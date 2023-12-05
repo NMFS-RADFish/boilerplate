@@ -12,7 +12,6 @@ function App() {
   useEffect(() => {
     const handleOnline = () => {
       // You may want to refetch data when the app comes online
-      // You can do that by using the refetch function from the useQuery hook
       setOnlineStatus(true);
     };
 
