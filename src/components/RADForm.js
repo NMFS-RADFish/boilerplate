@@ -1,4 +1,3 @@
-// Import necessary components and assets
 import { React } from "react";
 import {
   Fieldset,
@@ -10,7 +9,7 @@ import {
   FileInput,
 } from "@trussworks/react-uswds";
 import "./RADForm.css";
-import NOAALogo from "../assets/noaalogo.png"; // Make sure this path is correct
+import NOAALogo from "../assets/noaalogo.png";
 
 const RADForm = () => {
   const handleSubmit = (event) => {
