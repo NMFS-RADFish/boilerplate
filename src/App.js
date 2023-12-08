@@ -31,9 +31,11 @@ function App() {
 
   return (
     <div className="App">
-      <Alert type={"error"} headingLevel={"h1"} hidden={onlineStatus}>
-        {!onlineStatus && "Application currently offline"}
-      </Alert>
+      {!onlineStatus && (
+        <Alert type={"error"} headingLevel={"h1"} hidden={onlineStatus}>
+          Application currently offline
+        </Alert>
+      )}
       <main>
         <RADForm />
       </main>
