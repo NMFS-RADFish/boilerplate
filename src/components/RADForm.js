@@ -7,9 +7,13 @@ import {
   Select,
   RangeInput,
   FileInput,
+  ErrorMessage,
+  FormGroup,
 } from "@trussworks/react-uswds";
 import "./RADForm.css";
 import NOAALogo from "../assets/noaalogo.png";
+
+const REQUIRED_FIELD_ERROR = "This field is required";
 
 const RADForm = () => {
   const handleSubmit = (event) => {
@@ -29,15 +33,35 @@ const RADForm = () => {
         <img src={NOAALogo} alt="NOAA Logo" className="noaa-logo" />
         <Form onSubmit={(e) => handleSubmit(e)} className="noaa-form">
           <Fieldset legend="Personal Information" className="fieldset">
-            <TextInput id="full-name" name="full-name" type="text" placeholder="Full Name" />
-            <TextInput id="email" name="email" type="email" placeholder="Email Address" />
-            <TextInput
+            <FormGroup error>
+              <ErrorMessage id="input-error-message">
+                {REQUIRED_FIELD_ERROR}
+              </ErrorMessage>
+              <TextInput id="full-name" name="full-name" type="text" placeholder="Full Name" />
+            </FormGroup>
+            <FormGroup error>
+              <ErrorMessage id="input-error-message">
+                {REQUIRED_FIELD_ERROR}
+              </ErrorMessage>
+              <TextInput id="email" name="email" type="email" placeholder="Email Address" />
+            </FormGroup>
+            <FormGroup error>
+              <ErrorMessage id="input-error-message">
+                {REQUIRED_FIELD_ERROR}
+              </ErrorMessage>
+              <TextInput
               id="phone-number"
               name="phone-number"
               type="tel"
               placeholder="Phone Number"
             />
-            <DatePicker id="dob" name="dob" placeholder="Date of Birth" />
+            </FormGroup>
+            <FormGroup error>
+              <ErrorMessage id="input-error-message">
+                {REQUIRED_FIELD_ERROR}
+              </ErrorMessage>
+              <DatePicker id="dob" name="dob" placeholder="Date of Birth" />
+            </FormGroup>
           </Fieldset>
           <Fieldset legend="Address" className="fieldset">
             <TextInput
@@ -45,6 +69,8 @@ const RADForm = () => {
               name="address-line1"
               type="text"
               placeholder="Address Line 1"
+              validationStatus="error"
+              aria-describedby="input-error-message"
             />
             <TextInput
               id="address-line2"
