@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import RADForm from "./components/RADForm.js";
+import RADForm from "./components/RadForm/RADForm";
 import { Alert } from "@trussworks/react-uswds";
 
 function App() {
