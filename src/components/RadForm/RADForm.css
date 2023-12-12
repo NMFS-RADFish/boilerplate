@@ -71,7 +71,7 @@
 }
 
 .input-with-tooltip .tooltip {
-  margin-left: 8px; /* Adjust the space between the input and the tooltip */
+  margin-left: 8px;
 }
 
 input[type="text"],

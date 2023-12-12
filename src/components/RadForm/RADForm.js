@@ -101,10 +101,6 @@ const RADForm = () => {
               </Select>
               <Tooltip message="Choose the department you work in or are applying to." />
             </div>
-            <div className="input-with-tooltip">
-              <RangeInput id="experience" name="experience" min="0" max="30" step="1" />
-              <Tooltip message="Adjust the slider to reflect your total years of work experience." />
-            </div>
           </Fieldset>
           <Fieldset legend="Additional Details" className="fieldset">
           <div className="input-with-tooltip">
