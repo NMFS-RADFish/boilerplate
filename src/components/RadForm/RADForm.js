@@ -1,11 +1,11 @@
-import { React } from "react";
+import { React, useState } from "react";
 import {
   Fieldset,
   Form,
   TextInput,
   DatePicker,
   Select,
-  RangeInput,
+  FormGroup,
   FileInput,
 } from "@trussworks/react-uswds";
 import "./RADForm.css";
@@ -102,16 +102,10 @@ const RADForm = () => {
               <Tooltip message="Choose the department you work in or are applying to." />
             </div>
           </Fieldset>
-          <Fieldset legend="Additional Details" className="fieldset">
-          <div className="input-with-tooltip">
-            <FileInput id="resume" name="resume" />
-            <Tooltip message="Upload your resume or CV. Acceptable formats include PDF, DOC, DOCX." />
-          </div>
-          </Fieldset>
           <input type="submit" value="Submit" className="submit-button" />
         </Form>
       </main>
-    </div>
+    </div> 
   );
 };
 
