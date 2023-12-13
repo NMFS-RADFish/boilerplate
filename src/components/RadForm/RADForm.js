@@ -1,17 +1,14 @@
-import { React, useState } from "react";
+import { React } from "react";
 import {
   Fieldset,
   Form,
   TextInput,
   DatePicker,
   Select,
-  FormGroup,
-  FileInput,
 } from "@trussworks/react-uswds";
 import "./RADForm.css";
 import NOAALogo from "../../assets/noaalogo.png";
 import Tooltip from '../Tooltip/Tooltip';
-
 
 const RADForm = () => {
   const handleSubmit = (event) => {
@@ -54,7 +51,7 @@ const RADForm = () => {
           </div>
             <DatePicker id="dob" name="dob" placeholder="Date of Birth" />
           </Fieldset>
-          
+
           <Fieldset legend="Address" className="fieldset">
           <div className="input-with-tooltip">
             <TextInput
@@ -105,7 +102,7 @@ const RADForm = () => {
           <input type="submit" value="Submit" className="submit-button" />
         </Form>
       </main>
-    </div> 
+    </div>
   );
 };
 
