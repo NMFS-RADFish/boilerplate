@@ -4,7 +4,7 @@ import RADForm from "./components/RadForm/RADForm";
 import { Alert } from "@trussworks/react-uswds";
 
 function App() {
-  const [onlineStatus, setOnlineStatus] = useState(false);
+  const [onlineStatus, setOnlineStatus] = useState(true);
 
   // Check if the app is offline
   const isOffline = !navigator.onLine;
@@ -31,13 +31,11 @@ function App() {
 
   return (
     <div className="App">
-      <Alert
-        type={onlineStatus ? "success" : "error"}
-        headingLevel={"h1"}
-        hidden={false}
-      >
-        {onlineStatus ? "Application online!" : "Application currently offline"}
-      </Alert>
+      {!onlineStatus && (
+        <Alert type={"error"} headingLevel={"h1"} hidden={onlineStatus}>
+          Application currently offline
+        </Alert>
+      )}
       <main>
         <RADForm />
       </main>
