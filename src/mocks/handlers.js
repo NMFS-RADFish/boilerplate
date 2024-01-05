@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 
 export const handlers = [
-  http.get("/posts", () => {
-    return HttpResponse.json({ message: "hello world" }, { status: 200 });
+  http.get("/species", () => {
+    return HttpResponse.json({ data: ["grouper", "marlin"] }, { status: 200 });
   }),
 ];

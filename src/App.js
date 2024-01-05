@@ -8,7 +8,7 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetch("/posts");
+      await fetch("/species");
     };
     fetchData();
   }, []);
