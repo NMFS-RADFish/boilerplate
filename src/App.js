@@ -6,6 +6,13 @@ import { Alert } from "@trussworks/react-uswds";
 function App() {
   const [onlineStatus, setOnlineStatus] = useState(true);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetch("/posts");
+    };
+    fetchData();
+  }, []);
+
   // Check if the app is offline
   const isOffline = !navigator.onLine;
 
