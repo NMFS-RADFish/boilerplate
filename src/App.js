@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import RADForm from "./components/RadForm/RADForm";
+import Form from "./components/Form/Form";
 import { Alert } from "@trussworks/react-uswds";
+import { FormWrapper } from './contexts/FormWrapper';
 
 function App() {
   const [onlineStatus, setOnlineStatus] = useState(true);
@@ -29,6 +30,10 @@ function App() {
     };
   }, [isOffline]);
 
+  const handleFormSubmit = (submittedData) => {
+    console.log('Form Data Submitted:', submittedData);
+  };
+
   return (
     <div className="App">
       {!onlineStatus && (
@@ -37,7 +42,9 @@ function App() {
         </Alert>
       )}
       <main>
-        <RADForm />
+      <FormWrapper onSubmit={handleFormSubmit}>
+        <Form />
+      </FormWrapper>
       </main>
     </div>
   );

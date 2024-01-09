@@ -19,7 +19,6 @@ const RADForm = () => {
         formData[input.name] = input.value;
       }
     }
-    console.log(formData, "formData");
   };
 
   return (
