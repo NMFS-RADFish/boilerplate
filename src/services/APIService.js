@@ -88,10 +88,10 @@ class RadfishAPIService {
 
       if (!response.ok) {
         this.error = await response.json();
-        return;
+        return this.error;
       }
 
-      this.data = response.json();
+      this.data = await response.json();
       return this.data;
     } catch (err) {
       this.error = `[PUT] Error updating data: ${err}`;
@@ -116,7 +116,7 @@ class RadfishAPIService {
         return this.error;
       }
 
-      this.data = response.json();
+      this.data = await response.json();
       return this.data;
     } catch (err) {
       this.error = `[DELETE] Error removing data: ${err}`;
@@ -125,10 +125,6 @@ class RadfishAPIService {
       this.loading = false;
     }
   }
-
-  static getData = () => this.data;
-  static isLoading = () => this.loading;
-  static getError = () => this.error;
 }
 
 // Export an instance of RadfishAPIService singleton
