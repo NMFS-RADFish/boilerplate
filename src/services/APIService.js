@@ -1,6 +1,5 @@
 // Function to process and validate query parameters
 const processQueryParameters = (queryOptions) => {
-  // custom logic to process / validate query parameters
   return "";
 };
 
@@ -14,7 +13,6 @@ const setHeaders = (token) => {
 
 // Class for interacting with the Radfish API
 class RadfishAPIService {
-  // Static properties to store data, loading status, error, and token
   static data = null;
   static loading = false;
   static error = null;
@@ -26,7 +24,6 @@ class RadfishAPIService {
 
   // Asynchronous function to perform a GET request
   async get(endpoint, queryParams) {
-    // Process and validate query parameters
     const queryParamString = processQueryParameters(queryParams);
     try {
       this.loading = true;
@@ -35,7 +32,6 @@ class RadfishAPIService {
         headers: setHeaders(this.token),
       });
 
-      // Check if the response is not OK (status code not in the range 200-299)
       if (!response.ok) {
         // Set error with the JSON response
         this.error = await response.json();
