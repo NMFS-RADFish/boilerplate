@@ -28,6 +28,26 @@ describe("RadfishAPIService", () => {
       });
       expect(data).toEqual(apiService.data);
     });
+
+    it("should fetch data unsuccessfully", async () => {
+      const responseData = { data: "dataValue" };
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: false,
+        json: jest.fn().mockResolvedValue(responseData),
+      });
+
+      const apiService = new RadfishAPIService("your-token");
+      const data = await apiService.get("some-endpoint");
+
+      expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Access-Token": "your-token",
+        },
+      });
+      expect(data).toEqual(apiService.error);
+    });
+
     it("should handle error during fetch", async () => {
       const errorResponse = { error: "Error fetching data" };
       global.fetch = jest.fn().mockResolvedValue({
@@ -69,6 +89,28 @@ describe("RadfishAPIService", () => {
         body: JSON.stringify(requestData),
       });
       expect(data).toEqual(apiService.data);
+    });
+
+    it("should create data unsuccessfully", async () => {
+      const requestData = { newData: "newDataValue" };
+      const responseData = { createdData: "createdDataValue" };
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: false,
+        json: jest.fn().mockResolvedValue(responseData),
+      });
+
+      const apiService = new RadfishAPIService("your-token");
+      const data = await apiService.post("some-endpoint", requestData);
+
+      expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Access-Token": "your-token",
+        },
+        body: JSON.stringify(requestData),
+      });
+      expect(data).toEqual(apiService.error);
     });
 
     it("should handle error during creation", async () => {
@@ -117,6 +159,28 @@ describe("RadfishAPIService", () => {
       expect(data).toEqual(apiService.data);
     });
 
+    it("should update data unsuccessfully", async () => {
+      const requestData = { updatedData: "updatedDataValue" };
+      const responseData = { updatedData: "updatedDataValue" };
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: false,
+        json: jest.fn().mockResolvedValue(responseData),
+      });
+
+      const apiService = new RadfishAPIService("your-token");
+      const data = await apiService.put("some-endpoint", requestData);
+
+      expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Access-Token": "your-token",
+        },
+        body: JSON.stringify(requestData),
+      });
+      expect(data).toEqual(apiService.error);
+    });
+
     it("should handle error during update", async () => {
       const requestData = { updatedData: "updatedDataValue" };
       const errorResponse = { error: "Error updating data" };
@@ -161,6 +225,28 @@ describe("RadfishAPIService", () => {
         body: JSON.stringify(requestData),
       });
       expect(data).toEqual(apiService.data);
+    });
+
+    it("should remove data unsuccessfully", async () => {
+      const requestData = { deleteData: "deleteDataValue" };
+      const responseData = { message: "Data successfully deleted" };
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: false,
+        json: jest.fn().mockResolvedValue(responseData),
+      });
+
+      const apiService = new RadfishAPIService("your-token");
+      const data = await apiService.delete("some-endpoint", requestData);
+
+      expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Access-Token": "your-token",
+        },
+        body: JSON.stringify(requestData),
+      });
+      expect(data).toEqual(apiService.error);
     });
 
     it("should handle error during deletion", async () => {
