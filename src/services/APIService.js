@@ -1,6 +1,7 @@
 // Function to process and validate query parameters
 const processQueryParameters = (queryOptions) => {
   // custom logic to process / validate query parameters
+  return "";
 };
 
 // Function to set headers with provided token
@@ -27,9 +28,9 @@ class RadfishAPIService {
   async get(endpoint, queryParams) {
     // Process and validate query parameters
     const queryParamString = processQueryParameters(queryParams);
-
     try {
       this.loading = true;
+
       const response = await fetch(`${endpoint}${queryParamString}`, {
         headers: setHeaders(this.token),
       });
@@ -38,12 +39,15 @@ class RadfishAPIService {
       if (!response.ok) {
         // Set error with the JSON response
         this.error = await response.json();
-        return;
+        return this.error;
       }
+
       this.data = await response.json();
+      return this.data;
     } catch (err) {
       // Set error in case of an exception
       this.error = `[GET]: Error fetching data: ${err}`;
+      return this.error;
     } finally {
       this.loading = false;
     }
@@ -63,12 +67,14 @@ class RadfishAPIService {
 
       if (!response.ok) {
         this.error = await response.json();
-        return;
+        return this.error;
       }
 
       this.data = await response.json();
+      return this.data;
     } catch (err) {
       this.error = `[POST] Error creating data: ${err}`;
+      return this.error;
     } finally {
       this.loading = false;
     }
@@ -90,8 +96,10 @@ class RadfishAPIService {
       }
 
       this.data = response.json();
+      return this.data;
     } catch (err) {
       this.error = `[PUT] Error updating data: ${err}`;
+      return this.error;
     } finally {
       this.loading = false;
     }
@@ -109,11 +117,14 @@ class RadfishAPIService {
 
       if (!response.ok) {
         this.error = await response.json();
+        return this.error;
       }
 
       this.data = response.json();
+      return this.data;
     } catch (err) {
       this.error = `[DELETE] Error removing data: ${err}`;
+      return this.error;
     } finally {
       this.loading = false;
     }
@@ -125,4 +136,4 @@ class RadfishAPIService {
 }
 
 // Export an instance of RadfishAPIService singleton
-export default new RadfishAPIService();
+export default RadfishAPIService;

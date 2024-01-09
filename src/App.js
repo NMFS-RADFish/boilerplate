@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import RADForm from "./components/RadForm/RADForm";
 import { Alert } from "@trussworks/react-uswds";
+import RadfishAPIService from "./services/APIService";
+
+const ApiService = new RadfishAPIService("");
 
 function App() {
   const [onlineStatus, setOnlineStatus] = useState(true);
 
+  // should this be a reusable hook?
   useEffect(() => {
     const fetchData = async () => {
-      await fetch("/species");
+      const response = await ApiService.get("/species");
+      console.log("response data to populate species dropdown ", response);
     };
     fetchData();
   }, []);
