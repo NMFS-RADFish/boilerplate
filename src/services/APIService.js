@@ -17,9 +17,8 @@ class RadfishAPIService {
   static data = null;
   static loading = false;
   static error = null;
-  static token = "";
+  static token = null;
 
-  // Constructor to initialize the instance with a token
   constructor(token) {
     this.token = token;
   }
@@ -30,9 +29,7 @@ class RadfishAPIService {
     const queryParamString = processQueryParameters(queryParams);
 
     try {
-      // Set loading to true before making the request
       this.loading = true;
-      // Make the GET request using fetch API
       const response = await fetch(`${endpoint}${queryParamString}`, {
         headers: setHeaders(this.token),
       });
@@ -43,14 +40,11 @@ class RadfishAPIService {
         this.error = await response.json();
         return;
       }
-
-      // Set data with the JSON response
       this.data = await response.json();
     } catch (err) {
       // Set error in case of an exception
       this.error = `[GET]: Error fetching data: ${err}`;
     } finally {
-      // Set loading to false after the request is completed
       this.loading = false;
     }
   }
@@ -59,7 +53,6 @@ class RadfishAPIService {
   async post(endpoint, body) {
     try {
       this.loading = true;
-      // Make the POST request using fetch API
       const response = await fetch(`${endpoint}`, {
         method: "POST",
         headers: setHeaders(this.token),
@@ -85,7 +78,6 @@ class RadfishAPIService {
   async put(endpoint, body) {
     try {
       this.loading = true;
-      // Make the PUT request using fetch API
       const response = await fetch(`${endpoint}`, {
         method: "PUT",
         headers: setHeaders(this.token),
@@ -109,7 +101,6 @@ class RadfishAPIService {
   async delete(endpoint, body) {
     try {
       this.loading = true;
-      // Make the DELETE request using fetch API
       const response = await fetch(`${endpoint}`, {
         method: "DELETE",
         headers: setHeaders(this.token),
@@ -128,11 +119,10 @@ class RadfishAPIService {
     }
   }
 
-  // Static methods to retrieve data, loading status, and error
   static getData = () => this.data;
   static isLoading = () => this.loading;
   static getError = () => this.error;
 }
 
-// Export an instance of RadfishAPIService
+// Export an instance of RadfishAPIService singleton
 export default new RadfishAPIService();
