@@ -33,7 +33,7 @@ class RadfishAPIService {
       // Set loading to true before making the request
       this.loading = true;
       // Make the GET request using fetch API
-      const response = await fetch(`${API_HOST}/${endpoint}${queryParamString}`, {
+      const response = await fetch(`${endpoint}${queryParamString}`, {
         headers: setHeaders(this.token),
       });
 
@@ -60,7 +60,7 @@ class RadfishAPIService {
     try {
       this.loading = true;
       // Make the POST request using fetch API
-      const response = await fetch(`${API_HOST}/${endpoint}`, {
+      const response = await fetch(`${endpoint}`, {
         method: "POST",
         headers: setHeaders(this.token),
         body: JSON.stringify({
@@ -86,7 +86,7 @@ class RadfishAPIService {
     try {
       this.loading = true;
       // Make the PUT request using fetch API
-      const response = await fetch(`${API_HOST}/${endpoint}`, {
+      const response = await fetch(`${endpoint}`, {
         method: "PUT",
         headers: setHeaders(this.token),
         body: JSON.stringify({ ...body }),
@@ -110,7 +110,7 @@ class RadfishAPIService {
     try {
       this.loading = true;
       // Make the DELETE request using fetch API
-      const response = await fetch(`${API_HOST}/${endpoint}`, {
+      const response = await fetch(`${endpoint}`, {
         method: "DELETE",
         headers: setHeaders(this.token),
         body: JSON.stringify({ ...body }),
