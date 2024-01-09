@@ -11,7 +11,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   }, []);
 
-  const contextValue = { formData, handleChange };
+  const contextValue = { formData, handleChange, setFormData };
 
   return (
     <FormContext.Provider value={contextValue}>

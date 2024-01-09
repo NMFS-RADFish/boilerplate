@@ -4,27 +4,26 @@ import { TextInput, DatePicker, Select } from '@trussworks/react-uswds';
 import { useFormState } from '../../contexts/FormWrapper';
 
 const Form = () => {
-  const { formData, handleChange } = useFormState();
+  const { formData, handleChange, setFormData } = useFormState();
 
   useEffect(() => {
-    console.log("Form Data Changed:", formData);
-  }, [formData]);
+    console.log("Form Data Changed:", formData)
+    if(formData.fullName && formData.email) setFormData(prev => ({ ...prev, city: 'Waipahu' }));
+
+  }, [formData.fullName, formData.email]);
 
   return (
     <>
-      <TextInput name="full-name" type="text" placeholder="Full Name" value={formData["full-name"] || ''} onChange={handleChange}/>
-      <TextInput name="email" type="email" placeholder="Email Address" />
-      <TextInput name="phone-number" type="tel" placeholder="(000) 000-0000" />
-      <DatePicker name="dob" />
-      <TextInput name="address-line1" type="text" placeholder="Address Line 1" />
-      <TextInput name="address-line2" type="text" placeholder="Address Line 2" />
-      <TextInput name="city" type="text" placeholder="City" />
-      <TextInput name="state" type="text" placeholder="State" />
-      <TextInput name="zipcode" type="text" placeholder="Zip Code" />
-      <TextInput name="occupation" type="text" placeholder="Occupation" />
-      <TextInput name="fishnumber" type="text" placeholder="Zip Code" />
-      <TextInput name="price" type="text" placeholder="Occupation" />
-      <Select name="department">
+      <TextInput name="fullName" type="text" placeholder="Full Name" value={formData["fullName"] || ''} onChange={handleChange}/>
+      <TextInput name="email" type="email" placeholder="Email Address" value={formData["email"] || ''} onChange={handleChange}/>
+      <TextInput name="phoneNumber" type="tel" placeholder="(000) 000-0000" value={formData["phoneNumber"] || ''} onChange={handleChange}/>
+      <TextInput name="addressLine1" type="text" placeholder="Address Line 1" value={formData["addressLine1"] || ''} onChange={handleChange}/>
+      <TextInput name="addressLine2" type="text" placeholder="Address Line 2" value={formData["addressLine2"] || ''} onChange={handleChange}/>
+      <TextInput name="city" type="text" placeholder="City" value={formData["city"] || ''} onChange={handleChange}/>
+      <TextInput name="state" type="text" placeholder="State" value={formData["state"] || ''} onChange={handleChange}/>
+      <TextInput name="zipcode" type="text" placeholder="Zip Code" value={formData["zipcode"] || ''} onChange={handleChange}/>
+      <TextInput name="occupation" type="text" placeholder="Occupation" value={formData["occupation"] || ''} onChange={handleChange}/>
+      <Select name="department" value={formData["department"] || ''} onChange={handleChange}>
         <option value="">Select Department</option>
         <option value="hr">Human Resources</option>
         <option value="it">IT</option>
