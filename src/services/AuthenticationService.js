@@ -2,9 +2,9 @@ class RadfishAuthenticationService {
   static loading = false;
   static error = null;
 
-  async signIn(loginId, password) {
+  async signIn(loginId, password, endpoint) {
     try {
-      const response = await fetch(`/signIn`, {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,9 +25,9 @@ class RadfishAuthenticationService {
     }
   }
 
-  async signOut(token) {
+  async signOut(token, endpoint) {
     try {
-      const response = await fetch(`${API_HOST}/signOut`, {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
