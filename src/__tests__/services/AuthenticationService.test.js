@@ -59,7 +59,7 @@ describe("RadfishAuthenticationService", () => {
         }),
       });
 
-      expect(localStorage.getItem("token")).toBe("undefined");
+      expect(localStorage.getItem("token")).toBe(null);
     });
   });
 

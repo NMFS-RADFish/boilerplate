@@ -23,7 +23,7 @@ class RadfishAuthenticationService {
       });
 
       if (!response.ok) {
-        console.log("Authentication failed");
+        return response;
       }
 
       const responseJson = await response.json();
@@ -41,6 +41,7 @@ class RadfishAuthenticationService {
    * @returns {Promise<void>} - A promise that resolves once the sign-out process is complete.
    */
   async signOut(token, endpoint) {
+    localStorage.removeItem("token"); // Always remove the token from localStorage
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -53,10 +54,8 @@ class RadfishAuthenticationService {
       });
 
       if (!response.ok) {
-        console.log("Failed to remove token on server");
+        return response;
       }
-
-      localStorage.removeItem("token"); // Always remove the token from localStorage
     } catch (err) {
       throw new Error("signOut error: ", err);
     }
