@@ -1,9 +1,17 @@
-// Function to process and validate query parameters
+/**
+ * Function to process and validate query parameters
+ * @param {Object} queryOptions - The query parameters to be processed and validated.
+ * @returns {string} - The processed query parameters as a string.
+ */
 const processQueryParameters = (queryOptions) => {
   return "";
 };
 
-// Function to set headers with provided token
+/**
+ * Function to set headers with provided token
+ * @param {string} token - The access token to be set in the headers.
+ * @returns {Object} - The headers object with Content-Type and X-Access-Token.
+ */
 const setHeaders = (token) => {
   return {
     "Content-Type": "application/json",
@@ -11,18 +19,29 @@ const setHeaders = (token) => {
   };
 };
 
-// Class for interacting with the Radfish API
+/**
+ * Class for interacting with the Radfish API
+ */
 class RadfishAPIService {
   static data = null;
   static loading = false;
   static error = null;
   static token = null;
 
+  /**
+   * Constructor for RadfishAPIService
+   * @param {string} token - The access token used for API authentication.
+   */
   constructor(token) {
     this.token = token;
   }
 
-  // Asynchronous function to perform a GET request
+  /**
+   * Asynchronous function to perform a GET request
+   * @param {string} endpoint - The API endpoint to perform the GET request.
+   * @param {Object} queryParams - The query parameters for the GET request.
+   * @returns {Promise<Object|string>} - A promise that resolves to the API response data or an error string.
+   */
   async get(endpoint, queryParams) {
     const queryParamString = processQueryParameters(queryParams);
     try {
@@ -49,7 +68,12 @@ class RadfishAPIService {
     }
   }
 
-  // Asynchronous function to perform a POST request
+  /**
+   * Asynchronous function to perform a POST request
+   * @param {string} endpoint - The API endpoint to perform the POST request.
+   * @param {Object} body - The request body for the POST request.
+   * @returns {Promise<Object|string>} - A promise that resolves to the API response data or an error string.
+   */
   async post(endpoint, body) {
     try {
       this.loading = true;
@@ -76,7 +100,12 @@ class RadfishAPIService {
     }
   }
 
-  // Asynchronous function to perform a PUT request
+  /**
+   * Asynchronous function to perform a PUT request
+   * @param {string} endpoint - The API endpoint to perform the PUT request.
+   * @param {Object} body - The request body for the PUT request.
+   * @returns {Promise<Object|string>} - A promise that resolves to the API response data or an error string.
+   */
   async put(endpoint, body) {
     try {
       this.loading = true;
@@ -101,7 +130,12 @@ class RadfishAPIService {
     }
   }
 
-  // Asynchronous function to perform a DELETE request
+  /**
+   * Asynchronous function to perform a DELETE request
+   * @param {string} endpoint - The API endpoint to perform the DELETE request.
+   * @param {Object} body - The request body for the DELETE request.
+   * @returns {Promise<Object|string>} - A promise that resolves to the API response data or an error string.
+   */
   async delete(endpoint, body) {
     try {
       this.loading = true;
@@ -127,5 +161,4 @@ class RadfishAPIService {
   }
 }
 
-// Export an instance of RadfishAPIService singleton
 export default RadfishAPIService;

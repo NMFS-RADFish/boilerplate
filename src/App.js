@@ -9,11 +9,10 @@ const ApiService = new RadfishAPIService("");
 function App() {
   const [onlineStatus, setOnlineStatus] = useState(true);
 
-  // should this be a reusable hook?
   useEffect(() => {
     const fetchData = async () => {
       const response = await ApiService.get("/species");
-      console.log("response data to populate species dropdown ", response);
+      // TODO: reponse data to populate species dropdown form component
     };
     fetchData();
   }, []);
