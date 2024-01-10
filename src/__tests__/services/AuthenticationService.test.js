@@ -2,8 +2,6 @@ import RadfishAuthenticationService from "../../services/AuthenticationService";
 
 describe("RadfishAuthenticationService", () => {
   beforeEach(() => {
-    // Clear mocks and reset loading and error before each test
-    RadfishAuthenticationService.loading = false;
     RadfishAuthenticationService.error = null;
     localStorage.clear();
   });

@@ -24,7 +24,6 @@ const setHeaders = (token) => {
  */
 class RadfishAPIService {
   static data = null;
-  static loading = false;
   static error = null;
   static token = null;
 
@@ -45,8 +44,6 @@ class RadfishAPIService {
   async get(endpoint, queryParams) {
     const queryParamString = processQueryParameters(queryParams);
     try {
-      this.loading = true;
-
       const response = await fetch(`${endpoint}${queryParamString}`, {
         headers: setHeaders(this.token),
       });
@@ -63,8 +60,6 @@ class RadfishAPIService {
       // Set error in case of an exception
       this.error = `[GET]: Error fetching data: ${err}`;
       return this.error;
-    } finally {
-      this.loading = false;
     }
   }
 
@@ -76,7 +71,6 @@ class RadfishAPIService {
    */
   async post(endpoint, body) {
     try {
-      this.loading = true;
       const response = await fetch(`${endpoint}`, {
         method: "POST",
         headers: setHeaders(this.token),
@@ -95,8 +89,6 @@ class RadfishAPIService {
     } catch (err) {
       this.error = `[POST] Error creating data: ${err}`;
       return this.error;
-    } finally {
-      this.loading = false;
     }
   }
 
@@ -108,7 +100,6 @@ class RadfishAPIService {
    */
   async put(endpoint, body) {
     try {
-      this.loading = true;
       const response = await fetch(`${endpoint}`, {
         method: "PUT",
         headers: setHeaders(this.token),
@@ -125,8 +116,6 @@ class RadfishAPIService {
     } catch (err) {
       this.error = `[PUT] Error updating data: ${err}`;
       return this.error;
-    } finally {
-      this.loading = false;
     }
   }
 
@@ -138,7 +127,6 @@ class RadfishAPIService {
    */
   async delete(endpoint, body) {
     try {
-      this.loading = true;
       const response = await fetch(`${endpoint}`, {
         method: "DELETE",
         headers: setHeaders(this.token),
@@ -155,8 +143,6 @@ class RadfishAPIService {
     } catch (err) {
       this.error = `[DELETE] Error removing data: ${err}`;
       return this.error;
-    } finally {
-      this.loading = false;
     }
   }
 }

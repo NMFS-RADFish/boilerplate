@@ -2,10 +2,8 @@ import RadfishAPIService from "../../services/APIService";
 
 describe("RadfishAPIService", () => {
   beforeEach(() => {
-    // Clear mocks and reset data, loading, and error before each test
     jest.resetAllMocks();
     RadfishAPIService.data = null;
-    RadfishAPIService.loading = false;
     RadfishAPIService.error = null;
   });
 
