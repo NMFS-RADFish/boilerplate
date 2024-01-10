@@ -7,9 +7,7 @@ const Form = () => {
   const { formData, handleChange, setFormData } = useFormState();
 
   useEffect(() => {
-    console.log("Form Data Changed:", formData)
     if(formData.fullName && formData.email) setFormData(prev => ({ ...prev, city: 'Waipahu' }));
-
   }, [formData.fullName, formData.email]);
 
   return (
