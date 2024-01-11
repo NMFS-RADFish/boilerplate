@@ -5,13 +5,28 @@ const FormContext = createContext();
 
 export const FormWrapper = ({ children, onSubmit }) => {
   const [formData, setFormData] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
 
-  const handleChange = useCallback((event) => {
-    const { name, value } = event.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const validateInput = useCallback((name, value, validators) => {
+    if (validators && validators.length > 0) {
+      for (let validator of validators) {
+        if (!validator.test(value)) {
+          setValidationErrors(prev => ({ ...prev, [name]: validator.message }));
+          return false;
+        }
+      }
+    }
+    setValidationErrors(prev => ({ ...prev, [name]: null }));
+    return true;
   }, []);
 
-  const contextValue = { formData, handleChange, setFormData };
+  const handleChange = useCallback((event, validators) => {
+    const { name, value } = event.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    validateInput(name, value, validators);
+  }, [validateInput]);
+
+  const contextValue = { formData, handleChange, validationErrors, setFormData };
 
   return (
     <FormContext.Provider value={contextValue}>
