@@ -4,9 +4,20 @@ import { Alert } from "@trussworks/react-uswds";
 import { FormWrapper } from "./contexts/FormWrapper";
 import DemoForm from "./components/Demo/Demo";
 import { BrowserRouter as Router } from "react-router-dom";
+import RadfishAPIService from "./services/APIService";
+
+const ApiService = new RadfishAPIService("");
 
 function App() {
   const [onlineStatus, setOnlineStatus] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await ApiService.get("/species");
+      // TODO: reponse data to populate species dropdown form component
+    };
+    fetchData();
+  }, []);
 
   // Check if the app is offline
   const isOffline = !navigator.onLine;
@@ -31,8 +42,8 @@ function App() {
     };
   }, [isOffline]);
 
-  const handleFormSubmit = (submittedData) => {
-    console.log("Form Data Submitted:", submittedData);
+  const handleFormSubmit = async (submittedData) => {
+    const response = await ApiService.post("/species", submittedData);
   };
 
   return (
