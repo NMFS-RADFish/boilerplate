@@ -2,9 +2,20 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import RADForm from "./components/RadForm/RADForm";
 import { Alert } from "@trussworks/react-uswds";
+import RadfishAPIService from "./services/APIService";
+
+const ApiService = new RadfishAPIService("");
 
 function App() {
   const [onlineStatus, setOnlineStatus] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await ApiService.get("/species");
+      // TODO: reponse data to populate species dropdown form component
+    };
+    fetchData();
+  }, []);
 
   // Check if the app is offline
   const isOffline = !navigator.onLine;
