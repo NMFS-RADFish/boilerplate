@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import Form from "./components/Form/Form";
 import { Alert } from "@trussworks/react-uswds";
-import { FormWrapper } from './contexts/FormWrapper';
+import { FormWrapper } from "./contexts/FormWrapper";
+import DemoForm from "./components/Demo/Demo";
+import { BrowserRouter as Router } from "react-router-dom";
 
 function App() {
   const [onlineStatus, setOnlineStatus] = useState(true);
@@ -31,7 +32,7 @@ function App() {
   }, [isOffline]);
 
   const handleFormSubmit = (submittedData) => {
-    console.log('Form Data Submitted:', submittedData);
+    console.log("Form Data Submitted:", submittedData);
   };
 
   return (
@@ -42,9 +43,11 @@ function App() {
         </Alert>
       )}
       <main>
-      <FormWrapper onSubmit={handleFormSubmit}>
-        <Form />
-      </FormWrapper>
+        <Router>
+          <FormWrapper onSubmit={handleFormSubmit}>
+            <DemoForm />
+          </FormWrapper>
+        </Router>
       </main>
     </div>
   );
