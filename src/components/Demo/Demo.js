@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { TextInput, Select } from "@trussworks/react-uswds";
 import { useFormState } from "../../contexts/FormWrapper";
+import Layout from "../Layout";
 
 const fullNameValidators = [
   {
@@ -18,7 +19,7 @@ const DemoForm = () => {
   }, [formData.fullName, formData.email]);
 
   return (
-    <>
+    <Layout>
       <TextInput
         name="fullName"
         type="text"
@@ -103,7 +104,7 @@ const DemoForm = () => {
       >
         Multi Entry Submit
       </button>
-    </>
+    </Layout>
   );
 };
 
