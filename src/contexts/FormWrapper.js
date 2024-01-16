@@ -6,6 +6,7 @@ const FormContext = createContext();
 
 export const FormWrapper = ({ children, onSubmit }) => {
   const [formData, setFormData] = useState({});
+  const [prepopulatedFormData, setPrepopulatedFormData] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -53,9 +54,11 @@ export const FormWrapper = ({ children, onSubmit }) => {
 
   const contextValue = {
     formData,
+    setFormData,
+    prepopulatedFormData,
+    setPrepopulatedFormData,
     handleChange,
     validationErrors,
-    setFormData,
     handleMultiEntrySubmit,
     searchParams,
   };

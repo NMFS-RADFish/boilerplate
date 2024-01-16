@@ -11,14 +11,6 @@ const ApiService = new RadfishAPIService("");
 function App() {
   const [onlineStatus, setOnlineStatus] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await ApiService.get("/species");
-      // TODO: reponse data to populate species dropdown form component
-    };
-    fetchData();
-  }, []);
-
   // Check if the app is offline
   const isOffline = !navigator.onLine;
 

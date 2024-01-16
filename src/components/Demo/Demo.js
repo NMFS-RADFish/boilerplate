@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import { TextInput, Select } from "@trussworks/react-uswds";
 import { useFormState } from "../../contexts/FormWrapper";
+import RadfishAPIService from "../../services/APIService";
+
+const ApiService = new RadfishAPIService("");
 
 const fullNameValidators = [
   {
@@ -10,8 +13,24 @@ const fullNameValidators = [
 ];
 
 const DemoForm = () => {
-  const { formData, setFormData, handleChange, validationErrors, handleMultiEntrySubmit } =
-    useFormState();
+  const {
+    formData,
+    setFormData,
+    prepopulatedFormData,
+    setPrepopulatedFormData,
+    handleChange,
+    validationErrors,
+    handleMultiEntrySubmit,
+  } = useFormState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await ApiService.get("/species");
+      const newData = { species: data };
+      setPrepopulatedFormData((prev) => ({ ...prev, ...newData }));
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
@@ -95,6 +114,15 @@ const DemoForm = () => {
         <option value="hr">Human Resources</option>
         <option value="it">IT</option>
         <option value="finance">Finance</option>
+      </Select>
+      <Select name="species" value={prepopulatedFormData["species"] || ""} onChange={handleChange}>
+        {prepopulatedFormData?.species?.map((option) => {
+          return (
+            <option value={option.toLowerCase()}>
+              {option.charAt(0).toUpperCase() + option.slice(1)}
+            </option>
+          );
+        })}
       </Select>
       <button type="submit">Submit</button>
       <button
