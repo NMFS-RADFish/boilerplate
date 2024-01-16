@@ -11,6 +11,7 @@ const ApiService = new RadfishAPIService("");
 function App() {
   const [onlineStatus, setOnlineStatus] = useState(true);
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
+  const [formSubmitStatus, setFormSubmitStatus] = useState(null);
 
   // Check if the app is offline
   const isOffline = !navigator.onLine;
@@ -49,14 +50,35 @@ function App() {
   }, []);
 
   const handleFormSubmit = async (submittedData) => {
-    const { data } = await ApiService.post("/species", submittedData);
+    try {
+      const { data } = await ApiService.post("/species", submittedData);
+      setFormSubmitStatus({ status: "success", message: "Successful form submission" });
+    } catch (err) {
+      setFormSubmitStatus({ status: "error", message: "Error submitting form" });
+    } finally {
+      setTimeout(() => {
+        setFormSubmitStatus(null);
+      }, 2000);
+    }
   };
+
+  console.log(formSubmitStatus);
 
   return (
     <div className="App">
       {!onlineStatus && (
         <Alert type={"error"} headingLevel={"h1"} hidden={onlineStatus}>
           Application currently offline
+        </Alert>
+      )}
+      {formSubmitStatus?.status === "success" && (
+        <Alert type={"success"} headingLevel={"h1"} hidden={!formSubmitStatus}>
+          {formSubmitStatus.message}
+        </Alert>
+      )}
+      {formSubmitStatus?.status === "error" && (
+        <Alert type={"error"} headingLevel={"h1"} hidden={!formSubmitStatus}>
+          {formSubmitStatus.message}
         </Alert>
       )}
       <main>
