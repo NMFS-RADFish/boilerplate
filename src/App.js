@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import RADForm from "./components/RadForm/RADForm";
 import { Alert } from "@trussworks/react-uswds";
+import { FormWrapper } from "./contexts/FormWrapper";
+import DemoForm from "./components/Demo/Demo";
+import { BrowserRouter as Router } from "react-router-dom";
 import RadfishAPIService from "./services/APIService";
 
 const ApiService = new RadfishAPIService("");
@@ -40,6 +42,10 @@ function App() {
     };
   }, [isOffline]);
 
+  const handleFormSubmit = async (submittedData) => {
+    const response = await ApiService.post("/species", submittedData);
+  };
+
   return (
     <div className="App">
       {!onlineStatus && (
@@ -48,7 +54,11 @@ function App() {
         </Alert>
       )}
       <main>
-        <RADForm />
+        <Router>
+          <FormWrapper onSubmit={handleFormSubmit}>
+            <DemoForm />
+          </FormWrapper>
+        </Router>
       </main>
     </div>
   );
