@@ -10,6 +10,7 @@ const ApiService = new RadfishAPIService("");
 
 function App() {
   const [onlineStatus, setOnlineStatus] = useState(true);
+  const [asyncFormOptions, setAsyncFormOptions] = useState({});
 
   // Check if the app is offline
   const isOffline = !navigator.onLine;
@@ -34,8 +35,21 @@ function App() {
     };
   }, [isOffline]);
 
+  useEffect(() => {
+    if (!onlineStatus) {
+      return;
+    }
+    const fetchData = async () => {
+      const { data } = await ApiService.get("/species");
+      // add any other async requests here
+      const newData = { species: data };
+      setAsyncFormOptions((prev) => ({ ...prev, ...newData }));
+    };
+    fetchData();
+  }, []);
+
   const handleFormSubmit = async (submittedData) => {
-    const response = await ApiService.post("/species", submittedData);
+    const { data } = await ApiService.post("/species", submittedData);
   };
 
   return (
@@ -48,7 +62,7 @@ function App() {
       <main>
         <Router>
           <FormWrapper onSubmit={handleFormSubmit}>
-            <DemoForm />
+            <DemoForm asyncFormOptions={asyncFormOptions} />
           </FormWrapper>
         </Router>
       </main>
