@@ -5,6 +5,7 @@ import { FormWrapper } from "./contexts/FormWrapper";
 import DemoForm from "./components/Demo/Demo";
 import { BrowserRouter as Router } from "react-router-dom";
 import RadfishAPIService from "./services/APIService";
+import Layout from "./components/Layout";
 
 const ApiService = new RadfishAPIService("");
 
@@ -53,13 +54,13 @@ function App() {
           Application currently offline
         </Alert>
       )}
-      <main>
+      <Layout>
         <Router>
           <FormWrapper onSubmit={handleFormSubmit}>
             <DemoForm />
           </FormWrapper>
         </Router>
-      </main>
+      </Layout>
     </div>
   );
 }

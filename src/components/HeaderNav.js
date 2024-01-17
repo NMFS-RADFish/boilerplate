@@ -2,9 +2,23 @@ import React, { useState } from "react";
 import Logo from "../assets/noaalogo.png";
 import { Header, NavMenuButton, PrimaryNav, Search, Title } from "@trussworks/react-uswds";
 
+/**
+ * HeaderNav Component
+ * @param children HTML `<a>` tag links, i.e. `<a href="/">Home</a>`
+ * @returns Array of `<a>` tags [`<a href="#">linke one</a>`, `<a href="#">linke one</a>`]
+ * 
+ * The `HeaderNav` component can be used to display a navigation header. By default, this component is used within the `Layout` component. It is mobile responsive, and will convert to an expandable navigation menu with a hamburger icon on smaller screens.
+ * 
+ * Example usage:
+    ```<HeaderNav>
+        <a href="/">Home</a>
+        <a href="/">About</a>
+      </HeaderNav>```
+ */
+
 const HeaderNav = ({ children }) => {
   const [expanded, setExpanded] = useState(false);
-  const onClick = () => setExpanded((prvExpanded) => !prvExpanded);
+  const onExpandNavMenuClick = () => setExpanded((prvExpanded) => !prvExpanded);
 
   return (
     <>
@@ -18,9 +32,13 @@ const HeaderNav = ({ children }) => {
             <Title>
               <img src={Logo} alt="logo" id="logo" />
             </Title>
-            <NavMenuButton onClick={onClick} label="Menu" />
+            <NavMenuButton onClick={onExpandNavMenuClick} label="Menu" />
           </div>
-          <PrimaryNav items={children} mobileExpanded={expanded} onToggleMobileNav={onClick}>
+          <PrimaryNav
+            items={children}
+            mobileExpanded={expanded}
+            onToggleMobileNav={onExpandNavMenuClick}
+          >
             <Search size="small" onSubmit={() => null} />
           </PrimaryNav>
         </div>
