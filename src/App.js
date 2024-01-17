@@ -63,7 +63,7 @@ function App() {
 
   return (
     <div className="App">
-      <Toast toast={toast} hidden={toast} />
+      <Toast toast={toast} />
       <main>
         <Router>
           <FormWrapper onSubmit={handleFormSubmit}>
