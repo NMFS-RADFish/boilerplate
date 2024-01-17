@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { FormWrapper } from "./contexts/FormWrapper";
-import Toast from "./components/Toast";
+import Toast, { TOAST_CONFIG } from "./components/Toast";
 import DemoForm from "./components/Demo/Demo";
 import { BrowserRouter as Router } from "react-router-dom";
 import RadfishAPIService from "./services/APIService";
+import { MSW_ENDPOINT } from "./mocks/handlers";
 
 const ApiService = new RadfishAPIService("");
 
@@ -22,7 +23,8 @@ function App() {
     };
 
     const handleOffline = () => {
-      setToast({ status: "offline", message: "Application currently offline" });
+      const { status, message } = TOAST_CONFIG.OFFLINE;
+      setToast({ status, message });
     };
 
     window.addEventListener("online", handleOnline);
@@ -35,25 +37,30 @@ function App() {
     };
   }, [isOffline]);
 
+  // when application mounts, fetch data from endpoint and set the payload to component state
+  // this data is then passed into `DemoForm` component and used to prepopulate form fields (eg dropdown) with default options fetched from server
   useEffect(() => {
     if (isOffline) {
       return;
     }
-    const fetchData = async () => {
-      const { data } = await ApiService.get("/species");
+    // this function fetches any data needed for the business requirements in DemoForm
+    const fetchFormData = async () => {
+      const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
       // add any other async requests here
       const newData = { species: data };
       setAsyncFormOptions((prev) => ({ ...prev, ...newData }));
     };
-    fetchData();
-  }, []);
+    fetchFormData();
+  }, [isOffline]);
 
   const handleFormSubmit = async (submittedData) => {
     try {
-      const { data } = await ApiService.post("/species", submittedData);
-      setToast({ status: "success", message: "Successful form submission" });
+      await ApiService.post(MSW_ENDPOINT.SPECIES, submittedData);
+      const { status, message } = TOAST_CONFIG.SUCCESS;
+      setToast({ status, message });
     } catch (err) {
-      setToast({ status: "error", message: "Error submitting form" });
+      const { status, message } = TOAST_CONFIG.ERROR;
+      setToast({ status, message });
     } finally {
       setTimeout(() => {
         setToast(null);

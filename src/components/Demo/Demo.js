@@ -1,7 +1,14 @@
 import React, { useEffect } from "react";
-import { TextInput, Select } from "@trussworks/react-uswds";
+import { TextInput, Select, Button } from "@trussworks/react-uswds";
 import { useFormState } from "../../contexts/FormWrapper";
 
+/**
+ * Array of validators for the Full Name field.
+ *
+ * @typedef {Object} FullNameValidator
+ * @property {function} test - Validation function that checks if the value contains numbers.
+ * @property {string} message - Error message to display if validation fails.
+ */
 const fullNameValidators = [
   {
     test: (value) => !/\d/.test(value),
@@ -9,13 +16,26 @@ const fullNameValidators = [
   },
 ];
 
+/**
+ * React functional component for a demo form. Demonstrates how to construbt a form. This should be a child of `FormWrapper`
+ *
+ * @component
+ * @param {Object} props - React component props.
+ * @param {Object} props.asyncFormOptions - Options for asynchronous form elements.
+ * @returns {JSX.Element} The JSX element representing the demo form.
+ */
 const DemoForm = ({ asyncFormOptions }) => {
   const { formData, setFormData, handleChange, validationErrors, handleMultiEntrySubmit } =
     useFormState();
 
+  /**
+   * useEffect hook to set the city to "Honolulu" when fullName and email are present in formData.
+   *
+   * @function
+   */
   useEffect(() => {
     if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
-  }, [formData.fullName, formData.email]);
+  }, [formData.fullName, formData.email, setFormData]);
 
   return (
     <>
@@ -106,15 +126,15 @@ const DemoForm = ({ asyncFormOptions }) => {
           );
         })}
       </Select>
-      <button role="form-submit" type="submit">
+      <Button role="form-submit" type="submit">
         Submit
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         onClick={() => handleMultiEntrySubmit({ numberOfFish: Number(formData.numberOfFish) + 1 })}
       >
         Multi Entry Submit
-      </button>
+      </Button>
     </>
   );
 };
