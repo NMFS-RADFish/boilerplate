@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { Alert } from "@trussworks/react-uswds";
 import { FormWrapper } from "./contexts/FormWrapper";
+import Toast from "./components/Toast";
 import DemoForm from "./components/Demo/Demo";
 import { BrowserRouter as Router } from "react-router-dom";
 import RadfishAPIService from "./services/APIService";
@@ -9,9 +9,8 @@ import RadfishAPIService from "./services/APIService";
 const ApiService = new RadfishAPIService("");
 
 function App() {
-  const [onlineStatus, setOnlineStatus] = useState(true);
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
-  const [formSubmitStatus, setFormSubmitStatus] = useState(null);
+  const [toast, setToast] = useState(null);
 
   // Check if the app is offline
   const isOffline = !navigator.onLine;
@@ -19,11 +18,11 @@ function App() {
   useEffect(() => {
     const handleOnline = () => {
       // You may want to refetch data when the app comes online
-      setOnlineStatus(true);
+      setToast(true);
     };
 
     const handleOffline = () => {
-      setOnlineStatus(false);
+      setToast({ status: "offline", message: "Application currently offline" });
     };
 
     window.addEventListener("online", handleOnline);
@@ -37,7 +36,7 @@ function App() {
   }, [isOffline]);
 
   useEffect(() => {
-    if (!onlineStatus) {
+    if (isOffline) {
       return;
     }
     const fetchData = async () => {
@@ -52,35 +51,19 @@ function App() {
   const handleFormSubmit = async (submittedData) => {
     try {
       const { data } = await ApiService.post("/species", submittedData);
-      setFormSubmitStatus({ status: "success", message: "Successful form submission" });
+      setToast({ status: "success", message: "Successful form submission" });
     } catch (err) {
-      setFormSubmitStatus({ status: "error", message: "Error submitting form" });
+      setToast({ status: "error", message: "Error submitting form" });
     } finally {
       setTimeout(() => {
-        setFormSubmitStatus(null);
+        setToast(null);
       }, 2000);
     }
   };
 
-  console.log(formSubmitStatus);
-
   return (
     <div className="App">
-      {!onlineStatus && (
-        <Alert type={"error"} headingLevel={"h1"} hidden={onlineStatus}>
-          Application currently offline
-        </Alert>
-      )}
-      {formSubmitStatus?.status === "success" && (
-        <Alert type={"success"} headingLevel={"h1"} hidden={!formSubmitStatus}>
-          {formSubmitStatus.message}
-        </Alert>
-      )}
-      {formSubmitStatus?.status === "error" && (
-        <Alert type={"error"} headingLevel={"h1"} hidden={!formSubmitStatus}>
-          {formSubmitStatus.message}
-        </Alert>
-      )}
+      <Toast toast={toast} hidden={toast} />
       <main>
         <Router>
           <FormWrapper onSubmit={handleFormSubmit}>
