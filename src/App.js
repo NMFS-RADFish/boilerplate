@@ -9,6 +9,9 @@ import { MSW_ENDPOINT } from "./mocks/handlers";
 
 const ApiService = new RadfishAPIService("");
 
+// lifespan toast message should be visible in ms
+const TOAST_LIFESPAN = 2000;
+
 function App() {
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
   const [toast, setToast] = useState(null);
@@ -64,7 +67,7 @@ function App() {
     } finally {
       setTimeout(() => {
         setToast(null);
-      }, 2000);
+      }, TOAST_LIFESPAN);
     }
   };
 

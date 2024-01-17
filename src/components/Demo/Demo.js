@@ -17,11 +17,11 @@ const fullNameValidators = [
 ];
 
 /**
- * React functional component for a demo form. Demonstrates how to construbt a form. This should be a child of `FormWrapper`
+ * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
  *
  * @component
  * @param {Object} props - React component props.
- * @param {Object} props.asyncFormOptions - Options for asynchronous form elements.
+ * @param {Object} props.asyncFormOptions - Options for asynchronous form elements, helpful for providing default form options that are provided from centralized backend.
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
 const DemoForm = ({ asyncFormOptions }) => {
