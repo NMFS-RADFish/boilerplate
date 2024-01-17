@@ -12,6 +12,7 @@ import "./HeaderNav.css";
  * 
  * Example usage:
     ```<HeaderNav>
+        // add links here
         <a href="/">Home</a>
         <a href="/">About</a>
       </HeaderNav>```
