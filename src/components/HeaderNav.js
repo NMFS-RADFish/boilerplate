@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import Logo from "../assets/noaalogo.png";
 import { Header, NavMenuButton, PrimaryNav, Search, Title } from "@trussworks/react-uswds";
+import Logo from "../assets/noaa-logo-circle.svg";
+import "./HeaderNav.css";
 
 /**
  * HeaderNav Component
@@ -30,7 +31,7 @@ const HeaderNav = ({ children }) => {
         <div className="usa-nav-container">
           <div className="usa-navbar">
             <Title>
-              <img src={Logo} alt="logo" id="logo" />
+              <img src={Logo} alt="logo" className="header-logo" />
             </Title>
             <NavMenuButton onClick={onExpandNavMenuClick} label="Menu" />
           </div>
