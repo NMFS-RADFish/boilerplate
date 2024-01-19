@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { Alert } from "@trussworks/react-uswds";
 import { FormWrapper } from "./contexts/FormWrapper";
+import Toast, { TOAST_CONFIG } from "./components/Toast";
 import DemoForm from "./components/Demo/Demo";
 import { BrowserRouter as Router } from "react-router-dom";
 import RadfishAPIService from "./services/APIService";
 import Layout from "./components/Layout";
+import { MSW_ENDPOINT } from "./mocks/handlers";
 
 const ApiService = new RadfishAPIService("");
 
-function App() {
-  const [onlineStatus, setOnlineStatus] = useState(true);
+// lifespan toast message should be visible in ms
+const TOAST_LIFESPAN = 2000;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await ApiService.get("/species");
-      // TODO: reponse data to populate species dropdown form component
-    };
-    fetchData();
-  }, []);
+function App() {
+  const [asyncFormOptions, setAsyncFormOptions] = useState({});
+  const [toast, setToast] = useState(null);
 
   // Check if the app is offline
   const isOffline = !navigator.onLine;
@@ -26,11 +23,12 @@ function App() {
   useEffect(() => {
     const handleOnline = () => {
       // You may want to refetch data when the app comes online
-      setOnlineStatus(true);
+      setToast(true);
     };
 
     const handleOffline = () => {
-      setOnlineStatus(false);
+      const { status, message } = TOAST_CONFIG.OFFLINE;
+      setToast({ status, message });
     };
 
     window.addEventListener("online", handleOnline);
@@ -43,21 +41,44 @@ function App() {
     };
   }, [isOffline]);
 
+  // when application mounts, fetch data from endpoint and set the payload to component state
+  // this data is then passed into `DemoForm` component and used to prepopulate form fields (eg dropdown) with default options fetched from server
+  useEffect(() => {
+    if (isOffline) {
+      return;
+    }
+    // this function fetches any data needed for the business requirements in DemoForm
+    const fetchFormData = async () => {
+      const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
+      // add any other async requests here
+      const newData = { species: data };
+      setAsyncFormOptions((prev) => ({ ...prev, ...newData }));
+    };
+    fetchFormData();
+  }, [isOffline]);
+
   const handleFormSubmit = async (submittedData) => {
-    const response = await ApiService.post("/species", submittedData);
+    try {
+      await ApiService.post(MSW_ENDPOINT.SPECIES, submittedData);
+      const { status, message } = TOAST_CONFIG.SUCCESS;
+      setToast({ status, message });
+    } catch (err) {
+      const { status, message } = TOAST_CONFIG.ERROR;
+      setToast({ status, message });
+    } finally {
+      setTimeout(() => {
+        setToast(null);
+      }, TOAST_LIFESPAN);
+    }
   };
 
   return (
     <div className="App">
-      {!onlineStatus && (
-        <Alert type={"error"} headingLevel={"h1"} hidden={onlineStatus}>
-          Application currently offline
-        </Alert>
-      )}
       <Layout>
+        <Toast toast={toast} />
         <Router>
           <FormWrapper onSubmit={handleFormSubmit}>
-            <DemoForm />
+            <DemoForm asyncFormOptions={asyncFormOptions} />
           </FormWrapper>
         </Router>
       </Layout>
