@@ -178,17 +178,21 @@ const DemoForm = ({ asyncFormOptions }) => {
           </option>
         ))}
       </Select>
-
-      <Button role="form-submit" type="submit">
-        Submit
-      </Button>
-      <Button
-        role="form-submit"
-        type="submit"
-        onClick={() => handleMultiEntrySubmit({ numberOfFish: Number(formData.numberOfFish) + 1 })}
-      >
-        Multi Entry Submit
-      </Button>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <Button role="form-submit" type="submit">
+          Submit
+        </Button>
+        <Button
+          role="form-submit"
+          type="submit"
+          onClick={() =>
+            handleMultiEntrySubmit({ numberOfFish: Number(formData.numberOfFish) + 1 })
+          }
+          style={{ marginTop: "10px" }}
+        >
+          Multi Entry Submit
+        </Button>
+      </div>
     </>
   );
 };
