@@ -1,3 +1,3 @@
 # RADFish Boilerplate Application Code
 
-![radfish_logo](https://github.com/brockinit/uber_motivation/assets/11274285/d0a5a538-bac4-4a5e-bbba-4ea39c58ccbd)
+![radfish_logo](https://github.com/NMFS-RADFish/boilerplate/assets/11274285/f0c1f78d-d2bd-4590-897c-c6ec87522dd1)
