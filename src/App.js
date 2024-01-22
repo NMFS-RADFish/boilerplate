@@ -5,6 +5,7 @@ import Toast, { TOAST_CONFIG } from "./components/Toast";
 import DemoForm from "./components/Demo/Demo";
 import { BrowserRouter as Router } from "react-router-dom";
 import RadfishAPIService from "./services/APIService";
+import Layout from "./components/Layout";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 
 const ApiService = new RadfishAPIService("");
@@ -73,14 +74,14 @@ function App() {
 
   return (
     <div className="App">
-      <Toast toast={toast} />
-      <main>
+      <Layout>
+        <Toast toast={toast} />
         <Router>
           <FormWrapper onSubmit={handleFormSubmit}>
             <DemoForm asyncFormOptions={asyncFormOptions} />
           </FormWrapper>
         </Router>
-      </main>
+      </Layout>
     </div>
   );
 }
