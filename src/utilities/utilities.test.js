@@ -1,4 +1,4 @@
-import { fullNameValidators, emailValidators, phoneNumberValidators, cityValidators, stateValidators, zipcodeValidators } from './validators'; // Adjust the import path as needed
+import { fullNameValidators, emailValidators, phoneNumberValidators, cityValidators, stateValidators, zipcodeValidators } from './index.js';
 
 describe('Form Input Validators', () => {
   // Full Name Validator Tests
