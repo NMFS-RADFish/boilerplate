@@ -1,20 +1,8 @@
 import React, { useEffect } from "react";
 import { TextInput, Select, Button } from "@trussworks/react-uswds";
 import { useFormState } from "../../contexts/FormWrapper";
+import { fullNameValidators, emailValidators, phoneNumberValidators, zipcodeValidators, stateValidators, cityValidators } from "../../utilities";
 
-/**
- * Array of validators for the Full Name field.
- *
- * @typedef {Object} FullNameValidator
- * @property {function} test - Validation function that checks if the value contains numbers.
- * @property {string} message - Error message to display if validation fails.
- */
-const fullNameValidators = [
-  {
-    test: (value) => !/\d/.test(value),
-    message: "Full Name should not contain numbers.",
-  },
-];
 
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
@@ -44,6 +32,7 @@ const DemoForm = ({ asyncFormOptions }) => {
         type="text"
         placeholder="Full Name"
         value={formData["fullName"] || ""}
+        validationStatus={validationErrors.fullName ? "error" : undefined}
         onChange={(e) => handleChange(e, fullNameValidators)}
       />
       {validationErrors.fullName && <p className="error-message">{validationErrors.fullName}</p>}
@@ -52,14 +41,16 @@ const DemoForm = ({ asyncFormOptions }) => {
         type="email"
         placeholder="Email Address"
         value={formData["email"] || ""}
-        onChange={handleChange}
+        validationStatus={validationErrors.email ? "error" : undefined}
+        onChange={(e) => handleChange(e, emailValidators)}
       />
       <TextInput
         name="phoneNumber"
         type="tel"
         placeholder="(000) 000-0000"
         value={formData["phoneNumber"] || ""}
-        onChange={handleChange}
+        validationStatus={validationErrors.phoneNumber ? "error" : undefined}
+        onChange={(e) => handleChange(e, phoneNumberValidators)}
       />
       <TextInput
         name="numberOfFish"
@@ -87,21 +78,24 @@ const DemoForm = ({ asyncFormOptions }) => {
         type="text"
         placeholder="City"
         value={formData["city"] || ""}
-        onChange={handleChange}
+        validationStatus={validationErrors.city ? "error" : undefined}
+        onChange={(e) => handleChange(e, cityValidators)}
       />
       <TextInput
         name="state"
         type="text"
         placeholder="State"
         value={formData["state"] || ""}
-        onChange={handleChange}
+        validationStatus={validationErrors.state ? "error" : undefined}
+        onChange={(e) => handleChange(e, stateValidators)}
       />
       <TextInput
         name="zipcode"
         type="text"
         placeholder="Zip Code"
         value={formData["zipcode"] || ""}
-        onChange={handleChange}
+        validationStatus={validationErrors.zipcode ? "error" : undefined}
+        onChange={(e) => handleChange(e, zipcodeValidators)}
       />
       <TextInput
         name="occupation"

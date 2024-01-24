@@ -79,6 +79,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
    */
   const handleChange = useCallback(
     (event, validators) => {
+      console.log(validators, 'VALIDATE');
       const { name, value } = event.target;
       setFormData((prev) => ({ ...prev, [name]: value }));
       validateInput(name, value, validators);
