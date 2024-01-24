@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../../radfish";
+import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../../react-radfish";
 import { useFormState } from "../../contexts/FormWrapper";
 import {
   fullNameValidators,
@@ -215,4 +215,4 @@ const DemoForm = ({ asyncFormOptions }) => {
   );
 };
 
-export default DemoForm;
+export { DemoForm };

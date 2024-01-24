@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Title } from "@trussworks/react-uswds";
-import { Header, Navigation } from "../radfish";
+import { Header, Navigation } from "../react-radfish";
 import Logo from "../assets/noaa-logo-circle.svg";
 
 /**
