@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import "./index.css";
 import { FormWrapper } from "./contexts/FormWrapper";
 import Toast, { TOAST_CONFIG } from "./components/Toast";
 import DemoForm from "./components/Demo/Demo";
@@ -74,8 +75,8 @@ function App() {
 
   return (
     <div className="App">
+      <Toast toast={toast} />
       <Layout>
-        <Toast toast={toast} />
         <Router>
           <FormWrapper onSubmit={handleFormSubmit}>
             <DemoForm asyncFormOptions={asyncFormOptions} />

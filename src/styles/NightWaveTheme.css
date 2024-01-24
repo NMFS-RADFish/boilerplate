@@ -12,87 +12,124 @@ body {
   font-family:
     Arial Narrow,
     sans-serif;
-  color: var(--noaa-nightwave-text);
-  background-color: var(--noaa-nightwave-background);
+  color: var(--noaa-text-color);
+  background-color: #f4f4f4;
   line-height: 1.6;
+  border-radius: 4px;
 }
 
-form {
-  max-width: 700px;
+.radfish-form {
+  max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background: #01395e;
+  background: white;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-label {
+.usa-label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: white;
-  font-size: large;
-  letter-spacing: 0.6px;
+  color: var(--noaa-label-color);
 }
 
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="number"],
-select,
-textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  background-color: var(--noaa-nightwave-input-bg);
-  color: var(--noaa-nightwave-text);
-  border: 1px solid var(--noaa-nightwave-accent);
-  border-radius: 4px;
-  box-sizing: border-box;
-  transition: border-color 0.3s;
+.usa-textarea,
+.usa-range,
+.usa-input-group,
+.usa-combo-box__input,
+.usa-select,
+.usa-input {
+  min-width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
+  border-radius: 0.25rem !important;
+  border: solid var(--noaa-border-light) 2px !important;
+  transition: border-color 0.3s !important;
+  outline: none !important;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="tel"]:focus,
-input[type="number"]:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--noaa-nightwave-hover);
-  outline: none;
-}
-
-input[type="text"]::placeholder,
-input[type="email"]::placeholder,
-input[type="tel"]::placeholder,
-input[type="number"]::placeholder,
-select::placeholder,
-textarea::placeholder {
-  color: white;
-  opacity: 1;
-}
-
-input[type="radio"] {
-  margin-right: 10px;
-}
-
-button {
-  background-color: var(--noaa-nightwave-button);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: var(--noaa-nightwave-hover);
-}
-
-.error-message {
-  color: var(--noaa-nightwave-error);
+.usa-error-message {
+  color: var(--noaa-error-color);
   font-size: 14px;
+}
+
+.usa-textarea:focus,
+.usa-range:focus,
+.usa-input-group:focus,
+.usa-combo-box__input:focus,
+.usa-select:focus,
+.usa-input:focus {
+  outline: solid var(--noaa-light-blue) 2px !important;
+}
+
+.usa-radio__label {
+  color: var(--noaa-text-color) !important;
+}
+
+.usa-radio__label::before {
+  color: var(--noaa-text-color) !important;
+  box-shadow: 0 0 0 1px var(--noaa-border-dark) !important;
+}
+
+.usa-radio__input:checked + .usa-radio__label::before {
+  background-color: var(--noaa-dark-blue) !important;
+  box-shadow: 0 0 0 2px var(--noaa-dark-blue) !important;
+}
+
+.usa-radio__input:checked:focus + .usa-radio__label::before {
+  outline: solid var(--noaa-light-blue) 2px;
+}
+
+.usa-button {
+  transition: background-color 0.3s;
+  background-color: var(--noaa-light-blue) !important;
+}
+
+.usa-button:hover {
+  background-color: var(--noaa-button-hover) !important;
+}
+
+.usa-button:focus {
+  outline: solid var(--noaa-light-blue) 2px !important;
+}
+
+.usa-menu-btn {
+  border-top-left-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+  transition: background-color 0.3s;
+  background-color: var(--noaa-light-blue) !important;
+}
+
+.usa-menu-btn:hover {
+  background-color: var(--noaa-button-hover) !important;
+}
+
+.usa-menu-btn:focus {
+  outline: solid var(--noaa-light-blue) 2px !important;
+}
+
+/* HeaderNav styles */
+
+.usa-nav-container {
+  align-items: center !important;
+}
+
+.usa-header [role="search"] {
+  float: right;
+  max-width: calc(27ch) !important;
+  justify-content: flex-end !important;
+}
+
+.usa-navbar {
+  @media screen and (max-width: 1023px) {
+    min-height: 90px !important;
+  }
+}
+
+/* Minimum size for NOAA logo must be 72px (0.75 in) */
+.header-logo {
+  width: 72px;
 }
 
 @media (max-width: 768px) {

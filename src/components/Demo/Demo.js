@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { TextInput, Select, Button, Radio, Label } from "@trussworks/react-uswds";
+import { TextInput, Select, Button, Radio, Label, ErrorMessage } from "@trussworks/react-uswds";
 import { useFormState } from "../../contexts/FormWrapper";
 
 /**
@@ -43,7 +43,7 @@ const DemoForm = ({ asyncFormOptions }) => {
         value={formData["fullName"] || ""}
         onChange={(e) => handleChange(e, fullNameValidators)}
       />
-      {validationErrors.fullName && <p className="error-message">{validationErrors.fullName}</p>}
+      {validationErrors.fullName && <ErrorMessage>{validationErrors.fullName}</ErrorMessage>}
 
       <Label htmlFor="email">Email Address</Label>
       <TextInput

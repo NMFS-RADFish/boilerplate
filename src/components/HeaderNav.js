@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Header, NavMenuButton, PrimaryNav, Search, Title } from "@trussworks/react-uswds";
 import Logo from "../assets/noaa-logo-circle.svg";
-import "./HeaderNav.css";
 
 /**
  * HeaderNav Component

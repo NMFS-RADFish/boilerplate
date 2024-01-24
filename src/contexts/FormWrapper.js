@@ -97,7 +97,10 @@ export const FormWrapper = ({ children, onSubmit }) => {
 
   return (
     <FormContext.Provider value={contextValue}>
+      {/* TODO: form should be broken out into `compoennts/RadFishForm` */}
       <form
+        // TODO: styles should be broken out into `components/RadfishForm/styles.css
+        className="radfish-form"
         onSubmit={(event) => {
           event.preventDefault();
           onSubmit?.(formData);
