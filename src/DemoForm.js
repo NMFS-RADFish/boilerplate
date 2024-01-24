@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../../react-radfish";
-import { useFormState } from "../../contexts/FormWrapper";
+import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "./react-radfish";
+import { useFormState } from "./contexts/FormWrapper";
 import {
   fullNameValidators,
   emailValidators,
@@ -8,7 +8,7 @@ import {
   zipcodeValidators,
   stateValidators,
   cityValidators,
-} from "../../utilities";
+} from "./utilities";
 
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
