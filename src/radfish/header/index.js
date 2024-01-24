@@ -12,7 +12,6 @@ const RadfishHeader = (props) => {
 };
 
 const RadfishNavigation = (props) => {
-  console.log("PROPS", props.items);
   return (
     <div className="radfish-nav-container">
       <NavMenuButton onClick={props.onClick} label="Menu" />

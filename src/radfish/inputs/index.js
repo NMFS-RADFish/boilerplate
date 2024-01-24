@@ -3,6 +3,8 @@ import {
   TextInput as TwTextInput,
   Radio as TwRadio,
   Select as TwSelect,
+  Label as TwLabel,
+  ErrorMessage as TwErrorMessage,
 } from "@trussworks/react-uswds";
 
 const RadfishInput = (props) => {
@@ -17,4 +19,18 @@ const RadfishSelect = (props) => {
   return <TwSelect className="radfish-select" {...props} />;
 };
 
-export { RadfishInput as TextInput, RadfishRadio as Radio, RadfishSelect as Select };
+const RadfishInputLabel = (props) => {
+  return <TwLabel className="radfish-label" {...props} />;
+};
+
+const RadfishErrorMessage = (props) => {
+  return <TwErrorMessage className="radfish-error-message" {...props} />;
+};
+
+export {
+  RadfishInput as TextInput,
+  RadfishRadio as Radio,
+  RadfishSelect as Select,
+  RadfishInputLabel as Label,
+  RadfishErrorMessage as ErrorMessage,
+};

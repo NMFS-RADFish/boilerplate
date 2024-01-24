@@ -33,3 +33,17 @@
 .radfish-radio .usa-radio__input:checked:focus + .usa-radio__label::before {
   outline: solid var(--noaa-light-blue) 2px !important;
 }
+
+/* input label */
+.radfish-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--noaa-label-color);
+}
+
+/* input error message */
+.radfish-error-message {
+  color: var(--noaa-error-color);
+  font-size: 14px;
+}

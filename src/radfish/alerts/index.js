@@ -1,3 +1,4 @@
+import "./style.css";
 import React from "react";
 import { Alert } from "@trussworks/react-uswds";
 
@@ -5,7 +6,7 @@ import { Alert } from "@trussworks/react-uswds";
  * Toast configuration constants.
  * @constant {Object}
  */
-export const TOAST_CONFIG = {
+const TOAST_CONFIG = {
   OFFLINE: {
     status: "offline",
     message: "Application currently offline",
@@ -28,7 +29,7 @@ export const TOAST_CONFIG = {
  * @param {Object} props.toast - The toast object containing status and message information.
  * @returns {JSX.Element | undefined} The JSX element representing the toast notification.
  */
-const Toast = ({ toast }) => {
+const RadfishToast = ({ toast }) => {
   if (!toast) {
     return;
   }
@@ -72,4 +73,4 @@ const Toast = ({ toast }) => {
   }
 };
 
-export default Toast;
+export { RadfishToast as Toast, TOAST_CONFIG };

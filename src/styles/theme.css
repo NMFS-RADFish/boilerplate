@@ -20,19 +20,6 @@ body {
   border-radius: 4px;
 }
 
-/* Radfish input styles */
-.usa-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: var(--noaa-label-color);
-}
-
-.usa-error-message {
-  color: var(--noaa-error-color);
-  font-size: 14px;
-}
-
 /* Minimum size for NOAA logo must be 72px (0.75 in) */
 .header-logo {
   width: 72px;

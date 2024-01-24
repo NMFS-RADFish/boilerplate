@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { Label, ErrorMessage } from "@trussworks/react-uswds";
-import { TextInput, Radio, Select, Button } from "../../radfish";
+import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../../radfish";
 import { useFormState } from "../../contexts/FormWrapper";
 
 /**
