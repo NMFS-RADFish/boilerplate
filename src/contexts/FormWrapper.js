@@ -1,6 +1,7 @@
 // FormContext.js
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Form } from "../radfish";
 
 const FormContext = createContext();
 
@@ -97,17 +98,14 @@ export const FormWrapper = ({ children, onSubmit }) => {
 
   return (
     <FormContext.Provider value={contextValue}>
-      {/* TODO: form should be broken out into `compoennts/RadFishForm` */}
-      <form
-        // TODO: styles should be broken out into `components/RadfishForm/styles.css
-        className="radfish-form"
+      <Form
         onSubmit={(event) => {
           event.preventDefault();
           onSubmit?.(formData);
         }}
       >
         {children}
-      </form>
+      </Form>
     </FormContext.Provider>
   );
 };

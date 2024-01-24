@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Header, NavMenuButton, PrimaryNav, Search, Title } from "@trussworks/react-uswds";
+import { Title } from "@trussworks/react-uswds";
+import { NavMenuButton, Search, Header, Navigation } from "../radfish";
 import Logo from "../assets/noaa-logo-circle.svg";
 
 /**
@@ -28,21 +29,10 @@ const HeaderNav = ({ children }) => {
         onClick={() => (expanded ? setExpanded(false) : null)}
       ></div>
       <Header basic={true}>
-        <div className="usa-nav-container">
-          <div className="usa-navbar">
-            <Title>
-              <img src={Logo} alt="logo" className="header-logo" />
-            </Title>
-            <NavMenuButton onClick={onExpandNavMenuClick} label="Menu" />
-          </div>
-          <PrimaryNav
-            items={children}
-            mobileExpanded={expanded}
-            onToggleMobileNav={onExpandNavMenuClick}
-          >
-            <Search size="small" onSubmit={() => null} />
-          </PrimaryNav>
-        </div>
+        <Title>
+          <img src={Logo} alt="logo" className="header-logo" />
+        </Title>
+        <Navigation items={children} expanded={expanded} onClick={onExpandNavMenuClick} />
       </Header>
     </>
   );

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
 import "./index.css";
 import { FormWrapper } from "./contexts/FormWrapper";
 import Toast, { TOAST_CONFIG } from "./components/Toast";

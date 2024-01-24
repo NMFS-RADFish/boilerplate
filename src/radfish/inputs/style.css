@@ -1,0 +1,35 @@
+/* basic input */
+.radfish-input,
+.radfish-select {
+  min-width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
+  border-radius: 0.25rem;
+  border: solid var(--noaa-border-light) 2px;
+  transition: border-color 0.3s;
+  outline: none;
+}
+
+.radfish-input:focus,
+.radfish-select:focus {
+  outline: solid var(--noaa-light-blue) 2px !important;
+}
+
+/* radio input */
+.radfish-radio {
+  color: var(--noaa-text-color) !important;
+}
+
+.radfish-radio .usa-radio__label::before {
+  color: var(--noaa-text-color) !important;
+  box-shadow: 0 0 0 1px var(--noaa-border-dark) !important;
+}
+
+.radfish-radio .usa-radio__input:checked + .usa-radio__label::before {
+  background-color: var(--noaa-dark-blue) !important;
+  box-shadow: 0 0 0 2px var(--noaa-dark-blue) !important;
+}
+
+.radfish-radio .usa-radio__input:checked:focus + .usa-radio__label::before {
+  outline: solid var(--noaa-light-blue) 2px !important;
+}
