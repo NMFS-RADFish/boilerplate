@@ -1,20 +1,14 @@
 import React, { useEffect } from "react";
 import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../../radfish";
 import { useFormState } from "../../contexts/FormWrapper";
-
-/**
- * Array of validators for the Full Name field.
- *
- * @typedef {Object} FullNameValidator
- * @property {function} test - Validation function that checks if the value contains numbers.
- * @property {string} message - Error message to display if validation fails.
- */
-const fullNameValidators = [
-  {
-    test: (value) => !/\d/.test(value),
-    message: "Full Name should not contain numbers.",
-  },
-];
+import {
+  fullNameValidators,
+  emailValidators,
+  phoneNumberValidators,
+  zipcodeValidators,
+  stateValidators,
+  cityValidators,
+} from "../../utilities";
 
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
@@ -25,8 +19,14 @@ const fullNameValidators = [
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
 const DemoForm = ({ asyncFormOptions }) => {
-  const { formData, setFormData, handleChange, validationErrors, handleMultiEntrySubmit } =
-    useFormState();
+  const {
+    formData,
+    setFormData,
+    handleChange,
+    handleBlur,
+    validationErrors,
+    handleMultiEntrySubmit,
+  } = useFormState();
 
   useEffect(() => {
     if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
@@ -41,7 +41,10 @@ const DemoForm = ({ asyncFormOptions }) => {
         type="text"
         placeholder="Full Name"
         value={formData["fullName"] || ""}
-        onChange={(e) => handleChange(e, fullNameValidators)}
+        aria-invalid={validationErrors.fullName ? "true" : "false"}
+        validationStatus={validationErrors.fullName ? "error" : undefined}
+        onChange={handleChange}
+        onBlur={(e) => handleBlur(e, fullNameValidators)}
       />
       {validationErrors.fullName && <ErrorMessage>{validationErrors.fullName}</ErrorMessage>}
 
@@ -52,20 +55,26 @@ const DemoForm = ({ asyncFormOptions }) => {
         type="email"
         placeholder="Email Address"
         value={formData["email"] || ""}
+        validationStatus={validationErrors.email ? "error" : undefined}
         onChange={handleChange}
+        onBlur={(e) => handleBlur(e, emailValidators)}
       />
 
       <Label htmlFor="phoneNumber">Phone Number</Label>
+      {validationErrors.email && <ErrorMessage>{validationErrors.email}</ErrorMessage>}
       <TextInput
         id="phoneNumber"
         name="phoneNumber"
         type="tel"
         placeholder="(000) 000-0000"
         value={formData["phoneNumber"] || ""}
+        validationStatus={validationErrors.phoneNumber ? "error" : undefined}
         onChange={handleChange}
+        onBlur={(e) => handleBlur(e, phoneNumberValidators)}
       />
 
       <Label htmlFor="numberOfFish">Number of Fish</Label>
+      {validationErrors.phoneNumber && <ErrorMessage>{validationErrors.phoneNumber}</ErrorMessage>}
       <TextInput
         id="numberOfFish"
         name="numberOfFish"
@@ -128,30 +137,39 @@ const DemoForm = ({ asyncFormOptions }) => {
         type="text"
         placeholder="City"
         value={formData["city"] || ""}
+        validationStatus={validationErrors.city ? "error" : undefined}
         onChange={handleChange}
+        onBlur={(e) => handleBlur(e, cityValidators)}
       />
 
       <Label htmlFor="state">State</Label>
+      {validationErrors.city && <ErrorMessage>{validationErrors.city}</ErrorMessage>}
       <TextInput
         id="state"
         name="state"
         type="text"
         placeholder="State"
         value={formData["state"] || ""}
+        validationStatus={validationErrors.state ? "error" : undefined}
         onChange={handleChange}
+        onBlur={(e) => handleBlur(e, stateValidators)}
       />
 
       <Label htmlFor="zipcode">Zip Code</Label>
+      {validationErrors.state && <ErrorMessage>{validationErrors.state}</ErrorMessage>}
       <TextInput
         id="zipcode"
         name="zipcode"
         type="text"
         placeholder="Zip Code"
         value={formData["zipcode"] || ""}
+        validationStatus={validationErrors.zipcode ? "error" : undefined}
         onChange={handleChange}
+        onBlur={(e) => handleBlur(e, zipcodeValidators)}
       />
 
       <Label htmlFor="occupation">Occupation</Label>
+      {validationErrors.zipcode && <ErrorMessage>{validationErrors.zipcode}</ErrorMessage>}
       <TextInput
         id="occupation"
         name="occupation"

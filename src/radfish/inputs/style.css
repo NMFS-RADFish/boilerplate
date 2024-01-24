@@ -44,6 +44,11 @@
 
 /* input error message */
 .radfish-error-message {
-  color: var(--noaa-error-color);
-  font-size: 14px;
+  background-color: var(--noaa-yellow-one); /* light yellow background */
+  border: 1px solid var(--noaa-yellow-two); /* slightly darker yellow border */
+  color: var(--noaa-yellow-three); /* dark yellow text color, for better readability */
+  padding: 0.75rem 1.25rem; /* some padding around the text */
+  border-radius: 0.25rem; /* rounded corners */
+  font-size: 0.875rem; /* smaller font size for the warning text */
+  text-align: center; /* center the text */
 }

@@ -1,6 +1,9 @@
 :root {
   --noaa-dark-blue: #0054a4;
   --noaa-light-blue: #0093d0;
+  --noaa-yellow-one: #fff3cd;
+  --noaa-yellow-two: #ffeeba;
+  --noaa-yellow-three: #856404;
   --noaa-accent-color: #00467f;
   --noaa-text-color: #333;
   --noaa-error-color: #af292e;
