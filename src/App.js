@@ -6,7 +6,7 @@ import { FormWrapper } from "./contexts/FormWrapper";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
-import { DemoForm } from "./DemoForm";
+import { DemoForm } from "./components/DemoForm";
 
 const ApiService = new RadfishAPIService("");
 

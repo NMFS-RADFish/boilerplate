@@ -12,26 +12,26 @@
 
 .radfish-input:focus,
 .radfish-select:focus {
-  outline: solid var(--noaa-light-blue) 2px !important;
+  outline: solid var(--noaa-light-blue) 2px;
 }
 
 /* radio input */
 .radfish-radio {
-  color: var(--noaa-text-color) !important;
+  color: var(--noaa-text-color);
 }
 
 .radfish-radio .usa-radio__label::before {
-  color: var(--noaa-text-color) !important;
-  box-shadow: 0 0 0 1px var(--noaa-border-dark) !important;
+  color: var(--noaa-text-color);
+  box-shadow: 0 0 0 1px var(--noaa-border-dark);
 }
 
 .radfish-radio .usa-radio__input:checked + .usa-radio__label::before {
-  background-color: var(--noaa-dark-blue) !important;
-  box-shadow: 0 0 0 2px var(--noaa-dark-blue) !important;
+  background-color: var(--noaa-dark-blue);
+  box-shadow: 0 0 0 2px var(--noaa-dark-blue);
 }
 
 .radfish-radio .usa-radio__input:checked:focus + .usa-radio__label::before {
-  outline: solid var(--noaa-light-blue) 2px !important;
+  outline: solid var(--noaa-light-blue) 2px;
 }
 
 /* input label */

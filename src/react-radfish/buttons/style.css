@@ -8,7 +8,7 @@
 }
 
 .radfish-button:focus {
-  outline: solid var(--noaa-light-blue) 2px !important;
+  outline: solid var(--noaa-light-blue) 2px;
 }
 
 .radfish-menu-btn {
