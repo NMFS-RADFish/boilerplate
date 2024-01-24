@@ -1,20 +1,8 @@
 import React, { useEffect } from "react";
 import { TextInput, Select, Button } from "@trussworks/react-uswds";
 import { useFormState } from "../../contexts/FormWrapper";
+import { fullNameValidators, emailValidators, phoneNumberValidators, zipcodeValidators, stateValidators, cityValidators } from "../../utilities";
 
-/**
- * Array of validators for the Full Name field.
- *
- * @typedef {Object} FullNameValidator
- * @property {function} test - Validation function that checks if the value contains numbers.
- * @property {string} message - Error message to display if validation fails.
- */
-const fullNameValidators = [
-  {
-    test: (value) => !/\d/.test(value),
-    message: "Full Name should not contain numbers.",
-  },
-];
 
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
@@ -25,7 +13,7 @@ const fullNameValidators = [
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
 const DemoForm = ({ asyncFormOptions }) => {
-  const { formData, setFormData, handleChange, validationErrors, handleMultiEntrySubmit } =
+  const { formData, setFormData, handleChange, handleBlur, validationErrors, handleMultiEntrySubmit } =
     useFormState();
 
   /**
@@ -44,23 +32,32 @@ const DemoForm = ({ asyncFormOptions }) => {
         type="text"
         placeholder="Full Name"
         value={formData["fullName"] || ""}
-        onChange={(e) => handleChange(e, fullNameValidators)}
+        aria-invalid={validationErrors.fullName ? "true" : "false"}
+        validationStatus={validationErrors.fullName ? "error" : undefined}
+        onChange={handleChange}
+        onBlur={(e) => handleBlur(e, fullNameValidators)}
       />
-      {validationErrors.fullName && <p className="error-message">{validationErrors.fullName}</p>}
+      {validationErrors.fullName && <p className="validation-message">{validationErrors.fullName}</p>}
       <TextInput
         name="email"
         type="email"
         placeholder="Email Address"
         value={formData["email"] || ""}
+        validationStatus={validationErrors.email ? "error" : undefined}
         onChange={handleChange}
+        onBlur={(e) => handleBlur(e, emailValidators)}
       />
+      {validationErrors.email && <p className="validation-message">{validationErrors.email}</p>}
       <TextInput
         name="phoneNumber"
         type="tel"
         placeholder="(000) 000-0000"
         value={formData["phoneNumber"] || ""}
+        validationStatus={validationErrors.phoneNumber ? "error" : undefined}
         onChange={handleChange}
+        onBlur={(e) => handleBlur(e, phoneNumberValidators)}
       />
+      {validationErrors.phoneNumber && <p className="validation-message">{validationErrors.phoneNumber}</p>}
       <TextInput
         name="numberOfFish"
         type="number"
@@ -87,22 +84,31 @@ const DemoForm = ({ asyncFormOptions }) => {
         type="text"
         placeholder="City"
         value={formData["city"] || ""}
+        validationStatus={validationErrors.city ? "error" : undefined}
         onChange={handleChange}
+        onBlur={(e) => handleBlur(e, cityValidators)}
       />
+      {validationErrors.city && <p className="validation-message">{validationErrors.city}</p>}
       <TextInput
         name="state"
         type="text"
         placeholder="State"
         value={formData["state"] || ""}
+        validationStatus={validationErrors.state ? "error" : undefined}
         onChange={handleChange}
+        onBlur={(e) => handleBlur(e, stateValidators)}
       />
+      {validationErrors.state && <p className="validation-message">{validationErrors.state}</p>}
       <TextInput
         name="zipcode"
         type="text"
         placeholder="Zip Code"
         value={formData["zipcode"] || ""}
+        validationStatus={validationErrors.zipcode ? "error" : undefined}
         onChange={handleChange}
+        onBlur={(e) => handleBlur(e, zipcodeValidators)}
       />
+      {validationErrors.zipcode && <p className="validation-message">{validationErrors.zipcode}</p>}
       <TextInput
         name="occupation"
         type="text"

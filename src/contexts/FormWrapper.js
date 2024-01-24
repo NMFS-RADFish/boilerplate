@@ -71,25 +71,41 @@ export const FormWrapper = ({ children, onSubmit }) => {
   }, []);
 
   /**
-   * Handles input change events, updating form data and performing validation.
+   * Handles input change events, updating form data.
    *
    * @function
    * @param {Object} event - The change event object.
    * @param {Array} validators - Array of validation functions and error messages.
    */
   const handleChange = useCallback(
-    (event, validators) => {
+    (event) => {
       const { name, value } = event.target;
       setFormData((prev) => ({ ...prev, [name]: value }));
+    },
+    [],
+  );
+
+  /**
+ * Handles input onBlur events and performs validation.
+ *
+ * @function
+ * @param {Object} event - The onBlur event object.
+ * @param {Array} validators - Array of validation functions and error messages.
+ */
+  const handleBlur = useCallback(
+    (event, validators) => {
+      const { name, value } = event.target;
       validateInput(name, value, validators);
     },
     [validateInput],
   );
 
+
   const contextValue = {
     formData,
     setFormData,
     handleChange,
+    handleBlur,
     validationErrors,
     handleMultiEntrySubmit,
     searchParams,
