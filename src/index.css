@@ -16,3 +16,14 @@ html,
 body {
   width: 100%;
 }
+
+.validation-message {
+  background-color: #fff3cd; /* light yellow background */
+  border: 1px solid #ffeeba; /* slightly darker yellow border */
+  color: #856404; /* dark yellow text color, for better readability */
+  padding: .75rem 1.25rem; /* some padding around the text */
+  border-radius: .25rem; /* rounded corners */
+  font-size: .875rem; /* smaller font size for the warning text */
+  text-align: center; /* center the text */
+  max-width: 50%;
+}

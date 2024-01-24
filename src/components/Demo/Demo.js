@@ -13,7 +13,7 @@ import { fullNameValidators, emailValidators, phoneNumberValidators, zipcodeVali
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
 const DemoForm = ({ asyncFormOptions }) => {
-  const { formData, setFormData, handleChange, validationErrors, handleMultiEntrySubmit } =
+  const { formData, setFormData, handleChange, handleBlur, validationErrors, handleMultiEntrySubmit } =
     useFormState();
 
   /**
@@ -32,26 +32,32 @@ const DemoForm = ({ asyncFormOptions }) => {
         type="text"
         placeholder="Full Name"
         value={formData["fullName"] || ""}
+        aria-invalid={validationErrors.fullName ? "true" : "false"}
         validationStatus={validationErrors.fullName ? "error" : undefined}
-        onChange={(e) => handleChange(e, fullNameValidators)}
+        onChange={handleChange}
+        onBlur={(e) => handleBlur(e, fullNameValidators)}
       />
-      {validationErrors.fullName && <p className="error-message">{validationErrors.fullName}</p>}
+      {validationErrors.fullName && <p className="validation-message">{validationErrors.fullName}</p>}
       <TextInput
         name="email"
         type="email"
         placeholder="Email Address"
         value={formData["email"] || ""}
         validationStatus={validationErrors.email ? "error" : undefined}
-        onChange={(e) => handleChange(e, emailValidators)}
+        onChange={handleChange}
+        onBlur={(e) => handleBlur(e, emailValidators)}
       />
+      {validationErrors.email && <p className="validation-message">{validationErrors.email}</p>}
       <TextInput
         name="phoneNumber"
         type="tel"
         placeholder="(000) 000-0000"
         value={formData["phoneNumber"] || ""}
         validationStatus={validationErrors.phoneNumber ? "error" : undefined}
-        onChange={(e) => handleChange(e, phoneNumberValidators)}
+        onChange={handleChange}
+        onBlur={(e) => handleBlur(e, phoneNumberValidators)}
       />
+      {validationErrors.phoneNumber && <p className="validation-message">{validationErrors.phoneNumber}</p>}
       <TextInput
         name="numberOfFish"
         type="number"
@@ -79,24 +85,30 @@ const DemoForm = ({ asyncFormOptions }) => {
         placeholder="City"
         value={formData["city"] || ""}
         validationStatus={validationErrors.city ? "error" : undefined}
-        onChange={(e) => handleChange(e, cityValidators)}
+        onChange={handleChange}
+        onBlur={(e) => handleBlur(e, cityValidators)}
       />
+      {validationErrors.city && <p className="validation-message">{validationErrors.city}</p>}
       <TextInput
         name="state"
         type="text"
         placeholder="State"
         value={formData["state"] || ""}
         validationStatus={validationErrors.state ? "error" : undefined}
-        onChange={(e) => handleChange(e, stateValidators)}
+        onChange={handleChange}
+        onBlur={(e) => handleBlur(e, stateValidators)}
       />
+      {validationErrors.state && <p className="validation-message">{validationErrors.state}</p>}
       <TextInput
         name="zipcode"
         type="text"
         placeholder="Zip Code"
         value={formData["zipcode"] || ""}
         validationStatus={validationErrors.zipcode ? "error" : undefined}
-        onChange={(e) => handleChange(e, zipcodeValidators)}
+        onChange={handleChange}
+        onBlur={(e) => handleBlur(e, zipcodeValidators)}
       />
+      {validationErrors.zipcode && <p className="validation-message">{validationErrors.zipcode}</p>}
       <TextInput
         name="occupation"
         type="text"
