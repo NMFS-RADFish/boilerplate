@@ -6,7 +6,7 @@ export const MSW_ENDPOINT = {
 
 export const handlers = [
   http.get(MSW_ENDPOINT.SPECIES, () => {
-    return HttpResponse.json({ data: ["grouper", "marlin"] }, { status: 200 });
+    return HttpResponse.json({ data: ["grouper", "salmon"] }, { status: 200 });
   }),
   http.post(MSW_ENDPOINT.SPECIES, async ({ request }) => {
     const response = await request.json();

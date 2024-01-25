@@ -59,9 +59,9 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, emailValidators)}
       />
+      {validationErrors.email && <ErrorMessage>{validationErrors.email}</ErrorMessage>}
 
       <Label htmlFor="phoneNumber">Phone Number</Label>
-      {validationErrors.email && <ErrorMessage>{validationErrors.email}</ErrorMessage>}
       <TextInput
         id="phoneNumber"
         name="phoneNumber"
@@ -72,11 +72,12 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, phoneNumberValidators)}
       />
+      {validationErrors.phoneNumber && <ErrorMessage>{validationErrors.phoneNumber}</ErrorMessage>}
 
       <Label htmlFor="numberOfFish">Number of Fish</Label>
-      {validationErrors.phoneNumber && <ErrorMessage>{validationErrors.phoneNumber}</ErrorMessage>}
       <TextInput
         id="numberOfFish"
+        linkedInputId="computedPrice"
         name="numberOfFish"
         type="number"
         placeholder="0"
@@ -133,9 +134,9 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, cityValidators)}
       />
+      {validationErrors.city && <ErrorMessage>{validationErrors.city}</ErrorMessage>}
 
       <Label htmlFor="state">State</Label>
-      {validationErrors.city && <ErrorMessage>{validationErrors.city}</ErrorMessage>}
       <TextInput
         id="state"
         name="state"
@@ -146,9 +147,9 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, stateValidators)}
       />
+      {validationErrors.state && <ErrorMessage>{validationErrors.state}</ErrorMessage>}
 
       <Label htmlFor="zipcode">Zip Code</Label>
-      {validationErrors.state && <ErrorMessage>{validationErrors.state}</ErrorMessage>}
       <TextInput
         id="zipcode"
         name="zipcode"
@@ -159,9 +160,9 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, zipcodeValidators)}
       />
+      {validationErrors.zipcode && <ErrorMessage>{validationErrors.zipcode}</ErrorMessage>}
 
       <Label htmlFor="occupation">Occupation</Label>
-      {validationErrors.zipcode && <ErrorMessage>{validationErrors.zipcode}</ErrorMessage>}
       <TextInput
         id="occupation"
         name="occupation"
@@ -180,7 +181,12 @@ const DemoForm = ({ asyncFormOptions }) => {
       </Select>
 
       <Label htmlFor="species">Species</Label>
-      <Select name="species" value={formData["species"] || ""} onChange={handleChange}>
+      <Select
+        linkedInputId="computedPrice"
+        name="species"
+        value={formData["species"] || ""}
+        onChange={handleChange}
+      >
         <option value="">Select Species</option>
         {asyncFormOptions?.species?.map((option) => (
           <option key={option} value={option.toLowerCase()}>
@@ -188,6 +194,16 @@ const DemoForm = ({ asyncFormOptions }) => {
           </option>
         ))}
       </Select>
+      <Label htmlFor="species">Computed Price</Label>
+      <TextInput
+        id="computedPrice"
+        name="computedPrice"
+        type="text"
+        placeholder="Computed Price"
+        value={formData["computedPrice"] || ""}
+        onChange={handleChange}
+      />
+
       <div style={{ display: "flex", flexDirection: "column" }}>
         <Button role="form-submit" type="submit">
           Submit

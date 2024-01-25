@@ -2,8 +2,16 @@
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Form } from "../react-radfish";
+import { computePriceFromQuantitySpecies } from "../utilities";
 
 const FormContext = createContext();
+
+const computedInputConfig = {
+  computedPrice: {
+    callback: computePriceFromQuantitySpecies,
+    args: ["numberOfFish", "species"],
+  },
+};
 
 /**
  * Higher-order component providing form state and functionality.
@@ -16,6 +24,7 @@ const FormContext = createContext();
 export const FormWrapper = ({ children, onSubmit }) => {
   const [formData, setFormData] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
+  const [inputToCompute, setInputToCompute] = useState(null);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -49,6 +58,17 @@ export const FormWrapper = ({ children, onSubmit }) => {
     }
   }, [searchParams]);
 
+  // useEffect(() => {
+  //   console.log("blah");
+  //   console.log("formData: ", formData);
+  //   const computedValue = computedInputConfig[inputToCompute].callback(
+  //     formData["species"],
+  //     formData["numberOfFish"],
+  //   );
+  //   setFormData((prev) => ({ ...prev, [inputToCompute]: computedValue }));
+  //   // console.log(computedValue);
+  // }, [inputToCompute]);
+
   /**
    * Validates the input value based on provided validators.
    *
@@ -80,8 +100,32 @@ export const FormWrapper = ({ children, onSubmit }) => {
    */
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    const linkedInputId = event.target.getAttribute("linkedInputId");
+
+    setFormData((prev) => {
+      const updatedForm = { ...prev, [name]: value };
+      if (linkedInputId) {
+        const computedInputValue = handleComputedValues(
+          linkedInputId,
+          computedInputConfig[linkedInputId].args,
+          updatedForm,
+        );
+        return {
+          ...updatedForm,
+          [linkedInputId]: computedInputValue,
+        };
+      } else {
+        return updatedForm;
+      }
+    });
   }, []);
+
+  const handleComputedValues = useCallback((input, args, formData) => {
+    const values = args.map((arg) => formData[arg]);
+    const computedValue = computedInputConfig[input].callback(values);
+    return computedValue;
+  });
 
   /**
    * Handles input onBlur events and performs validation.
