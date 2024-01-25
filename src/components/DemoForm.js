@@ -196,6 +196,7 @@ const DemoForm = ({ asyncFormOptions }) => {
       </Select>
       <Label htmlFor="species">Computed Price</Label>
       <TextInput
+        readOnly
         id="computedPrice"
         name="computedPrice"
         type="text"

@@ -24,7 +24,6 @@ const computedInputConfig = {
 export const FormWrapper = ({ children, onSubmit }) => {
   const [formData, setFormData] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
-  const [inputToCompute, setInputToCompute] = useState(null);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -58,17 +57,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
     }
   }, [searchParams]);
 
-  // useEffect(() => {
-  //   console.log("blah");
-  //   console.log("formData: ", formData);
-  //   const computedValue = computedInputConfig[inputToCompute].callback(
-  //     formData["species"],
-  //     formData["numberOfFish"],
-  //   );
-  //   setFormData((prev) => ({ ...prev, [inputToCompute]: computedValue }));
-  //   // console.log(computedValue);
-  // }, [inputToCompute]);
-
   /**
    * Validates the input value based on provided validators.
    *
@@ -100,31 +88,28 @@ export const FormWrapper = ({ children, onSubmit }) => {
    */
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
-
     const linkedInputId = event.target.getAttribute("linkedInputId");
 
+    // if field being updated has a linked field that needs to be computed, update state after computing linked fields
+    // else just return updatedForm without needing to linked computedValues
     setFormData((prev) => {
       const updatedForm = { ...prev, [name]: value };
       if (linkedInputId) {
-        const computedInputValue = handleComputedValues(
-          linkedInputId,
-          computedInputConfig[linkedInputId].args,
-          updatedForm,
-        );
-        return {
-          ...updatedForm,
-          [linkedInputId]: computedInputValue,
-        };
+        const updatedComputedForm = handleComputedValues(linkedInputId, updatedForm);
+        return updatedComputedForm;
       } else {
         return updatedForm;
       }
     });
   }, []);
 
-  const handleComputedValues = useCallback((input, args, formData) => {
-    const values = args.map((arg) => formData[arg]);
-    const computedValue = computedInputConfig[input].callback(values);
-    return computedValue;
+  const handleComputedValues = useCallback((inputId, formData) => {
+    const args = computedInputConfig[inputId].args.map((arg) => formData[arg]);
+    const computedValue = computedInputConfig[inputId].callback(args);
+    return {
+      ...formData,
+      [inputId]: computedValue,
+    };
   });
 
   /**
