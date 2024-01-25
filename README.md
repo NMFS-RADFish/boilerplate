@@ -9,7 +9,6 @@
     - [Building your first page and form](#building-your-first-page-and-form)
     - [Setting the layout of the application](#setting-the-layout-of-the-application)
       - [Layout Component (Layout.js)](#layout-component-layoutjs)
-    - [Setting the navigation header of the application](#setting-the-navigation-header-of-the-application)
       - [HeaderNav Component (HeaderNav.js)](#headernav-component-headernavjs)
     - [State Management](#state-management)
     - [Interfacing with backend services](#interfacing-with-backend-services)
@@ -65,8 +64,6 @@ const App = () => {
 
 export default App;
 ```
-
-### Setting the navigation header of the application
 
 #### HeaderNav Component ([HeaderNav.js](src/components/HeaderNav.js))
 
