@@ -10,14 +10,14 @@ Assuming you have generated the application with the cli application, you should
 
 You have the following scripts available to you during development to setup this project outside of the cli bootstrapping process:
 
-`npm start` starts the development server, with hot reloading
-`npm run build` build a production bundle of your application for deployment
-`npm run test` runs unit test suite
-`npm run eject` ejects create-react-app preconfiguration (you shouldn't need this often)
-`npm run lint` lints code with eslint
-`npm run lint:fix` lints and updates code to correct format
-`npm run format` lints, updates, and saves changed files for commit
-`npm run serve` runs the application as a production bundle (need to `npm run build` first). Helpful for debugging service worker behavior in a "production like" environment
+- `npm start` starts the development server, with hot reloading
+- `npm run build` build a production bundle of your application for deployment
+- `npm run test` runs unit test suite
+- `npm run eject` ejects create-react-app preconfiguration (you shouldn't need this often)
+- `npm run lint` lints code with eslint
+- `npm run lint:fix` lints and updates code to correct format
+- `npm run format` lints, updates, and saves changed files for commit
+- `npm run serve` runs the application as a production bundle (need to `npm run build` first). Helpful for debugging service worker behavior in a "production like" environment
 
 ## State Management
 
