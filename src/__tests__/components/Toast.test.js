@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import Toast from "../../components/Toast";
+import { Toast } from "../../react-radfish";
 
 describe("Toast Component", () => {
   test("does not render anything when toast is not passed", () => {

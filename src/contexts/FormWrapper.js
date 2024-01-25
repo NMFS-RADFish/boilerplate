@@ -1,6 +1,7 @@
 // FormContext.js
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Form } from "../react-radfish";
 
 const FormContext = createContext();
 
@@ -77,21 +78,18 @@ export const FormWrapper = ({ children, onSubmit }) => {
    * @param {Object} event - The change event object.
    * @param {Array} validators - Array of validation functions and error messages.
    */
-  const handleChange = useCallback(
-    (event) => {
-      const { name, value } = event.target;
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    },
-    [],
-  );
+  const handleChange = useCallback((event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
   /**
- * Handles input onBlur events and performs validation.
- *
- * @function
- * @param {Object} event - The onBlur event object.
- * @param {Array} validators - Array of validation functions and error messages.
- */
+   * Handles input onBlur events and performs validation.
+   *
+   * @function
+   * @param {Object} event - The onBlur event object.
+   * @param {Array} validators - Array of validation functions and error messages.
+   */
   const handleBlur = useCallback(
     (event, validators) => {
       const { name, value } = event.target;
@@ -99,7 +97,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
     },
     [validateInput],
   );
-
 
   const contextValue = {
     formData,
@@ -113,14 +110,14 @@ export const FormWrapper = ({ children, onSubmit }) => {
 
   return (
     <FormContext.Provider value={contextValue}>
-      <form
+      <Form
         onSubmit={(event) => {
           event.preventDefault();
           onSubmit?.(formData);
         }}
       >
         {children}
-      </form>
+      </Form>
     </FormContext.Provider>
   );
 };

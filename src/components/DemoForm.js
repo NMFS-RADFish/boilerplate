@@ -1,8 +1,14 @@
 import React, { useEffect } from "react";
-import { TextInput, Select, Button } from "@trussworks/react-uswds";
-import { useFormState } from "../../contexts/FormWrapper";
-import { fullNameValidators, emailValidators, phoneNumberValidators, zipcodeValidators, stateValidators, cityValidators } from "../../utilities";
-
+import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../react-radfish";
+import { useFormState } from "../contexts/FormWrapper";
+import {
+  fullNameValidators,
+  emailValidators,
+  phoneNumberValidators,
+  zipcodeValidators,
+  stateValidators,
+  cityValidators,
+} from "../utilities";
 
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
@@ -13,21 +19,24 @@ import { fullNameValidators, emailValidators, phoneNumberValidators, zipcodeVali
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
 const DemoForm = ({ asyncFormOptions }) => {
-  const { formData, setFormData, handleChange, handleBlur, validationErrors, handleMultiEntrySubmit } =
-    useFormState();
+  const {
+    formData,
+    setFormData,
+    handleChange,
+    handleBlur,
+    validationErrors,
+    handleMultiEntrySubmit,
+  } = useFormState();
 
-  /**
-   * useEffect hook to set the city to "Honolulu" when fullName and email are present in formData.
-   *
-   * @function
-   */
   useEffect(() => {
     if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
   }, [formData.fullName, formData.email, setFormData]);
 
   return (
     <>
+      <Label htmlFor="fullName">Full Name</Label>
       <TextInput
+        id="fullName"
         name="fullName"
         type="text"
         placeholder="Full Name"
@@ -37,8 +46,11 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, fullNameValidators)}
       />
-      {validationErrors.fullName && <p className="validation-message">{validationErrors.fullName}</p>}
+      {validationErrors.fullName && <ErrorMessage>{validationErrors.fullName}</ErrorMessage>}
+
+      <Label htmlFor="email">Email Address</Label>
       <TextInput
+        id="email"
         name="email"
         type="email"
         placeholder="Email Address"
@@ -47,8 +59,11 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, emailValidators)}
       />
-      {validationErrors.email && <p className="validation-message">{validationErrors.email}</p>}
+
+      <Label htmlFor="phoneNumber">Phone Number</Label>
+      {validationErrors.email && <ErrorMessage>{validationErrors.email}</ErrorMessage>}
       <TextInput
+        id="phoneNumber"
         name="phoneNumber"
         type="tel"
         placeholder="(000) 000-0000"
@@ -57,29 +72,59 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, phoneNumberValidators)}
       />
-      {validationErrors.phoneNumber && <p className="validation-message">{validationErrors.phoneNumber}</p>}
+
+      <Label htmlFor="numberOfFish">Number of Fish</Label>
+      {validationErrors.phoneNumber && <ErrorMessage>{validationErrors.phoneNumber}</ErrorMessage>}
       <TextInput
+        id="numberOfFish"
         name="numberOfFish"
         type="number"
         placeholder="0"
         value={formData["numberOfFish"] || ""}
         onChange={handleChange}
       />
+
+      <Label htmlFor="addressLine1">Address Line 1</Label>
       <TextInput
+        id="addressLine1"
         name="addressLine1"
         type="text"
         placeholder="Address Line 1"
         value={formData["addressLine1"] || ""}
         onChange={handleChange}
       />
+
+      <Label htmlFor="radioOption">Have you caught fish today?</Label>
+      <Radio
+        id="option-catch-yes"
+        name="radioOption"
+        label="Yes"
+        value="option-catch-yes"
+        checked={formData.radioOption === "option-catch-yes"}
+        onChange={handleChange}
+      />
+      <Radio
+        id="option-catch-no"
+        name="radioOption"
+        label="No"
+        value="option-catch-no"
+        checked={formData.radioOption === "option-catch-no"}
+        onChange={handleChange}
+      />
+
+      <Label htmlFor="addressLine2">Address Line 2</Label>
       <TextInput
+        id="addressLine2"
         name="addressLine2"
         type="text"
         placeholder="Address Line 2"
         value={formData["addressLine2"] || ""}
         onChange={handleChange}
       />
+
+      <Label htmlFor="city">City</Label>
       <TextInput
+        id="city"
         name="city"
         type="text"
         placeholder="City"
@@ -88,8 +133,11 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, cityValidators)}
       />
-      {validationErrors.city && <p className="validation-message">{validationErrors.city}</p>}
+
+      <Label htmlFor="state">State</Label>
+      {validationErrors.city && <ErrorMessage>{validationErrors.city}</ErrorMessage>}
       <TextInput
+        id="state"
         name="state"
         type="text"
         placeholder="State"
@@ -98,8 +146,11 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, stateValidators)}
       />
-      {validationErrors.state && <p className="validation-message">{validationErrors.state}</p>}
+
+      <Label htmlFor="zipcode">Zip Code</Label>
+      {validationErrors.state && <ErrorMessage>{validationErrors.state}</ErrorMessage>}
       <TextInput
+        id="zipcode"
         name="zipcode"
         type="text"
         placeholder="Zip Code"
@@ -108,41 +159,52 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, zipcodeValidators)}
       />
-      {validationErrors.zipcode && <p className="validation-message">{validationErrors.zipcode}</p>}
+
+      <Label htmlFor="occupation">Occupation</Label>
+      {validationErrors.zipcode && <ErrorMessage>{validationErrors.zipcode}</ErrorMessage>}
       <TextInput
+        id="occupation"
         name="occupation"
         type="text"
         placeholder="Occupation"
         value={formData["occupation"] || ""}
         onChange={handleChange}
       />
+
+      <Label htmlFor="department">Department</Label>
       <Select name="department" value={formData["department"] || ""} onChange={handleChange}>
         <option value="">Select Department</option>
         <option value="hr">Human Resources</option>
         <option value="it">IT</option>
         <option value="finance">Finance</option>
       </Select>
+
+      <Label htmlFor="species">Species</Label>
       <Select name="species" value={formData["species"] || ""} onChange={handleChange}>
         <option value="">Select Species</option>
-        {asyncFormOptions?.species?.map((option) => {
-          return (
-            <option value={option.toLowerCase()}>
-              {option.charAt(0).toUpperCase() + option.slice(1)}
-            </option>
-          );
-        })}
+        {asyncFormOptions?.species?.map((option) => (
+          <option key={option} value={option.toLowerCase()}>
+            {option.charAt(0).toUpperCase() + option.slice(1)}
+          </option>
+        ))}
       </Select>
-      <Button role="form-submit" type="submit">
-        Submit
-      </Button>
-      <Button
-        type="button"
-        onClick={() => handleMultiEntrySubmit({ numberOfFish: Number(formData.numberOfFish) + 1 })}
-      >
-        Multi Entry Submit
-      </Button>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <Button role="form-submit" type="submit">
+          Submit
+        </Button>
+        <Button
+          role="form-submit"
+          type="submit"
+          onClick={() =>
+            handleMultiEntrySubmit({ numberOfFish: Number(formData.numberOfFish) + 1 })
+          }
+          style={{ marginTop: "10px" }}
+        >
+          Multi Entry Submit
+        </Button>
+      </div>
     </>
   );
 };
 
-export default DemoForm;
+export { DemoForm };

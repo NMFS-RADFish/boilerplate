@@ -1,12 +1,12 @@
+import "./index.css";
 import React, { useState, useEffect } from "react";
-import "./App.css";
-import { FormWrapper } from "./contexts/FormWrapper";
-import Toast, { TOAST_CONFIG } from "./components/Toast";
-import DemoForm from "./components/Demo/Demo";
 import { BrowserRouter as Router } from "react-router-dom";
-import RadfishAPIService from "./services/APIService";
+import { Toast, TOAST_CONFIG } from "./react-radfish";
+import { FormWrapper } from "./contexts/FormWrapper";
 import Layout from "./components/Layout";
+import RadfishAPIService from "./services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
+import { DemoForm } from "./components/DemoForm";
 
 const ApiService = new RadfishAPIService("");
 
@@ -74,8 +74,8 @@ function App() {
 
   return (
     <div className="App">
+      <Toast toast={toast} />
       <Layout>
-        <Toast toast={toast} />
         <Router>
           <FormWrapper onSubmit={handleFormSubmit}>
             <DemoForm asyncFormOptions={asyncFormOptions} />
