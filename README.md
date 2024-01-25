@@ -6,6 +6,7 @@
 
 - [RADFish Boilerplate Application Code](#radfish-boilerplate-application-code)
   - [Getting Started](#getting-started)
+  - [React RADFish Components](#react-radfish-components)
     - [Building your first page and form](#building-your-first-page-and-form)
     - [Setting the layout of the application](#setting-the-layout-of-the-application)
       - [Layout Component (Layout.js)](#layout-component-layoutjs)
@@ -20,7 +21,6 @@
     - [Handling Responses and Errors](#handling-responses-and-errors)
   - [State Management](#state-management)
   - [Styling](#styling)
-    - [USWDS](#uswds)
     - [NOAA Branding and Style Guide](#noaa-branding-and-style-guide)
       - [Using CSS files](#using-css-files)
       - [Using `className` to modify CSS](#using-classname-to-modify-css)
@@ -38,9 +38,53 @@
 
 > #### ⭐ Full documentation can be found in the [RADFish Frontend Application Development Guide](https://hickory-drawbridge-d5a.notion.site/RADFish-Frontend-Application-Development-Guide-dc3c5589b019458e8b5ab3f4293ec183).
 
-To start the application run `npm start`
+Assuming you have generated the application with the cli application, you should already have a webpack server running on `localhost:3000`. We have created a example form `DemoForm.js` that demonstrates how to build a form using the `react-radfish` components. You can modify and make changes to this form as needed.
+
+You have the following scripts available to you during development to setup this project outside of the cli bootstrapping process:
+
+- `npm start` starts the development server, with hot reloading
+- `npm run build` build a production bundle of your application for deployment
+- `npm run test` runs unit test suite
+- `npm run lint` lints code with eslint
+- `npm run lint:fix` lints and updates code to correct format
+- `npm run format` lints, updates, and saves changed files for commit
+- `npm run serve` runs the application as a production bundle (need to `npm run build` first). Helpful for debugging service worker behavior in a "production like" environment
+
+## React RADFish Components
 
 ### Building your first page and form
+
+When building applications with React, there is an existing component library, [react-uswds](https://trussworks.github.io/react-uswds/?path=/story/welcome--welcome) that our project extends for the purposes of building any Radfish application. These components maintain all functionality of `react-uswds` components, but are branded with NOAA themes and styles. These components live in `react-radfish` directory, and allow for development in a modern React environment with NOAA look and feel.
+
+For reference on the full `react-uswds` library, you can reference the deployed storybook:
+
+[https://trussworks.github.io/react-uswds/](https://trussworks.github.io/react-uswds/?path=/story/welcome--welcome)
+
+> 🚨 Note: Whenever possible, you should use components from `react-radfish` rather than importing components directly from `@trussworks/react-uswds`. This ensures that the component you are using have the correctly styles and theme applied.
+
+**Example**
+
+If you wanted to build a `TextInput` component into an existing form, you can use the `@trussworks` [storybook reference](https://trussworks.github.io/react-uswds/?path=/docs/components-text-input--default-text-input) related to component props that are available.
+
+However, this component should be imported from `react-radfish`. Since `react-radfish` extends the `@trussworks` library, you should have all the functionality from the underlying component:
+
+```jsx
+
+import { TextInput, Label } from "../react-radfish";
+
+<Label htmlFor="fullName">Full Name</Label>
+<TextInput
+  id="fullName"
+  name="fullName"
+  type="text"
+  placeholder="Full Name"
+  value={formData["fullName"] || ""}
+  aria-invalid={validationErrors.fullName ? "true" : "false"}
+  validationStatus={validationErrors.fullName ? "error" : undefined}
+  onChange={handleChange}
+  onBlur={(e) => handleBlur(e, fullNameValidators)}
+/>
+```
 
 ### Setting the layout of the application
 
@@ -101,7 +145,7 @@ The **`RadfishAPIService`** is a class designed to facilitate interactions with 
 
 ### Initializing the Service
 
-To use **`RadfishAPIService`**, instantiate it with an access token:
+To use **`RadfishAPIService`**, you should use the included `APIService.js` module that is provided in the radfish application. 
 
 ```jsx
 import RadfishAPIService from './RadfishAPIService';
@@ -111,17 +155,32 @@ const ApiService = new RadfishAPIService('your_access_token_here');
 
 ### Making API Requests
 
+A common pattern, is to call this `ApiService` in a `useEffect` that will trigger whenever a React component loads:
+
+```jsx
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await ApiService.get(API_ENDPOINT);
+      // handle data as needed
+    };
+    fetchData();
+  }, []);
+```
+
 #### `GET` Request
 Asynchronous function to perform a `GET` request
 - `@param {string} endpoint` - The API endpoint to perform the GET request.
 - `@param {Object} queryParams` - The query parameters for the GET request.
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
+  
 ```js
-const getData = async (endpoint, queryParams) => {
-    return await ApiService.get(endpoint, queryParams);
-};
-
-getData("https://api.example.com/data", { "param1": "a" });
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await ApiService.get(API_ENDPOINT, { "param1": "foo" });
+      // handle data as needed
+    };
+    fetchData();
+  }, []);
 ```
 
 #### `POST` Request
@@ -132,11 +191,13 @@ Asynchronous function to perform a `POST` request
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
-const postData = async (endpoint, body) => {
-    return await ApiService.get(endpoint, body);
-};
-
-postData("https://api.example.com/data", { "name": "foo" });
+  useEffect(() => {
+    const postData = async () => {
+      const { data } = await ApiService.post(API_ENDPOINT, { "name": "foo" });
+      // handle data as needed
+    };
+    postData();
+  }, []);
 ```
 
 #### `PUT` Request
@@ -147,11 +208,13 @@ Asynchronous function to perform a `PUT` request
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
-const updateData = async (endpoint, body) => {
-    return await ApiService.get(endpoint, body);
-};
-
-putData("https://api.example.com/data", { "name": "bar" });
+  useEffect(() => {
+    const updateData = async () => {
+      const { data } = await ApiService.put(API_ENDPOINT, { "id": 1 });
+      // handle data as needed
+    };
+    updateData();
+  }, []);
 ```
 
 #### `DELETE` Request
@@ -162,11 +225,13 @@ Asynchronous function to perform a `DELETE` request
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
-const deleteData = async (endpoint, body) => {
-    return await ApiService.get(endpoint, body);
-};
-
-deleteData("https://api.example.com/data", { "id": 1 });
+  useEffect(() => {
+    const deleteData = async () => {
+      const { data } = await ApiService.delete(API_ENDPOINT, { "id": 1 });
+      // handle data as needed
+    };
+    deleteData();
+  }, []);
 ```
 
 ### Handling Responses and Errors
@@ -175,47 +240,17 @@ Responses and errors from the API are returned as promises.
 
 ## State Management
 
-## Styling
+Form state is managed with react context. The code for this state can be found in `contexts/FormWrapper.js`. This context exports form handlers, and captures form data on submit. Whenever you want to leverage this context for a form you create, be sure to wrap this component with the `FormWrapper`.
 
-### USWDS
-
-USWDS (United States Web Design System) is a web design system that specifies coding patterns, components, and design tokens that outline how government applications should be built while adhering to 508 compliance guidelines.
-
-More specifically, when building applications with React, there is an existing component library, [react-uswds](https://trussworks.github.io/react-uswds/?path=/story/welcome--welcome) that our project extends for the purposes of building any Radfish application. These components maintain all functionality of `react-uswds` components, but are branded with NOAA themes and styles. These components live in `react-radfish` directory, and allow for development in a modern React environment with NOAA look and feel.
-
-For reference on the full `react-uswds` library, you can reference the deployed storybook:
-
-[https://trussworks.github.io/react-uswds/](https://trussworks.github.io/react-uswds/?path=/story/welcome--welcome)
-
-The benefit of referencing and leveraging `react-radfish` when building applications is to increase developer velocity, design consistency, and ensures that front-end development is happening in compliance with government regulation. The storybook above provides examples of a wide variety of compliant components that can be used to build apps for a wide variety of use cases.
-
-> 🚨 Note: Whenever possible, you should use components from `react-radfish` rather than importing components directly from `@trussworks/react-uswds`. This ensure that the component you are using have the correctly styles and theme applied.
-
-If you need another component for your application support, please see `CONTRIBUTING` section (In progress)
-
-**Example**
-
-If you wanted to build a `TextInput` component into an existing form, you can use the `@trussworks` [storybook reference](https://trussworks.github.io/react-uswds/?path=/docs/components-text-input--default-text-input) related to component props that are available.
-
-However, this component should be imported from `react-radfish`. Since `react-radfish` extends the `@trussworks` library, you should have all the functionality from the underlying component:
-
-```jsx
-
-import { TextInput, Label } from "../react-radfish";
-
-<Label htmlFor="fullName">Full Name</Label>
-<TextInput
-  id="fullName"
-  name="fullName"
-  type="text"
-  placeholder="Full Name"
-  value={formData["fullName"] || ""}
-  aria-invalid={validationErrors.fullName ? "true" : "false"}
-  validationStatus={validationErrors.fullName ? "error" : undefined}
-  onChange={handleChange}
-  onBlur={(e) => handleBlur(e, fullNameValidators)}
-/>
 ```
+    <FormWrapper onSubmit={handleFormSubmit}>
+        <DemoForm asyncFormOptions={asyncFormOptions} />
+    </FormWrapper>
+```
+
+This will ensure that the state that is managed in context will be passed correctly to the child form that you are building, and should behave in a similar way. You can access the form data within the `FormWrapper` and can `console.log`, `debug`, or otherwise pass this data to the context's children as you application needs.
+
+## Styling
 
 ### NOAA Branding and Style Guide
 
