@@ -11,6 +11,10 @@
     - [Setting the layout of the application](#setting-the-layout-of-the-application)
       - [Layout Component (Layout.js)](#layout-component-layoutjs)
       - [HeaderNav Component (HeaderNav.js)](#headernav-component-headernavjs)
+  - [Styling](#styling)
+    - [NOAA Branding and Style Guide](#noaa-branding-and-style-guide)
+      - [Using CSS files](#using-css-files)
+      - [Using `className` to modify CSS](#using-classname-to-modify-css)
   - [Interfacing with backend services](#interfacing-with-backend-services)
     - [Initializing the Service](#initializing-the-service)
     - [Making API Requests](#making-api-requests)
@@ -20,10 +24,6 @@
       - [`DELETE` Request](#delete-request)
     - [Handling Responses and Errors](#handling-responses-and-errors)
   - [State Management](#state-management)
-  - [Styling](#styling)
-    - [NOAA Branding and Style Guide](#noaa-branding-and-style-guide)
-      - [Using CSS files](#using-css-files)
-      - [Using `className` to modify CSS](#using-classname-to-modify-css)
   - [Testing](#testing)
     - [Running Tests](#running-tests)
     - [Unit Tests](#unit-tests)
@@ -139,6 +139,45 @@ const Layout = () => {
 export default Layout;
 ```
 
+## Styling
+
+### NOAA Branding and Style Guide
+
+Branding refers to the process of creating a distinct identity for a product or application. It involves defining and maintaining a set of visual elements, such as logos, colors, and typography, that represent the brand.
+
+#### Using CSS files
+
+You will notice, that the components above do not have any `className` assigned, and you may be wondering how to style that component. To do this, there are a couple of things to keep in mind:
+
+1. Each component in `react-radfish` has it's own scoped css file, that modifies the existing `@trussworks` css in order to inject NOAA styles. This file should not be touched. If you notice a bug or issue, please see `CONTRIBUTING`
+2. You can modify the general theme of these components in the `styles/theme.css` file. You can change things like color variables, font-family, and line-height here, and they will be propagated throughout the application, as well as throughout `react-radfish` . Radfish utilizes css variables, and can be used like so:
+
+```css
+// styles/theme.js
+:root {
+  --noaa-dark-blue: #0054a4;
+}
+
+// form.css
+.your-custom-class {
+	background-color: var(--noaa-dark-blue);
+}
+```
+
+#### Using `className` to modify CSS
+
+If you need to add additional styles to a particular component, you can do so by adding another `className` **after** the component has been imported from `react-radfish`
+
+```jsx
+import { Label } from "../react-radfish";
+
+<Label htmlFor="fullName" className="your-custom-class">
+	Full Name
+</Label>
+```
+
+By following this method, you can leverage the underlying `uswds` component, maintain the NOAA theme, and can extend if further to suit you needs as a developer.
+
 ## Interfacing with backend services
 
 The **`RadfishAPIService`** is a class designed to facilitate interactions with a backend API. It simplifies making HTTP requests (GET, POST, PUT, DELETE) by encapsulating them into easy-to-use class methods. This service handles the construction of requests, including headers and query parameters, and processes responses.
@@ -249,45 +288,6 @@ Form state is managed with react context. The code for this state can be found i
 ```
 
 This will ensure that the state that is managed in context will be passed correctly to the child form that you are building, and should behave in a similar way. You can access the form data within the `FormWrapper` and can `console.log`, `debug`, or otherwise pass this data to the context's children as you application needs.
-
-## Styling
-
-### NOAA Branding and Style Guide
-
-Branding refers to the process of creating a distinct identity for a product or application. It involves defining and maintaining a set of visual elements, such as logos, colors, and typography, that represent the brand.
-
-#### Using CSS files
-
-You will notice, that the components above do not have any `className` assigned, and you may be wondering how to style that component. To do this, there are a couple of things to keep in mind:
-
-1. Each component in `react-radfish` has it's own scoped css file, that modifies the existing `@trussworks` css in order to inject NOAA styles. This file should not be touched. If you notice a bug or issue, please see `CONTRIBUTING`
-2. You can modify the general theme of these components in the `styles/theme.css` file. You can change things like color variables, font-family, and line-height here, and they will be propagated throughout the application, as well as throughout `react-radfish` . Radfish utilizes css variables, and can be used like so:
-
-```css
-// styles/theme.js
-:root {
-  --noaa-dark-blue: #0054a4;
-}
-
-// form.css
-.your-custom-class {
-	background-color: var(--noaa-dark-blue);
-}
-```
-
-#### Using `className` to modify CSS
-
-If you need to add additional styles to a particular component, you can do so by adding another `className` **after** the component has been imported from `react-radfish`
-
-```jsx
-import { Label } from "../react-radfish";
-
-<Label htmlFor="fullName" className="your-custom-class">
-	Full Name
-</Label>
-```
-
-By following this method, you can leverage the underlying `uswds` component, maintain the NOAA theme, and can extend if further to suit you needs as a developer.
 
 ## Testing
 
