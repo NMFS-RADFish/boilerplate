@@ -94,29 +94,21 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
       />
 
-      <Label htmlFor="radioOption">Options</Label>
+      <Label htmlFor="radioOption">Have you caught fish today?</Label>
       <Radio
-        id="option1"
+        id="option-catch-yes"
         name="radioOption"
-        label="Option 1"
-        value="option1"
-        checked={formData.radioOption === "option1"}
+        label="Yes"
+        value="option-catch-yes"
+        checked={formData.radioOption === "option-catch-yes"}
         onChange={handleChange}
       />
       <Radio
-        id="option2"
+        id="option-catch-no"
         name="radioOption"
-        label="Option 2"
-        value="option2"
-        checked={formData.radioOption === "option2"}
-        onChange={handleChange}
-      />
-      <Radio
-        id="option3"
-        name="radioOption"
-        label="Option 3"
-        value="option3"
-        checked={formData.radioOption === "option3"}
+        label="No"
+        value="option-catch-no"
+        checked={formData.radioOption === "option-catch-no"}
         onChange={handleChange}
       />
 
