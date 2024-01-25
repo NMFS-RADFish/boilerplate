@@ -37,6 +37,8 @@
 
 > #### ⭐ Full documentation can be found in the [RADFish Frontend Application Development Guide](https://hickory-drawbridge-d5a.notion.site/RADFish-Frontend-Application-Development-Guide-dc3c5589b019458e8b5ab3f4293ec183).
 
+To start the application run `npm start`
+
 ### Building your first page and form
 
 ### Setting the layout of the application
