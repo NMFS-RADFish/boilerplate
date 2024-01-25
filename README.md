@@ -81,14 +81,14 @@ import HeaderNav from './HeaderNav';
 
 const Layout = () => {
   return (
-		<>
-	    <HeaderNav>
-	      <a href="/">Home</a>
-	      <a href="/about">About</a>
-	      {/* Additional navigation links */}
-	    </HeaderNav>
-			<GridContainer>{children}</GridContainer>;
-		</>
+    <>
+    <HeaderNav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        {/* Additional navigation links */}
+    </HeaderNav>
+        <GridContainer>{children}</GridContainer>;
+    </>
   );
 };
 
