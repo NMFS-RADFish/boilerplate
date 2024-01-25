@@ -87,7 +87,7 @@ const Layout = () => {
         <a href="/about">About</a>
         {/* Additional navigation links */}
     </HeaderNav>
-        <GridContainer>{children}</GridContainer>;
+    <GridContainer>{children}</GridContainer>;
     </>
   );
 };
