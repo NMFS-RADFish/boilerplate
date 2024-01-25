@@ -10,27 +10,28 @@
     - [Setting the layout of the application](#setting-the-layout-of-the-application)
       - [Layout Component (Layout.js)](#layout-component-layoutjs)
       - [HeaderNav Component (HeaderNav.js)](#headernav-component-headernavjs)
-    - [State Management](#state-management)
-    - [Interfacing with backend services](#interfacing-with-backend-services)
-      - [Usage](#usage)
-        - [`GET` Request](#get-request)
-        - [`POST` Request](#post-request)
-        - [`PUT` Request](#put-request)
-        - [`DELETE` Request](#delete-request)
-      - [Handling Responses and Errors](#handling-responses-and-errors)
-    - [Styling](#styling)
-      - [USWDS](#uswds)
-      - [NOAA Branding and Style Guide](#noaa-branding-and-style-guide)
-        - [Using CSS files](#using-css-files)
-        - [Using `className` to modify CSS](#using-classname-to-modify-css)
-    - [Testing](#testing)
-      - [Running Tests](#running-tests)
-      - [Unit Tests](#unit-tests)
-        - [Basic Unit Test](#basic-unit-test)
-        - [Testing User Interactions](#testing-user-interactions)
-      - [Snapshot Tests](#snapshot-tests)
-      - [Writing Browser Tests](#writing-browser-tests)
-      - [Additional Jest Configuration](#additional-jest-configuration)
+  - [Interfacing with backend services](#interfacing-with-backend-services)
+    - [Initializing the Service](#initializing-the-service)
+    - [Making API Requests](#making-api-requests)
+      - [`GET` Request](#get-request)
+      - [`POST` Request](#post-request)
+      - [`PUT` Request](#put-request)
+      - [`DELETE` Request](#delete-request)
+    - [Handling Responses and Errors](#handling-responses-and-errors)
+  - [State Management](#state-management)
+  - [Styling](#styling)
+    - [USWDS](#uswds)
+    - [NOAA Branding and Style Guide](#noaa-branding-and-style-guide)
+      - [Using CSS files](#using-css-files)
+      - [Using `className` to modify CSS](#using-classname-to-modify-css)
+  - [Testing](#testing)
+    - [Running Tests](#running-tests)
+    - [Unit Tests](#unit-tests)
+      - [Basic Unit Test](#basic-unit-test)
+      - [Testing User Interactions](#testing-user-interactions)
+    - [Snapshot Tests](#snapshot-tests)
+    - [Writing Browser Tests](#writing-browser-tests)
+    - [Additional Jest Configuration](#additional-jest-configuration)
 
 
 ## Getting Started
@@ -94,15 +95,11 @@ const Layout = () => {
 export default Layout;
 ```
 
-### State Management
-
-### Interfacing with backend services
+## Interfacing with backend services
 
 The **`RadfishAPIService`** is a class designed to facilitate interactions with a backend API. It simplifies making HTTP requests (GET, POST, PUT, DELETE) by encapsulating them into easy-to-use class methods. This service handles the construction of requests, including headers and query parameters, and processes responses.
 
-#### Usage
-
-**Initializing the Service**
+### Initializing the Service
 
 To use **`RadfishAPIService`**, instantiate it with an access token:
 
@@ -112,7 +109,9 @@ import RadfishAPIService from './RadfishAPIService';
 const ApiService = new RadfishAPIService('your_access_token_here');
 ```
 
-##### `GET` Request
+### Making API Requests
+
+#### `GET` Request
 Asynchronous function to perform a `GET` request
 - `@param {string} endpoint` - The API endpoint to perform the GET request.
 - `@param {Object} queryParams` - The query parameters for the GET request.
@@ -121,9 +120,11 @@ Asynchronous function to perform a `GET` request
 const getData = async (endpoint, queryParams) => {
     return await ApiService.get(endpoint, queryParams);
 };
+
+getData("https://api.example.com/data", { "param1": "a" });
 ```
 
-##### `POST` Request
+#### `POST` Request
 
 Asynchronous function to perform a `POST` request
 - `@param {string} endpoint` - The API endpoint to perform the POST request.
@@ -134,9 +135,11 @@ Asynchronous function to perform a `POST` request
 const postData = async (endpoint, body) => {
     return await ApiService.get(endpoint, body);
 };
+
+postData("https://api.example.com/data", { "name": "foo" });
 ```
 
-##### `PUT` Request
+#### `PUT` Request
 
 Asynchronous function to perform a `PUT` request
 - `@param {string} endpoint` - The API endpoint to perform the PUT request.
@@ -147,9 +150,11 @@ Asynchronous function to perform a `PUT` request
 const updateData = async (endpoint, body) => {
     return await ApiService.get(endpoint, body);
 };
+
+putData("https://api.example.com/data", { "name": "bar" });
 ```
 
-##### `DELETE` Request
+#### `DELETE` Request
 
 Asynchronous function to perform a `DELETE` request
 - `@param {string} endpoint` - The API endpoint to perform the DELETE request.
@@ -160,15 +165,19 @@ Asynchronous function to perform a `DELETE` request
 const deleteData = async (endpoint, body) => {
     return await ApiService.get(endpoint, body);
 };
+
+deleteData("https://api.example.com/data", { "id": 1 });
 ```
 
-#### Handling Responses and Errors
+### Handling Responses and Errors
 
 Responses and errors from the API are returned as promises.
 
-### Styling
+## State Management
 
-#### USWDS
+## Styling
+
+### USWDS
 
 USWDS (United States Web Design System) is a web design system that specifies coding patterns, components, and design tokens that outline how government applications should be built while adhering to 508 compliance guidelines.
 
@@ -208,11 +217,11 @@ import { TextInput, Label } from "../react-radfish";
 />
 ```
 
-#### NOAA Branding and Style Guide
+### NOAA Branding and Style Guide
 
 Branding refers to the process of creating a distinct identity for a product or application. It involves defining and maintaining a set of visual elements, such as logos, colors, and typography, that represent the brand.
 
-##### Using CSS files
+#### Using CSS files
 
 You will notice, that the components above do not have any `className` assigned, and you may be wondering how to style that component. To do this, there are a couple of things to keep in mind:
 
@@ -231,7 +240,7 @@ You will notice, that the components above do not have any `className` assigned,
 }
 ```
 
-##### Using `className` to modify CSS
+#### Using `className` to modify CSS
 
 If you need to add additional styles to a particular component, you can do so by adding another `className` **after** the component has been imported from `react-radfish`
 
@@ -245,19 +254,19 @@ import { Label } from "../react-radfish";
 
 By following this method, you can leverage the underlying `uswds` component, maintain the NOAA theme, and can extend if further to suit you needs as a developer.
 
-### Testing
+## Testing
 
 Testing is a critical part of the software development process, ensuring the reliability and maintainability of your React application. This section provides an overview of writing tests using [Jest](https://jestjs.io/), along with additional frameworks like [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for different types of tests: snapshot, unit, and browser testing. This section also covers debugging techniques for broken or failed tests and best practices for effective test writing.
 
-#### Running Tests
+### Running Tests
 
 Run tests with the following command: `npm test`
 
-#### Unit Tests
+### Unit Tests
 
 Unit tests focus on testing individual components or functions in isolation.
 
-##### Basic Unit Test
+#### Basic Unit Test
 
 ```jsx
 import React from 'react';
@@ -270,7 +279,7 @@ it('renders the correct content', () => {
 });
 ```
 
-##### Testing User Interactions
+#### Testing User Interactions
 
 Utilize user-event or fireEvent from React Testing Library to simulate user actions.
 
@@ -281,7 +290,7 @@ import userEvent from '@testing-library/user-event';
 userEvent.click(screen.getByRole('button'));
 ```
 
-#### Snapshot Tests
+### Snapshot Tests
 
 Snapshot testing captures the rendered output of a component and ensures that it does not change unexpectedly.
 
@@ -296,7 +305,7 @@ it('renders correctly', () => {
 });
 ```
 
-#### Writing Browser Tests
+### Writing Browser Tests
 
 Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Jest. Please note Puppeteer does not come included by default in the RADFish framework.
 
@@ -313,6 +322,6 @@ it('should display the homepage', async () => {
 
 ```
 
-#### Additional Jest Configuration
+### Additional Jest Configuration
 
 Jest and React Testing Library is included in the RADFish framework by default. Modifying the Jest test configuration can be configured in the `jest.config.js` file. Please see the official Jest docs for the latest configuration options: https://jestjs.io/docs/configuration.
