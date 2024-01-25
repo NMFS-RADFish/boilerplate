@@ -21,7 +21,7 @@
       - [Handling Responses and Errors](#handling-responses-and-errors)
     - [Styling](#styling)
       - [USWDS](#uswds)
-      - [Styling](#styling-1)
+      - [NOAA Branding and Style Guide](#noaa-branding-and-style-guide)
         - [Using CSS files](#using-css-files)
         - [Using `className` to modify CSS](#using-classname-to-modify-css)
     - [Testing](#testing)
@@ -209,13 +209,16 @@ import { TextInput, Label } from "../react-radfish";
 />
 ```
 
-#### Styling
+#### NOAA Branding and Style Guide
+
+Branding refers to the process of creating a distinct identity for a product or application. It involves defining and maintaining a set of visual elements, such as logos, colors, and typography, that represent the brand.
 
 ##### Using CSS files
 
-Each component in `react-radfish` has it's own scoped css file, that modifies the existing `@trussworks` css in order to inject NOAA styles. This file should not be touched. If you notice a bug or issue, please see `CONTRIBUTING`
+You will notice, that the components above do not have any `className` assigned, and you may be wondering how to style that component. To do this, there are a couple of things to keep in mind:
 
-You can modify the general theme of these components in the `styles/theme.css` file. You can change things like color variables, font-family, and line-height here, and they will be propagated throughout the application, as well as throughout `react-radfish` . Radfish utilizes css variables, and can be used like so:
+1. Each component in `react-radfish` has it's own scoped css file, that modifies the existing `@trussworks` css in order to inject NOAA styles. This file should not be touched. If you notice a bug or issue, please see `CONTRIBUTING`
+2. You can modify the general theme of these components in the `styles/theme.css` file. You can change things like color variables, font-family, and line-height here, and they will be propagated throughout the application, as well as throughout `react-radfish` . Radfish utilizes css variables, and can be used like so:
 
 ```css
 // styles/theme.js
