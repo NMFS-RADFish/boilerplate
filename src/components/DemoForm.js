@@ -77,6 +77,7 @@ const DemoForm = ({ asyncFormOptions }) => {
       <Label htmlFor="numberOfFish">Number of Fish</Label>
       <TextInput
         id="numberOfFish"
+        // linkedInputId tells computedPrice to update onChange
         linkedInputId="computedPrice"
         name="numberOfFish"
         type="number"
@@ -182,6 +183,7 @@ const DemoForm = ({ asyncFormOptions }) => {
 
       <Label htmlFor="species">Species</Label>
       <Select
+        // linkedInputId tells computedPrice to update onChange
         linkedInputId="computedPrice"
         name="species"
         value={formData["species"] || ""}

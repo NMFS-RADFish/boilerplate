@@ -9,6 +9,7 @@ const FormContext = createContext();
 const computedInputConfig = {
   computedPrice: {
     callback: computePriceFromQuantitySpecies,
+    // args should specify all formIds that are marked with linkedInputId, in this case computedPrice
     args: ["numberOfFish", "species"],
   },
 };
