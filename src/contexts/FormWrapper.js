@@ -2,8 +2,17 @@
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Form } from "../react-radfish";
+import { computePriceFromQuantitySpecies } from "../utilities";
 
 const FormContext = createContext();
+
+const computedInputConfig = {
+  computedPrice: {
+    callback: computePriceFromQuantitySpecies,
+    // args should specify all formIds that are marked with linkedInputId, in this case computedPrice
+    args: ["numberOfFish", "species"],
+  },
+};
 
 /**
  * Higher-order component providing form state and functionality.
@@ -80,8 +89,29 @@ export const FormWrapper = ({ children, onSubmit }) => {
    */
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const linkedInputId = event.target.getAttribute("linkedInputId");
+
+    // if field being updated has a linked field that needs to be computed, update state after computing linked fields
+    // else just return updatedForm without needing to linked computedValues
+    setFormData((prev) => {
+      const updatedForm = { ...prev, [name]: value };
+      if (linkedInputId) {
+        const updatedComputedForm = handleComputedValues(linkedInputId, updatedForm);
+        return updatedComputedForm;
+      } else {
+        return updatedForm;
+      }
+    });
   }, []);
+
+  const handleComputedValues = useCallback((inputId, formData) => {
+    const args = computedInputConfig[inputId].args.map((arg) => formData[arg]);
+    const computedValue = computedInputConfig[inputId].callback(args);
+    return {
+      ...formData,
+      [inputId]: computedValue,
+    };
+  });
 
   /**
    * Handles input onBlur events and performs validation.
