@@ -81,6 +81,22 @@ export const FormWrapper = ({ children, onSubmit }) => {
   }, []);
 
   /**
+   * Handles computed form values, updating form elements with a calculated value.
+   *
+   * @function
+   * @param {String} inputId - The id of the input field being computed
+   * @param {Object} formData - Controlled form data stored in React state
+  */
+  const handleComputedValues = useCallback((inputId, formData) => {
+    const args = computedInputConfig[inputId].args.map((arg) => formData[arg]);
+    const computedValue = computedInputConfig[inputId].callback(args);
+    return {
+      ...formData,
+      [inputId]: computedValue,
+    };
+  }, []); // Added empty array as the second argument to useCallback
+
+  /**
    * Handles input change events, updating form data.
    *
    * @function
@@ -102,16 +118,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
         return updatedForm;
       }
     });
-  }, []);
-
-  const handleComputedValues = useCallback((inputId, formData) => {
-    const args = computedInputConfig[inputId].args.map((arg) => formData[arg]);
-    const computedValue = computedInputConfig[inputId].callback(args);
-    return {
-      ...formData,
-      [inputId]: computedValue,
-    };
-  });
+  }, [handleComputedValues]); // Include 'handleComputedValues' in the dependency array
 
   /**
    * Handles input onBlur events and performs validation.
