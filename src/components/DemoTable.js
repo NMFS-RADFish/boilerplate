@@ -1,32 +1,22 @@
 import { Table } from "@trussworks/react-uswds";
-
-const tableConfig = {
-  head: ["Document title", "1776"],
-  rows: [
-    ["Declaration of Independence", "1776"],
-    ["Bill of Rights", "1791"],
-    ["Declaration of Sentiments", "1848"],
-    ["Emancipation Proclamation", "1863"],
-  ],
-};
+import { useTableState } from "../contexts/TableWrapper";
 
 export const DemoTable = () => {
+  const { tableConfig } = useTableState();
+  if (!tableConfig) {
+    return null;
+  }
   return (
-    <Table
-      bordered
-      caption="This table uses the fixed prop to force equal width columns"
-      fullWidth
-      fixed
-    >
+    <Table bordered caption={tableConfig?.caption || ""} fullWidth fixed>
       <thead>
         <tr>
-          {tableConfig.head.map((text) => {
+          {tableConfig?.head?.map((text) => {
             return <th scope="col">{text}</th>;
           })}
         </tr>
       </thead>
       <tbody>
-        {tableConfig.rows.map((row) => {
+        {tableConfig?.rows?.map((row) => {
           return (
             <tr>
               {row.map((cell, i) => {

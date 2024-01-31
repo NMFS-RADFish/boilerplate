@@ -86,7 +86,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
    * @function
    * @param {String} inputId - The id of the input field being computed
    * @param {Object} formData - Controlled form data stored in React state
-  */
+   */
   const handleComputedValues = useCallback((inputId, formData) => {
     const args = computedInputConfig[inputId].args.map((arg) => formData[arg]);
     const computedValue = computedInputConfig[inputId].callback(args);
@@ -103,22 +103,25 @@ export const FormWrapper = ({ children, onSubmit }) => {
    * @param {Object} event - The change event object.
    * @param {Array} validators - Array of validation functions and error messages.
    */
-  const handleChange = useCallback((event) => {
-    const { name, value } = event.target;
-    const linkedInputId = event.target.getAttribute("linkedInputId");
+  const handleChange = useCallback(
+    (event) => {
+      const { name, value } = event.target;
+      const linkedInputId = event.target.getAttribute("linkedInputId");
 
-    // if field being updated has a linked field that needs to be computed, update state after computing linked fields
-    // else just return updatedForm without needing to linked computedValues
-    setFormData((prev) => {
-      const updatedForm = { ...prev, [name]: value };
-      if (linkedInputId) {
-        const updatedComputedForm = handleComputedValues(linkedInputId, updatedForm);
-        return updatedComputedForm;
-      } else {
-        return updatedForm;
-      }
-    });
-  }, [handleComputedValues]); // Include 'handleComputedValues' in the dependency array
+      // if field being updated has a linked field that needs to be computed, update state after computing linked fields
+      // else just return updatedForm without needing to linked computedValues
+      setFormData((prev) => {
+        const updatedForm = { ...prev, [name]: value };
+        if (linkedInputId) {
+          const updatedComputedForm = handleComputedValues(linkedInputId, updatedForm);
+          return updatedComputedForm;
+        } else {
+          return updatedForm;
+        }
+      });
+    },
+    [handleComputedValues],
+  ); // Include 'handleComputedValues' in the dependency array
 
   /**
    * Handles input onBlur events and performs validation.

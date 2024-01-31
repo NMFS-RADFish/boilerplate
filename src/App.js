@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { Toast, TOAST_CONFIG } from "./react-radfish";
 import { FormWrapper } from "./contexts/FormWrapper";
+import { TableWrapper } from "./contexts/TableWrapper";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
@@ -87,7 +88,14 @@ function App() {
                 </FormWrapper>
               }
             />
-            <Route path="/table" element={<DemoTable />} />
+            <Route
+              path="/table"
+              element={
+                <TableWrapper>
+                  <DemoTable />
+                </TableWrapper>
+              }
+            />
           </Routes>
         </Router>
       </Layout>
