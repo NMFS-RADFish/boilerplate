@@ -1,12 +1,13 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { Toast, TOAST_CONFIG } from "./react-radfish";
 import { FormWrapper } from "./contexts/FormWrapper";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { DemoForm } from "./components/DemoForm";
+import { DemoTable } from "./components/DemoTable";
 
 const ApiService = new RadfishAPIService("");
 
@@ -77,9 +78,17 @@ function App() {
       <Toast toast={toast} />
       <Layout>
         <Router>
-          <FormWrapper onSubmit={handleFormSubmit}>
-            <DemoForm asyncFormOptions={asyncFormOptions} />
-          </FormWrapper>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <FormWrapper onSubmit={handleFormSubmit}>
+                  <DemoForm asyncFormOptions={asyncFormOptions} />
+                </FormWrapper>
+              }
+            />
+            <Route path="/table" element={<DemoTable />} />
+          </Routes>
         </Router>
       </Layout>
     </div>
