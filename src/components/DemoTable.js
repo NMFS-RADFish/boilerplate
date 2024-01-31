@@ -1,30 +1,37 @@
 import { Table } from "@trussworks/react-uswds";
 import { useTableState } from "../contexts/TableWrapper";
+import { flexRender } from "@tanstack/react-table";
 
 export const DemoTable = () => {
-  const { tableConfig } = useTableState();
-  if (!tableConfig) {
+  const { tableCaption, table } = useTableState();
+
+  if (!table) {
     return null;
   }
+
   return (
-    <Table bordered caption={tableConfig?.caption || ""} fullWidth fixed>
+    <Table bordered caption={tableCaption || ""} fullWidth fixed>
       <thead>
-        <tr>
-          {tableConfig?.head?.map((text) => {
-            return <th scope="col">{text}</th>;
-          })}
-        </tr>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <th key={header.id}>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(header.column.columnDef.header, header.getContext())}
+              </th>
+            ))}
+          </tr>
+        ))}
       </thead>
       <tbody>
-        {tableConfig?.rows?.map((row) => {
-          return (
-            <tr>
-              {row.map((cell, i) => {
-                return i === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>;
-              })}
-            </tr>
-          );
-        })}
+        {table.getRowModel().rows.map((row) => (
+          <tr key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+            ))}
+          </tr>
+        ))}
       </tbody>
     </Table>
   );
