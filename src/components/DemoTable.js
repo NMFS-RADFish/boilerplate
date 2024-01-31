@@ -1,5 +1,15 @@
 import { Table } from "@trussworks/react-uswds";
 
+const tableConfig = {
+  head: ["Document title", "1776"],
+  rows: [
+    ["Declaration of Independence", "1776"],
+    ["Bill of Rights", "1791"],
+    ["Declaration of Sentiments", "1848"],
+    ["Emancipation Proclamation", "1863"],
+  ],
+};
+
 export const DemoTable = () => {
   return (
     <Table
@@ -10,27 +20,21 @@ export const DemoTable = () => {
     >
       <thead>
         <tr>
-          <th scope="col">Document title</th>
-          <th scope="col">Year</th>
+          {tableConfig.head.map((text) => {
+            return <th scope="col">{text}</th>;
+          })}
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">Declaration of Independence</th>
-          <td>1776</td>
-        </tr>
-        <tr>
-          <th scope="row">Bill of Rights</th>
-          <td>1791</td>
-        </tr>
-        <tr>
-          <th scope="row">Declaration of Sentiments</th>
-          <td>1848</td>
-        </tr>
-        <tr>
-          <th scope="row">Emancipation Proclamation</th>
-          <td>1863</td>
-        </tr>
+        {tableConfig.rows.map((row) => {
+          return (
+            <tr>
+              {row.map((cell, i) => {
+                return i === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>;
+              })}
+            </tr>
+          );
+        })}
       </tbody>
     </Table>
   );
