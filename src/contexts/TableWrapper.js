@@ -3,6 +3,7 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -26,22 +27,35 @@ const tableData = [
 ];
 
 const columnHelper = createColumnHelper();
-
-const columns = [
-  columnHelper.accessor("documentTitle", {
-    cell: (info) => info.getValue(),
-    header: () => <span>Document Title</span>,
-  }),
-  columnHelper.accessor("year", {
-    cell: (info) => info.getValue(),
-    header: () => <span>Year Created</span>,
-  }),
-];
-
 const TableContext = createContext();
 
 export const TableWrapper = ({ children }) => {
-  const table = useReactTable({ data: tableData, columns, getCoreRowModel: getCoreRowModel() });
+  const [sorting, setSorting] = React.useState([]);
+
+  const columns = React.useMemo(
+    () => [
+      columnHelper.accessor("documentTitle", {
+        cell: (info) => info.getValue(),
+        header: () => <span>Document Title</span>,
+      }),
+      columnHelper.accessor("year", {
+        cell: (info) => info.getValue(),
+        header: () => <span>Year Created</span>,
+      }),
+    ],
+    [],
+  );
+
+  const table = useReactTable({
+    data: tableData,
+    columns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
   const contextValue = {
     tableCaption: "This table uses the fixed prop to force equal width columns",
     table,
