@@ -1,35 +1,16 @@
 import React, { createContext } from "react";
 import {
   createColumnHelper,
-  flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
-const tableData = [
-  {
-    documentTitle: "Declaration of Independence",
-    year: "1776",
-  },
-  {
-    documentTitle: "Bill of Rights",
-    year: "1791",
-  },
-  {
-    documentTitle: "Declaration of Sentiments",
-    year: "1848",
-  },
-  {
-    documentTitle: "Emancipation Proclamation",
-    year: "1863",
-  },
-];
-
 const columnHelper = createColumnHelper();
 const TableContext = createContext();
 
 export const TableWrapper = ({ children }) => {
+  const [data, setData] = React.useState([]);
   const [sorting, setSorting] = React.useState([]);
 
   const columns = React.useMemo(
@@ -47,7 +28,7 @@ export const TableWrapper = ({ children }) => {
   );
 
   const table = useReactTable({
-    data: tableData,
+    data,
     columns,
     state: {
       sorting,
@@ -56,9 +37,11 @@ export const TableWrapper = ({ children }) => {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
+
   const contextValue = {
     tableCaption: "This table uses the fixed prop to force equal width columns",
     table,
+    setData,
   };
 
   return <TableContext.Provider value={contextValue}>{children}</TableContext.Provider>;

@@ -1,9 +1,28 @@
+import { useEffect } from "react";
 import { Table } from "@trussworks/react-uswds";
 import { useTableState } from "../contexts/TableWrapper";
 import { flexRender } from "@tanstack/react-table";
+import { MSW_ENDPOINT } from "../mocks/handlers";
+import RadfishAPIService from "../services/APIService";
+
+const ApiService = new RadfishAPIService("");
 
 export const DemoTable = () => {
-  const { tableCaption, table } = useTableState();
+  const { tableCaption, table, setData } = useTableState();
+
+  // Check if the app is offline
+  const isOffline = !navigator.onLine;
+
+  useEffect(() => {
+    if (isOffline) {
+      return;
+    }
+    const fetchFormData = async () => {
+      const { data } = await ApiService.get(MSW_ENDPOINT.TABLE);
+      setData(data);
+    };
+    fetchFormData();
+  }, [isOffline]);
 
   if (!table) {
     return null;
