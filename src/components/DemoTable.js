@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useTableState } from "../contexts/TableWrapper";
+import { MSW_ENDPOINT } from "../mocks/handlers";
+import RadfishAPIService from "../services/APIService";
 import {
   Table,
   TableBody,
@@ -9,8 +11,6 @@ import {
   TableHeaderRow,
   TableBodyCell,
 } from "../react-radfish";
-import { MSW_ENDPOINT } from "../mocks/handlers";
-import RadfishAPIService from "../services/APIService";
 
 const ApiService = new RadfishAPIService("");
 
@@ -27,7 +27,7 @@ export const DemoTable = () => {
       return;
     }
     const fetchFormData = async () => {
-      const { data } = await ApiService.get(MSW_ENDPOINT.TABLE);
+      const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?amount=0`);
       setData(data);
     };
     fetchFormData();

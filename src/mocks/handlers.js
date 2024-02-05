@@ -13,27 +13,38 @@ export const handlers = [
     const response = await request.json();
     return HttpResponse.json({ data: response }, { status: 201 });
   }),
-  http.get(MSW_ENDPOINT.TABLE, () => {
+  http.get(MSW_ENDPOINT.TABLE, ({ request }) => {
+    const url = new URL(request.url);
+    const minAmount = url.searchParams.get("amount");
+
+    const data = [
+      {
+        species: "Grouper",
+        count: 10,
+      },
+      {
+        species: "Salmon",
+        count: 5,
+      },
+      {
+        species: "Marlin",
+        count: 1,
+      },
+      {
+        species: "Mahimahi",
+        count: 15,
+      },
+    ];
+
+    let returnData = data;
+
+    if (minAmount) {
+      returnData = data.filter((data) => data.count > minAmount);
+    }
+
     return HttpResponse.json(
       {
-        data: [
-          {
-            documentTitle: "Declaration of Independence",
-            year: "1776",
-          },
-          {
-            documentTitle: "Bill of Rights",
-            year: "1791",
-          },
-          {
-            documentTitle: "Declaration of Sentiments",
-            year: "1848",
-          },
-          {
-            documentTitle: "Emancipation Proclamation",
-            year: "1863",
-          },
-        ],
+        data: returnData,
       },
       { status: 200 },
     );

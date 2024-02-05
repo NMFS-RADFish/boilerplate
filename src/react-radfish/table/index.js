@@ -62,7 +62,6 @@ const RadfishTableBodyCell = (props) => {
 
 const RadfishSortDirectionIcon = ({ header }) => {
   const isSorted = header.column.getIsSorted();
-
   switch (isSorted) {
     case "asc":
       return <Icon.ArrowUpward />;

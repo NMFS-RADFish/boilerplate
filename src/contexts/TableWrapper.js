@@ -15,13 +15,13 @@ export const TableWrapper = ({ children }) => {
 
   const columns = React.useMemo(
     () => [
-      columnHelper.accessor("documentTitle", {
+      columnHelper.accessor("species", {
         cell: (info) => info.getValue(),
-        header: () => <span>Document Title</span>,
+        header: () => <span>Species</span>,
       }),
-      columnHelper.accessor("year", {
+      columnHelper.accessor("count", {
         cell: (info) => info.getValue(),
-        header: () => <span>Year Created</span>,
+        header: () => <span>Amount Caught</span>,
       }),
     ],
     [],
