@@ -1,7 +1,14 @@
 import { useEffect } from "react";
-import { Table } from "@trussworks/react-uswds";
 import { useTableState } from "../contexts/TableWrapper";
-import { flexRender } from "@tanstack/react-table";
+import {
+  Table,
+  TableBody,
+  TableBodyRow,
+  TableHeaderCell,
+  TableHeader,
+  TableHeaderRow,
+  TableBodyCell,
+} from "../react-radfish";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import RadfishAPIService from "../services/APIService";
 
@@ -9,6 +16,8 @@ const ApiService = new RadfishAPIService("");
 
 export const DemoTable = () => {
   const { tableCaption, table, setData } = useTableState();
+  const headerGroup = table.getHeaderGroups();
+  const rowModel = table.getRowModel();
 
   // Check if the app is offline
   const isOffline = !navigator.onLine;
@@ -30,50 +39,26 @@ export const DemoTable = () => {
 
   return (
     <Table bordered caption={tableCaption || ""} fullWidth fixed>
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => {
-              return (
-                <th key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : (
-                    <div
-                      {...{
-                        className: header.column.getCanSort() ? "cursor-pointer select-none" : "",
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}
-                    >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                      {{
-                        asc: " 🔼",
-                        desc: " 🔽",
-                      }[header.column.getIsSorted()] ?? null}
-                    </div>
-                  )}
-                </th>
-              );
-            })}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table
-          .getRowModel()
-          .rows.slice(0, 10)
-          .map((row) => {
-            return (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <td key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-      </tbody>
+      <TableHeader table={table}>
+        <TableHeaderRow table={table}>
+          {headerGroup.map((group) =>
+            group.headers.map((header) => {
+              return <TableHeaderCell header={header} />;
+            }),
+          )}
+        </TableHeaderRow>
+      </TableHeader>
+      <TableBody table={table}>
+        {rowModel.rows.map((row) => {
+          return (
+            <TableBodyRow row={row}>
+              {row.getVisibleCells().map((cell) => {
+                return <TableBodyCell cell={cell} />;
+              })}
+            </TableBodyRow>
+          );
+        })}
+      </TableBody>
     </Table>
   );
 };
