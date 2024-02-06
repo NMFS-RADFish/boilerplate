@@ -74,6 +74,13 @@ export const TableWrapper = ({ children }) => {
   });
 
   /**
+   * headerGroup and rowModel are the result of two helper methods that make rendering table data simpler.
+   *
+   */
+  const headerGroup = table.getHeaderGroups();
+  const rowModel = table.getRowModel();
+
+  /**
    * Context value for the table.
    * @type {object}
    * @property {string} tableCaption - Caption for the table.
@@ -83,6 +90,8 @@ export const TableWrapper = ({ children }) => {
   const contextValue = {
     tableCaption: "This table shows how many of each fish species were caught",
     table,
+    headerGroup,
+    rowModel,
     setData,
   };
 

@@ -1,23 +1,16 @@
-import { useEffect } from "react";
-import { useTableState } from "../contexts/TableWrapper";
-import { MSW_ENDPOINT } from "../mocks/handlers";
-import RadfishAPIService from "../services/APIService";
-import {
-  Table,
-  TableBody,
-  TableBodyRow,
-  TableHeaderCell,
-  TableHeader,
-  TableHeaderRow,
-  TableBodyCell,
-} from "../react-radfish";
-
-const ApiService = new RadfishAPIService("");
-
+/**
+ * Component for displaying a demo table.
+ * @returns {React.ReactNode} - The demo table component.
+ */
 export const DemoTable = () => {
-  const { tableCaption, table, setData } = useTableState();
-  const headerGroup = table.getHeaderGroups();
-  const rowModel = table.getRowModel();
+  /**
+   * Retrieves table state from the context.
+   * @type {object}
+   * @property {string} tableCaption - Caption for the table.
+   * @property {TableInstance} table - The React Table instance.
+   * @property {Function} setData - Function to set table data. Useful for initializing data from cache or API endpoint
+   */
+  const { tableCaption, table, headerGroup, rowModel, setData } = useTableState();
 
   // Check if the app is offline
   const isOffline = !navigator.onLine;
@@ -26,6 +19,9 @@ export const DemoTable = () => {
     if (isOffline) {
       return;
     }
+    /**
+     * Fetches table data from the API service and sets it to the state.
+     */
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?amount=0`);
       setData(data);
