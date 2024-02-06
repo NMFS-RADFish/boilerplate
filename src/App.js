@@ -78,8 +78,10 @@ function App() {
     <div className="App">
       <Toast toast={toast} />
       <Layout>
+        {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
         <Router>
           <Routes>
+            {/* On root route "/", render the DemoForm component along with it's context for state management */}
             <Route
               path="/"
               element={
@@ -88,6 +90,7 @@ function App() {
                 </FormWrapper>
               }
             />
+            {/* On "/table" route, render the DemoTable component along with it's context for state management */}
             <Route
               path="/table"
               element={
