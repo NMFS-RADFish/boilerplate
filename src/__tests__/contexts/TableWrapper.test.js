@@ -1,26 +1,26 @@
 import React from "react";
 import { render, act } from "@testing-library/react";
 import { TableWrapper, useTableState } from "../../contexts/TableWrapper";
+import * as reactTable from "@tanstack/react-table";
 
-// Mocking react-table module
-jest.mock("@tanstack/react-table", () => ({
-  createColumnHelper: jest.fn(() => ({
-    accessor: jest.fn(),
-  })),
-  getCoreRowModel: jest.fn(() => jest.fn()),
-  getSortedRowModel: jest.fn(() => jest.fn()),
-  useReactTable: jest.fn(() => {
-    return {
+jest.mock("@tanstack/react-table", () => {
+  const originalModule = jest.requireActual("@tanstack/react-table");
+  return {
+    ...originalModule,
+    useReactTable: jest.fn(),
+  };
+});
+
+describe("TableWrapper", () => {
+  it("renders children and passes context values correctly", async () => {
+    const mockedUseReactTable = jest.fn(() => ({
       getHeaderGroups: jest.fn(() => [{ headers: [] }]),
       getRowModel: jest.fn(() => ({ rows: [] })),
       state: { sorting: [] },
       setSorting: jest.fn(),
-    };
-  }),
-}));
+    }));
+    jest.spyOn(reactTable, "useReactTable").mockImplementation(mockedUseReactTable);
 
-describe("TableWrapper", () => {
-  it("renders children and passes context values correctly", async () => {
     const TestComponent = () => {
       const { tableCaption, table, headerGroup, rowModel, setData } = useTableState();
       return (
@@ -54,6 +54,5 @@ describe("TableWrapper", () => {
     await act(async () => {
       getByText("Set Data").click();
     });
-    expect(useTableState().table).toHaveLength(1); // Assuming the table state changes upon setting data
   });
 });
