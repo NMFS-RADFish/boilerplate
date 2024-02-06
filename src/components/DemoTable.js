@@ -15,13 +15,15 @@ export const DemoTable = () => {
   // Check if the app is offline
   const isOffline = !navigator.onLine;
 
+  /**
+   * Fetches table data from the API service and sets it to the state in TableWrapper context.
+   * Remember that DemoTable needs to be wrapped by a TableWrapper
+   * If app is offline, do not fetch. TODO: This should getch data from cache
+   */
   useEffect(() => {
     if (isOffline) {
       return;
     }
-    /**
-     * Fetches table data from the API service and sets it to the state.
-     */
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?amount=0`);
       setData(data);
