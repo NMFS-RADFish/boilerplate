@@ -1,4 +1,9 @@
-// FormContext.js
+/**
+ * Manages state for any child Radfish form.
+ * This context should wrap the RadfisForm component and will manage it's state related to input fields, input validations, and form submissions
+ * This context provider is meant to be extensible and modular. You can use this anywhere in your app to wrap a form to manage the specific form's state
+ */
+
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Form } from "../react-radfish";
