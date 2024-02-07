@@ -19,7 +19,6 @@ export const handlers = [
     if (!navigator.onLine) {
       const formData = new FormData();
       const id = crypto.randomUUID();
-      formData.append("id", id);
 
       for (let key in response) {
         formData.append(key, response[key]);
