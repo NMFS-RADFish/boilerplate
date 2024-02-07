@@ -15,7 +15,27 @@ export const handlers = [
   // In a full stack implementation, there will likely be some logic on the server to handle/store persistent data
   http.post(MSW_ENDPOINT.SPECIES, async ({ request }) => {
     const response = await request.json();
-    return HttpResponse.json({ data: response }, { status: 201 });
+
+    if (!navigator.onLine) {
+      const formData = new FormData();
+      const id = crypto.randomUUID();
+
+      for (let key in response) {
+        formData.append(key, response[key]);
+      }
+
+      if (localStorage.getItem("formData")) {
+        const mapData = JSON.parse(localStorage.getItem("formData"));
+        mapData.push([id, Object.fromEntries(formData)]);
+        localStorage.setItem("formData", JSON.stringify(mapData));
+      } else {
+        localStorage.setItem("formData", JSON.stringify([[id, Object.fromEntries(formData)]]));
+      }
+
+      return HttpResponse.error(null, { status: 500 });
+    } else {
+      return HttpResponse.json({ data: response }, { status: 201 });
+    }
   }),
   // this endpoint is meant to return data to populate a RadfishForm state.
   // ReactTable expects an array of objects, where the key of each object represent a column header value
