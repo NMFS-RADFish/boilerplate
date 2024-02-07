@@ -1,4 +1,5 @@
 import { http, HttpResponse } from "msw";
+import uuid from "short-uuid";
 
 export const MSW_ENDPOINT = {
   SPECIES: "/species",
@@ -18,21 +19,29 @@ export const handlers = [
 
     if (!navigator.onLine) {
       const formData = new FormData();
-      formData.append("timestamp", Date.now());
+      const id = uuid.generate();
+      formData.append("id", id);
 
       for (let key in response) {
         formData.append(key, response[key]);
       }
 
-      localStorage.getItem("formData")
-        ? localStorage.setItem(
-            "formData",
-            JSON.stringify([
-              ...JSON.parse(localStorage.getItem("formData")),
-              Object.fromEntries(formData),
-            ]),
-          )
-        : localStorage.setItem("formData", JSON.stringify([Object.fromEntries(formData)]));
+      if (localStorage.getItem("formData")) {
+        // Parse the data from localStorage and convert it into a Map
+        const mapData = new Map(JSON.parse(localStorage.getItem("formData")));
+
+        // Add the new entry
+        mapData.set(id, Object.fromEntries(formData));
+
+        // Convert the Map back into an array and stringify it
+        // Store it back in localStorage
+        localStorage.setItem("formData", JSON.stringify(Array.from(mapData.entries())));
+      } else {
+        localStorage.setItem(
+          "formData",
+          JSON.stringify(Array.from(new Map([[id, Object.fromEntries(formData)]]).entries())),
+        );
+      }
 
       return HttpResponse.error(null, { status: 500 });
     } else {
