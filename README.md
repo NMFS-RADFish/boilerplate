@@ -24,6 +24,7 @@
       - [`DELETE` Request](#delete-request)
     - [Handling Responses and Errors](#handling-responses-and-errors)
   - [State Management](#state-management)
+  - [Multi Entry Form Submit](#multi-entry)
   - [Testing](#testing)
     - [Running Tests](#running-tests)
     - [Unit Tests](#unit-tests)
@@ -32,7 +33,6 @@
     - [Snapshot Tests](#snapshot-tests)
     - [Writing Browser Tests](#writing-browser-tests)
     - [Additional Jest Configuration](#additional-jest-configuration)
-
 
 ## Getting Started
 
@@ -97,14 +97,12 @@ The **`Layout`** component is a wrapper component used to structure the main lay
 To use the **`Layout`** component, wrap it around the main content of your application. The children of the **`Layout`** component are placed inside a **`GridContainer`**, which provides a responsive grid layout.
 
 ```jsx
-import Layout from './components/Layout';
+import Layout from "./components/Layout";
 
 const App = () => {
   return (
     <Layout>
-      <main>
-        {/* Your main content goes here */}
-      </main>
+      <main>{/* Your main content goes here */}</main>
     </Layout>
   );
 };
@@ -121,17 +119,17 @@ The **`HeaderNav`** component is integrated into the **`Layout`** component. It 
 **Usage**
 
 ```jsx
-import HeaderNav from './HeaderNav';
+import HeaderNav from "./HeaderNav";
 
 const Layout = () => {
   return (
     <>
-    <HeaderNav>
+      <HeaderNav>
         <a href="/">Home</a>
         <a href="/about">About</a>
         {/* Additional navigation links */}
-    </HeaderNav>
-    <GridContainer>{children}</GridContainer>;
+      </HeaderNav>
+      <GridContainer>{children}</GridContainer>;
     </>
   );
 };
@@ -160,7 +158,7 @@ You will notice, that the components above do not have any `className` assigned,
 
 // form.css
 .your-custom-class {
-	background-color: var(--noaa-dark-blue);
+  background-color: var(--noaa-dark-blue);
 }
 ```
 
@@ -172,8 +170,8 @@ If you need to add additional styles to a particular component, you can do so by
 import { Label } from "../react-radfish";
 
 <Label htmlFor="fullName" className="your-custom-class">
-	Full Name
-</Label>
+  Full Name
+</Label>;
 ```
 
 By following this method, you can leverage the underlying `uswds` component, maintain the NOAA theme, and can extend if further to suit you needs as a developer.
@@ -184,12 +182,12 @@ The **`RadfishAPIService`** is a class designed to facilitate interactions with 
 
 ### Initializing the Service
 
-To use **`RadfishAPIService`**, you should use the included `APIService.js` module that is provided in the radfish application. 
+To use **`RadfishAPIService`**, you should use the included `APIService.js` module that is provided in the radfish application.
 
 ```jsx
-import RadfishAPIService from './RadfishAPIService';
+import RadfishAPIService from "./RadfishAPIService";
 
-const ApiService = new RadfishAPIService('your_access_token_here');
+const ApiService = new RadfishAPIService("your_access_token_here");
 ```
 
 ### Making API Requests
@@ -197,80 +195,85 @@ const ApiService = new RadfishAPIService('your_access_token_here');
 A common pattern, is to call this `ApiService` in a `useEffect` that will trigger whenever a React component loads:
 
 ```jsx
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await ApiService.get(API_ENDPOINT);
-      // handle data as needed
-    };
-    fetchData();
-  }, []);
+useEffect(() => {
+  const fetchData = async () => {
+    const { data } = await ApiService.get(API_ENDPOINT);
+    // handle data as needed
+  };
+  fetchData();
+}, []);
 ```
 
 #### `GET` Request
+
 Asynchronous function to perform a `GET` request
+
 - `@param {string} endpoint` - The API endpoint to perform the GET request.
 - `@param {Object} queryParams` - The query parameters for the GET request.
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
-  
+
 ```js
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await ApiService.get(API_ENDPOINT, { "param1": "foo" });
-      // handle data as needed
-    };
-    fetchData();
-  }, []);
+useEffect(() => {
+  const fetchData = async () => {
+    const { data } = await ApiService.get(API_ENDPOINT, { param1: "foo" });
+    // handle data as needed
+  };
+  fetchData();
+}, []);
 ```
 
 #### `POST` Request
 
 Asynchronous function to perform a `POST` request
+
 - `@param {string} endpoint` - The API endpoint to perform the POST request.
 - `@param {Object} body` - The request body for the POST request.
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
-  useEffect(() => {
-    const postData = async () => {
-      const { data } = await ApiService.post(API_ENDPOINT, { "name": "foo" });
-      // handle data as needed
-    };
-    postData();
-  }, []);
+useEffect(() => {
+  const postData = async () => {
+    const { data } = await ApiService.post(API_ENDPOINT, { name: "foo" });
+    // handle data as needed
+  };
+  postData();
+}, []);
 ```
 
 #### `PUT` Request
 
 Asynchronous function to perform a `PUT` request
+
 - `@param {string} endpoint` - The API endpoint to perform the PUT request.
 - `@param {Object} body` - The request body for the PUT request.
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
-  useEffect(() => {
-    const updateData = async () => {
-      const { data } = await ApiService.put(API_ENDPOINT, { "id": 1 });
-      // handle data as needed
-    };
-    updateData();
-  }, []);
+useEffect(() => {
+  const updateData = async () => {
+    const { data } = await ApiService.put(API_ENDPOINT, { id: 1 });
+    // handle data as needed
+  };
+  updateData();
+}, []);
 ```
 
 #### `DELETE` Request
 
 Asynchronous function to perform a `DELETE` request
+
 - `@param {string} endpoint` - The API endpoint to perform the DELETE request.
 - `@param {Object} body` - The request body for the DELETE request.
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
-  useEffect(() => {
-    const deleteData = async () => {
-      const { data } = await ApiService.delete(API_ENDPOINT, { "id": 1 });
-      // handle data as needed
-    };
-    deleteData();
-  }, []);
+useEffect(() => {
+  const deleteData = async () => {
+    const { data } = await ApiService.delete(API_ENDPOINT, { id: 1 });
+    // handle data as needed
+  };
+  deleteData();
+}, []);
 ```
 
 ### Handling Responses and Errors
@@ -289,6 +292,62 @@ Form state is managed with react context. The code for this state can be found i
 
 This will ensure that the state that is managed in context will be passed correctly to the child form that you are building, and should behave in a similar way. You can access the form data within the `FormWrapper` and can `console.log`, `debug`, or otherwise pass this data to the context's children as you application needs.
 
+## Multi-Entry Form Submit
+
+Implementing multi-entry submissions in your NOAA web application forms streamlines the process of submitting data for multiple items at once. This guide will help you set up this functionality.
+
+### Prerequisites
+
+- Ensure your form is wrapped in `FormWrapper` to manage state effectively.
+- Utilize `useFormState` within your form component to interact with form data.
+
+### Steps for Implementation
+
+#### 1. Integrate `FormWrapper`:
+
+Wrap your form component with `FormWrapper` to access state management features such as handling changes, performing validation, and submitting data.
+
+#### 2. Access Form State:
+
+Use the `useFormState` hook to manage form data, including retrieving and setting values, validating inputs, and handling form submissions.
+
+#### 3. Add Multi-Entry Button:
+
+Include a button in your form specifically for multi-entry submissions. This button will facilitate the submission of multiple data entries based on the current form data.
+
+#### 4. Implement Multi-Entry Logic:
+
+Define a function that updates the form data for multiple entries. This could involve incrementing data values or adding multiple sets of data to the submission payload.
+
+#### 5. Handle Multi-Entry Submission:
+
+Utilize the `handleMultiEntrySubmit` method from `useFormState` to process and submit the updated form data for multiple entries. This method can be triggered by the multi-entry button.
+
+#### 6. Submit Data:
+
+On clicking the multi-entry submit button, execute the defined logic to adjust form data as needed for multi-entry and use `handleMultiEntrySubmit` to submit the data.
+
+### Example
+
+Assuming you have a form with fields like `numberOfFish` and `species`, and you want to submit data for an additional fish catch without filling out the form again:
+
+```jsx
+// Inside your form component
+const { formData, setFormData, handleMultiEntrySubmit } = useFormState();
+
+// Function to increment fish count and submit
+const submitMultipleEntries = () => {
+  const updatedData = {
+    ...formData,
+    numberOfFish: Number(formData.numberOfFish) + 1, // Increment fish count
+  };
+  handleMultiEntrySubmit(updatedData); // Submit updated data
+};
+
+// Include this button in your form JSX
+<Button onClick={submitMultipleEntries}>Add Another Catch</Button>;
+```
+
 ## Testing
 
 Testing is a critical part of the software development process, ensuring the reliability and maintainability of your React application. This section provides an overview of writing tests using [Jest](https://jestjs.io/), along with additional frameworks like [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for different types of tests: snapshot, unit, and browser testing. This section also covers debugging techniques for broken or failed tests and best practices for effective test writing.
@@ -304,13 +363,13 @@ Unit tests focus on testing individual components or functions in isolation.
 #### Basic Unit Test
 
 ```jsx
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import MyComponent from './MyComponent';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import MyComponent from "./MyComponent";
 
-it('renders the correct content', () => {
+it("renders the correct content", () => {
   render(<MyComponent />);
-  expect(screen.getByText('Content')).toBeInTheDocument();
+  expect(screen.getByText("Content")).toBeInTheDocument();
 });
 ```
 
@@ -319,10 +378,10 @@ it('renders the correct content', () => {
 Utilize user-event or fireEvent from React Testing Library to simulate user actions.
 
 ```jsx
-import userEvent from '@testing-library/user-event';
+import userEvent from "@testing-library/user-event";
 
 // Example: Clicking a button
-userEvent.click(screen.getByRole('button'));
+userEvent.click(screen.getByRole("button"));
 ```
 
 ### Snapshot Tests
@@ -330,11 +389,11 @@ userEvent.click(screen.getByRole('button'));
 Snapshot testing captures the rendered output of a component and ensures that it does not change unexpectedly.
 
 ```jsx
-import React from 'react';
-import renderer from 'react-test-renderer';
-import MyComponent from './MyComponent';
+import React from "react";
+import renderer from "react-test-renderer";
+import MyComponent from "./MyComponent";
 
-it('renders correctly', () => {
+it("renders correctly", () => {
   const tree = renderer.create(<MyComponent />).toJSON();
   expect(tree).toMatchSnapshot();
 });
@@ -345,16 +404,15 @@ it('renders correctly', () => {
 Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Jest. Please note Puppeteer does not come included by default in the RADFish framework.
 
 ```jsx
-const puppeteer = require('puppeteer');
+const puppeteer = require("puppeteer");
 
-it('should display the homepage', async () => {
+it("should display the homepage", async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto('http://localhost:3000');
-  await expect(page.title()).resolves.toMatch('Home Page');
+  await page.goto("http://localhost:3000");
+  await expect(page.title()).resolves.toMatch("Home Page");
   await browser.close();
 });
-
 ```
 
 ### Additional Jest Configuration
