@@ -25,20 +25,11 @@ export const handlers = [
       }
 
       if (localStorage.getItem("formData")) {
-        // Parse the data from localStorage and convert it into a Map
-        const mapData = new Map(JSON.parse(localStorage.getItem("formData")));
-
-        // Add the new entry
-        mapData.set(id, Object.fromEntries(formData));
-
-        // Convert the Map back into an array and stringify it
-        // Store it back in localStorage
-        localStorage.setItem("formData", JSON.stringify(Array.from(mapData.entries())));
+        const mapData = JSON.parse(localStorage.getItem("formData"));
+        mapData.push([id, Object.fromEntries(formData)]);
+        localStorage.setItem("formData", JSON.stringify(mapData));
       } else {
-        localStorage.setItem(
-          "formData",
-          JSON.stringify(Array.from(new Map([[id, Object.fromEntries(formData)]]).entries())),
-        );
+        localStorage.setItem("formData", JSON.stringify([[id, Object.fromEntries(formData)]]));
       }
 
       return HttpResponse.error(null, { status: 500 });
