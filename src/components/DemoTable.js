@@ -48,6 +48,10 @@ export const DemoTable = () => {
     fetchFormData();
   }, [isOffline]);
 
+  const handleClick = (row) => {
+    console.log("ID: ", row.original.id);
+  };
+
   if (!table) {
     return null;
   }
@@ -66,7 +70,7 @@ export const DemoTable = () => {
       <TableBody table={table}>
         {rowModel.rows.map((row) => {
           return (
-            <TableBodyRow row={row}>
+            <TableBodyRow row={row} onClick={() => handleClick(row)}>
               {row.getVisibleCells().map((cell) => {
                 return <TableBodyCell cell={cell} />;
               })}
