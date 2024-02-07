@@ -48,6 +48,10 @@ export const DemoTable = () => {
     fetchFormData();
   }, [isOffline]);
 
+  /**
+   * handleRowClick gets executed in the onClick handler on TableBodyRow
+   * This can be useful for re-routing to a detail page, or handling other data specific functionality
+   */
   const handleRowClick = (row) => {
     console.log("ID: ", row.original.id);
   };
