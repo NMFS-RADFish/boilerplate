@@ -1,5 +1,4 @@
 import { http, HttpResponse } from "msw";
-import uuid from "short-uuid";
 
 export const MSW_ENDPOINT = {
   SPECIES: "/species",
@@ -19,7 +18,7 @@ export const handlers = [
 
     if (!navigator.onLine) {
       const formData = new FormData();
-      const id = uuid.generate();
+      const id = crypto.randomUUID();
       formData.append("id", id);
 
       for (let key in response) {

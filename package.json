@@ -15,7 +15,6 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.2",
     "react-scripts": "5.0.1",
-    "short-uuid": "^4.2.2",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^7.0.0",
     "workbox-broadcast-update": "^7.0.0",
