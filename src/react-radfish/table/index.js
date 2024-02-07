@@ -1,3 +1,4 @@
+import "./style.css";
 import { flexRender } from "@tanstack/react-table";
 import { Table as TwTable } from "@trussworks/react-uswds";
 import { Icon } from "@trussworks/react-uswds";
@@ -49,7 +50,11 @@ const RadfishTableBody = (props) => {
 };
 
 const RadfishTableBodyRow = (props) => {
-  return <tr key={props.row.id}>{props.children}</tr>;
+  return (
+    <tr className="radfish-table-row" key={props.row.id} onClick={props.onClick}>
+      {props.children}
+    </tr>
+  );
 };
 
 const RadfishTableBodyCell = (props) => {

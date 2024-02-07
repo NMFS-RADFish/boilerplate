@@ -45,6 +45,10 @@ export const TableWrapper = ({ children }) => {
    */
   const columns = React.useMemo(
     () => [
+      columnHelper.accessor("id", {
+        cell: (info) => info.getValue(),
+        header: () => <span>Id</span>,
+      }),
       columnHelper.accessor("species", {
         cell: (info) => info.getValue(),
         header: () => <span>Species</span>,

@@ -47,18 +47,22 @@ export const handlers = [
 
     const data = [
       {
+        id: 1,
         species: "Grouper",
         count: 10,
       },
       {
+        id: 2,
         species: "Salmon",
         count: 5,
       },
       {
+        id: 3,
         species: "Marlin",
         count: 1,
       },
       {
+        id: 4,
         species: "Mahimahi",
         count: 15,
       },
