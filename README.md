@@ -24,6 +24,7 @@
       - [`DELETE` Request](#delete-request)
     - [Handling Responses and Errors](#handling-responses-and-errors)
   - [State Management](#state-management)
+  - [Multi Entry Form Submit](#multi-entry-form-submit)
   - [Testing](#testing)
     - [Running Tests](#running-tests)
     - [Unit Tests](#unit-tests)
@@ -288,6 +289,63 @@ Form state is managed with react context. The code for this state can be found i
 ```
 
 This will ensure that the state that is managed in context will be passed correctly to the child form that you are building, and should behave in a similar way. You can access the form data within the `FormWrapper` and can `console.log`, `debug`, or otherwise pass this data to the context's children as you application needs.
+
+## Multi-Entry Form Submit
+
+Implementing multi-entry submissions in your NOAA web application forms streamlines the process of submitting data for multiple items at once. This guide will help you set up this functionality.
+
+### Prerequisites
+
+- Ensure your form is wrapped in `FormWrapper` to manage state effectively.
+- Utilize `useFormState` within your form component to interact with form data.
+
+### Steps for Implementation
+
+#### 1. Integrate `FormWrapper`:
+
+Wrap your form component with `FormWrapper` to access state management features such as handling changes, performing validation, and submitting data.
+
+#### 2. Access Form State:
+
+Use the `useFormState` hook to manage form data, including retrieving and setting values, validating inputs, and handling form submissions.
+
+#### 3. Add Multi-Entry Button:
+
+Include a button in your form specifically for multi-entry submissions. This button will facilitate the submission of multiple data entries based on the current form data.
+
+#### 4. Implement Multi-Entry Logic:
+
+Define a function that updates the form data for multiple entries. This could involve incrementing data values or adding multiple sets of data to the submission payload.
+
+#### 5. Handle Multi-Entry Submission:
+
+Utilize the `handleMultiEntrySubmit` method from `useFormState` to process and submit the updated form data for multiple entries. This method can be triggered by the multi-entry button.
+
+#### 6. Submit Data:
+
+On clicking the multi-entry submit button, execute the defined logic to adjust form data as needed for multi-entry and use `handleMultiEntrySubmit` to submit the data.
+
+### Example
+
+Assuming you have a form with fields like `numberOfFish` and `species`, and you want to submit data for an additional fish catch without filling out the form again:
+
+```jsx
+// Inside your form component
+const { formData, setFormData, handleMultiEntrySubmit } = useFormState();
+
+// Function to increment fish count and submit
+const submitMultipleEntries = () => {
+  const updatedData = {
+    ...formData,
+    numberOfFish: Number(formData.numberOfFish) + 1, // Increment fish count
+  };
+  handleMultiEntrySubmit(updatedData); // Submit updated data
+};
+
+// Include this button in your form JSX
+<Button onClick={submitMultipleEntries}>Add Another Catch</Button>;
+```
+
 
 ## Testing
 
