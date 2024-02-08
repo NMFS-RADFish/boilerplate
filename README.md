@@ -24,7 +24,17 @@
       - [`DELETE` Request](#delete-request)
     - [Handling Responses and Errors](#handling-responses-and-errors)
   - [State Management](#state-management)
-  - [Multi Entry Form Submit](#multi-entry-form-submit)
+  - [Multi-Entry Form Submit](#multi-entry-form-submit)
+  - [Handling Offline Requests](#handling-offline-requests)
+    - [Prerequisites](#prerequisites)
+    - [Steps for Implementation](#steps-for-implementation)
+      - [1. Integrate `FormWrapper`:](#1-integrate-formwrapper)
+      - [2. Access Form State:](#2-access-form-state)
+      - [3. Add Multi-Entry Button:](#3-add-multi-entry-button)
+      - [4. Implement Multi-Entry Logic:](#4-implement-multi-entry-logic)
+      - [5. Handle Multi-Entry Submission:](#5-handle-multi-entry-submission)
+      - [6. Submit Data:](#6-submit-data)
+    - [Example](#example)
   - [Testing](#testing)
     - [Running Tests](#running-tests)
     - [Unit Tests](#unit-tests)
@@ -293,6 +303,24 @@ This will ensure that the state that is managed in context will be passed correc
 ## Multi-Entry Form Submit
 
 Implementing multi-entry submissions in your NOAA web application forms streamlines the process of submitting data for multiple items at once. This guide will help you set up this functionality.
+
+## Handling Offline Requests
+
+In the case that there is no network connection, a handler can be implemented in `mocks/handlers.js. If your application makes a request that matches a route handler, this will allow you to store data locally so it can be worked with at a later time.
+
+```js
+  http.post('/api', async ({ request }) => {
+    const data = await request.json();
+
+    if (!navigator.onLine) {
+      const requests = localstorage.getItem('api-requests') || [];
+      requests.push(data);
+
+      return HttpResponse.json({ data }, { status: 201 });
+    }
+
+  }),
+```
 
 ### Prerequisites
 
