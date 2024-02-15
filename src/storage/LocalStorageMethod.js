@@ -1,7 +1,7 @@
-import { StorageMethod } from "./StorageMethods";
+import { StorageMethod } from "./StorageMethod";
 
 export class LocalStorageMethod extends StorageMethod {
-  save(key, data) {
+  save(data, key) {
     try {
       localStorage.setItem(key, JSON.stringify(data));
     } catch (error) {
@@ -15,22 +15,20 @@ export class LocalStorageMethod extends StorageMethod {
       const data = localStorage.getItem(key);
       return data ? JSON.parse(data) : null;
     } catch (error) {
-      console.error(`Error loading data from localStorage: ${error}`);
       throw error;
     }
   }
 
-  loadOne(key, uuid) {
+  loadOne(uuid, key) {
     try {
       const data = this.load(key);
       return data.find((entry) => entry[0] === uuid);
     } catch (error) {
-      console.error(`Error loading item from localStorage: ${error}`);
       throw error;
     }
   }
 
-  editOne(key, uuid, data) {
+  editOne(uuid, data, key) {
     try {
       const originalData = this.load(key);
       const updatedData = originalData.map((entry) => {
@@ -41,7 +39,6 @@ export class LocalStorageMethod extends StorageMethod {
       });
       this.save(key, updatedData);
     } catch (error) {
-      console.error(`Error editing item in localStorage: ${error}`);
       throw error;
     }
   }

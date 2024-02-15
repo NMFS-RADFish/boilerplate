@@ -1,5 +1,5 @@
 export class StorageMethod {
-  save(_key, _data) {
+  save(_data, _key) {
     throw new Error("Method not implemented.");
   }
 
@@ -7,11 +7,11 @@ export class StorageMethod {
     throw new Error("Method not implemented.");
   }
 
-  loadOne(_key, _uuid) {
+  loadOne(_uuid, _key) {
     throw new Error("Method not implemented.");
   }
 
-  editOne(_key, _uuid, _data) {
+  editOne(_uuid, _data, _key) {
     throw new Error("Method not implemented.");
   }
 }
