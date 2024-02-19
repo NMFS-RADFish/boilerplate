@@ -55,7 +55,7 @@ export const DemoTable = () => {
    * This can be useful for re-routing to a detail page, or handling other data specific functionality
    */
   const handleRowClick = (row) => {
-    console.log("ID: ", row.original.id);
+    // row.original.id should be the id used when generating the form. this can come from MSW or alternatively from IndexDB/localStorage as needed when offline
     navigate(`/detail/${row.original.id}`);
   };
 
