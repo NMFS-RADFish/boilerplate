@@ -16,6 +16,7 @@ import {
   TableHeaderRow,
   TableBodyCell,
 } from "../react-radfish";
+import { useNavigate } from "react-router-dom";
 
 const ApiService = new RadfishAPIService("");
 
@@ -28,6 +29,7 @@ export const DemoTable = () => {
    * @property {Function} setData - Function to set table data. Useful for initializing data from cache or API endpoint
    */
   const { tableCaption, table, headerGroup, rowModel, setData } = useTableState();
+  const navigate = useNavigate();
 
   // Check if the app is offline
   const isOffline = !navigator.onLine;
@@ -54,6 +56,7 @@ export const DemoTable = () => {
    */
   const handleRowClick = (row) => {
     console.log("ID: ", row.original.id);
+    navigate(`/detail/${row.original.id}`);
   };
 
   if (!table) {

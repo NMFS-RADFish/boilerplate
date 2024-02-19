@@ -9,6 +9,7 @@ import RadfishAPIService from "./services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { DemoForm } from "./components/DemoForm";
 import { DemoTable } from "./components/DemoTable";
+import { DetailPage } from "./components/DetailPage";
 
 const ApiService = new RadfishAPIService("");
 
@@ -99,6 +100,7 @@ function App() {
                 </TableWrapper>
               }
             />
+            <Route path="/detail/:id" element={<DetailPage />} />
           </Routes>
         </Router>
       </Layout>
