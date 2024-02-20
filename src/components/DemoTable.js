@@ -16,6 +16,7 @@ import {
   TableHeaderRow,
   TableBodyCell,
 } from "../react-radfish";
+import useFormStorage from "../hooks/useFormStorage";
 
 const ApiService = new RadfishAPIService("");
 
@@ -29,6 +30,8 @@ export const DemoTable = () => {
    */
   const { tableCaption, table, headerGroup, rowModel, setData } = useTableState();
 
+  const { store } = useFormStorage();
+
   // Check if the app is offline
   const isOffline = !navigator.onLine;
 
@@ -38,15 +41,16 @@ export const DemoTable = () => {
    * If app is offline, do not fetch. TODO: This should getch data from cache
    */
   useEffect(() => {
-    if (isOffline) {
-      return;
+    if (isOffline && store) {
+      setData(store.map((entry) => entry[1]));
+    } else {
+      const fetchFormData = async () => {
+        const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?amount=0`);
+        setData(data);
+      };
+      fetchFormData();
     }
-    const fetchFormData = async () => {
-      const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?amount=0`);
-      setData(data);
-    };
-    fetchFormData();
-  }, [isOffline]);
+  }, [isOffline, store, setData]);
 
   /**
    * handleRowClick gets executed in the onClick handler on TableBodyRow
