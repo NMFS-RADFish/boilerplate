@@ -3,7 +3,7 @@ import { StorageMethod } from "./StorageMethod";
 import { db } from "./indexedDB";
 
 export class IndexedDBMethod extends StorageMethod {
-  async save(data) {
+  async create(data) {
     try {
       await db.formData.add({
         ...data,
@@ -14,7 +14,7 @@ export class IndexedDBMethod extends StorageMethod {
     }
   }
 
-  async load() {
+  async find() {
     try {
       return await db.formData.toArray();
     } catch (error) {
@@ -22,15 +22,7 @@ export class IndexedDBMethod extends StorageMethod {
     }
   }
 
-  async loadOne(uuid) {
-    try {
-      return await db.formData.get(uuid);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async editOne(uuid, data) {
+  async update(uuid, data) {
     try {
       return await db.formData.update(uuid, data);
     } catch (error) {

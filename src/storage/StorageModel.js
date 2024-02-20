@@ -9,16 +9,16 @@ export class StorageModel {
     this.storageMethod = storageMethod;
   }
 
-  saveEntry(data, key) {
-    this.storageMethod.save(data, key);
+  create(data) {
+    this.storageMethod.create(data);
   }
-  loadAllEntries(key) {
-    return this.storageMethod.load(key);
+  find(criteria) {
+    return this.storageMethod.find(criteria);
   }
-  loadEntryByUUID(uuid, key) {
-    return this.storageMethod.loadOne(uuid, key);
-  }
-  editEntry(uuid, data, key) {
-    return this.storageMethod.editOne(uuid, data, key);
+  // loadEntryByUUID(uuid) {
+  //   return this.storageMethod.loadOne(uuid);
+  // }
+  update(criteria, data) {
+    return this.storageMethod.update(criteria, data);
   }
 }
