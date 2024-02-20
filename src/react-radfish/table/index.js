@@ -51,7 +51,12 @@ const RadfishTableBody = (props) => {
 
 const RadfishTableBodyRow = (props) => {
   return (
-    <tr className="radfish-table-row" key={props.row.id} onClick={props.onClick}>
+    <tr
+      className="radfish-table-row"
+      style={props.style}
+      key={props.row.id}
+      onClick={props.onClick}
+    >
       {props.children}
     </tr>
   );

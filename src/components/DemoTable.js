@@ -3,7 +3,7 @@
  * @returns {React.ReactNode} - The demo table component.
  */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTableState } from "../contexts/TableWrapper";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import RadfishAPIService from "../services/APIService";
@@ -15,9 +15,17 @@ import {
   TableHeader,
   TableHeaderRow,
   TableBodyCell,
+  Button,
 } from "../react-radfish";
 
+import { RadfishNavMenuButton } from "../react-radfish/buttons/index";
+
 const ApiService = new RadfishAPIService("");
+
+const offlineData = [
+  { id: "5", species: "Offline Grouper", count: "8" },
+  { id: "6", species: "Offline Salmon", count: "9" },
+];
 
 export const DemoTable = () => {
   /**
@@ -38,15 +46,23 @@ export const DemoTable = () => {
    * If app is offline, do not fetch. TODO: This should getch data from cache
    */
   useEffect(() => {
-    if (isOffline) {
-      return;
+    if (isOffline || true) {
+      setOfflineData();
     }
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?amount=0`);
-      setData(data);
+      setData((prevData) => {
+        const newData = data.map((item) => ({ ...item, isOffline: false }));
+        const combinedData = [...prevData, ...newData];
+        const uniqueData = Array.from(
+          new Map(combinedData.map((item) => [item.id, item])).values(),
+        );
+        return uniqueData;
+      });
     };
+
     fetchFormData();
-  }, [isOffline]);
+  }, []);
 
   /**
    * handleRowClick gets executed in the onClick handler on TableBodyRow
@@ -60,28 +76,60 @@ export const DemoTable = () => {
     return null;
   }
 
+  const setOfflineData = () => {
+    const markedOfflineData = offlineData.map((item) => ({ ...item, isOffline: true }));
+    setData(markedOfflineData);
+  };
+
+  const handleSubmitOfflineData = () => {
+    setData((prevData) => {
+      // Remove the `isOffline` property from all items
+      const updatedData = prevData.map((item) => {
+        if (item.isOffline) {
+          const { isOffline, ...rest } = item; // Remove isOffline flag
+          return rest;
+        }
+        return item;
+      });
+      return updatedData;
+    });
+  };
+
   return (
-    <Table bordered caption={tableCaption || ""} fullWidth fixed>
-      <TableHeader table={table}>
-        <TableHeaderRow table={table}>
-          {headerGroup.map((group) =>
-            group.headers.map((header) => {
-              return <TableHeaderCell header={header} />;
-            }),
-          )}
-        </TableHeaderRow>
-      </TableHeader>
-      <TableBody table={table}>
-        {rowModel.rows.map((row) => {
-          return (
-            <TableBodyRow row={row} onClick={() => handleRowClick(row)}>
-              {row.getVisibleCells().map((cell) => {
-                return <TableBodyCell cell={cell} />;
-              })}
-            </TableBodyRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-end",
+      }}
+    >
+      <Button style={{ marginLeft: "auto" }} onClick={handleSubmitOfflineData}>
+        Submit Offline Data
+      </Button>
+      <Table bordered caption={tableCaption || ""} fullWidth fixed>
+        <TableHeader table={table}>
+          <TableHeaderRow table={table}>
+            {headerGroup.map((group) =>
+              group.headers.map((header) => {
+                return <TableHeaderCell header={header} />;
+              }),
+            )}
+          </TableHeaderRow>
+        </TableHeader>
+        <TableBody table={table}>
+          {rowModel.rows.map((row) => {
+            const rowStyle = row.original.isOffline ? { backgroundColor: "lightgrey" } : {};
+            return (
+              <TableBodyRow row={row} onClick={() => handleRowClick(row)} style={rowStyle}>
+                {row.getVisibleCells().map((cell) => {
+                  return <TableBodyCell style={{ background: "transparent" }} cell={cell} />;
+                })}
+              </TableBodyRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
