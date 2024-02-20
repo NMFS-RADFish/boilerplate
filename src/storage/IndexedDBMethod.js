@@ -5,7 +5,6 @@ import { db } from "./indexedDB";
 export class IndexedDBMethod extends StorageMethod {
   async create(data) {
     try {
-      console.log("Creating data: ", data);
       await db.formData.add({
         ...data,
         uuid: generateUUID(),
