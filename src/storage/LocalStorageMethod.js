@@ -12,7 +12,9 @@ export class LocalStorageMethod extends StorageMethod {
     const existingData = JSON.parse(this.store) || [];
     const uuid = generateUUID();
     try {
-      localStorage.setItem(this.key, JSON.stringify([...existingData, [uuid, data]]));
+      const newData = JSON.stringify([...existingData, [uuid, data]]);
+      localStorage.setItem(this.key, newData);
+      this.store = newData;
     } catch (error) {
       throw error;
     }
@@ -53,7 +55,9 @@ export class LocalStorageMethod extends StorageMethod {
         }
         return entry;
       });
-      localStorage.setItem(this.key, JSON.stringify(updatedData));
+      const newData = JSON.stringify(updatedData);
+      localStorage.setItem(this.key, newData);
+      this.store = newData;
       return updatedData;
     } catch (error) {
       throw error;

@@ -28,8 +28,7 @@ export class IndexedDBMethod extends StorageMethod {
 
   async update(criteria, data) {
     try {
-      const entry = await this.find(criteria);
-      return await db.formData.update(entry.uuid, data);
+      return await db.formData.put(data, criteria.uuid);
     } catch (error) {
       throw error;
     }
