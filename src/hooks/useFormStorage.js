@@ -2,27 +2,27 @@ import { useEffect, useState } from "react";
 import { LocalStorageMethod, StorageModelFactory } from "../storage";
 
 function useFormStorage() {
-  const localStorageMethod = new LocalStorageMethod("formData");
-  const localStorageModel = StorageModelFactory.createModel(localStorageMethod);
+  const storageMethod = new LocalStorageMethod("formData");
+  const storageModel = StorageModelFactory.createModel(storageMethod);
 
   const [store, setStore] = useState();
 
   useEffect(() => {
     if (!store) {
-      setStore(localStorageModel.find());
+      setStore(storageModel.find());
     }
-  }, [store, localStorageModel]);
+  }, [store, storageModel]);
 
   function create(data) {
-    return localStorageModel.create(data);
+    return storageModel.create(data);
   }
 
   function find(criteria) {
-    return localStorageModel.find(criteria);
+    return storageModel.find(criteria);
   }
 
   function update(criteria, data) {
-    return localStorageModel.update(criteria, data);
+    return storageModel.update(criteria, data);
   }
 
   return {
