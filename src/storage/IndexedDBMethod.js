@@ -14,17 +14,22 @@ export class IndexedDBMethod extends StorageMethod {
     }
   }
 
-  async find() {
+  async find(criteria) {
     try {
-      return await db.formData.toArray();
+      if (!criteria) {
+        return await db.formData.toArray();
+      } else {
+        return await db.formData.where(criteria);
+      }
     } catch (error) {
       throw error;
     }
   }
 
-  async update(uuid, data) {
+  async update(criteria, data) {
     try {
-      return await db.formData.update(uuid, data);
+      const entry = await this.find(criteria);
+      return await db.formData.update(entry.uuid, data);
     } catch (error) {
       throw error;
     }
