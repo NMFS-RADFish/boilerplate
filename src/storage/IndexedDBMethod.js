@@ -5,6 +5,7 @@ import { db } from "./indexedDB";
 export class IndexedDBMethod extends StorageMethod {
   async create(data) {
     try {
+      console.log("Creating data: ", data);
       await db.formData.add({
         ...data,
         uuid: generateUUID(),
@@ -19,7 +20,7 @@ export class IndexedDBMethod extends StorageMethod {
       if (!criteria) {
         return await db.formData.toArray();
       } else {
-        return await db.formData.where(criteria);
+        return await db.formData.where(criteria).toArray();
       }
     } catch (error) {
       throw error;
