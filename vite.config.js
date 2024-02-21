@@ -6,7 +6,6 @@ export default defineConfig({
   base: "",
   plugins: [react()],
   test: {
-    // <--- Add this object
     globals: true,
     environment: "jsdom",
   },

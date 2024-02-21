@@ -24,6 +24,17 @@
       - [`DELETE` Request](#delete-request)
     - [Handling Responses and Errors](#handling-responses-and-errors)
   - [State Management](#state-management)
+  - [Multi-Entry Form Submit](#multi-entry-form-submit)
+  - [Handling Offline Requests](#handling-offline-requests)
+    - [Prerequisites](#prerequisites)
+    - [Steps for Implementation](#steps-for-implementation)
+      - [1. Integrate `FormWrapper`:](#1-integrate-formwrapper)
+      - [2. Access Form State:](#2-access-form-state)
+      - [3. Add Multi-Entry Button:](#3-add-multi-entry-button)
+      - [4. Implement Multi-Entry Logic:](#4-implement-multi-entry-logic)
+      - [5. Handle Multi-Entry Submission:](#5-handle-multi-entry-submission)
+      - [6. Submit Data:](#6-submit-data)
+    - [Example](#example)
   - [Testing](#testing)
     - [Running Tests](#running-tests)
     - [Unit Tests](#unit-tests)
@@ -32,7 +43,6 @@
     - [Snapshot Tests](#snapshot-tests)
     - [Writing Browser Tests](#writing-browser-tests)
     - [Additional Jest Configuration](#additional-jest-configuration)
-
 
 ## Getting Started
 
@@ -97,14 +107,12 @@ The **`Layout`** component is a wrapper component used to structure the main lay
 To use the **`Layout`** component, wrap it around the main content of your application. The children of the **`Layout`** component are placed inside a **`GridContainer`**, which provides a responsive grid layout.
 
 ```jsx
-import Layout from './components/Layout';
+import Layout from "./components/Layout";
 
 const App = () => {
   return (
     <Layout>
-      <main>
-        {/* Your main content goes here */}
-      </main>
+      <main>{/* Your main content goes here */}</main>
     </Layout>
   );
 };
@@ -121,17 +129,17 @@ The **`HeaderNav`** component is integrated into the **`Layout`** component. It 
 **Usage**
 
 ```jsx
-import HeaderNav from './HeaderNav';
+import HeaderNav from "./HeaderNav";
 
 const Layout = () => {
   return (
     <>
-    <HeaderNav>
+      <HeaderNav>
         <a href="/">Home</a>
         <a href="/about">About</a>
         {/* Additional navigation links */}
-    </HeaderNav>
-    <GridContainer>{children}</GridContainer>;
+      </HeaderNav>
+      <GridContainer>{children}</GridContainer>;
     </>
   );
 };
@@ -160,7 +168,7 @@ You will notice, that the components above do not have any `className` assigned,
 
 // form.css
 .your-custom-class {
-	background-color: var(--noaa-dark-blue);
+  background-color: var(--noaa-dark-blue);
 }
 ```
 
@@ -172,8 +180,8 @@ If you need to add additional styles to a particular component, you can do so by
 import { Label } from "../react-radfish";
 
 <Label htmlFor="fullName" className="your-custom-class">
-	Full Name
-</Label>
+  Full Name
+</Label>;
 ```
 
 By following this method, you can leverage the underlying `uswds` component, maintain the NOAA theme, and can extend if further to suit you needs as a developer.
@@ -184,12 +192,12 @@ The **`RadfishAPIService`** is a class designed to facilitate interactions with 
 
 ### Initializing the Service
 
-To use **`RadfishAPIService`**, you should use the included `APIService.js` module that is provided in the radfish application. 
+To use **`RadfishAPIService`**, you should use the included `APIService.js` module that is provided in the radfish application.
 
 ```jsx
-import RadfishAPIService from './RadfishAPIService';
+import RadfishAPIService from "./RadfishAPIService";
 
-const ApiService = new RadfishAPIService('your_access_token_here');
+const ApiService = new RadfishAPIService("your_access_token_here");
 ```
 
 ### Making API Requests
@@ -197,80 +205,85 @@ const ApiService = new RadfishAPIService('your_access_token_here');
 A common pattern, is to call this `ApiService` in a `useEffect` that will trigger whenever a React component loads:
 
 ```jsx
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await ApiService.get(API_ENDPOINT);
-      // handle data as needed
-    };
-    fetchData();
-  }, []);
+useEffect(() => {
+  const fetchData = async () => {
+    const { data } = await ApiService.get(API_ENDPOINT);
+    // handle data as needed
+  };
+  fetchData();
+}, []);
 ```
 
 #### `GET` Request
+
 Asynchronous function to perform a `GET` request
+
 - `@param {string} endpoint` - The API endpoint to perform the GET request.
 - `@param {Object} queryParams` - The query parameters for the GET request.
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
-  
+
 ```js
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await ApiService.get(API_ENDPOINT, { "param1": "foo" });
-      // handle data as needed
-    };
-    fetchData();
-  }, []);
+useEffect(() => {
+  const fetchData = async () => {
+    const { data } = await ApiService.get(API_ENDPOINT, { param1: "foo" });
+    // handle data as needed
+  };
+  fetchData();
+}, []);
 ```
 
 #### `POST` Request
 
 Asynchronous function to perform a `POST` request
+
 - `@param {string} endpoint` - The API endpoint to perform the POST request.
 - `@param {Object} body` - The request body for the POST request.
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
-  useEffect(() => {
-    const postData = async () => {
-      const { data } = await ApiService.post(API_ENDPOINT, { "name": "foo" });
-      // handle data as needed
-    };
-    postData();
-  }, []);
+useEffect(() => {
+  const postData = async () => {
+    const { data } = await ApiService.post(API_ENDPOINT, { name: "foo" });
+    // handle data as needed
+  };
+  postData();
+}, []);
 ```
 
 #### `PUT` Request
 
 Asynchronous function to perform a `PUT` request
+
 - `@param {string} endpoint` - The API endpoint to perform the PUT request.
 - `@param {Object} body` - The request body for the PUT request.
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
-  useEffect(() => {
-    const updateData = async () => {
-      const { data } = await ApiService.put(API_ENDPOINT, { "id": 1 });
-      // handle data as needed
-    };
-    updateData();
-  }, []);
+useEffect(() => {
+  const updateData = async () => {
+    const { data } = await ApiService.put(API_ENDPOINT, { id: 1 });
+    // handle data as needed
+  };
+  updateData();
+}, []);
 ```
 
 #### `DELETE` Request
 
 Asynchronous function to perform a `DELETE` request
+
 - `@param {string} endpoint` - The API endpoint to perform the DELETE request.
 - `@param {Object} body` - The request body for the DELETE request.
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
-  useEffect(() => {
-    const deleteData = async () => {
-      const { data } = await ApiService.delete(API_ENDPOINT, { "id": 1 });
-      // handle data as needed
-    };
-    deleteData();
-  }, []);
+useEffect(() => {
+  const deleteData = async () => {
+    const { data } = await ApiService.delete(API_ENDPOINT, { id: 1 });
+    // handle data as needed
+  };
+  deleteData();
+}, []);
 ```
 
 ### Handling Responses and Errors
@@ -281,13 +294,122 @@ Responses and errors from the API are returned as promises.
 
 Form state is managed with react context. The code for this state can be found in `contexts/FormWrapper.js`. This context exports form handlers, and captures form data on submit. Whenever you want to leverage this context for a form you create, be sure to wrap this component with the `FormWrapper`.
 
-```
-    <FormWrapper onSubmit={handleFormSubmit}>
-        <DemoForm asyncFormOptions={asyncFormOptions} />
-    </FormWrapper>
+```jsx
+<FormWrapper onSubmit={handleFormSubmit}>
+  <DemoForm asyncFormOptions={asyncFormOptions} />
+</FormWrapper>
 ```
 
 This will ensure that the state that is managed in context will be passed correctly to the child form that you are building, and should behave in a similar way. You can access the form data within the `FormWrapper` and can `console.log`, `debug`, or otherwise pass this data to the context's children as you application needs.
+
+Table state is managed in a similar way. We use a React context provider to wrap whichever table needs state to be managed. For instance, within the boilerplate repository, you can see how `DemoTable` is wrapper by `TableWrapper`
+
+```jsx
+<TableWrapper>
+  <DemoTable />
+</TableWrapper>
+```
+
+By doing this, `DemoTable` can now utilize the `useTableState` hook, that provides the component with all of the state, event handlers, sorting functionality, as well as other pieces of functionality that may be needed for the application’s needs.
+
+```jsx
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+
+/**
+ * React Table instance. Initializes the table with the data being managed in TableWrapper state
+ * Columns are set to the memoized value returned from the useMemo hook above
+ * state and helper methods are to provide helper methods to render data, and re-render based on sorting functionality
+ */
+const table = useReactTable({
+  data,
+  columns,
+  state: {
+    sorting,
+  },
+  onSortingChange: setSorting,
+  getCoreRowModel: getCoreRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+});
+```
+
+## Multi-Entry Form Submit
+
+Implementing multi-entry submissions in your NOAA web application forms streamlines the process of submitting data for multiple items at once. This guide will help you set up this functionality.
+
+## Handling Offline Requests
+
+In the case that there is no network connection, a handler can be implemented in `mocks/handlers.js. If your application makes a request that matches a route handler, this will allow you to store data locally so it can be worked with at a later time.
+
+```js
+  http.post('/api', async ({ request }) => {
+    const data = await request.json();
+
+    if (!navigator.onLine) {
+      const requests = localstorage.getItem('api-requests') || [];
+      requests.push(data);
+
+      return HttpResponse.json({ data }, { status: 201 });
+    }
+
+  }),
+```
+
+### Prerequisites
+
+- Ensure your form is wrapped in `FormWrapper` to manage state effectively.
+- Utilize `useFormState` within your form component to interact with form data.
+
+### Steps for Implementation
+
+#### 1. Integrate `FormWrapper`:
+
+Wrap your form component with `FormWrapper` to access state management features such as handling changes, performing validation, and submitting data.
+
+#### 2. Access Form State:
+
+Use the `useFormState` hook to manage form data, including retrieving and setting values, validating inputs, and handling form submissions.
+
+#### 3. Add Multi-Entry Button:
+
+Include a button in your form specifically for multi-entry submissions. This button will facilitate the submission of multiple data entries based on the current form data.
+
+#### 4. Implement Multi-Entry Logic:
+
+Define a function that updates the form data for multiple entries. This could involve incrementing data values or adding multiple sets of data to the submission payload.
+
+#### 5. Handle Multi-Entry Submission:
+
+Utilize the `handleMultiEntrySubmit` method from `useFormState` to process and submit the updated form data for multiple entries. This method can be triggered by the multi-entry button.
+
+#### 6. Submit Data:
+
+On clicking the multi-entry submit button, execute the defined logic to adjust form data as needed for multi-entry and use `handleMultiEntrySubmit` to submit the data.
+
+### Example
+
+Assuming you have a form with fields like `numberOfFish` and `species`, and you want to submit data for an additional fish catch without filling out the form again:
+
+```jsx
+// Inside your form component
+const { formData, setFormData, handleMultiEntrySubmit } = useFormState();
+
+// Function to increment fish count and submit
+const submitMultipleEntries = () => {
+  const updatedData = {
+    ...formData,
+    numberOfFish: Number(formData.numberOfFish) + 1, // Increment fish count
+  };
+  handleMultiEntrySubmit(updatedData); // Submit updated data
+};
+
+// Include this button in your form JSX
+<Button onClick={submitMultipleEntries}>Add Another Catch</Button>;
+```
 
 ## Testing
 
@@ -304,13 +426,13 @@ Unit tests focus on testing individual components or functions in isolation.
 #### Basic Unit Test
 
 ```jsx
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import MyComponent from './MyComponent';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import MyComponent from "./MyComponent";
 
-it('renders the correct content', () => {
+it("renders the correct content", () => {
   render(<MyComponent />);
-  expect(screen.getByText('Content')).toBeInTheDocument();
+  expect(screen.getByText("Content")).toBeInTheDocument();
 });
 ```
 
@@ -319,10 +441,10 @@ it('renders the correct content', () => {
 Utilize user-event or fireEvent from React Testing Library to simulate user actions.
 
 ```jsx
-import userEvent from '@testing-library/user-event';
+import userEvent from "@testing-library/user-event";
 
 // Example: Clicking a button
-userEvent.click(screen.getByRole('button'));
+userEvent.click(screen.getByRole("button"));
 ```
 
 ### Snapshot Tests
@@ -330,11 +452,11 @@ userEvent.click(screen.getByRole('button'));
 Snapshot testing captures the rendered output of a component and ensures that it does not change unexpectedly.
 
 ```jsx
-import React from 'react';
-import renderer from 'react-test-renderer';
-import MyComponent from './MyComponent';
+import React from "react";
+import renderer from "react-test-renderer";
+import MyComponent from "./MyComponent";
 
-it('renders correctly', () => {
+it("renders correctly", () => {
   const tree = renderer.create(<MyComponent />).toJSON();
   expect(tree).toMatchSnapshot();
 });
@@ -345,16 +467,15 @@ it('renders correctly', () => {
 Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Jest. Please note Puppeteer does not come included by default in the RADFish framework.
 
 ```jsx
-const puppeteer = require('puppeteer');
+const puppeteer = require("puppeteer");
 
-it('should display the homepage', async () => {
+it("should display the homepage", async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto('http://localhost:3000');
-  await expect(page.title()).resolves.toMatch('Home Page');
+  await page.goto("http://localhost:3000");
+  await expect(page.title()).resolves.toMatch("Home Page");
   await browser.close();
 });
-
 ```
 
 ### Additional Jest Configuration

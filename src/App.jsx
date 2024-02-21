@@ -1,12 +1,14 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { Toast, TOAST_CONFIG } from "./react-radfish";
 import { FormWrapper } from "./contexts/FormWrapper";
+import { TableWrapper } from "./contexts/TableWrapper";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { DemoForm } from "./components/DemoForm";
+import { DemoTable } from "./components/DemoTable";
 
 const ApiService = new RadfishAPIService("");
 
@@ -76,10 +78,28 @@ function App() {
     <div className="App">
       <Toast toast={toast} />
       <Layout>
+        {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
         <Router>
-          <FormWrapper onSubmit={handleFormSubmit}>
-            <DemoForm asyncFormOptions={asyncFormOptions} />
-          </FormWrapper>
+          <Routes>
+            {/* On root route "/", render the DemoForm component along with it's context for state management */}
+            <Route
+              path="/"
+              element={
+                <FormWrapper onSubmit={handleFormSubmit}>
+                  <DemoForm asyncFormOptions={asyncFormOptions} />
+                </FormWrapper>
+              }
+            />
+            {/* On "/table" route, render the DemoTable component along with it's context for state management */}
+            <Route
+              path="/table"
+              element={
+                <TableWrapper>
+                  <DemoTable />
+                </TableWrapper>
+              }
+            />
+          </Routes>
         </Router>
       </Layout>
     </div>
