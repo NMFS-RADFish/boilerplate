@@ -51,10 +51,14 @@ function App() {
     }
     // this function fetches any data needed for the business requirements in DemoForm
     const fetchFormData = async () => {
-      const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
-      // add any other async requests here
-      const newData = { species: data };
-      setAsyncFormOptions((prev) => ({ ...prev, ...newData }));
+      try {
+        const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
+        // add any other async requests here
+        const newData = { species: data };
+        setAsyncFormOptions((prev) => ({ ...prev, ...newData }));
+      } catch (err) {
+        console.log("err fetchFormData: ", err);
+      }
     };
     fetchFormData();
   }, [isOffline]);
@@ -73,6 +77,8 @@ function App() {
       }, TOAST_LIFESPAN);
     }
   };
+
+  console.log("COMPONENT MOUNT");
 
   return (
     <div className="App">

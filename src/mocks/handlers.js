@@ -1,4 +1,5 @@
 import { http, HttpResponse } from "msw";
+console.log("HANDLERS");
 
 export const MSW_ENDPOINT = {
   SPECIES: "/species",
