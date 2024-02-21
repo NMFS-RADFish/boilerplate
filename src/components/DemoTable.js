@@ -17,6 +17,7 @@ import {
   TableBodyCell,
 } from "../react-radfish";
 import { useNavigate } from "react-router-dom";
+import useFormStorage from "../hooks/useFormStorage";
 
 const ApiService = new RadfishAPIService("");
 
@@ -31,6 +32,8 @@ export const DemoTable = () => {
   const { tableCaption, table, headerGroup, rowModel, setData } = useTableState();
   const navigate = useNavigate();
 
+  const { store } = useFormStorage();
+
   // Check if the app is offline
   const isOffline = !navigator.onLine;
 
@@ -40,15 +43,16 @@ export const DemoTable = () => {
    * If app is offline, do not fetch. TODO: This should getch data from cache
    */
   useEffect(() => {
-    if (isOffline) {
-      return;
+    if (isOffline && store) {
+      setData(store.map((entry) => entry[1]));
+    } else {
+      const fetchFormData = async () => {
+        const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
+        setData(data);
+      };
+      fetchFormData();
     }
-    const fetchFormData = async () => {
-      const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?amount=0`);
-      setData(data);
-    };
-    fetchFormData();
-  }, [isOffline]);
+  }, [isOffline, store, setData]);
 
   /**
    * handleRowClick gets executed in the onClick handler on TableBodyRow
@@ -56,7 +60,7 @@ export const DemoTable = () => {
    */
   const handleRowClick = (row) => {
     // row.original.id should be the id used when generating the form. this can come from MSW or alternatively from IndexDB/localStorage as needed when offline
-    navigate(`/detail/${row.original.id}`);
+    navigate(`/form/${row.original.id}`);
   };
 
   if (!table) {

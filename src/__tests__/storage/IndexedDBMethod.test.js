@@ -7,42 +7,54 @@ jest.mock("../../storage/indexedDB.js", () => ({
     formData: {
       add: jest.fn(),
       toArray: jest.fn(),
-      get: jest.fn(),
-      update: jest.fn(),
+      where: jest.fn(),
+      put: jest.fn(),
     },
   },
 }));
 
-import { db, IndexedDBMethod } from "../../storage";
+import { IndexedDBMethod, db } from "../../storage";
+import { generateUUID } from "../../utilities/cryptoWrapper";
 
 describe("IndexedDBMethod", () => {
   let indexedDBMethod;
+  let mockData;
 
   beforeEach(() => {
     indexedDBMethod = new IndexedDBMethod();
+    mockData = { key: "value" };
+
+    db.formData.add.mockClear();
+    db.formData.toArray.mockClear();
+    db.formData.where.mockClear();
+    db.formData.put.mockClear();
+    generateUUID.mockClear();
   });
 
-  it("should save data", async () => {
-    const data = { key: "value" };
-    await indexedDBMethod.save(data);
-    expect(db.formData.add).toHaveBeenCalledWith(data);
+  it("should create data", async () => {
+    generateUUID.mockReturnValue("mock-uuid");
+    await indexedDBMethod.create(mockData);
+    expect(db.formData.add).toHaveBeenCalledWith({ ...mockData, uuid: "mock-uuid" });
   });
 
-  it("should load data", async () => {
-    await indexedDBMethod.load();
+  it("should find all data if no criteria is provided", async () => {
+    db.formData.toArray.mockReturnValue([mockData]);
+    const result = await indexedDBMethod.find();
+    expect(result).toEqual([mockData]);
     expect(db.formData.toArray).toHaveBeenCalled();
   });
 
-  it("should load one item", async () => {
-    const uuid = "1234";
-    await indexedDBMethod.loadOne(uuid);
-    expect(db.formData.get).toHaveBeenCalledWith(uuid);
+  it("should find data based on criteria", async () => {
+    db.formData.where.mockReturnValue({
+      toArray: jest.fn().mockReturnValue([mockData]),
+    });
+    const result = await indexedDBMethod.find({ key: "value" });
+    expect(result).toEqual([mockData]);
+    expect(db.formData.where).toHaveBeenCalledWith({ key: "value" });
   });
 
-  it("should edit one item", async () => {
-    const uuid = "1234";
-    const data = { key: "value" };
-    await indexedDBMethod.editOne(uuid, data);
-    expect(db.formData.update).toHaveBeenCalledWith(uuid, data);
+  it("should update data based on criteria", async () => {
+    await indexedDBMethod.update({ uuid: "mock-uuid" }, mockData);
+    expect(db.formData.put).toHaveBeenCalledWith(mockData, "mock-uuid");
   });
 });

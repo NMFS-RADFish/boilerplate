@@ -1,15 +1,42 @@
 import { http, HttpResponse } from "msw";
+import { computePriceFromQuantitySpecies } from "../utilities";
 
 export const MSW_ENDPOINT = {
   SPECIES: "/species",
   TABLE: "/table",
 };
 
+const data = [
+  {
+    id: "507ff846-573d-40e9-9996-c458c34b4643",
+    species: "grouper",
+    numberOfFish: 10,
+  },
+  {
+    id: "967ec4e7-1e96-452d-a9bc-79f60f64a6fd",
+    species: "salmon",
+    numberOfFish: 5,
+  },
+  {
+    id: "7e96975b-e1a1-48ed-bad6-15cb780d99cb",
+    species: "marlin",
+    numberOfFish: 1,
+  },
+  {
+    id: "3037d796-cf4d-4274-ab2d-f7c80d8c0fa3",
+    species: "mahimahi",
+    numberOfFish: 15,
+  },
+];
+
 export const handlers = [
   // Returns an array of fish species. This is currently being used to demonstrate populating a dropdown form component with "data" from a server
   // Note that this implementation can/should change depending on your needs
   http.get(MSW_ENDPOINT.SPECIES, () => {
-    return HttpResponse.json({ data: ["grouper", "salmon"] }, { status: 200 });
+    return HttpResponse.json(
+      { data: ["grouper", "salmon", "marlin", "mahimahi"] },
+      { status: 200 },
+    );
   }),
   // This endpoint simply returns the data that is submitted to from a form
   // In a full stack implementation, there will likely be some logic on the server to handle/store persistent data
@@ -45,29 +72,6 @@ export const handlers = [
     const url = new URL(request.url);
     const minAmount = url.searchParams.get("amount");
 
-    const data = [
-      {
-        id: 1,
-        species: "Grouper",
-        count: 10,
-      },
-      {
-        id: 2,
-        species: "Salmon",
-        count: 5,
-      },
-      {
-        id: 3,
-        species: "Marlin",
-        count: 1,
-      },
-      {
-        id: 4,
-        species: "Mahimahi",
-        count: 15,
-      },
-    ];
-
     let returnData = data;
 
     // leverage the URL query param `?amount=<number>` to mock sever side logic and only returned filtered data to client
@@ -76,6 +80,27 @@ export const handlers = [
       returnData = data.filter((data) => data.count > minAmount);
     }
 
+    return HttpResponse.json(
+      {
+        data: returnData,
+      },
+      { status: 200 },
+    );
+  }),
+
+  http.get("/form/:id", ({ params }) => {
+    const [mockData] = data.filter((obj) => obj.id === params.id);
+    console.log("MOCK: ", mockData);
+    const returnData = {
+      id: mockData.id,
+      fullName: "John Smith",
+      email: "john@noaa.com",
+      city: "Honolulu",
+      phoneNumber: "1112223333",
+      numberOfFish: mockData.numberOfFish,
+      species: mockData.species,
+      computedPrice: computePriceFromQuantitySpecies([mockData.numberOfFish, mockData.species]),
+    };
     return HttpResponse.json(
       {
         data: returnData,

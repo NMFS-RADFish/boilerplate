@@ -1,17 +1,35 @@
+/**
+ * Abstract class representing a storage method.
+ */
 export class StorageMethod {
-  save(_data, _key) {
+  /**
+   * Create data in the storage.
+   * This method should be overridden by subclasses.
+   * @param {Object} _data - The data to create.
+   * @throws {Error} If the method is not implemented.
+   */
+  create(_data) {
     throw new Error("Method not implemented.");
   }
 
-  load(_key) {
+  /**
+   * Find data in the storage.
+   * This method should be overridden by subclasses.
+   * @param {Object} _criteria - The criteria to use for finding data.
+   * @throws {Error} If the method is not implemented.
+   */
+  find(_criteria) {
     throw new Error("Method not implemented.");
   }
 
-  loadOne(_uuid, _key) {
-    throw new Error("Method not implemented.");
-  }
-
-  editOne(_uuid, _data, _key) {
+  /**
+   * Update data in the storage.
+   * This method should be overridden by subclasses.
+   * @param {Object} _criteria - The criteria to use for updating data.
+   * @param {Object} _data - The new data.
+   * @throws {Error} If the method is not implemented.
+   */
+  update(_criteria, _data) {
     throw new Error("Method not implemented.");
   }
 }

@@ -9,6 +9,7 @@ import {
   stateValidators,
   cityValidators,
 } from "../utilities";
+import useFormStorage from "../hooks/useFormStorage";
 
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
@@ -27,6 +28,8 @@ const DemoForm = ({ asyncFormOptions }) => {
     validationErrors,
     handleMultiEntrySubmit,
   } = useFormState();
+
+  const { create } = useFormStorage();
 
   useEffect(() => {
     if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
@@ -208,7 +211,7 @@ const DemoForm = ({ asyncFormOptions }) => {
       />
 
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <Button role="form-submit" type="submit">
+        <Button role="form-submit" type="submit" onClick={() => create(formData)}>
           Submit
         </Button>
         <Button

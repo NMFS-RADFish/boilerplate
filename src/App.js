@@ -100,7 +100,14 @@ function App() {
                 </TableWrapper>
               }
             />
-            <Route path="/detail/:id" element={<DetailPage />} />
+            <Route
+              path="/form/:id"
+              element={
+                <FormWrapper onSubmit={handleFormSubmit}>
+                  <DemoForm asyncFormOptions={asyncFormOptions} />
+                </FormWrapper>
+              }
+            />
           </Routes>
         </Router>
       </Layout>

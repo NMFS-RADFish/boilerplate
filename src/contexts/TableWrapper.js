@@ -53,7 +53,7 @@ export const TableWrapper = ({ children }) => {
         cell: (info) => info.getValue(),
         header: () => <span>Species</span>,
       }),
-      columnHelper.accessor("count", {
+      columnHelper.accessor("numberOfFish", {
         cell: (info) => info.getValue(),
         header: () => <span>Amount Caught</span>,
       }),

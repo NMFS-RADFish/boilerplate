@@ -2,8 +2,17 @@ import { generateUUID } from "../utilities";
 import { StorageMethod } from "./StorageMethod";
 import { db } from "./indexedDB";
 
+/**
+ * Class representing an IndexedDB storage method.
+ * @extends StorageMethod
+ */
 export class IndexedDBMethod extends StorageMethod {
-  async save(data) {
+  /**
+   * Create and store data in IndexedDB.
+   * @param {Object} data - The data to store, e.g. { numberOfFish: "1", species: "Grouper" }.
+   * @throws {Error} If an error occurs while adding the data to IndexedDB.
+   */
+  async create(data) {
     try {
       await db.formData.add({
         ...data,
@@ -14,25 +23,34 @@ export class IndexedDBMethod extends StorageMethod {
     }
   }
 
-  async load() {
+  /**
+   * Find data in IndexedDB.
+   * @param {Object} criteria - The criteria to use for finding data, e.g. { uuid: "1234" }.
+   * @return {Promise<Array>} A promise that resolves to the found data.
+   * @throws {Error} If an error occurs while retrieving the data from IndexedDB.
+   */
+  async find(criteria) {
     try {
-      return await db.formData.toArray();
+      if (!criteria) {
+        return await db.formData.toArray();
+      } else {
+        return await db.formData.where(criteria).toArray();
+      }
     } catch (error) {
       throw error;
     }
   }
 
-  async loadOne(uuid) {
+  /**
+   * Update data in IndexedDB.
+   * @param {Object} criteria - The criteria to use for updating data, e.g. { uuid: "1234" .
+   * @param {Object} data - The new data, e.g. { numberOfFish: "1", species: "Grouper" }.
+   * @return {Promise<Array>} A promise that resolves to the updated data.
+   * @throws {Error} If an error occurs while updating the data in IndexedDB.
+   */
+  async update(criteria, data) {
     try {
-      return await db.formData.get(uuid);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async editOne(uuid, data) {
-    try {
-      return await db.formData.update(uuid, data);
+      return await db.formData.put(data, criteria.uuid);
     } catch (error) {
       throw error;
     }
