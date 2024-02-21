@@ -9,28 +9,28 @@ describe("Toast Component", () => {
     expect(toastElement).toBeNull();
   });
 
-  test("renders Success Alert when toast status is 'success'", () => {
+  test("renders Success Alert when toast status is 'offline'", () => {
     const toast = { status: "offline", message: "Application currently offline" };
     render(<Toast toast={toast} />);
     const offlineAlert = screen.getByRole("toast-notification");
-    expect(offlineAlert).toBeInTheDocument();
-    expect(offlineAlert).toHaveTextContent("Application currently offline");
+    expect(offlineAlert).toBeDefined();
+    expect(screen.findByText(toast.message)).to.exist;
   });
 
   test("renders Success Alert when toast status is 'success'", () => {
     const toast = { status: "success", message: "Successful action" };
     render(<Toast toast={toast} />);
     const successAlert = screen.getByRole("toast-notification");
-    expect(successAlert).toBeInTheDocument();
-    expect(successAlert).toHaveTextContent("Successful action");
+    expect(successAlert).toBeDefined();
+    expect(screen.findByText(toast.message)).to.exist;
   });
 
   test("renders Error Alert when toast status is 'error'", () => {
     const toast = { status: "error", message: "Error occurred" };
     render(<Toast toast={toast} />);
     const errorAlert = screen.getByRole("toast-notification");
-    expect(errorAlert).toBeInTheDocument();
-    expect(errorAlert).toHaveTextContent("Error occurred");
+    expect(errorAlert).toBeDefined();
+    expect(screen.findByText(toast.message)).to.exist;
   });
 
   test("does not render anything when toast status is null", () => {

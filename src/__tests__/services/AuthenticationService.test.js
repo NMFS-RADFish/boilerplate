@@ -13,9 +13,9 @@ describe("RadfishAuthenticationService", () => {
       const endpoint = "some-sign-in-endpoint";
       const responseJson = { token: "someToken" };
 
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(responseJson),
+        json: vi.fn().mockResolvedValue(responseJson),
       });
 
       await RadfishAuthenticationService.signIn(loginId, password, endpoint);
@@ -39,9 +39,9 @@ describe("RadfishAuthenticationService", () => {
       const password = "testPassword";
       const endpoint = "some-sign-in-endpoint";
 
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
-        json: jest.fn().mockResolvedValue({ error: "Sign-in error" }),
+        json: vi.fn().mockResolvedValue({ error: "Sign-in error" }),
       });
 
       await RadfishAuthenticationService.signIn(loginId, password, endpoint);
@@ -66,9 +66,9 @@ describe("RadfishAuthenticationService", () => {
       const token = "someToken";
       const endpoint = "some-sign-out-endpoint";
 
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue({ message: "Sign-out success" }),
+        json: vi.fn().mockResolvedValue({ message: "Sign-out success" }),
       });
 
       localStorage.setItem("token", token); // emulate logged in state
@@ -92,9 +92,9 @@ describe("RadfishAuthenticationService", () => {
       const token = "someToken";
       const endpoint = "some-sign-out-endpoint";
 
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
-        json: jest.fn().mockResolvedValue({ error: "Sign-out error" }),
+        json: vi.fn().mockResolvedValue({ error: "Sign-out error" }),
       });
 
       localStorage.setItem("token", token); // emulate logged in state

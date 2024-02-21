@@ -5,6 +5,11 @@ export default defineConfig({
   // depending on your application, base can also be "/"
   base: "",
   plugins: [react()],
+  test: {
+    // <--- Add this object
+    globals: true,
+    environment: "jsdom",
+  },
   server: {
     // this ensures that the browser opens upon server start
     open: true,
