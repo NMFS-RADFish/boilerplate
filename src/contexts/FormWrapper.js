@@ -5,7 +5,7 @@
  */
 
 import React, { createContext, useState, useCallback, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
 import { computePriceFromQuantitySpecies } from "../utilities";
 
@@ -31,6 +31,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const [formData, setFormData] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
+  const params = useParams();
   const [searchParams] = useSearchParams();
 
   /**
@@ -62,6 +63,19 @@ export const FormWrapper = ({ children, onSubmit }) => {
       setFormData((prev) => ({ ...prev, ...newFormData }));
     }
   }, [searchParams]);
+
+  // if id exists, query data from server with that id
+  useEffect(() => {
+    if (params.id) {
+      const paramFormData = async () => {
+        const formData = await fetch(`/form/${params.id}`);
+        const responseJson = await formData.json();
+
+        setFormData(responseJson.data);
+      };
+      paramFormData();
+    }
+  }, [params]);
 
   /**
    * Validates the input value based on provided validators.

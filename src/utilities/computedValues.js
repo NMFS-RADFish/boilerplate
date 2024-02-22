@@ -1,6 +1,8 @@
 const speciesPriceMap = {
   grouper: 25.0,
   salmon: 58.0,
+  marlin: 100.0,
+  mahimahi: 44.0,
 };
 
 const computePriceFromQuantitySpecies = (values) => {
