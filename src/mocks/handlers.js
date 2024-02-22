@@ -88,9 +88,10 @@ export const handlers = [
     );
   }),
 
+  // endpoint to return a form's prepopulated data based on it's uuid. this returns a mock server response.
+  // note that locally cached data and server provided data can often be out of sync.
   http.get("/form/:id", ({ params }) => {
     const [mockData] = data.filter((obj) => obj.id === params.id);
-    console.log("MOCK: ", mockData);
     const returnData = {
       id: mockData.id,
       fullName: "John Smith",
