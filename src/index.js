@@ -10,25 +10,35 @@ async function enableMocking() {
 
   // `worker.start()` returns a Promise that resolves
   // once the Service Worker is up and ready to intercept requests.
-  return worker.start();
+  return worker.start({
+    serviceWorker: {
+      url: `/service-worker.js`,
+    },
+  });
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-enableMocking().then(() => {
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-  );
-});
+enableMocking()
+  .then(() => {
+    root.render(
+      // <React.StrictMode>
+      <App />,
+      // <div>hello</div>,
+      // </React.StrictMode>,
+    );
+  })
+  .catch(console.error)
+  .finally(() => {
+    console.log("finally");
+  });
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
-serviceWorkerRegistration.register();
+// serviceWorkerRegistration.register();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// reportWebVitals();
