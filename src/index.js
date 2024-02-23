@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
-import reportWebVitals from "./reportWebVitals";
+// import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+// import reportWebVitals from "./reportWebVitals";
 
 async function enableMocking() {
   const { worker } = await import("./mocks/browser");
