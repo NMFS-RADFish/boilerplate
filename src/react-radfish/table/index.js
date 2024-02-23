@@ -67,7 +67,9 @@ const RadfishTableBodyCell = (props) => {
     <td key={props.cell.id} {...props}>
       {flexRender(props.cell.column.columnDef.cell, props.cell.getContext())}
       {props.cell.column.id === "id" && props.isOfflineData && (
-        <div style={{ width: "100%", textAlign: "right" }}>🔖</div>
+        <div style={{ width: "100%", textAlign: "right" }}>
+          <strong>DRAFT</strong> 🔖
+        </div>
       )}
     </td>
   );
