@@ -22,10 +22,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 enableMocking()
   .then(() => {
     root.render(
-      // <React.StrictMode>
-      <App />,
-      // <div>hello</div>,
-      // </React.StrictMode>,
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
     );
   })
   .catch(console.error)

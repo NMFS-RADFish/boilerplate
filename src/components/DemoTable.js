@@ -43,15 +43,11 @@ export const DemoTable = () => {
    * If app is offline, do not fetch. TODO: This should getch data from cache
    */
   useEffect(() => {
-    if (isOffline && store) {
-      setData(store.map((entry) => entry[1]));
-    } else {
-      const fetchFormData = async () => {
-        const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
-        setData(data);
-      };
-      fetchFormData();
-    }
+    const fetchFormData = async () => {
+      const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
+      setData(data);
+    };
+    fetchFormData();
   }, [isOffline, store, setData]);
 
   /**

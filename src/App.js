@@ -46,9 +46,6 @@ function App() {
   // when application mounts, fetch data from endpoint and set the payload to component state
   // this data is then passed into `DemoForm` component and used to prepopulate form fields (eg dropdown) with default options fetched from server
   useEffect(() => {
-    if (isOffline) {
-      return;
-    }
     // this function fetches any data needed for the business requirements in DemoForm
     const fetchFormData = async () => {
       const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
@@ -75,11 +72,11 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Toast toast={toast} />
-      <Layout>
-        {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
-        <Router>
+    <Router>
+      <div className="App">
+        <Toast toast={toast} />
+        <Layout>
+          {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
           <Routes>
             {/* On root route "/", render the DemoForm component along with it's context for state management */}
             <Route
@@ -108,9 +105,9 @@ function App() {
               }
             />
           </Routes>
-        </Router>
-      </Layout>
-    </div>
+        </Layout>
+      </div>
+    </Router>
   );
 }
 

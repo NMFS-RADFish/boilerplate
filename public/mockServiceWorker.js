@@ -13,6 +13,8 @@ const IS_MOCKED_RESPONSE = Symbol('isMockedResponse')
 const activeClientIds = new Set()
 
 self.addEventListener('install', function () {
+  console.log('mockServiceWorker.js install')
+
   self.skipWaiting()
 })
 

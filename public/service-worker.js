@@ -1,8 +1,5 @@
 (() => {
   "use strict";
-  const url = new URL(location.href);
-
-  importScripts("/mockServiceWorker.js");
   var e = {
       923: () => {
         try {
@@ -215,16 +212,16 @@
       return t !== e && (b.set(e, t), R.set(t, e)), t;
     }
     const q = (e) => R.get(e);
-    const D = ["get", "getKey", "getAll", "getAllKeys", "count"],
-      U = ["put", "add", "delete", "clear"],
-      T = new Map();
-    function k(e, t) {
+    const U = ["get", "getKey", "getAll", "getAllKeys", "count"],
+      D = ["put", "add", "delete", "clear"],
+      k = new Map();
+    function T(e, t) {
       if (!(e instanceof IDBDatabase) || t in e || "string" !== typeof t) return;
-      if (T.get(t)) return T.get(t);
+      if (k.get(t)) return k.get(t);
       const s = t.replace(/FromIndex$/, ""),
         n = t !== s,
-        a = U.includes(s);
-      if (!(s in (n ? IDBIndex : IDBObjectStore).prototype) || (!a && !D.includes(s))) return;
+        a = D.includes(s);
+      if (!(s in (n ? IDBIndex : IDBObjectStore).prototype) || (!a && !U.includes(s))) return;
       const r = async function (e) {
         const t = this.transaction(e, a ? "readwrite" : "readonly");
         let r = t.store;
@@ -232,12 +229,12 @@
           o[c - 1] = arguments[c];
         return n && (r = r.index(o.shift())), (await Promise.all([r[s](...o), a && t.done]))[0];
       };
-      return T.set(t, r), r;
+      return k.set(t, r), r;
     }
     x = ((e) => ({
       ...e,
-      get: (t, s, n) => k(t, s) || e.get(t, s, n),
-      has: (t, s) => !!k(t, s) || e.has(t, s),
+      get: (t, s, n) => T(t, s) || e.get(t, s, n),
+      has: (t, s) => !!T(t, s) || e.has(t, s),
     }))(x);
     s(190);
     const N = "cache-entries",
@@ -967,14 +964,11 @@
       if ("string" === typeof e) {
         const t = new URL(e, location.href);
         0;
-        a = new $(
-          (e) => {
-            let { url: s } = e;
-            return s.href === t.href;
-          },
-          s,
-          n,
-        );
+        const r = (e) => {
+          let { url: s } = e;
+          return s.href === t.href;
+        };
+        a = new $(r, s, n);
       } else if (e instanceof RegExp) a = new Q(e, s, n);
       else if ("function" === typeof e) a = new $(e, s, n);
       else {
@@ -1037,17 +1031,18 @@
         return 200 === t.status || 0 === t.status ? t : null;
       },
     };
+    new URL(location.href);
     var te;
-    self.addEventListener("activate", () => self.clients.claim()),
+    self.importScripts("/mockServiceWorker.js"),
+      self.addEventListener("activate", () => self.clients.claim()),
       (function (e) {
         V().precache(e);
       })([
-        { revision: "be28167cfa49fbba33f065800e40a5f4", url: "/index.html" },
+        { revision: "2f3d0c1f2e815acdd25d316c21924cc0", url: "/index.html" },
         { revision: null, url: "/static/css/main.e968754b.css" },
         { revision: null, url: "/static/js/178.b3dc6371.chunk.js" },
-        { revision: null, url: "/static/js/787.3d62dfaa.chunk.js" },
         { revision: null, url: "/static/js/832.e0b8d119.chunk.js" },
-        { revision: null, url: "/static/js/main.49b7df00.js" },
+        { revision: null, url: "/static/js/main.c2b4d216.js" },
         { revision: null, url: "/static/media/087069a9f454e2581ed6.087069a9f454e2581ed6.woff2" },
         { revision: null, url: "/static/media/09cc62a8fbd32c8b2812.09cc62a8fbd32c8b2812.woff2" },
         { revision: null, url: "/static/media/316b1352cc4ab2054de6.316b1352cc4ab2054de6.woff2" },
@@ -1077,13 +1072,14 @@
         Y(new Z(t, e));
       })(te);
     const se = new RegExp("/[^/?]+\\.[^/]+$");
-    var ne;
     Y(
       (e) => {
         let { request: t, url: s } = e;
         return "navigate" === t.mode && !s.pathname.startsWith("/_") && !s.pathname.match(se);
       },
-      ((ne = "/index.html"), V().createHandlerBoundToURL(ne)),
+      (function (e) {
+        return V().createHandlerBoundToURL(e);
+      })("/index.html"),
     ),
       Y(
         (e) => {
@@ -1174,6 +1170,9 @@
       ),
       self.addEventListener("message", (e) => {
         e.data && "SKIP_WAITING" === e.data.type && self.skipWaiting();
+      }),
+      self.addEventListener("install", (e) => {
+        console.log("service-worker.js install");
       });
   })();
 })();
