@@ -83,6 +83,12 @@ export const DemoTable = () => {
     );
   };
 
+  /**
+   * This is a demo function that simulates the submission of offline data by removing the `isOffline` flag.
+   * In a real application, you should make a POST request with the offline data to your server and then clear
+   * the local storage or any state that holds this offline data.
+   */
+
   const handleSubmitOfflineData = () => {
     setData((prevData) => {
       // Remove the `isOffline` property from all items
