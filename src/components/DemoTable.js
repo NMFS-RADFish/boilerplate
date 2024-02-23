@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableHeaderRow,
   TableBodyCell,
+  Button,
 } from "../react-radfish";
 import { useNavigate } from "react-router-dom";
 import useFormStorage from "../hooks/useFormStorage";
@@ -35,7 +36,7 @@ export const DemoTable = () => {
   const { store } = useFormStorage();
 
   // Check if the app is offline
-  const isOffline = !navigator.onLine;
+  // const isOffline = !navigator.onLine;
 
   /**
    * Fetches table data from the API service and sets it to the state in TableWrapper context.
@@ -43,18 +44,30 @@ export const DemoTable = () => {
    * If app is offline, do not fetch. TODO: This should getch data from cache
    */
   useEffect(() => {
+    if (store) {
+      setOfflineData();
+    }
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
-      setData(data);
+      setData((prevData) => {
+        const newData = data.map((item) => ({ ...item, isOffline: false }));
+        const combinedData = [...prevData, ...newData];
+        const uniqueData = Array.from(
+          new Map(combinedData.map((item) => [item.id, item])).values(),
+        );
+        return uniqueData;
+      });
     };
+
     fetchFormData();
-  }, [isOffline, store, setData]);
+  }, [store]);
 
   /**
    * handleRowClick gets executed in the onClick handler on TableBodyRow
    * This can be useful for re-routing to a detail page, or handling other data specific functionality
    */
   const handleRowClick = (row) => {
+    if (row.original.isOffline) return;
     // row.original.id should be the id used when generating the form. this can come from MSW or alternatively from IndexDB/localStorage as needed when offline
     navigate(`/form/${row.original.id}`);
   };
@@ -63,28 +76,75 @@ export const DemoTable = () => {
     return null;
   }
 
+  const setOfflineData = () => {
+    setData(
+      store.map((entry) => {
+        return { id: entry[0], ...entry[1], isOffline: true };
+      }),
+    );
+  };
+
+  /**
+   * This is a demo function that simulates the submission of offline data by removing the `isOffline` flag.
+   * In a real application, you should make a POST request with the offline data to your server and then clear
+   * the local storage or any state that holds this offline data.
+   */
+
+  const handleSubmitOfflineData = () => {
+    setData((prevData) => {
+      // Remove the `isOffline` property from all items
+      const updatedData = prevData.map((item) => {
+        if (item.isOffline) {
+          return { ...item, isSubmitted: true };
+        }
+        return item;
+      });
+      return updatedData;
+    });
+  };
+
   return (
-    <Table bordered caption={tableCaption || ""} fullWidth fixed>
-      <TableHeader table={table}>
-        <TableHeaderRow table={table}>
-          {headerGroup.map((group) =>
-            group.headers.map((header) => {
-              return <TableHeaderCell header={header} />;
-            }),
-          )}
-        </TableHeaderRow>
-      </TableHeader>
-      <TableBody table={table}>
-        {rowModel.rows.map((row) => {
-          return (
-            <TableBodyRow row={row} onClick={() => handleRowClick(row)}>
-              {row.getVisibleCells().map((cell) => {
-                return <TableBodyCell cell={cell} />;
-              })}
-            </TableBodyRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-end",
+      }}
+    >
+      <Button style={{ marginLeft: "auto" }} onClick={handleSubmitOfflineData}>
+        Submit Offline Data
+      </Button>
+      <Table bordered caption={tableCaption || ""} fullWidth fixed>
+        <TableHeader table={table}>
+          <TableHeaderRow table={table}>
+            {headerGroup.map((group) =>
+              group.headers.map((header) => {
+                return <TableHeaderCell header={header} />;
+              }),
+            )}
+          </TableHeaderRow>
+        </TableHeader>
+        <TableBody table={table}>
+          {rowModel.rows.map((row) => {
+            const isOfflineData = row.original.isOffline && !row.original.isSubmitted;
+            const rowStyle = isOfflineData ? { backgroundColor: "lightgrey", cursor: "auto" } : {};
+            return (
+              <TableBodyRow row={row} onClick={() => handleRowClick(row)} style={rowStyle}>
+                {row.getVisibleCells().map((cell) => {
+                  return (
+                    <TableBodyCell
+                      style={{ background: "transparent" }}
+                      isOfflineData={isOfflineData}
+                      cell={cell}
+                    />
+                  );
+                })}
+              </TableBodyRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
