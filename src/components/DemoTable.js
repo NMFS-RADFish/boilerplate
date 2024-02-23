@@ -3,7 +3,7 @@
  * @returns {React.ReactNode} - The demo table component.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTableState } from "../contexts/TableWrapper";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import RadfishAPIService from "../services/APIService";
@@ -30,7 +30,7 @@ export const DemoTable = () => {
    * @property {TableInstance} table - The React Table instance.
    * @property {Function} setData - Function to set table data. Useful for initializing data from cache or API endpoint
    */
-  const { tableCaption, table, headerGroup, rowModel, setData, data } = useTableState();
+  const { tableCaption, table, headerGroup, rowModel, setData } = useTableState();
   const navigate = useNavigate();
 
   const { store } = useFormStorage();
@@ -67,6 +67,7 @@ export const DemoTable = () => {
    * This can be useful for re-routing to a detail page, or handling other data specific functionality
    */
   const handleRowClick = (row) => {
+    if (row.original.isOffline) return;
     // row.original.id should be the id used when generating the form. this can come from MSW or alternatively from IndexDB/localStorage as needed when offline
     navigate(`/form/${row.original.id}`);
   };
@@ -127,7 +128,9 @@ export const DemoTable = () => {
         </TableHeader>
         <TableBody table={table}>
           {rowModel.rows.map((row) => {
-            const rowStyle = row.original.isOffline ? { backgroundColor: "lightgrey" } : {};
+            const rowStyle = row.original.isOffline
+              ? { backgroundColor: "lightgrey", cursor: "auto" }
+              : {};
             return (
               <TableBodyRow row={row} onClick={() => handleRowClick(row)} style={rowStyle}>
                 {row.getVisibleCells().map((cell) => {

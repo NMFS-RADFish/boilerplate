@@ -64,7 +64,7 @@ const RadfishTableBodyRow = (props) => {
 
 const RadfishTableBodyCell = (props) => {
   return (
-    <td key={props.cell.id} {...props}>
+    <td key={props.cell.id} {...props} style={{ background: "green" }}>
       {flexRender(props.cell.column.columnDef.cell, props.cell.getContext())}
     </td>
   );
