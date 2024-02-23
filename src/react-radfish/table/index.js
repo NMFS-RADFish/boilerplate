@@ -51,7 +51,12 @@ const RadfishTableBody = (props) => {
 
 const RadfishTableBodyRow = (props) => {
   return (
-    <tr className="radfish-table-row" key={props.row.id} onClick={props.onClick}>
+    <tr
+      className="radfish-table-row"
+      style={props.style}
+      key={props.row.id}
+      onClick={props.onClick}
+    >
       {props.children}
     </tr>
   );
@@ -61,6 +66,11 @@ const RadfishTableBodyCell = (props) => {
   return (
     <td key={props.cell.id} {...props}>
       {flexRender(props.cell.column.columnDef.cell, props.cell.getContext())}
+      {props.cell.column.id === "id" && props.isOfflineData && (
+        <div style={{ width: "100%", textAlign: "right" }}>
+          <strong>DRAFT</strong> 🔖
+        </div>
+      )}
     </td>
   );
 };
