@@ -19,18 +19,13 @@ async function enableMocking() {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-enableMocking()
-  .then(() => {
-    root.render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    );
-  })
-  .catch(console.error)
-  .finally(() => {
-    console.log("finally");
-  });
+enableMocking().then(() => {
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  );
+});
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

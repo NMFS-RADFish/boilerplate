@@ -1171,9 +1171,6 @@
       self.addEventListener("message", (e) => {
         e.data && "SKIP_WAITING" === e.data.type && self.skipWaiting();
       }),
-      self.addEventListener("install", (e) => {
-        console.log("service-worker.js install");
-      });
   })();
 })();
 //# sourceMappingURL=service-worker.js.map

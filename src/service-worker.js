@@ -79,8 +79,4 @@ self.addEventListener("message", (event) => {
   }
 });
 
-self.addEventListener("install", (event) => {
-  console.log("service-worker.js install");
-});
-
 // Any other custom service worker logic can go here.
