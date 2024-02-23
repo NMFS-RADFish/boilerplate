@@ -20,14 +20,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import useFormStorage from "../hooks/useFormStorage";
 
-import { RadfishNavMenuButton } from "../react-radfish/buttons/index";
-
 const ApiService = new RadfishAPIService("");
-
-const offlineData = [
-  { id: "5", species: "Offline Grouper", count: "8" },
-  { id: "6", species: "Offline Salmon", count: "9" },
-];
 
 export const DemoTable = () => {
   /**
@@ -37,13 +30,13 @@ export const DemoTable = () => {
    * @property {TableInstance} table - The React Table instance.
    * @property {Function} setData - Function to set table data. Useful for initializing data from cache or API endpoint
    */
-  const { tableCaption, table, headerGroup, rowModel, setData } = useTableState();
+  const { tableCaption, table, headerGroup, rowModel, setData, data } = useTableState();
   const navigate = useNavigate();
 
   const { store } = useFormStorage();
 
   // Check if the app is offline
-  const isOffline = !navigator.onLine;
+  // const isOffline = !navigator.onLine;
 
   /**
    * Fetches table data from the API service and sets it to the state in TableWrapper context.
@@ -51,24 +44,23 @@ export const DemoTable = () => {
    * If app is offline, do not fetch. TODO: This should getch data from cache
    */
   useEffect(() => {
-    if (isOffline && store) {
-      setData(store.map((entry) => entry[1]));
-      // setOfflineData();
-    } else {
-      const fetchFormData = async () => {
-        const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?amount=0`);
-        setData((prevData) => {
-          const newData = data.map((item) => ({ ...item, isOffline: false }));
-          const combinedData = [...prevData, ...newData];
-          const uniqueData = Array.from(
-            new Map(combinedData.map((item) => [item.id, item])).values(),
-          );
-          return uniqueData;
-        });
-      };
-      fetchFormData();
+    if (store) {
+      setOfflineData();
     }
-  }, [isOffline, store, setData]);
+    const fetchFormData = async () => {
+      const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
+      setData((prevData) => {
+        const newData = data.map((item) => ({ ...item, isOffline: false }));
+        const combinedData = [...prevData, ...newData];
+        const uniqueData = Array.from(
+          new Map(combinedData.map((item) => [item.id, item])).values(),
+        );
+        return uniqueData;
+      });
+    };
+
+    fetchFormData();
+  }, [store]);
 
   /**
    * handleRowClick gets executed in the onClick handler on TableBodyRow
@@ -84,8 +76,11 @@ export const DemoTable = () => {
   }
 
   const setOfflineData = () => {
-    const markedOfflineData = offlineData.map((item) => ({ ...item, isOffline: true }));
-    setData(markedOfflineData);
+    setData(
+      store.map((entry) => {
+        return { id: entry[0], ...entry[1], isOffline: true };
+      }),
+    );
   };
 
   const handleSubmitOfflineData = () => {

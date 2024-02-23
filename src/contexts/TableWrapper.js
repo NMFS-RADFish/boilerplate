@@ -97,6 +97,7 @@ export const TableWrapper = ({ children }) => {
     headerGroup,
     rowModel,
     setData,
+    data,
   };
 
   return <TableContext.Provider value={contextValue}>{children}</TableContext.Provider>;
