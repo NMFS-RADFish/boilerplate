@@ -95,8 +95,7 @@ export const DemoTable = () => {
       // Remove the `isOffline` property from all items
       const updatedData = prevData.map((item) => {
         if (item.isOffline) {
-          const { isOffline, ...rest } = item; // Remove isOffline flag
-          return rest;
+          return { ...item, isSubmitted: true };
         }
         return item;
       });
@@ -128,13 +127,18 @@ export const DemoTable = () => {
         </TableHeader>
         <TableBody table={table}>
           {rowModel.rows.map((row) => {
-            const rowStyle = row.original.isOffline
-              ? { backgroundColor: "lightgrey", cursor: "auto" }
-              : {};
+            const isOfflineData = row.original.isOffline && !row.original.isSubmitted;
+            const rowStyle = isOfflineData ? { backgroundColor: "lightgrey", cursor: "auto" } : {};
             return (
               <TableBodyRow row={row} onClick={() => handleRowClick(row)} style={rowStyle}>
                 {row.getVisibleCells().map((cell) => {
-                  return <TableBodyCell style={{ background: "transparent" }} cell={cell} />;
+                  return (
+                    <TableBodyCell
+                      style={{ background: "transparent" }}
+                      isOfflineData={isOfflineData}
+                      cell={cell}
+                    />
+                  );
                 })}
               </TableBodyRow>
             );
