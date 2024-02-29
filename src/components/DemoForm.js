@@ -35,6 +35,11 @@ const DemoForm = ({ asyncFormOptions }) => {
     if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
   }, [formData.fullName, formData.email, setFormData]);
 
+  function onOfflineSubmit(e) {
+    e.preventDefault();
+    create(formData);
+  }
+
   return (
     <>
       <Label htmlFor="fullName">Full Name</Label>
@@ -211,7 +216,7 @@ const DemoForm = ({ asyncFormOptions }) => {
       />
 
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <Button role="form-submit" type="submit" onClick={() => create(formData)}>
+        <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
           Submit
         </Button>
         <Button
