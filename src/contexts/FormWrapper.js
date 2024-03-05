@@ -4,18 +4,51 @@
  * This context provider is meant to be extensible and modular. You can use this anywhere in your app to wrap a form to manage the specific form's state
  */
 
-import React, { createContext, useState, useCallback, useEffect } from "react";
+import React, { createContext, useState, useCallback, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
 import { computePriceFromQuantitySpecies } from "../utilities";
 
 const FormContext = createContext();
 
-const computedInputConfig = {
+const handleSubSpeciesVisibility = (args, formData) => {
+  for (let arg of args) {
+    if (!formData[arg]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const formConfig = {
+  numberOfFish: {
+    callback: () => console.log("callback numberOfFish"),
+    args: [],
+    visibilityCallback: null,
+    visibilityCallbackArgs: [],
+    visibleOnMount: true,
+  },
+  species: {
+    callback: () => console.log("callback numberOfFish"),
+    args: [],
+    visibilityCallback: null,
+    visibilityCallbackArgs: [],
+    visibleOnMount: true,
+  },
+  subSpecies: {
+    callback: () => console.log("callback subSpecies"),
+    args: [],
+    visibilityCallback: handleSubSpeciesVisibility,
+    visibilityCallbackArgs: ["species"],
+    visibleOnMount: false,
+  },
   computedPrice: {
     callback: computePriceFromQuantitySpecies,
     // args should specify all formIds that are marked with linkedInputId, in this case computedPrice
     args: ["numberOfFish", "species"],
+    visibilityCallback: null,
+    visibilityCallbackArgs: [],
+    visibleOnMount: true,
   },
 };
 
@@ -29,6 +62,13 @@ const computedInputConfig = {
  */
 export const FormWrapper = ({ children, onSubmit }) => {
   const [formData, setFormData] = useState({});
+  const [visibleInputs, setVisibleInputs] = useState(() => {
+    let hashmap = {};
+    for (let key in formConfig) {
+      hashmap[key] = formConfig[key].visibleOnMount;
+    }
+    return hashmap;
+  });
   const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
   const params = useParams();
@@ -107,16 +147,30 @@ export const FormWrapper = ({ children, onSubmit }) => {
    * @param {Object} formData - Controlled form data stored in React state
    */
   const handleComputedValues = useCallback((inputIds, formData) => {
-    console.log(inputIds);
     return inputIds.map((inputId) => {
-      const args = computedInputConfig[inputId].args.map((arg) => formData[arg]);
-      const computedValue = computedInputConfig[inputId].callback(args);
+      const args = formConfig[inputId].args.map((arg) => formData[arg]);
+      const computedValue = formConfig[inputId].callback(args);
       return {
         ...formData,
         [inputId]: computedValue,
       };
     })[0];
   }, []); // Added empty array as the second argument to useCallback
+
+  const handleInputVisibility = useCallback((inputIds, formData) => {
+    let existing = visibleInputs;
+    inputIds.forEach((inputId) => {
+      if (formConfig[inputId].visibilityCallback) {
+        const callback = formConfig[inputId].visibilityCallback;
+        const args = formConfig[inputId].visibilityCallbackArgs;
+        let result = callback(args, formData);
+        existing[inputId] = result;
+      }
+    });
+    setVisibleInputs(existing);
+  }, []);
+
+  console.log(visibleInputs);
 
   /**
    * Handles input change events, updating form data.
@@ -135,7 +189,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
         const updatedForm = { ...prev, [name]: value };
         if (linkedInputIds) {
           const updatedComputedForm = handleComputedValues(linkedInputIds, updatedForm);
-          console.log(updatedComputedForm);
+          handleInputVisibility(linkedInputIds, updatedComputedForm);
           return updatedComputedForm;
         } else {
           return updatedForm;
@@ -162,6 +216,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
 
   const contextValue = {
     formData,
+    visibleInputs,
     setFormData,
     handleChange,
     handleBlur,

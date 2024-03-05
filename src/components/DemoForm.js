@@ -22,6 +22,7 @@ import useFormStorage from "../hooks/useFormStorage";
 const DemoForm = ({ asyncFormOptions }) => {
   const {
     formData,
+    visibleInputs,
     setFormData,
     handleChange,
     handleBlur,
@@ -42,7 +43,7 @@ const DemoForm = ({ asyncFormOptions }) => {
 
   return (
     <>
-      <Label htmlFor="fullName">Full Name</Label>
+      {/* <Label htmlFor="fullName">Full Name</Label>
       <TextInput
         id="fullName"
         name="fullName"
@@ -80,7 +81,7 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, phoneNumberValidators)}
       />
-      {validationErrors.phoneNumber && <ErrorMessage>{validationErrors.phoneNumber}</ErrorMessage>}
+      {validationErrors.phoneNumber && <ErrorMessage>{validationErrors.phoneNumber}</ErrorMessage>} */}
 
       <Label htmlFor="numberOfFish">Number of Fish</Label>
       <TextInput
@@ -94,7 +95,7 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
       />
 
-      <Label htmlFor="addressLine1">Address Line 1</Label>
+      {/* <Label htmlFor="addressLine1">Address Line 1</Label>
       <TextInput
         id="addressLine1"
         name="addressLine1"
@@ -187,12 +188,12 @@ const DemoForm = ({ asyncFormOptions }) => {
         <option value="hr">Human Resources</option>
         <option value="it">IT</option>
         <option value="finance">Finance</option>
-      </Select>
+      </Select> */}
 
       <Label htmlFor="species">Species</Label>
       <Select
         // linkedInputIds tells computedPrice to update onChange
-        linkedInputIds={["computedPrice"]}
+        linkedInputIds={["computedPrice", "subSpecies"]}
         name="species"
         value={formData["species"] || ""}
         onChange={handleChange}
@@ -204,18 +205,23 @@ const DemoForm = ({ asyncFormOptions }) => {
           </option>
         ))}
       </Select>
-      <Label htmlFor="subSpecies" isVisible={true}>
-        Sub species
-      </Label>
-      <TextInput
-        id="subSpecies"
-        name="subSpecies"
-        type="text"
-        placeholder="Sub-species"
-        value={formData["subSpecies"] || ""}
-        onChange={handleChange}
-        isVisible={true}
-      />
+      {visibleInputs["subSpecies"] && (
+        <>
+          <Label htmlFor="subSpecies" isVisible={true}>
+            Sub species
+          </Label>
+          <TextInput
+            id="subSpecies"
+            name="subSpecies"
+            type="text"
+            placeholder="Sub-species"
+            value={formData["subSpecies"] || ""}
+            onChange={handleChange}
+            isVisible={true}
+          />
+        </>
+      )}
+
       <Label htmlFor="species">Computed Price</Label>
       <TextInput
         readOnly
@@ -231,7 +237,7 @@ const DemoForm = ({ asyncFormOptions }) => {
         <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
           Submit
         </Button>
-        <Button
+        {/* <Button
           role="form-submit"
           type="submit"
           onClick={() =>
@@ -240,7 +246,7 @@ const DemoForm = ({ asyncFormOptions }) => {
           style={{ marginTop: "10px" }}
         >
           Multi Entry Submit
-        </Button>
+        </Button> */}
       </div>
     </>
   );
