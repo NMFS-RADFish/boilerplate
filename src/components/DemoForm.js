@@ -31,9 +31,9 @@ const DemoForm = ({ asyncFormOptions }) => {
 
   const { create } = useFormStorage();
 
-  useEffect(() => {
-    if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
-  }, [formData.fullName, formData.email, setFormData]);
+  // useEffect(() => {
+  //   if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
+  // }, [formData.fullName, formData.email, setFormData]);
 
   function onOfflineSubmit(e) {
     e.preventDefault();
@@ -86,7 +86,7 @@ const DemoForm = ({ asyncFormOptions }) => {
       <TextInput
         id="numberOfFish"
         // linkedInputId tells computedPrice to update onChange
-        linkedInputId="computedPrice"
+        linkedInputIds={["computedPrice"]}
         name="numberOfFish"
         type="number"
         placeholder="0"
@@ -191,8 +191,8 @@ const DemoForm = ({ asyncFormOptions }) => {
 
       <Label htmlFor="species">Species</Label>
       <Select
-        // linkedInputId tells computedPrice to update onChange
-        linkedInputId="computedPrice"
+        // linkedInputIds tells computedPrice to update onChange
+        linkedInputIds={["computedPrice"]}
         name="species"
         value={formData["species"] || ""}
         onChange={handleChange}
@@ -204,6 +204,18 @@ const DemoForm = ({ asyncFormOptions }) => {
           </option>
         ))}
       </Select>
+      <Label htmlFor="subSpecies" isVisible={true}>
+        Sub species
+      </Label>
+      <TextInput
+        id="subSpecies"
+        name="subSpecies"
+        type="text"
+        placeholder="Sub-species"
+        value={formData["subSpecies"] || ""}
+        onChange={handleChange}
+        isVisible={true}
+      />
       <Label htmlFor="species">Computed Price</Label>
       <TextInput
         readOnly

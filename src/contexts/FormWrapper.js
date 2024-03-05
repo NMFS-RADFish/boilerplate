@@ -106,13 +106,16 @@ export const FormWrapper = ({ children, onSubmit }) => {
    * @param {String} inputId - The id of the input field being computed
    * @param {Object} formData - Controlled form data stored in React state
    */
-  const handleComputedValues = useCallback((inputId, formData) => {
-    const args = computedInputConfig[inputId].args.map((arg) => formData[arg]);
-    const computedValue = computedInputConfig[inputId].callback(args);
-    return {
-      ...formData,
-      [inputId]: computedValue,
-    };
+  const handleComputedValues = useCallback((inputIds, formData) => {
+    console.log(inputIds);
+    return inputIds.map((inputId) => {
+      const args = computedInputConfig[inputId].args.map((arg) => formData[arg]);
+      const computedValue = computedInputConfig[inputId].callback(args);
+      return {
+        ...formData,
+        [inputId]: computedValue,
+      };
+    })[0];
   }, []); // Added empty array as the second argument to useCallback
 
   /**
@@ -125,14 +128,14 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const handleChange = useCallback(
     (event) => {
       const { name, value } = event.target;
-      const linkedInputId = event.target.getAttribute("linkedInputId");
-
+      const linkedInputIds = event.target.getAttribute("linkedInputIds").split(",");
       // if field being updated has a linked field that needs to be computed, update state after computing linked fields
       // else just return updatedForm without needing to linked computedValues
       setFormData((prev) => {
         const updatedForm = { ...prev, [name]: value };
-        if (linkedInputId) {
-          const updatedComputedForm = handleComputedValues(linkedInputId, updatedForm);
+        if (linkedInputIds) {
+          const updatedComputedForm = handleComputedValues(linkedInputIds, updatedForm);
+          console.log(updatedComputedForm);
           return updatedComputedForm;
         } else {
           return updatedForm;
@@ -170,6 +173,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   return (
     <FormContext.Provider value={contextValue}>
       <Form
+        config={{}}
         onSubmit={(event) => {
           event.preventDefault();
           onSubmit?.(formData);
