@@ -14,7 +14,7 @@ jest.mock("@tanstack/react-table", () => {
 describe("TableWrapper", () => {
   it("renders children and passes context values correctly", async () => {
     const mockedUseReactTable = jest.fn(() => ({
-      getHeaderGroups: jest.fn(() => [{ headers: [] }]),
+      getFlatHeaders: jest.fn(() => [{ headers: [] }]),
       getRowModel: jest.fn(() => ({ rows: [] })),
       state: { sorting: [] },
       setSorting: jest.fn(),
@@ -22,12 +22,12 @@ describe("TableWrapper", () => {
     jest.spyOn(reactTable, "useReactTable").mockImplementation(mockedUseReactTable);
 
     const TestComponent = () => {
-      const { tableCaption, table, headerGroup, rowModel, setData } = useTableState();
+      const { tableCaption, table, headerNames, rowModel, setData } = useTableState();
       return (
         <div>
           <span>{tableCaption}</span>
           <span>
-            {table && headerGroup && rowModel
+            {table && headerNames && rowModel
               ? "Context values exist"
               : "Context values do not exist"}
           </span>
