@@ -1,3 +1,13 @@
+#radfish-table-pagination-goto {
+  width: 65px;
+  margin: 0px 5px;
+}
+
+#radfish-table-pagination-select {
+  width: 115px;
+  margin: 0;
+}
+
 .radfish-table-row {
   cursor: pointer;
 }

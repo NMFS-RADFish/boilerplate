@@ -10,6 +10,7 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 
 /**
@@ -31,6 +32,10 @@ const TableContext = createContext();
 export const TableWrapper = ({ children }) => {
   const [data, setData] = React.useState([]);
   const [sorting, setSorting] = React.useState([]);
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   /**
    * Defines the columns for the table. This needs to be memoized for performance reasons.
@@ -45,6 +50,10 @@ export const TableWrapper = ({ children }) => {
    */
   const columns = React.useMemo(
     () => [
+      columnHelper.accessor("isOffline", {
+        cell: (info) => (info.getValue() ? "Draft 🔖" : "Submitted"),
+        header: () => <span>Status</span>,
+      }),
       columnHelper.accessor("id", {
         cell: (info) => info.getValue(),
         header: () => <span>Id</span>,
@@ -71,17 +80,20 @@ export const TableWrapper = ({ children }) => {
     columns,
     state: {
       sorting,
+      pagination,
     },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
   });
 
   /**
-   * headerGroup and rowModel are the result of two helper methods that make rendering table data simpler.
+   * headerNames and rowModel are the result of two helper methods that make rendering table data simpler.
    *
    */
-  const headerGroup = table.getHeaderGroups();
+  const headerNames = table.getFlatHeaders();
   const rowModel = table.getRowModel();
 
   /**
@@ -94,7 +106,7 @@ export const TableWrapper = ({ children }) => {
   const contextValue = {
     tableCaption: "This table shows how many of each fish species were caught",
     table,
-    headerGroup,
+    headerNames,
     rowModel,
     setData,
   };

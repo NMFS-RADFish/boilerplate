@@ -1,8 +1,6 @@
 /* basic input */
 .radfish-input,
 .radfish-select {
-  min-width: 100%;
-  max-width: 1200px;
   margin-bottom: 20px;
   border-radius: 0.25rem;
   border: solid var(--noaa-border-light) 2px;
