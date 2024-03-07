@@ -125,6 +125,12 @@ export const FormWrapper = ({ children, onSubmit }) => {
         const args = FORM_CONFIG[inputId].visibility.args;
         let result = visibilityCallback(args, formData);
         inputVisibility[inputId] = result;
+        // whenever a form disappears, remove it's value from formData
+        // this prevents non-visible fields from being submitted
+        if (result === false) {
+          const updatedForm = { ...formData, [inputId]: "" };
+          setFormData(updatedForm);
+        }
       }
     });
     setVisibleInputs(inputVisibility);

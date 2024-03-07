@@ -1,10 +1,16 @@
-import { computePriceFromQuantitySpecies, handleSubSpeciesVisibility } from "../utilities";
+import {
+  computePriceFromQuantitySpecies,
+  handleCountryVisibility,
+  handleNicknameVisibility,
+  handleSubSpeciesVisibility,
+} from "../utilities";
 
 const CONSTANTS = {
   fullName: "fullName",
   nickname: "nickname",
   email: "email",
   phoneNumber: "phoneNumber",
+  country: "country",
   numberOfFish: "numberOfFish",
   addressLine1: "addressLine1",
   radioOption: "radioOption",
@@ -19,60 +25,91 @@ const CONSTANTS = {
   computedPrice: "computedPrice",
 };
 
-const VISIBILITY = {
-  [CONSTANTS.nickname]: {
-    callback: (args, formData) => {
-      let data = args[0];
-      if (!formData[data]) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    args: [CONSTANTS.fullName],
-    visibleOnMount: false,
-  },
-  [CONSTANTS.subSpecies]: {
-    callback: handleSubSpeciesVisibility,
-    args: [CONSTANTS.species],
-    visibleOnMount: false,
-  },
-};
-
-const COMPUTED = {
-  [CONSTANTS.computedPrice]: {
-    callback: computePriceFromQuantitySpecies,
-    args: [CONSTANTS.numberOfFish, CONSTANTS.species],
-  },
-};
-
-const VALIDATION = {};
-
 const FORM_CONFIG = {
+  [CONSTANTS.fullName]: {
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
   [CONSTANTS.nickname]: {
-    visibility: VISIBILITY[CONSTANTS.nickname],
-    computed: COMPUTED[CONSTANTS.nickname],
-    validation: VALIDATION[CONSTANTS.nickname],
+    visibility: {
+      callback: handleNicknameVisibility,
+      args: [CONSTANTS.fullName],
+      visibleOnMount: false,
+    },
+    computed: null,
+    validation: null,
+  },
+  [CONSTANTS.email]: {
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
+  [CONSTANTS.country]: {
+    visibility: {
+      callback: handleCountryVisibility,
+      args: [CONSTANTS.phoneNumber],
+      visibleOnMount: false,
+    },
+    computed: null,
+    validation: null,
   },
   [CONSTANTS.numberOfFish]: {
-    visibility: VISIBILITY[CONSTANTS.numberOfFish],
-    computed: COMPUTED[CONSTANTS.numberOfFish],
-    validation: VALIDATION[CONSTANTS.numberOfFish],
+    visibility: null,
+    computed: null,
+    validation: null,
   },
-  [CONSTANTS.subSpecies]: {
-    visibility: VISIBILITY[CONSTANTS.subSpecies],
-    computed: COMPUTED[CONSTANTS.subSpecies],
-    validation: VALIDATION[CONSTANTS.subSpecies],
+  [CONSTANTS.addressLine1]: {
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
+  [CONSTANTS.city]: {
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
+  [CONSTANTS.state]: {
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
+  [CONSTANTS.zipcode]: {
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
+  [CONSTANTS.occupation]: {
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
+  [CONSTANTS.department]: {
+    visibility: null,
+    computed: null,
+    validation: null,
   },
   [CONSTANTS.species]: {
-    visibility: VISIBILITY[CONSTANTS.species],
-    computed: COMPUTED[CONSTANTS.species],
-    validation: VALIDATION[CONSTANTS.species],
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
+  [CONSTANTS.subSpecies]: {
+    visibility: {
+      callback: handleSubSpeciesVisibility,
+      args: [CONSTANTS.species],
+      visibleOnMount: false,
+    },
+    computed: null,
+    validation: null,
   },
   [CONSTANTS.computedPrice]: {
-    visibility: VISIBILITY[CONSTANTS.computedPrice],
-    computed: COMPUTED[CONSTANTS.computedPrice],
-    validation: VALIDATION[CONSTANTS.computedPrice],
+    visibility: null,
+    computed: {
+      callback: computePriceFromQuantitySpecies,
+      args: [CONSTANTS.numberOfFish, CONSTANTS.species],
+    },
+    validation: null,
   },
 };
 

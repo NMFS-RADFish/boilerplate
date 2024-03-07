@@ -17,6 +17,7 @@ const {
   nickname,
   email,
   phoneNumber,
+  country,
   addressLine1,
   numberOfFish,
   addressLine2,
@@ -90,7 +91,6 @@ const DemoForm = ({ asyncFormOptions }) => {
           />
         </>
       )}
-
       <Label htmlFor={email}>Email Address</Label>
       <TextInput
         id={email}
@@ -114,11 +114,25 @@ const DemoForm = ({ asyncFormOptions }) => {
         validationStatus={validationErrors[phoneNumber] ? "error" : undefined}
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, phoneNumberValidators)}
+        linkedinputids={[country]}
       />
       {validationErrors[phoneNumber] && (
         <ErrorMessage>{validationErrors[phoneNumber]}</ErrorMessage>
       )}
-
+      {visibleInputs[country] && (
+        <>
+          <Label htmlFor={country}>Country</Label>
+          <TextInput
+            id={country}
+            name={country}
+            type="text"
+            placeholder="Country of Origin"
+            value={formData[country] || ""}
+            onChange={handleChange}
+            linkedinputids={[country]}
+          />
+        </>
+      )}
       <Label htmlFor={numberOfFish}>Number of Fish</Label>
       <TextInput
         id={numberOfFish}
