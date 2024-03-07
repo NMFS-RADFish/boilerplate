@@ -61,7 +61,18 @@ export const handlers = [
 
       return HttpResponse.error(null, { status: 500 });
     } else {
-      return HttpResponse.json({ data: response }, { status: 201 });
+      const draftId = response.id; // Adjust this line to match how you can extract or compare the `id` from `response`
+
+      // Update data to reflect the submission status
+      const modifiedResponse = { ...response, isOffline: false };
+
+      data.push(modifiedResponse);
+
+      // Remove the submitted draft from local storage
+      const existingDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
+      const updatedDrafts = existingDrafts.filter(([id, _]) => id !== draftId);
+      localStorage.setItem("formData", JSON.stringify(updatedDrafts));
+      return HttpResponse.json({ data: modifiedResponse }, { status: 201 });
     }
   }),
   // this endpoint is meant to return data to populate a RadfishForm state.

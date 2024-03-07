@@ -65,6 +65,8 @@ export const FormWrapper = ({ children, onSubmit }) => {
   }, [searchParams]);
 
   // if id exists, query data from server with that id
+
+  // hook with draft param to get data from local or api
   useEffect(() => {
     if (params.id) {
       const paramFormData = async () => {

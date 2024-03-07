@@ -32,6 +32,7 @@ const TableContext = createContext();
 export const TableWrapper = ({ children }) => {
   const [data, setData] = React.useState([]);
   const [sorting, setSorting] = React.useState([]);
+  const [showOfflineSubmit, setShowOfflineSubmit] = React.useState(false);
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
@@ -51,7 +52,7 @@ export const TableWrapper = ({ children }) => {
   const columns = React.useMemo(
     () => [
       columnHelper.accessor("isOffline", {
-        cell: (info) => (info.getValue() ? "Draft 🔖" : "Submitted"),
+        cell: (info) => (info.getValue() ? "Draft " : "Submitted"),
         header: () => <span>Status</span>,
       }),
       columnHelper.accessor("id", {
@@ -109,6 +110,8 @@ export const TableWrapper = ({ children }) => {
     headerNames,
     rowModel,
     setData,
+    showOfflineSubmit,
+    setShowOfflineSubmit,
   };
 
   return <TableContext.Provider value={contextValue}>{children}</TableContext.Provider>;

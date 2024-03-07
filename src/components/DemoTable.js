@@ -34,7 +34,16 @@ export const DemoTable = () => {
    * @property {TableInstance} table - The React Table instance.
    * @property {Function} setData - Function to set table data. Useful for initializing data from cache or API endpoint
    */
-  const { tableCaption, table, headerNames, rowModel, setData } = useTableState();
+  const {
+    tableCaption,
+    table,
+    headerNames,
+    rowModel,
+    setData,
+    data,
+    showOfflineSubmit,
+    setShowOfflineSubmit,
+  } = useTableState();
   const navigate = useNavigate();
 
   const { store } = useFormStorage();
@@ -48,8 +57,9 @@ export const DemoTable = () => {
    * If app is offline, do not fetch. TODO: This should getch data from cache
    */
   useEffect(() => {
-    if (store) {
+    if (store && store.length) {
       setOfflineData();
+      setShowOfflineSubmit(true);
     }
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
@@ -83,7 +93,12 @@ export const DemoTable = () => {
   const setOfflineData = () => {
     setData(
       store.map((entry) => {
-        return { id: entry[0], ...entry[1], isOffline: true };
+        return {
+          id: entry[0],
+          ...entry[1],
+          isOffline: true,
+          onClick: () => handleSubmitDraft(data),
+        };
       }),
     );
   };
@@ -107,6 +122,36 @@ export const DemoTable = () => {
     });
   };
 
+  const handleSubmitDraft = async (draftData) => {
+    if (!draftData) return;
+    try {
+      // Replace with the actual API call to submit the draft data
+      console.log(draftData, "data");
+      const response = await fetch("/species", {
+        method: "POST",
+        // headers: setHeaders(this.token),
+        body: JSON.stringify({
+          ...draftData,
+        }),
+      });
+
+      const { data } = await response.json(); // This is the modifiedResponse from your backend
+      console.log(data, "datatata");
+
+      setData((prevData) => {
+        // Remove the old draft based on its id and add the updated one
+        const newData = prevData.filter((item) => item.id !== data.id); // Assuming `id` is the unique identifier
+        newData.push(data); // Add the updated draft
+        return newData;
+      });
+      console.log(store, "stpore in submit");
+      const existingDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
+      setShowOfflineSubmit(existingDrafts.length);
+    } catch (error) {
+      console.error("Failed to submit draft:", error);
+    }
+  };
+
   return (
     <>
       <div
@@ -117,9 +162,13 @@ export const DemoTable = () => {
           alignItems: "flex-end",
         }}
       >
-        <Button style={{ marginLeft: "auto" }} onClick={handleSubmitOfflineData}>
-          Submit Offline Data
-        </Button>
+        {showOfflineSubmit ? (
+          <Button style={{ marginLeft: "auto" }} onClick={handleSubmitOfflineData}>
+            Submit Offline Data
+          </Button>
+        ) : (
+          ""
+        )}
         <Table bordered caption={tableCaption || ""} fullWidth fixed>
           <TableHeader table={table}>
             <TableHeaderRow table={table}>
@@ -142,12 +191,22 @@ export const DemoTable = () => {
                   key={row.original.id}
                 >
                   {row.getVisibleCells().map((cell) => {
+                    const isStatusColumn = cell.column.id === "isOffline";
                     return (
                       <TableBodyCell
                         style={{ background: "transparent" }}
                         key={cell.id}
                         cell={cell}
-                      />
+                      >
+                        {isStatusColumn && isOfflineData && (
+                          <Button
+                            onClick={() => handleSubmitDraft(row.original)}
+                            style={{ fontSize: "14px", padding: "6px", marginLeft: "auto" }}
+                          >
+                            Submit
+                          </Button>
+                        )}
+                      </TableBodyCell>
                     );
                   })}
                 </TableBodyRow>
