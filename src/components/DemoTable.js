@@ -135,7 +135,6 @@ export const DemoTable = () => {
       const responseData = await response.json();
 
       if (draftData === "all") {
-        console.log(responseData.data);
         setData(responseData.data);
       } else {
         setData((prevData) => {
