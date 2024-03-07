@@ -7,9 +7,7 @@
 import React, { createContext, useState, useCallback, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
-import { computePriceFromQuantitySpecies, handleSubSpeciesVisibility } from "../utilities";
 import { FORM_CONFIG } from "../config/form";
-console.log(FORM_CONFIG);
 
 const FormContext = createContext();
 
@@ -107,7 +105,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
    */
   const handleComputedValues = useCallback((inputIds, formData) => {
     return inputIds.map((inputId) => {
-      const computedCallback = FORM_CONFIG[inputId].computed.callback;
+      const computedCallback = FORM_CONFIG[inputId]?.computed.callback;
       if (computedCallback) {
         const args = FORM_CONFIG[inputId].computed.args.map((arg) => formData[arg]);
         const computedValue = computedCallback(args);
@@ -122,7 +120,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const handleInputVisibility = useCallback((inputIds, formData) => {
     const inputVisibility = visibleInputs;
     inputIds.forEach((inputId) => {
-      const visibilityCallback = FORM_CONFIG[inputId].visibility.callback;
+      const visibilityCallback = FORM_CONFIG[inputId]?.visibility.callback;
       if (visibilityCallback) {
         const args = FORM_CONFIG[inputId].visibility.args;
         let result = visibilityCallback(args, formData);
@@ -148,7 +146,8 @@ export const FormWrapper = ({ children, onSubmit }) => {
       setFormData((prev) => {
         const updatedForm = { ...prev, [name]: value };
         if (linkedInputIds) {
-          const updatedComputedForm = handleComputedValues(linkedInputIds, updatedForm);
+          const updatedComputedForm =
+            handleComputedValues(linkedInputIds, updatedForm) || updatedForm;
           handleInputVisibility(linkedInputIds, updatedComputedForm);
           return updatedComputedForm;
         } else {

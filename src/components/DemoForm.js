@@ -12,7 +12,24 @@ import {
 import useFormStorage from "../hooks/useFormStorage";
 import { CONSTANTS } from "../config/form";
 
-const { nickname, fullName, numberOfFish, species, subSpecies, computedPrice } = CONSTANTS;
+const {
+  fullName,
+  nickname,
+  email,
+  phoneNumber,
+  addressLine1,
+  numberOfFish,
+  addressLine2,
+  radioOption,
+  city,
+  state,
+  zipcode,
+  occupation,
+  department,
+  species,
+  subSpecies,
+  computedPrice,
+} = CONSTANTS;
 
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
@@ -46,7 +63,7 @@ const DemoForm = ({ asyncFormOptions }) => {
 
   return (
     <>
-      {/* <Label htmlFor={fullName}>Full Name</Label>
+      <Label htmlFor={fullName}>Full Name</Label>
       <TextInput
         id={fullName}
         name={fullName}
@@ -57,8 +74,22 @@ const DemoForm = ({ asyncFormOptions }) => {
         validationStatus={validationErrors[fullName] ? "error" : undefined}
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, fullNameValidators)}
+        linkedInputIds={[nickname]}
       />
       {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
+      {visibleInputs[nickname] && (
+        <>
+          <Label htmlFor={nickname}>Nickname</Label>
+          <TextInput
+            id={nickname}
+            name={nickname}
+            type="text"
+            placeholder="Nickname"
+            value={formData[nickname] || ""}
+            onChange={handleChange}
+          />
+        </>
+      )}
 
       <Label htmlFor={email}>Email Address</Label>
       <TextInput
@@ -86,7 +117,7 @@ const DemoForm = ({ asyncFormOptions }) => {
       />
       {validationErrors[phoneNumber] && (
         <ErrorMessage>{validationErrors[phoneNumber]}</ErrorMessage>
-      )} */}
+      )}
 
       <Label htmlFor={numberOfFish}>Number of Fish</Label>
       <TextInput
@@ -100,7 +131,7 @@ const DemoForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
       />
 
-      {/* <Label htmlFor={addressLine1}>Address Line 1</Label>
+      <Label htmlFor={addressLine1}>Address Line 1</Label>
       <TextInput
         id={addressLine1}
         name={addressLine1}
@@ -193,7 +224,7 @@ const DemoForm = ({ asyncFormOptions }) => {
         <option value="hr">Human Resources</option>
         <option value="it">IT</option>
         <option value="finance">Finance</option>
-      </Select> */}
+      </Select>
 
       <Label htmlFor={species}>Species</Label>
       <Select

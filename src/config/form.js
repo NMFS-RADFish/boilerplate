@@ -1,62 +1,64 @@
 import { computePriceFromQuantitySpecies, handleSubSpeciesVisibility } from "../utilities";
 
 const CONSTANTS = {
+  fullName: "fullName",
+  nickname: "nickname",
+  email: "email",
+  phoneNumber: "phoneNumber",
   numberOfFish: "numberOfFish",
+  addressLine1: "addressLine1",
+  radioOption: "radioOption",
+  addressLine2: "addressLine2",
+  city: "city",
+  state: "state",
+  zipcode: "zipcode",
+  occupation: "occupation",
+  department: "department",
   species: "species",
   subSpecies: "subSpecies",
   computedPrice: "computedPrice",
 };
 
 const VISIBILITY = {
-  [CONSTANTS.numberOfFish]: {
-    callback: null,
-    args: [],
-    visibleOnMount: true,
-  },
-  [CONSTANTS.species]: {
-    callback: null,
-    args: [],
-    visibleOnMount: true,
+  [CONSTANTS.nickname]: {
+    callback: (args, formData) => {
+      let data = args[0];
+      if (!formData[data]) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    args: [CONSTANTS.fullName],
+    visibleOnMount: false,
   },
   [CONSTANTS.subSpecies]: {
     callback: handleSubSpeciesVisibility,
     args: [CONSTANTS.species],
     visibleOnMount: false,
   },
-  [CONSTANTS.computedPrice]: {
-    callback: null,
-    args: [],
-    visibleOnMount: true,
-  },
 };
 
 const COMPUTED = {
-  [CONSTANTS.numberOfFish]: {
-    callback: null,
-    args: [],
-  },
-  [CONSTANTS.species]: {
-    callback: null,
-    args: [],
-  },
-  [CONSTANTS.subSpecies]: {
-    callback: null,
-    args: [],
-  },
   [CONSTANTS.computedPrice]: {
     callback: computePriceFromQuantitySpecies,
     args: [CONSTANTS.numberOfFish, CONSTANTS.species],
   },
 };
 
-const VALIDATION = {
-  [CONSTANTS.numberOfFish]: {},
-  [CONSTANTS.species]: {},
-  [CONSTANTS.subSpecies]: {},
-  [CONSTANTS.computedPrice]: {},
-};
+const VALIDATION = {};
 
 const FORM_CONFIG = {
+  [CONSTANTS.fullName]: {
+    visibility: VISIBILITY[CONSTANTS.fullName],
+    computed: COMPUTED[CONSTANTS.fullName],
+    validation: VALIDATION[CONSTANTS.fullName],
+  },
+  [CONSTANTS.nickname]: {
+    visibility: VISIBILITY[CONSTANTS.nickname],
+    computed: COMPUTED[CONSTANTS.nickname],
+    validation: VALIDATION[CONSTANTS.nickname],
+  },
   [CONSTANTS.numberOfFish]: {
     visibility: VISIBILITY[CONSTANTS.numberOfFish],
     computed: COMPUTED[CONSTANTS.numberOfFish],
