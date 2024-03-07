@@ -81,7 +81,6 @@ export const DemoTable = () => {
    * This can be useful for re-routing to a detail page, or handling other data specific functionality
    */
   const handleRowClick = (row) => {
-    if (row.original.isOffline) return;
     // row.original.id should be the id used when generating the form. this can come from MSW or alternatively from IndexDB/localStorage as needed when offline
     navigate(`/form/${row.original.id}`);
   };
@@ -109,44 +108,44 @@ export const DemoTable = () => {
    * the local storage or any state that holds this offline data.
    */
 
-  const handleSubmitOfflineData = () => {
-    setData((prevData) => {
-      // Remove the `isOffline` property from all items
-      const updatedData = prevData.map((item) => {
-        if (item.isOffline) {
-          return { ...item, isSubmitted: true };
-        }
-        return item;
-      });
-      return updatedData;
-    });
-  };
-
   const handleSubmitDraft = async (draftData) => {
     if (!draftData) return;
     try {
-      // Replace with the actual API call to submit the draft data
-      console.log(draftData, "data");
-      const response = await fetch("/species", {
-        method: "POST",
-        // headers: setHeaders(this.token),
-        body: JSON.stringify({
-          ...draftData,
-        }),
-      });
+      let response;
+      if (draftData === "all") {
+        // Handling the submission of all drafts
+        response = await fetch("/species", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ all: true }),
+        });
+      } else {
+        // Handling the submission of a single draft
+        response = await fetch("/species", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(draftData),
+        });
+      }
 
-      const { data } = await response.json(); // This is the modifiedResponse from your backend
-      console.log(data, "datatata");
+      const responseData = await response.json();
 
-      setData((prevData) => {
-        // Remove the old draft based on its id and add the updated one
-        const newData = prevData.filter((item) => item.id !== data.id); // Assuming `id` is the unique identifier
-        newData.push(data); // Add the updated draft
-        return newData;
-      });
-      console.log(store, "stpore in submit");
+      if (draftData === "all") {
+        console.log(responseData.data);
+        setData(responseData.data);
+      } else {
+        setData((prevData) => {
+          const filteredData = prevData.filter((item) => item.id !== responseData.data[0].id);
+          return [...filteredData, ...responseData.data]; // Add the single updated draft
+        });
+      }
+
       const existingDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
-      setShowOfflineSubmit(existingDrafts.length);
+      setShowOfflineSubmit(existingDrafts.length > 0);
     } catch (error) {
       console.error("Failed to submit draft:", error);
     }
@@ -163,7 +162,7 @@ export const DemoTable = () => {
         }}
       >
         {showOfflineSubmit ? (
-          <Button style={{ marginLeft: "auto" }} onClick={handleSubmitOfflineData}>
+          <Button style={{ marginLeft: "auto" }} onClick={() => handleSubmitDraft("all")}>
             Submit Offline Data
           </Button>
         ) : (
@@ -180,9 +179,7 @@ export const DemoTable = () => {
           <TableBody table={table}>
             {rowModel.rows.map((row) => {
               const isOfflineData = row.original.isOffline && !row.original.isSubmitted;
-              const rowStyle = isOfflineData
-                ? { backgroundColor: "lightgrey", cursor: "auto" }
-                : {};
+              const rowStyle = isOfflineData ? { backgroundColor: "lightgrey" } : {};
               return (
                 <TableBodyRow
                   row={row}
