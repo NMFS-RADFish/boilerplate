@@ -49,11 +49,6 @@ const COMPUTED = {
 const VALIDATION = {};
 
 const FORM_CONFIG = {
-  [CONSTANTS.fullName]: {
-    visibility: VISIBILITY[CONSTANTS.fullName],
-    computed: COMPUTED[CONSTANTS.fullName],
-    validation: VALIDATION[CONSTANTS.fullName],
-  },
   [CONSTANTS.nickname]: {
     visibility: VISIBILITY[CONSTANTS.nickname],
     computed: COMPUTED[CONSTANTS.nickname],

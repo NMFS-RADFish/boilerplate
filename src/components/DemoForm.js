@@ -74,7 +74,7 @@ const DemoForm = ({ asyncFormOptions }) => {
         validationStatus={validationErrors[fullName] ? "error" : undefined}
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, fullNameValidators)}
-        linkedInputIds={[nickname]}
+        linkedinputids={[nickname]}
       />
       {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
       {visibleInputs[nickname] && (
@@ -123,7 +123,7 @@ const DemoForm = ({ asyncFormOptions }) => {
       <TextInput
         id={numberOfFish}
         // linkedInputId tells computedPrice to update onChange
-        linkedInputIds={[computedPrice]}
+        linkedinputids={[computedPrice]}
         name={numberOfFish}
         type="number"
         placeholder="0"
@@ -228,8 +228,8 @@ const DemoForm = ({ asyncFormOptions }) => {
 
       <Label htmlFor={species}>Species</Label>
       <Select
-        // linkedInputIds tells computedPrice to update onChange
-        linkedInputIds={[computedPrice, subSpecies]}
+        // linkedinputids tells computedPrice to update onChange
+        linkedinputids={[computedPrice, subSpecies]}
         name={species}
         value={formData[species] || ""}
         onChange={handleChange}

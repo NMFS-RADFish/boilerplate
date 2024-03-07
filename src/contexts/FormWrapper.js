@@ -23,7 +23,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const [formData, setFormData] = useState({});
   const [visibleInputs, setVisibleInputs] = useState(() =>
     Object.fromEntries(
-      Object.entries(FORM_CONFIG).map(([key, config]) => [key, config.visibility.visibleOnMount]),
+      Object.entries(FORM_CONFIG).map(([key, config]) => [key, config.visibility?.visibleOnMount]),
     ),
   );
   const [validationErrors, setValidationErrors] = useState({});
@@ -105,7 +105,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
    */
   const handleComputedValues = useCallback((inputIds, formData) => {
     return inputIds.map((inputId) => {
-      const computedCallback = FORM_CONFIG[inputId]?.computed.callback;
+      const computedCallback = FORM_CONFIG[inputId]?.computed?.callback;
       if (computedCallback) {
         const args = FORM_CONFIG[inputId].computed.args.map((arg) => formData[arg]);
         const computedValue = computedCallback(args);
@@ -120,7 +120,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const handleInputVisibility = useCallback((inputIds, formData) => {
     const inputVisibility = visibleInputs;
     inputIds.forEach((inputId) => {
-      const visibilityCallback = FORM_CONFIG[inputId]?.visibility.callback;
+      const visibilityCallback = FORM_CONFIG[inputId]?.visibility?.callback;
       if (visibilityCallback) {
         const args = FORM_CONFIG[inputId].visibility.args;
         let result = visibilityCallback(args, formData);
@@ -140,15 +140,15 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const handleChange = useCallback(
     (event) => {
       const { name, value } = event.target;
-      const linkedInputIds = event.target.getAttribute("linkedInputIds")?.split(",");
+      const linkedinputids = event.target.getAttribute("linkedinputids")?.split(",");
       // if field being updated has a linked field that needs to be computed, update state after computing linked fields
       // else just return updatedForm without needing to linked computedValues
       setFormData((prev) => {
         const updatedForm = { ...prev, [name]: value };
-        if (linkedInputIds) {
+        if (linkedinputids) {
           const updatedComputedForm =
-            handleComputedValues(linkedInputIds, updatedForm) || updatedForm;
-          handleInputVisibility(linkedInputIds, updatedComputedForm);
+            handleComputedValues(linkedinputids, updatedForm) || updatedForm;
+          handleInputVisibility(linkedinputids, updatedComputedForm);
           return updatedComputedForm;
         } else {
           return updatedForm;
