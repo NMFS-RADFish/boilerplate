@@ -10,6 +10,9 @@ import {
   cityValidators,
 } from "../utilities";
 import useFormStorage from "../hooks/useFormStorage";
+import { CONSTANTS } from "../config/form";
+
+const { nickname, fullName, numberOfFish, species, subSpecies, computedPrice } = CONSTANTS;
 
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
@@ -43,159 +46,161 @@ const DemoForm = ({ asyncFormOptions }) => {
 
   return (
     <>
-      {/* <Label htmlFor="fullName">Full Name</Label>
+      {/* <Label htmlFor={fullName}>Full Name</Label>
       <TextInput
-        id="fullName"
-        name="fullName"
+        id={fullName}
+        name={fullName}
         type="text"
         placeholder="Full Name"
-        value={formData["fullName"] || ""}
-        aria-invalid={validationErrors.fullName ? "true" : "false"}
-        validationStatus={validationErrors.fullName ? "error" : undefined}
+        value={formData[fullName] || ""}
+        aria-invalid={validationErrors[fullName] ? "true" : "false"}
+        validationStatus={validationErrors[fullName] ? "error" : undefined}
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, fullNameValidators)}
       />
-      {validationErrors.fullName && <ErrorMessage>{validationErrors.fullName}</ErrorMessage>}
+      {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
 
-      <Label htmlFor="email">Email Address</Label>
+      <Label htmlFor={email}>Email Address</Label>
       <TextInput
-        id="email"
-        name="email"
-        type="email"
+        id={email}
+        name={email}
+        type={email}
         placeholder="Email Address"
-        value={formData["email"] || ""}
-        validationStatus={validationErrors.email ? "error" : undefined}
+        value={formData[email] || ""}
+        validationStatus={validationErrors[email] ? "error" : undefined}
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, emailValidators)}
       />
-      {validationErrors.email && <ErrorMessage>{validationErrors.email}</ErrorMessage>}
+      {validationErrors[email] && <ErrorMessage>{validationErrors[email]}</ErrorMessage>}
 
-      <Label htmlFor="phoneNumber">Phone Number</Label>
+      <Label htmlFor={phoneNumber}>Phone Number</Label>
       <TextInput
-        id="phoneNumber"
-        name="phoneNumber"
+        id={phoneNumber}
+        name={phoneNumber}
         type="tel"
         placeholder="(000) 000-0000"
-        value={formData["phoneNumber"] || ""}
-        validationStatus={validationErrors.phoneNumber ? "error" : undefined}
+        value={formData[phoneNumber] || ""}
+        validationStatus={validationErrors[phoneNumber] ? "error" : undefined}
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, phoneNumberValidators)}
       />
-      {validationErrors.phoneNumber && <ErrorMessage>{validationErrors.phoneNumber}</ErrorMessage>} */}
+      {validationErrors[phoneNumber] && (
+        <ErrorMessage>{validationErrors[phoneNumber]}</ErrorMessage>
+      )} */}
 
-      <Label htmlFor="numberOfFish">Number of Fish</Label>
+      <Label htmlFor={numberOfFish}>Number of Fish</Label>
       <TextInput
-        id="numberOfFish"
+        id={numberOfFish}
         // linkedInputId tells computedPrice to update onChange
-        linkedInputIds={["computedPrice"]}
-        name="numberOfFish"
+        linkedInputIds={[computedPrice]}
+        name={numberOfFish}
         type="number"
         placeholder="0"
-        value={formData["numberOfFish"] || ""}
+        value={formData[numberOfFish] || ""}
         onChange={handleChange}
       />
 
-      {/* <Label htmlFor="addressLine1">Address Line 1</Label>
+      {/* <Label htmlFor={addressLine1}>Address Line 1</Label>
       <TextInput
-        id="addressLine1"
-        name="addressLine1"
+        id={addressLine1}
+        name={addressLine1}
         type="text"
         placeholder="Address Line 1"
-        value={formData["addressLine1"] || ""}
+        value={formData[addressLine1] || ""}
         onChange={handleChange}
       />
 
-      <Label htmlFor="radioOption">Have you caught fish today?</Label>
+      <Label htmlFor={radioOption}>Have you caught fish today?</Label>
       <Radio
         id="option-catch-yes"
-        name="radioOption"
+        name={radioOption}
         label="Yes"
         value="option-catch-yes"
-        checked={formData.radioOption === "option-catch-yes"}
+        checked={formData[radioOption] === "option-catch-yes"}
         onChange={handleChange}
       />
       <Radio
         id="option-catch-no"
-        name="radioOption"
+        name={radioOption}
         label="No"
         value="option-catch-no"
-        checked={formData.radioOption === "option-catch-no"}
+        checked={formData[radioOption] === "option-catch-no"}
         onChange={handleChange}
       />
 
-      <Label htmlFor="addressLine2">Address Line 2</Label>
+      <Label htmlFor={addressLine2}>Address Line 2</Label>
       <TextInput
-        id="addressLine2"
-        name="addressLine2"
+        id={addressLine2}
+        name={addressLine2}
         type="text"
         placeholder="Address Line 2"
-        value={formData["addressLine2"] || ""}
+        value={formData[addressLine2] || ""}
         onChange={handleChange}
       />
 
-      <Label htmlFor="city">City</Label>
+      <Label htmlFor={city}>City</Label>
       <TextInput
-        id="city"
-        name="city"
+        id={city}
+        name={city}
         type="text"
         placeholder="City"
-        value={formData["city"] || ""}
-        validationStatus={validationErrors.city ? "error" : undefined}
+        value={formData[city] || ""}
+        validationStatus={validationErrors[city] ? "error" : undefined}
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, cityValidators)}
       />
       {validationErrors.city && <ErrorMessage>{validationErrors.city}</ErrorMessage>}
 
-      <Label htmlFor="state">State</Label>
+      <Label htmlFor={state}>State</Label>
       <TextInput
-        id="state"
+        id={state}
         name="state"
         type="text"
         placeholder="State"
-        value={formData["state"] || ""}
-        validationStatus={validationErrors.state ? "error" : undefined}
+        value={formData[state] || ""}
+        validationStatus={validationErrors[state] ? "error" : undefined}
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, stateValidators)}
       />
-      {validationErrors.state && <ErrorMessage>{validationErrors.state}</ErrorMessage>}
+      {validationErrors[state] && <ErrorMessage>{validationErrors[state]}</ErrorMessage>}
 
-      <Label htmlFor="zipcode">Zip Code</Label>
+      <Label htmlFor={zipcode}>Zip Code</Label>
       <TextInput
-        id="zipcode"
-        name="zipcode"
+        id={zipcode}
+        name={zipcode}
         type="text"
         placeholder="Zip Code"
-        value={formData["zipcode"] || ""}
-        validationStatus={validationErrors.zipcode ? "error" : undefined}
+        value={formData[zipcode] || ""}
+        validationStatus={validationErrors[zipcode] ? "error" : undefined}
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, zipcodeValidators)}
       />
-      {validationErrors.zipcode && <ErrorMessage>{validationErrors.zipcode}</ErrorMessage>}
+      {validationErrors[zipcode] && <ErrorMessage>{validationErrors[zipcode]}</ErrorMessage>}
 
-      <Label htmlFor="occupation">Occupation</Label>
+      <Label htmlFor={occupation}>Occupation</Label>
       <TextInput
-        id="occupation"
-        name="occupation"
+        id={occupation}
+        name={occupation}
         type="text"
         placeholder="Occupation"
-        value={formData["occupation"] || ""}
+        value={formData[occupation] || ""}
         onChange={handleChange}
       />
 
-      <Label htmlFor="department">Department</Label>
-      <Select name="department" value={formData["department"] || ""} onChange={handleChange}>
+      <Label htmlFor={department}>Department</Label>
+      <Select name={department} value={formData[department] || ""} onChange={handleChange}>
         <option value="">Select Department</option>
         <option value="hr">Human Resources</option>
         <option value="it">IT</option>
         <option value="finance">Finance</option>
       </Select> */}
 
-      <Label htmlFor="species">Species</Label>
+      <Label htmlFor={species}>Species</Label>
       <Select
         // linkedInputIds tells computedPrice to update onChange
-        linkedInputIds={["computedPrice", "subSpecies"]}
-        name="species"
-        value={formData["species"] || ""}
+        linkedInputIds={[computedPrice, subSpecies]}
+        name={species}
+        value={formData[species] || ""}
         onChange={handleChange}
       >
         <option value="">Select Species</option>
@@ -205,31 +210,31 @@ const DemoForm = ({ asyncFormOptions }) => {
           </option>
         ))}
       </Select>
-      {visibleInputs["subSpecies"] && (
+      {visibleInputs[subSpecies] && (
         <>
-          <Label htmlFor="subSpecies" isVisible={true}>
+          <Label htmlFor={subSpecies} isVisible={true}>
             Sub species
           </Label>
           <TextInput
-            id="subSpecies"
-            name="subSpecies"
+            id={subSpecies}
+            name={subSpecies}
             type="text"
             placeholder="Sub-species"
-            value={formData["subSpecies"] || ""}
+            value={formData[subSpecies] || ""}
             onChange={handleChange}
             isVisible={true}
           />
         </>
       )}
 
-      <Label htmlFor="species">Computed Price</Label>
+      <Label htmlFor={species}>Computed Price</Label>
       <TextInput
         readOnly
-        id="computedPrice"
-        name="computedPrice"
+        id={computedPrice}
+        name={computedPrice}
         type="text"
         placeholder="Computed Price"
-        value={formData["computedPrice"] || ""}
+        value={formData[computedPrice] || ""}
         onChange={handleChange}
       />
 

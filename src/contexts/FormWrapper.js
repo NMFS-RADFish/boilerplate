@@ -7,50 +7,11 @@
 import React, { createContext, useState, useCallback, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
-import { computePriceFromQuantitySpecies } from "../utilities";
+import { computePriceFromQuantitySpecies, handleSubSpeciesVisibility } from "../utilities";
+import { FORM_CONFIG } from "../config/form";
+console.log(FORM_CONFIG);
 
 const FormContext = createContext();
-
-const handleSubSpeciesVisibility = (args, formData) => {
-  for (let arg of args) {
-    if (!formData[arg]) {
-      return false;
-    }
-  }
-  return true;
-};
-
-const formConfig = {
-  numberOfFish: {
-    callback: () => console.log("callback numberOfFish"),
-    args: [],
-    visibilityCallback: null,
-    visibilityCallbackArgs: [],
-    visibleOnMount: true,
-  },
-  species: {
-    callback: () => console.log("callback numberOfFish"),
-    args: [],
-    visibilityCallback: null,
-    visibilityCallbackArgs: [],
-    visibleOnMount: true,
-  },
-  subSpecies: {
-    callback: () => console.log("callback subSpecies"),
-    args: [],
-    visibilityCallback: handleSubSpeciesVisibility,
-    visibilityCallbackArgs: ["species"],
-    visibleOnMount: false,
-  },
-  computedPrice: {
-    callback: computePriceFromQuantitySpecies,
-    // args should specify all formIds that are marked with linkedInputId, in this case computedPrice
-    args: ["numberOfFish", "species"],
-    visibilityCallback: null,
-    visibilityCallbackArgs: [],
-    visibleOnMount: true,
-  },
-};
 
 /**
  * Higher-order component providing form state and functionality.
@@ -62,13 +23,11 @@ const formConfig = {
  */
 export const FormWrapper = ({ children, onSubmit }) => {
   const [formData, setFormData] = useState({});
-  const [visibleInputs, setVisibleInputs] = useState(() => {
-    let hashmap = {};
-    for (let key in formConfig) {
-      hashmap[key] = formConfig[key].visibleOnMount;
-    }
-    return hashmap;
-  });
+  const [visibleInputs, setVisibleInputs] = useState(() =>
+    Object.fromEntries(
+      Object.entries(FORM_CONFIG).map(([key, config]) => [key, config.visibility.visibleOnMount]),
+    ),
+  );
   const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
   const params = useParams();
@@ -148,29 +107,30 @@ export const FormWrapper = ({ children, onSubmit }) => {
    */
   const handleComputedValues = useCallback((inputIds, formData) => {
     return inputIds.map((inputId) => {
-      const args = formConfig[inputId].args.map((arg) => formData[arg]);
-      const computedValue = formConfig[inputId].callback(args);
-      return {
-        ...formData,
-        [inputId]: computedValue,
-      };
+      const computedCallback = FORM_CONFIG[inputId].computed.callback;
+      if (computedCallback) {
+        const args = FORM_CONFIG[inputId].computed.args.map((arg) => formData[arg]);
+        const computedValue = computedCallback(args);
+        return {
+          ...formData,
+          [inputId]: computedValue,
+        };
+      }
     })[0];
   }, []); // Added empty array as the second argument to useCallback
 
   const handleInputVisibility = useCallback((inputIds, formData) => {
-    let existing = visibleInputs;
+    const inputVisibility = visibleInputs;
     inputIds.forEach((inputId) => {
-      if (formConfig[inputId].visibilityCallback) {
-        const callback = formConfig[inputId].visibilityCallback;
-        const args = formConfig[inputId].visibilityCallbackArgs;
-        let result = callback(args, formData);
-        existing[inputId] = result;
+      const visibilityCallback = FORM_CONFIG[inputId].visibility.callback;
+      if (visibilityCallback) {
+        const args = FORM_CONFIG[inputId].visibility.args;
+        let result = visibilityCallback(args, formData);
+        inputVisibility[inputId] = result;
       }
     });
-    setVisibleInputs(existing);
+    setVisibleInputs(inputVisibility);
   }, []);
-
-  console.log(visibleInputs);
 
   /**
    * Handles input change events, updating form data.
@@ -182,7 +142,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const handleChange = useCallback(
     (event) => {
       const { name, value } = event.target;
-      const linkedInputIds = event.target.getAttribute("linkedInputIds").split(",");
+      const linkedInputIds = event.target.getAttribute("linkedInputIds")?.split(",");
       // if field being updated has a linked field that needs to be computed, update state after computing linked fields
       // else just return updatedForm without needing to linked computedValues
       setFormData((prev) => {
