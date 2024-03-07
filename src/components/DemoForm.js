@@ -52,9 +52,9 @@ const DemoForm = ({ asyncFormOptions }) => {
 
   const { create } = useFormStorage();
 
-  // useEffect(() => {
-  //   if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
-  // }, [formData.fullName, formData.email, setFormData]);
+  useEffect(() => {
+    if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
+  }, [formData.fullName, formData.email, setFormData]);
 
   function onOfflineSubmit(e) {
     e.preventDefault();
@@ -273,7 +273,7 @@ const DemoForm = ({ asyncFormOptions }) => {
         <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
           Submit
         </Button>
-        {/* <Button
+        <Button
           role="form-submit"
           type="submit"
           onClick={() =>
@@ -282,7 +282,7 @@ const DemoForm = ({ asyncFormOptions }) => {
           style={{ marginTop: "10px" }}
         >
           Multi Entry Submit
-        </Button> */}
+        </Button>
       </div>
     </>
   );
