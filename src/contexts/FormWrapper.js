@@ -72,7 +72,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
         const formData = await fetch(`/form/${params.id}`);
         if (!formData.ok) {
           const data = find({ uuid: params.id })[0][1];
-          console.log(data, "data local storeage");
           setFormData(data);
         } else {
           const responseJson = await formData.json();

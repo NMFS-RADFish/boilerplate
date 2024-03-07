@@ -62,7 +62,6 @@ export const handlers = [
       return HttpResponse.error(null, { status: 500 });
     } else {
       let modifiedResponses = [];
-      console.log(response, "response");
       if (response.all) {
         // Submit all drafts from local storage
         const allDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
@@ -74,7 +73,7 @@ export const handlers = [
           isOffline: false,
         }));
         data.push(...modifiedResponses);
-        // localStorage.removeItem("formData");
+        localStorage.removeItem("formData");
       } else {
         // Handle a single draft submission
         const draftId = response.id;
