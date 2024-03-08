@@ -539,6 +539,10 @@ const Form = () => {
 };
 ```
 
+The behavior should now be working as expected:
+
+https://github.com/NMFS-RADFish/boilerplate/assets/35090461/879f212e-8dcf-43dd-8958-97a63db603d8
+
 ## Multi-Entry Form Submit
 
 Implementing multi-entry submissions in your NOAA web application forms streamlines the process of submitting data for multiple items at once. This guide will help you set up this functionality.
