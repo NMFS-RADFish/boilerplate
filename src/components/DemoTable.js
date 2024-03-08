@@ -96,7 +96,6 @@ export const DemoTable = () => {
           id: entry[0],
           ...entry[1],
           isOffline: true,
-          onClick: () => handleSubmitDraft(data),
         };
       }),
     );
@@ -108,7 +107,9 @@ export const DemoTable = () => {
    * the local storage or any state that holds this offline data.
    */
 
-  const handleSubmitDraft = async (draftData) => {
+  const handleSubmitDraft = async (e, draftData) => {
+    e.stopPropagation();
+    e.preventDefault();
     if (!draftData) return;
     try {
       let response;
@@ -161,7 +162,7 @@ export const DemoTable = () => {
         }}
       >
         {showOfflineSubmit ? (
-          <Button style={{ marginLeft: "auto" }} onClick={() => handleSubmitDraft("all")}>
+          <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, "all")}>
             Submit Offline Data
           </Button>
         ) : (
