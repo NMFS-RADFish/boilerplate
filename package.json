@@ -33,8 +33,7 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "test": "jest",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "format": "prettier --write src --config ./.prettierrc",
@@ -59,7 +58,11 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.24.0",
+    "@babel/preset-react": "^7.23.3",
+    "@types/jest": "29.5.12",
     "@vitejs/plugin-react": "^4.2.1",
+    "babel-jest": "^29.7.0",
     "eslint": "^8.55.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react": "^7.33.2",
@@ -67,6 +70,7 @@
     "jest": "^27.5.1",
     "msw": "^2.0.12",
     "prettier": "^3.1.0",
+    "react-test-renderer": "^18.2.0",
     "vite": "^5.1.5"
   },
   "msw": {
