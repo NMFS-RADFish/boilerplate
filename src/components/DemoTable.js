@@ -40,7 +40,6 @@ export const DemoTable = () => {
     headerNames,
     rowModel,
     setData,
-    data,
     showOfflineSubmit,
     setShowOfflineSubmit,
   } = useTableState();
