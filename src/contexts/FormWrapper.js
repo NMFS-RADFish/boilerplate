@@ -193,7 +193,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
   return (
     <FormContext.Provider value={contextValue}>
       <Form
-        config={{}}
         onSubmit={(event) => {
           event.preventDefault();
           onSubmit?.(formData);
