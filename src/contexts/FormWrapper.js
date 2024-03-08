@@ -8,6 +8,7 @@ import React, { createContext, useState, useCallback, useEffect, useMemo } from 
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
 import { FORM_CONFIG } from "../config/form";
+import { handleComputedValuesLogic, handleInputVisibilityLogic } from "../utilities";
 
 const FormContext = createContext();
 
@@ -99,40 +100,23 @@ export const FormWrapper = ({ children, onSubmit }) => {
   /**
    * Handles computed form values, updating form elements with a calculated value.
    *
-   * @function
+   * @callback handleComputedValuesCallback
    * @param {String} inputId - The id of the input field being computed
    * @param {Object} formData - Controlled form data stored in React state
    */
-  const handleComputedValues = useCallback((inputIds, formData) => {
-    return inputIds.map((inputId) => {
-      const computedCallback = FORM_CONFIG[inputId]?.computed?.callback;
-      if (computedCallback) {
-        const args = FORM_CONFIG[inputId].computed.args.map((arg) => formData[arg]);
-        const computedValue = computedCallback(args);
-        return {
-          ...formData,
-          [inputId]: computedValue,
-        };
-      }
-    })[0];
-  }, []); // Added empty array as the second argument to useCallback
+  const handleComputedValuesCallback = useCallback((inputIds, formData) => {
+    handleComputedValuesLogic(inputIds, formData, FORM_CONFIG);
+  }, []);
 
-  const handleInputVisibility = useCallback((inputIds, formData) => {
-    const inputVisibility = visibleInputs;
-    inputIds.forEach((inputId) => {
-      const visibilityCallback = FORM_CONFIG[inputId]?.visibility?.callback;
-      if (visibilityCallback) {
-        const args = FORM_CONFIG[inputId].visibility.args;
-        let result = visibilityCallback(args, formData);
-        inputVisibility[inputId] = result;
-        // whenever a form disappears, remove it's value from formData
-        // this prevents non-visible fields from being submitted
-        if (result === false) {
-          const updatedForm = { ...formData, [inputId]: "" };
-          setFormData(updatedForm);
-        }
-      }
-    });
+  /**
+   * Callback function for handling input visibility based on form data and configuration.
+   *
+   * @callback handleInputVisibilityCallback
+   * @param {string[]} inputIds - An array of input IDs.
+   * @param {Object} formData - The form data object.
+   */
+  const handleInputVisibilityCallback = useCallback((inputIds, formData) => {
+    const inputVisibility = handleInputVisibilityLogic(inputIds, formData, FORM_CONFIG);
     setVisibleInputs(inputVisibility);
   }, []);
 
@@ -153,15 +137,15 @@ export const FormWrapper = ({ children, onSubmit }) => {
         const updatedForm = { ...prev, [name]: value };
         if (linkedinputids) {
           const updatedComputedForm =
-            handleComputedValues(linkedinputids, updatedForm) || updatedForm;
-          handleInputVisibility(linkedinputids, updatedComputedForm);
+            handleComputedValuesCallback(linkedinputids, updatedForm) || updatedForm;
+          handleInputVisibilityCallback(linkedinputids, updatedComputedForm);
           return updatedComputedForm;
         } else {
           return updatedForm;
         }
       });
     },
-    [handleComputedValues],
+    [handleComputedValuesCallback, handleInputVisibilityCallback],
   ); // Include 'handleComputedValues' in the dependency array
 
   /**
