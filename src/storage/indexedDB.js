@@ -1,8 +1,10 @@
 import Dexie from "dexie";
 
-export const db = new Dexie(process.env.REACT_APP_INDEXED_DB_NAME);
+console.log(import.meta.env);
 
-db.version(process.env.REACT_APP_INDEXED_DB_VERSION).stores({
+export const db = new Dexie(import.meta.env.VITE_INDEXED_DB_NAME);
+
+db.version(import.meta.env.VITE_INDEXED_DB_VERSION).stores({
   formData:
     "uuid, fullName, email, phoneNumber, numberOfFish, address1, address2, city, state, zipcode, occupation, department, species, computedPrice",
 });
