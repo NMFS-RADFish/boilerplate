@@ -45,6 +45,11 @@ const FORM_CONFIG = {
     computed: null,
     validation: null,
   },
+  [CONSTANTS.phoneNumber]: {
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
   [CONSTANTS.country]: {
     visibility: {
       callback: handleCountryVisibility,
@@ -60,6 +65,16 @@ const FORM_CONFIG = {
     validation: null,
   },
   [CONSTANTS.addressLine1]: {
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
+  [CONSTANTS.radioOption]: {
+    visibility: null,
+    computed: null,
+    validation: null,
+  },
+  [CONSTANTS.addressLine2]: {
     visibility: null,
     computed: null,
     validation: null,
