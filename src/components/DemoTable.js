@@ -196,7 +196,7 @@ export const DemoTable = () => {
                       >
                         {isStatusColumn && isOfflineData && (
                           <Button
-                            onClick={() => handleSubmitDraft(row.original)}
+                            onClick={(e) => handleSubmitDraft(e, row.original)}
                             style={{ fontSize: "14px", padding: "6px", marginLeft: "10%" }}
                           >
                             Submit
