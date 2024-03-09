@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, getAllByRole, queryAllByRole, screen } from "@testing-library/react";
 import * as formWrapper from "../../contexts/FormWrapper";
 import * as reactRouter from "react-router-dom";
 
@@ -63,7 +63,7 @@ describe("FormWrapper", () => {
       );
     };
 
-    const { getByText, getByRole, getByTestId } = render(
+    const { getByText, getByTestId } = render(
       <formWrapper.FormWrapper>
         <TestComponent />
       </formWrapper.FormWrapper>,
@@ -130,5 +130,92 @@ describe("FormWrapper", () => {
     );
 
     expect(queryByText(validationMessage)).not.toBeInTheDocument();
+  });
+});
+
+describe("handleInputVisibility", () => {
+  it("should update the visibility state of form inputs correctly", () => {
+    const mockedVisibleInputs = {
+      input1: true,
+      input2: false,
+    };
+    const mockedUseSearchParams = jest.fn(() => [new URLSearchParams(), jest.fn()]);
+    const mockedHandleChange = jest.fn((event) => {
+      mockedVisibleInputs.input2 = event.target.value;
+    });
+    const mockedHandleBlur = jest.fn();
+    const mockedUseFormState = jest.fn(() => ({
+      formData: {
+        conditionOne: "sample input text 1",
+        conditionTwo: "sample input text 2",
+      },
+      visibleInputs: mockedVisibleInputs,
+      handleChange: mockedHandleChange,
+      handleBlur: mockedHandleBlur,
+    }));
+
+    jest.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
+    jest.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
+    // Mock form configuration data
+    const FORM_CONFIG = {
+      input1: {
+        visibility: {
+          callback: (args, formData) => formData.condition1 === "sample input text 1",
+          args: [],
+        },
+      },
+      input2: {
+        visibility: {
+          callback: (args, formData) => formData.condition2 === "sample input text 2",
+          args: [],
+        },
+      },
+    };
+
+    const TestComponent = () => {
+      const { formData, visibleInputs } = formWrapper.useFormState();
+      return (
+        <div>
+          <input
+            data-testid="input1"
+            role="testinput"
+            type="text"
+            name="input1"
+            value={formData.input1}
+            onChange={mockedHandleChange}
+          />
+          {visibleInputs.input2 && (
+            <input
+              data-testid="input2"
+              role="testinput"
+              type="text"
+              name="input2"
+              value={formData.input2}
+              onChange={() => {}}
+            />
+          )}
+        </div>
+      );
+    };
+
+    const { getByTestId, rerender } = render(
+      <formWrapper.FormWrapper>
+        <TestComponent />
+      </formWrapper.FormWrapper>,
+    );
+
+    const visibleInputs = screen.queryAllByRole("testinput");
+    expect(visibleInputs.length).toBe(1);
+
+    fireEvent.change(getByTestId("input1"), { target: { value: true } });
+    rerender(
+      <formWrapper.FormWrapper>
+        <TestComponent />
+      </formWrapper.FormWrapper>,
+    );
+
+    const visibleInputs2 = screen.queryAllByRole("testinput");
+    expect(visibleInputs2.length).toBe(2);
+    expect(getByTestId("input2")).toBeDefined();
   });
 });
