@@ -1,7 +1,5 @@
 import Dexie from "dexie";
 
-console.log(import.meta.env);
-
 export const db = new Dexie(import.meta.env.VITE_INDEXED_DB_NAME);
 
 db.version(import.meta.env.VITE_INDEXED_DB_VERSION).stores({
