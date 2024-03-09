@@ -8,6 +8,14 @@ import App from "./App";
 async function enableMocking() {
   const { worker } = await import("./mocks/browser");
 
+  if (import.meta.env.MODE === "development") {
+    return worker.start({
+      serviceWorker: {
+        url: `/mockServiceWorker.js`,
+      },
+    });
+  }
+
   // `worker.start()` returns a Promise that resolves
   // once the Service Worker is up and ready to intercept requests.
   return worker.start({
@@ -23,7 +31,7 @@ enableMocking().then(() => {
   root.render(
     <React.StrictMode>
       <App />
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 });
 
