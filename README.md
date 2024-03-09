@@ -360,7 +360,7 @@ There are three main parts to this implementation. Let's say you want to handle 
 
 The configuration of a complex form lives in the `config` directory of this project, form example: `config/form.js`. This is where you will start.
 
-Firstly, the `CONTANTS` object should contain the key-value mapping of each input you plan on using in your form. Whenever you need to reference a certain input value, you should refer to this mapping. This kind of pointer allows you to avoid hardcoded typos, and provides a clear represenation of what inputs your form will have.
+Firstly, the `CONSTANTS` object should contain the key-value mapping of each input you plan on using in your form. Whenever you need to reference a certain input value, you should refer to this mapping. This kind of pointer allows you to avoid hardcoded typos, and provides a clear represenation of what inputs your form will have.
 
 So, rather than using `"species"`, you should use `CONTANTS.species`.
 
