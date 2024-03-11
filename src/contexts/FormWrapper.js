@@ -7,8 +7,9 @@
 import React, { createContext, useState, useCallback, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
+import { computePriceFromQuantitySpecies, handleComputedValuesLogic, handleInputVisibilityLogic } from "../utilities";
+import useFormStorage from "../hooks/useFormStorage";
 import { FORM_CONFIG } from "../config/form";
-import { handleComputedValuesLogic, handleInputVisibilityLogic } from "../utilities";
 
 const FormContext = createContext();
 
@@ -31,6 +32,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams] = useSearchParams();
+  const { find } = useFormStorage();
 
   /**
    * Handles the submission of multiple entries by updating the URL with query parameters.
@@ -67,9 +69,13 @@ export const FormWrapper = ({ children, onSubmit }) => {
     if (params.id) {
       const paramFormData = async () => {
         const formData = await fetch(`/form/${params.id}`);
-        const responseJson = await formData.json();
-
-        setFormData(responseJson.data);
+        if (!formData.ok) {
+          const data = find({ uuid: params.id })[0][1];
+          setFormData(data);
+        } else {
+          const responseJson = await formData.json();
+          setFormData(responseJson.data);
+        }
       };
       paramFormData();
     }
