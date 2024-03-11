@@ -4,20 +4,14 @@
  * This context provider is meant to be extensible and modular. You can use this anywhere in your app to wrap a form to manage the specific form's state
  */
 
-import React, { createContext, useState, useCallback, useEffect } from "react";
+import React, { createContext, useState, useCallback, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
-import { computePriceFromQuantitySpecies } from "../utilities";
+import { computePriceFromQuantitySpecies, handleComputedValuesLogic, handleInputVisibilityLogic } from "../utilities";
 import useFormStorage from "../hooks/useFormStorage";
-const FormContext = createContext();
+import { FORM_CONFIG } from "../config/form";
 
-const computedInputConfig = {
-  computedPrice: {
-    callback: computePriceFromQuantitySpecies,
-    // args should specify all formIds that are marked with linkedInputId, in this case computedPrice
-    args: ["numberOfFish", "species"],
-  },
-};
+const FormContext = createContext();
 
 /**
  * Higher-order component providing form state and functionality.
@@ -29,6 +23,11 @@ const computedInputConfig = {
  */
 export const FormWrapper = ({ children, onSubmit }) => {
   const [formData, setFormData] = useState({});
+  const [visibleInputs, setVisibleInputs] = useState(() =>
+    Object.fromEntries(
+      Object.entries(FORM_CONFIG).map(([key, config]) => [key, config.visibility?.visibleOnMount]),
+    ),
+  );
   const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
   const params = useParams();
@@ -107,18 +106,25 @@ export const FormWrapper = ({ children, onSubmit }) => {
   /**
    * Handles computed form values, updating form elements with a calculated value.
    *
-   * @function
+   * @callback handleComputedValuesCallback
    * @param {String} inputId - The id of the input field being computed
    * @param {Object} formData - Controlled form data stored in React state
    */
-  const handleComputedValues = useCallback((inputId, formData) => {
-    const args = computedInputConfig[inputId].args.map((arg) => formData[arg]);
-    const computedValue = computedInputConfig[inputId].callback(args);
-    return {
-      ...formData,
-      [inputId]: computedValue,
-    };
-  }, []); // Added empty array as the second argument to useCallback
+  const handleComputedValuesCallback = useCallback((inputIds, formData) => {
+    handleComputedValuesLogic(inputIds, formData, FORM_CONFIG);
+  }, []);
+
+  /**
+   * Callback function for handling input visibility based on form data and configuration.
+   *
+   * @callback handleInputVisibilityCallback
+   * @param {string[]} inputIds - An array of input IDs.
+   * @param {Object} formData - The form data object.
+   */
+  const handleInputVisibilityCallback = useCallback((inputIds, formData) => {
+    const inputVisibility = handleInputVisibilityLogic(inputIds, formData, FORM_CONFIG);
+    setVisibleInputs(inputVisibility);
+  }, []);
 
   /**
    * Handles input change events, updating form data.
@@ -130,21 +136,22 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const handleChange = useCallback(
     (event) => {
       const { name, value } = event.target;
-      const linkedInputId = event.target.getAttribute("linkedInputId");
-
+      const linkedinputids = event.target.getAttribute("linkedinputids")?.split(",");
       // if field being updated has a linked field that needs to be computed, update state after computing linked fields
       // else just return updatedForm without needing to linked computedValues
       setFormData((prev) => {
         const updatedForm = { ...prev, [name]: value };
-        if (linkedInputId) {
-          const updatedComputedForm = handleComputedValues(linkedInputId, updatedForm);
+        if (linkedinputids) {
+          const updatedComputedForm =
+            handleComputedValuesCallback(linkedinputids, updatedForm) || updatedForm;
+          handleInputVisibilityCallback(linkedinputids, updatedComputedForm);
           return updatedComputedForm;
         } else {
           return updatedForm;
         }
       });
     },
-    [handleComputedValues],
+    [handleComputedValuesCallback, handleInputVisibilityCallback],
   ); // Include 'handleComputedValues' in the dependency array
 
   /**
@@ -164,6 +171,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
 
   const contextValue = {
     formData,
+    visibleInputs,
     setFormData,
     handleChange,
     handleBlur,

@@ -24,6 +24,7 @@
       - [`DELETE` Request](#delete-request)
     - [Handling Responses and Errors](#handling-responses-and-errors)
   - [State Management](#state-management)
+  - [Building Complex Forms](#complex-forms)
   - [Multi-Entry Form Submit](#multi-entry-form-submit)
   - [Handling Offline Requests](#handling-offline-requests)
     - [Prerequisites](#prerequisites)
@@ -336,6 +337,213 @@ const table = useReactTable({
   getSortedRowModel: getSortedRowModel(),
 });
 ```
+
+## Building Complex Forms
+
+### What is a complex form?
+
+As a developer of a NOAA PWA, there may be cases where you need to build a complex form. That is to say, you may need your form's structure/behavior to dynamically change based on the data that is already inputted into the form. Here are some examples:
+
+1. You may want the visibility of certain fields to depend on the values of another input. Let's say you have two inputs: `species` and `subSpecies`. In this case, you may want the `subSpecies` field to initial be non-visible, and then when a `species` is selected in the other input, `subSpecies` then becomes visible.
+
+2. The values of an input may need to be computed from the values of one or several other inputs. Let's say you have a `species` and `numberOfFish` that both correlate to the catch of a certain trip. You then have a third input `computedPrice` that will automatically calculate based on the values selected in `species` and `numberOfFish`
+
+To do this, this boilerplate provides you with a pattern to link inputs as dependencies to other inputs, and create custom callbacks as needed to handle logic required to handle the structure/behavior of your complex form.
+
+### Design pattern
+
+There are three main parts to this implementation. Let's say you want to handle this complex behavior:
+
+> When `species` input is filled, show `subSpecies` input. If `species` input is empty, hide `subSpecies`
+
+#### Configuration
+
+The configuration of a complex form lives in the `config` directory of this project, form example: `config/form.js`. This is where you will start.
+
+Firstly, the `CONSTANTS` object should contain the key-value mapping of each input you plan on using in your form. Whenever you need to reference a certain input value, you should refer to this mapping. This kind of pointer allows you to avoid hardcoded typos, and provides a clear represenation of what inputs your form will have.
+
+So, rather than using `"species"`, you should use `CONTANTS.species`.
+
+```js
+const CONSTANTS = {
+  species: "species",
+  subSpecies: "subSpecies",
+};
+```
+
+> 🚨 Importantly, this values will correspond with the `name` property of each input in the form. This property is used in the `handleChange` callback of the form's event listener, and is used to update `formState`. It is very important that the `name` property be properly assigned to each input in your form.
+
+Secondly, the `FORM_CONFIG` object represents the "schema" for your form, that defines the types of callbacks, arguments, and controls that each complex input needs in order to control their dependencies. Each input should have a corresponding configuration object.
+
+An example configuration could look like the following. You'll notice that we are referring to the `CONSTANTS` object above, rather that hardcoding the string value.
+
+```js
+const FORM_CONFIG = {
+  [CONSTANTS.species]: {
+    visibility: null,
+    computed: null,
+  },
+  [CONSTANTS.subSpecies]: {
+    visibility: {
+      callback: handleSubSpeciesVisibility,
+      args: [CONSTANTS.species],
+      visibleOnMount: false,
+    },
+    computed: null,
+  },
+};
+```
+
+Thirdly, each configuration object will contain mappings to each complex relationship that your form supports. In this case, our form will support `visibility` and `computed` relationships, as mentioned earlier. This can be extended to your needs.
+
+Each of these complex relationship is `nullable` and, if defined, should contain **at minimum** a `callback` and `args`. This will be used in the state handlers to update your state as needed (more on this in the next section). Each complex relationship can also contain additional keys as needed, for instance `visibleOnMount`.
+
+Each `callback` can either be defined inline, or, preferably in a utilities file. For instance `utilities/inputVisibility.js`. This file can contain any number of callbacks needed to suit your complex form's needs. Each of these callback will accept the args defined in the config, as well as the `formData` from the `FormWrapper` as described in the previous section related to [State Management](#state-management). The `args` in this case, correspond to the `species` and `numberOfFish` inputs, and it will be used to determine whether or not the `subSpecies` input should be visible:
+
+```js
+// check to see if values exist in `formData`. If each value exists, return true. If there is a missing value, return false
+export const handleSubSpeciesVisibility = (args, formData) => {
+  for (let arg of args) {
+    if (!formData[arg]) {
+      return false;
+    }
+  }
+  return true;
+};
+```
+
+#### State handlers
+
+Now that your configuration is defined, you can now hook up your state handler in `FormWrapper`. Here is a simplified version:
+
+```jsx
+export const FormWrapper = ({ children, onSubmit }) => {
+  const [formData, setFormData] = useState({});
+  // here, we are using the `visibleOnMount` configuration property, to correctly show/hide each input when mounted to DOM
+  const [visibleInputs, setVisibleInputs] = useState(() =>
+    Object.fromEntries(
+      Object.entries(FORM_CONFIG).map(([key, config]) => [key, config.visibility?.visibleOnMount]),
+    ),
+  );
+
+  // triggered whenever an input value is changed in form. This is the main state handler, and is responsible, in turn, to execute any complex callbacks
+  const handleChange = useCallback(
+    (event) => {
+      const { name, value } = event.target; // name corresponds to the input name property, and should refer to CONTSTANTS
+      const linkedinputids = event.target.getAttribute("linkedinputids")?.split(","); // linkedinput ids propertry, should also correspond to CONSTANTS. See Markup section below for more details
+
+      setFormData((prev) => {
+        const updatedForm = { ...prev, [name]: value };
+        if (linkedinputids) {
+          // if there are linkedinputids, handle the complex behavior handler as needed.
+          const updatedComplexForm = handleInputVisibility(linkedinputids, updatedForm);
+          // ...add other handlers as needed (for instance, handleComputedValues)
+          return updatedComplexForm;
+        } else {
+          return updatedForm;
+        }
+      });
+    },
+    [handleInputVisibility], // include callbacks into dependency array
+  );
+
+  const handleInputVisibility = useCallback((inputIds, formData) => {
+    const inputVisibility = visibleInputs;
+    inputIds.forEach((inputId) => {
+      // inputId corresponds to CONSTANTS: eg subSpecies
+      const visibilityCallback = FORM_CONFIG[inputId]?.visibility?.callback; // eg handleSubSpeciesVisibility
+
+      if (visibilityCallback) {
+        // get the args needed for that callback (ie the dependant inputs, in this case `species`)
+        const args = FORM_CONFIG[inputId].visibility.args;
+        let result = visibilityCallback(args, formData);
+        inputVisibility[inputId] = result; // true if `species` is filled, else false
+
+        // whenever a form disappears, remove it's value from formData
+        // this prevents non-visible fields from being submitted inadvertantly
+        if (result === false) {
+          const updatedForm = { ...formData, [inputId]: "" };
+          setFormData(updatedForm);
+        }
+      }
+    });
+    setVisibleInputs(inputVisibility); // sets state
+  }, []);
+
+  // pass along context values to children
+  const contextValue = {
+    formData,
+    visibleInputs,
+    setFormData,
+    handleChange,
+  };
+
+  return (
+    <FormContext.Provider value={contextValue}>
+      <Form
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSubmit?.(formData);
+        }}
+      >
+        {children}
+      </Form>
+    </FormContext.Provider>
+  );
+};
+```
+
+#### Markup
+
+Finally, you can now render your jsx markup for your form:
+
+```jsx
+const Form = () => {
+  const { formData, visibleInputs, setFormData, handleChange } = useFormState();
+  return (
+    <React.Fragment>
+      <Label htmlFor={species}>Species</Label>
+      <Select
+        linkedinputids={[subSpecies]} // linkedinputids, tells handleInputVisibility that the `subSpecies` input depends on the value in `species`. Note that this can be several different inputs, meaning that `species` can handle complex behaviors for several dependent inputs
+        name={species} // corresponds to CONSTANTS
+        value={formData[species] || ""}
+        onChange={handleChange}
+      >
+        <option value="">Select Species</option>
+        {speciesOptions.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </Select>
+      {/* visibleInputs[subSpecies] uses FormWrapper state to determine if input should be rendered.
+       State gets modified by handleInputVisibility state handler */}
+      {visibleInputs[subSpecies] && (
+        <>
+          <Label htmlFor={subSpecies} isVisible={true}>
+            Sub species
+          </Label>
+          <TextInput
+            id={subSpecies}
+            name={subSpecies} // corresponds to CONSTANTS
+            type="text"
+            placeholder="Sub-species"
+            value={formData[subSpecies] || ""}
+            onChange={handleChange}
+            isVisible={true}
+          />
+        </>
+      )}
+    </React.Fragment>
+  );
+};
+```
+
+The behavior should now be working as expected:
+
+https://github.com/NMFS-RADFish/boilerplate/assets/35090461/879f212e-8dcf-43dd-8958-97a63db603d8
+
+This pattern can be followed and extended to suit any complex behaviors you may encounter as a developer building out a Radfish form.
 
 ## Multi-Entry Form Submit
 
