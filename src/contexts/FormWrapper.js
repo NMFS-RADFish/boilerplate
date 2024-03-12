@@ -4,11 +4,15 @@
  * This context provider is meant to be extensible and modular. You can use this anywhere in your app to wrap a form to manage the specific form's state
  */
 
-import React, { createContext, useState, useCallback, useEffect, useMemo } from "react";
+import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
 import { FORM_CONFIG } from "../config/form";
-import { handleComputedValuesLogic, handleInputVisibilityLogic } from "../utilities";
+import {
+  handleComputedValuesLogic,
+  handleInputVisibilityLogic,
+  handleInputValidationLogic,
+} from "../utilities";
 
 const FormContext = createContext();
 
@@ -84,17 +88,8 @@ export const FormWrapper = ({ children, onSubmit }) => {
    * @param {Array} validators - Array of validation functions and error messages.
    * @returns {boolean} True if validation passes, false otherwise.
    */
-  const validateInput = useCallback((name, value, validators) => {
-    if (validators && validators.length > 0) {
-      for (let validator of validators) {
-        if (!validator.test(value)) {
-          setValidationErrors((prev) => ({ ...prev, [name]: validator.message }));
-          return false;
-        }
-      }
-    }
-    setValidationErrors((prev) => ({ ...prev, [name]: null }));
-    return true;
+  const validateInputCallback = useCallback((name, value, validators) => {
+    return handleInputValidationLogic(name, value, validators);
   }, []);
 
   /**
@@ -158,9 +153,12 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const handleBlur = useCallback(
     (event, validators) => {
       const { name, value } = event.target;
-      validateInput(name, value, validators);
+      setValidationErrors((prev) => ({
+        ...prev,
+        ...validateInputCallback(name, value, validators),
+      }));
     },
-    [validateInput],
+    [validateInputCallback],
   );
 
   const contextValue = {
