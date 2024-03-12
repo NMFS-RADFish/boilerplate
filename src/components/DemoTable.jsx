@@ -34,7 +34,15 @@ export const DemoTable = () => {
    * @property {TableInstance} table - The React Table instance.
    * @property {Function} setData - Function to set table data. Useful for initializing data from cache or API endpoint
    */
-  const { tableCaption, table, headerNames, rowModel, setData } = useTableState();
+  const {
+    tableCaption,
+    table,
+    headerNames,
+    rowModel,
+    setData,
+    showOfflineSubmit,
+    setShowOfflineSubmit,
+  } = useTableState();
   const navigate = useNavigate();
 
   const { store } = useFormStorage();
@@ -48,8 +56,9 @@ export const DemoTable = () => {
    * If app is offline, do not fetch. TODO: This should getch data from cache
    */
   useEffect(() => {
-    if (store) {
+    if (store && store.length) {
       setOfflineData();
+      setShowOfflineSubmit(true);
     }
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
@@ -71,7 +80,6 @@ export const DemoTable = () => {
    * This can be useful for re-routing to a detail page, or handling other data specific functionality
    */
   const handleRowClick = (row) => {
-    if (row.original.isOffline) return;
     // row.original.id should be the id used when generating the form. this can come from MSW or alternatively from IndexDB/localStorage as needed when offline
     navigate(`/form/${row.original.id}`);
   };
@@ -83,7 +91,11 @@ export const DemoTable = () => {
   const setOfflineData = () => {
     setData(
       store.map((entry) => {
-        return { id: entry[0], ...entry[1], isOffline: true };
+        return {
+          id: entry[0],
+          ...entry[1],
+          isOffline: true,
+        };
       }),
     );
   };
@@ -94,17 +106,48 @@ export const DemoTable = () => {
    * the local storage or any state that holds this offline data.
    */
 
-  const handleSubmitOfflineData = () => {
-    setData((prevData) => {
-      // Remove the `isOffline` property from all items
-      const updatedData = prevData.map((item) => {
-        if (item.isOffline) {
-          return { ...item, isSubmitted: true };
-        }
-        return item;
-      });
-      return updatedData;
-    });
+  const handleSubmitDraft = async (e, draftData) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (!draftData) return;
+    try {
+      let response;
+      if (draftData === "all") {
+        // Handling the submission of all drafts
+        response = await fetch("/species", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ all: true }),
+        });
+      } else {
+        // Handling the submission of a single draft
+        response = await fetch("/species", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(draftData),
+        });
+      }
+
+      const responseData = await response.json();
+
+      if (draftData === "all") {
+        setData(responseData.data);
+      } else {
+        setData((prevData) => {
+          const filteredData = prevData.filter((item) => item.id !== responseData.data[0].id);
+          return [...filteredData, ...responseData.data]; // Add the single updated draft
+        });
+      }
+
+      const existingDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
+      setShowOfflineSubmit(existingDrafts.length > 0);
+    } catch (error) {
+      console.error("Failed to submit draft:", error);
+    }
   };
 
   return (
@@ -117,9 +160,13 @@ export const DemoTable = () => {
           alignItems: "flex-end",
         }}
       >
-        <Button style={{ marginLeft: "auto" }} onClick={handleSubmitOfflineData}>
-          Submit Offline Data
-        </Button>
+        {showOfflineSubmit ? (
+          <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, "all")}>
+            Submit Offline Data
+          </Button>
+        ) : (
+          ""
+        )}
         <Table bordered caption={tableCaption || ""} fullWidth fixed>
           <TableHeader table={table}>
             <TableHeaderRow table={table}>
@@ -131,9 +178,7 @@ export const DemoTable = () => {
           <TableBody table={table}>
             {rowModel.rows.map((row) => {
               const isOfflineData = row.original.isOffline && !row.original.isSubmitted;
-              const rowStyle = isOfflineData
-                ? { backgroundColor: "lightgrey", cursor: "auto" }
-                : {};
+              const rowStyle = isOfflineData ? { backgroundColor: "lightgrey" } : {};
               return (
                 <TableBodyRow
                   row={row}
@@ -142,12 +187,22 @@ export const DemoTable = () => {
                   key={row.original.id}
                 >
                   {row.getVisibleCells().map((cell) => {
+                    const isStatusColumn = cell.column.id === "isOffline";
                     return (
                       <TableBodyCell
                         style={{ background: "transparent" }}
                         key={cell.id}
                         cell={cell}
-                      />
+                      >
+                        {isStatusColumn && isOfflineData && (
+                          <Button
+                            onClick={(e) => handleSubmitDraft(e, row.original)}
+                            style={{ fontSize: "14px", padding: "6px", marginLeft: "10%" }}
+                          >
+                            Submit
+                          </Button>
+                        )}
+                      </TableBodyCell>
                     );
                   })}
                 </TableBodyRow>
