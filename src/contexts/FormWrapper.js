@@ -13,8 +13,11 @@ import {
   handleInputVisibilityLogic,
   handleInputValidationLogic,
 } from "../utilities";
+import RadfishAPIService from "../services/APIService";
 
 const FormContext = createContext();
+
+const ApiService = new RadfishAPIService("");
 
 /**
  * Higher-order component providing form state and functionality.
@@ -70,10 +73,8 @@ export const FormWrapper = ({ children, onSubmit }) => {
   useEffect(() => {
     if (params.id) {
       const paramFormData = async () => {
-        const formData = await fetch(`/form/${params.id}`);
-        const responseJson = await formData.json();
-
-        setFormData(responseJson.data);
+        const { data } = await ApiService.get(`/form/${params.id}`);
+        setFormData(data);
       };
       paramFormData();
     }
