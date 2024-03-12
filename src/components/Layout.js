@@ -27,7 +27,7 @@ const Layout = ({ children }) => {
         <Link to="/">About</Link>
         <Link to="/table">Table</Link>
       </HeaderNav>
-      <GridContainer>{children}</GridContainer>;
+      <GridContainer>{children}</GridContainer>
     </>
   );
 };

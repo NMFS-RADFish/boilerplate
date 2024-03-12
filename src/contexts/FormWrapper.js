@@ -7,6 +7,7 @@
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
+import useFormStorage from "../hooks/useFormStorage";
 import { FORM_CONFIG } from "../config/form";
 import {
   handleComputedValuesLogic,
@@ -38,6 +39,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams] = useSearchParams();
+  const { find } = useFormStorage();
 
   /**
    * Handles the submission of multiple entries by updating the URL with query parameters.
@@ -73,8 +75,15 @@ export const FormWrapper = ({ children, onSubmit }) => {
   useEffect(() => {
     if (params.id) {
       const paramFormData = async () => {
-        const { data } = await ApiService.get(`/form/${params.id}`);
-        setFormData(data);
+        const { data, error } = await ApiService.get(`/form/${params.id}`);
+        if (error) {
+          // error fetching data, use local cache instead
+          const cachedData = find({ uuid: params.id })[0][1];
+          setFormData(cachedData);
+        } else {
+          // use data from API call
+          setFormData(data);
+        }
       };
       paramFormData();
     }
