@@ -3,17 +3,6 @@
   - Validators are used to validate form input. They are used in conjunction with the `handleChange` function in `FormWrapper` to validate form input.
 */
 
-const handleInputValidationLogic = (name, value, validators) => {
-  if (validators && validators.length > 0) {
-    for (let validator of validators) {
-      if (!validator.test(value)) {
-        return { [name]: validator.message };
-      }
-    }
-  }
-  return { [name]: null };
-};
-
 /**
  *
  * Array of validators for the Full Name field.
@@ -92,7 +81,6 @@ const zipcodeValidators = [
 ];
 
 export {
-  handleInputValidationLogic,
   fullNameValidators,
   emailValidators,
   phoneNumberValidators,

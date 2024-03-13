@@ -5,12 +5,14 @@ import {
   cityValidators,
   stateValidators,
   zipcodeValidators,
-  handleComputedValuesLogic,
-  handleInputVisibilityLogic,
   handleSubSpeciesVisibility,
   handleNicknameVisibility,
   handleCountryVisibility,
 } from "../../utilities/index.js";
+import {
+  handleComputedValuesLogic,
+  handleInputVisibilityLogic,
+} from "../../contexts/FormWrapper.js";
 
 describe("Form Input Validators", () => {
   // Full Name Validator Tests

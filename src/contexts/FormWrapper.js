@@ -9,17 +9,11 @@ import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
 import useFormStorage from "../hooks/useFormStorage";
 import { FORM_CONFIG } from "../config/form";
-import {
-  handleComputedValuesLogic,
-  handleInputVisibilityLogic,
-  handleInputValidationLogic,
-} from "../utilities";
 import RadfishAPIService from "../services/APIService";
 
 const FormContext = createContext();
 
 const ApiService = new RadfishAPIService("");
-
 /**
  * Higher-order component providing form state and functionality.
  *
@@ -209,4 +203,48 @@ export const useFormState = () => {
     throw new Error("useFormState must be used within a FormWrapper");
   }
   return context;
+};
+
+// callback handlers
+
+export const handleComputedValuesLogic = (inputIds, formData, FORM_CONFIG) => {
+  for (let inputId of inputIds) {
+    const computedCallback = FORM_CONFIG[inputId]?.computed?.callback;
+    if (computedCallback) {
+      const args = FORM_CONFIG[inputId].computed.args.map((arg) => formData[arg]);
+      const computedValue = computedCallback(args);
+      formData[inputId] = computedValue;
+    }
+  }
+};
+
+export const handleInputVisibilityLogic = (inputIds, formData, FORM_CONFIG) => {
+  const inputVisibility = {};
+
+  inputIds.forEach((inputId) => {
+    const visibilityCallback = FORM_CONFIG[inputId]?.visibility?.callback;
+    if (visibilityCallback) {
+      const args = FORM_CONFIG[inputId].visibility.args;
+      let result = visibilityCallback(args, formData);
+      inputVisibility[inputId] = result;
+      // whenever a form disappears, remove its value from formData
+      // this prevents non-visible fields from being submitted
+      if (result === false) {
+        formData[inputId] = ""; // Update the form data directly
+      }
+    }
+  });
+
+  return inputVisibility;
+};
+
+export const handleInputValidationLogic = (name, value, validators) => {
+  if (validators && validators.length > 0) {
+    for (let validator of validators) {
+      if (!validator.test(value)) {
+        return { [name]: validator.message };
+      }
+    }
+  }
+  return { [name]: null };
 };
