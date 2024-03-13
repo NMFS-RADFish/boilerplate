@@ -122,7 +122,6 @@ export const DemoTable = () => {
     e.preventDefault();
     const { data } = await ApiService.post(MSW_ENDPOINT.SPECIES, { body: draftData });
     console.log("data coming back from api", data);
-    // if (!draftData) return;
     try {
       setData((prevData) => {
         // Remove the submitted drafts based on their IDs
