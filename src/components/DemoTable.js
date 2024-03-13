@@ -42,10 +42,21 @@ export const DemoTable = () => {
     setData,
     showOfflineSubmit,
     setShowOfflineSubmit,
+    data,
   } = useTableState();
   const navigate = useNavigate();
 
   const { store } = useFormStorage();
+  const allDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
+
+  // Transforming each element to merge the ID and data into a single object
+  const draftData = allDrafts.map((draft) => {
+    const [id, data] = draft; // Destructuring the two elements of each array
+    return {
+      id, // Shorthand for id: id,
+      ...data, // Spread operator to merge the data object properties
+    };
+  });
 
   // Check if the app is offline
   // const isOffline = !navigator.onLine;
@@ -88,6 +99,7 @@ export const DemoTable = () => {
     return null;
   }
 
+  // Sets the offline data in localStorage to the table data state.
   const setOfflineData = () => {
     setData(
       store.map((entry) => {
@@ -109,42 +121,25 @@ export const DemoTable = () => {
   const handleSubmitDraft = async (e, draftData) => {
     e.stopPropagation();
     e.preventDefault();
-    if (!draftData) return;
+    const { data } = await ApiService.post(MSW_ENDPOINT.SPECIES, { body: draftData });
+    console.log("data coming back from api", data);
+    // if (!draftData) return;
     try {
-      let response;
-      if (draftData === "all") {
-        // Handling the submission of all drafts
-        response = await fetch("/species", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ all: true }),
-        });
-      } else {
-        // Handling the submission of a single draft
-        response = await fetch("/species", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(draftData),
-        });
-      }
+      setData((prevData) => {
+        // Remove the submitted drafts based on their IDs
+        const filteredData = prevData.filter(
+          (prevItem) => !data.some((submittedItem) => submittedItem.id === prevItem.id),
+        );
 
-      const responseData = await response.json();
+        // Combine the filtered previous data with the newly updated data from the server
+        return [...filteredData, ...data];
+      });
 
-      if (draftData === "all") {
-        setData(responseData.data);
-      } else {
-        setData((prevData) => {
-          const filteredData = prevData.filter((item) => item.id !== responseData.data[0].id);
-          return [...filteredData, ...responseData.data]; // Add the single updated draft
-        });
-      }
-
+      // Update localStorage to remove the submitted drafts
       const existingDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
-      setShowOfflineSubmit(existingDrafts.length > 0);
+      const idsFromApiResponse = data.map((item) => item.id);
+      const updatedDrafts = existingDrafts.filter(([id, _]) => !idsFromApiResponse.includes(id));
+      localStorage.setItem("formData", JSON.stringify(updatedDrafts));
     } catch (error) {
       console.error("Failed to submit draft:", error);
     }
@@ -161,7 +156,7 @@ export const DemoTable = () => {
         }}
       >
         {showOfflineSubmit ? (
-          <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, "all")}>
+          <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, draftData)}>
             Submit Offline Data
           </Button>
         ) : (
@@ -196,7 +191,7 @@ export const DemoTable = () => {
                       >
                         {isStatusColumn && isOfflineData && (
                           <Button
-                            onClick={(e) => handleSubmitDraft(e, row.original)}
+                            onClick={(e) => handleSubmitDraft(e, [row.original])}
                             style={{ fontSize: "14px", padding: "6px", marginLeft: "10%" }}
                           >
                             Submit

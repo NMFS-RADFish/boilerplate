@@ -112,6 +112,7 @@ export const TableWrapper = ({ children }) => {
     setData,
     showOfflineSubmit,
     setShowOfflineSubmit,
+    data,
   };
 
   return <TableContext.Provider value={contextValue}>{children}</TableContext.Provider>;
