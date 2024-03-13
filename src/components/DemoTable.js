@@ -42,7 +42,6 @@ export const DemoTable = () => {
     setData,
     showOfflineSubmit,
     setShowOfflineSubmit,
-    data,
   } = useTableState();
   const navigate = useNavigate();
 
