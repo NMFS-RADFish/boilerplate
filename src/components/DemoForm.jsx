@@ -9,7 +9,7 @@ import {
   stateValidators,
   cityValidators,
 } from "../utilities";
-import useFormStorage from "../hooks/useFormStorage";
+import useOfflineStorage from "../hooks/useOfflineStorage";
 import { CONSTANTS } from "../config/form";
 
 const {
@@ -51,7 +51,7 @@ const DemoForm = ({ asyncFormOptions }) => {
     handleMultiEntrySubmit,
   } = useFormState();
 
-  const { create } = useFormStorage();
+  const { createOfflineDataEntry } = useOfflineStorage();
 
   useEffect(() => {
     if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
@@ -59,7 +59,7 @@ const DemoForm = ({ asyncFormOptions }) => {
 
   function onOfflineSubmit(e) {
     e.preventDefault();
-    create(formData);
+    createOfflineDataEntry(formData);
   }
 
   return (

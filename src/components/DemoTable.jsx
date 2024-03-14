@@ -22,7 +22,7 @@ import {
   TablePaginationSelectRowCount,
 } from "../react-radfish";
 import { useNavigate } from "react-router-dom";
-import useFormStorage from "../hooks/useFormStorage";
+import useOfflineStorage from "../hooks/useOfflineStorage";
 
 const ApiService = new RadfishAPIService("");
 
@@ -45,7 +45,7 @@ export const DemoTable = () => {
   } = useTableState();
   const navigate = useNavigate();
 
-  const { store } = useFormStorage();
+  const { findOfflineData } = useOfflineStorage();
 
   // Check if the app is offline
   // const isOffline = !navigator.onLine;
@@ -53,27 +53,36 @@ export const DemoTable = () => {
   /**
    * Fetches table data from the API service and sets it to the state in TableWrapper context.
    * Remember that DemoTable needs to be wrapped by a TableWrapper
-   * If app is offline, do not fetch. TODO: This should getch data from cache
    */
   useEffect(() => {
-    if (store && store.length) {
-      setOfflineData();
-      setShowOfflineSubmit(true);
-    }
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
+      const newData = data.map((item) => ({ ...item, isOffline: false }));
+
       setData((prevData) => {
-        const newData = data.map((item) => ({ ...item, isOffline: false }));
-        const combinedData = [...prevData, ...newData];
-        const uniqueData = Array.from(
+        // Get offline data
+        const offlineData = findOfflineData();
+        const offlineDataMapped = offlineData
+          ? offlineData.map((entry) => ({ id: entry[0], ...entry[1], isOffline: true }))
+          : [];
+        // Combine offline data with new data and existing data
+        const combinedData = [...offlineDataMapped, ...prevData, ...newData];
+        // Remove duplicates
+        const uniqueDataMap = Array.from(
           new Map(combinedData.map((item) => [item.id, item])).values(),
         );
-        return uniqueData;
+        // Set the state with the unique data
+        return uniqueDataMap;
       });
+
+      // If there is offline data, show the submit draft button
+      if (findOfflineData()) {
+        setShowOfflineSubmit(true);
+      }
     };
 
     fetchFormData();
-  }, [store, setData]);
+  }, [setData, setShowOfflineSubmit]);
 
   /**
    * handleRowClick gets executed in the onClick handler on TableBodyRow
@@ -87,18 +96,6 @@ export const DemoTable = () => {
   if (!table) {
     return null;
   }
-
-  const setOfflineData = () => {
-    setData(
-      store.map((entry) => {
-        return {
-          id: entry[0],
-          ...entry[1],
-          isOffline: true,
-        };
-      }),
-    );
-  };
 
   /**
    * This is a demo function that simulates the submission of offline data by removing the `isOffline` flag.

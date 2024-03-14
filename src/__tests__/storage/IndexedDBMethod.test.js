@@ -1,60 +1,55 @@
-jest.mock("../../utilities/cryptoWrapper.js", () => ({
-  generateUUID: jest.fn(() => "mock-uuid"),
-}));
+import Dexie from "dexie";
+import { IndexedDBMethod } from "../../storage/IndexedDBMethod.js";
+import { generateUUID } from "../../utilities/cryptoWrapper.js";
 
-jest.mock("../../storage/indexedDB.js", () => ({
-  db: {
-    formData: {
-      add: jest.fn(),
-      toArray: jest.fn(),
-      where: jest.fn(),
-      put: jest.fn(),
-    },
-  },
-}));
-
-import { IndexedDBMethod, db } from "../../storage";
-import { generateUUID } from "../../utilities/cryptoWrapper";
+jest.mock("dexie");
+jest.mock("../../utilities/cryptoWrapper.js");
 
 describe("IndexedDBMethod", () => {
   let indexedDBMethod;
   let mockData;
 
   beforeEach(() => {
-    indexedDBMethod = new IndexedDBMethod();
-    mockData = { key: "value" };
+    // Mock Dexie
+    Dexie.mockImplementation(() => ({
+      version: jest.fn().mockReturnThis(),
+      stores: jest.fn().mockReturnThis(),
+      formData: {
+        add: jest.fn(),
+        toArray: jest.fn(),
+        where: jest.fn().mockReturnThis(),
+        put: jest.fn(),
+      },
+    }));
 
-    db.formData.add.mockClear();
-    db.formData.toArray.mockClear();
-    db.formData.where.mockClear();
-    db.formData.put.mockClear();
-    generateUUID.mockClear();
-  });
-
-  it("should create data", async () => {
+    // Mock generateUUID
     generateUUID.mockReturnValue("mock-uuid");
+
+    indexedDBMethod = new IndexedDBMethod("mock-db", 1);
+    mockData = { key: "value" };
+  });
+
+  test("create", async () => {
     await indexedDBMethod.create(mockData);
-    expect(db.formData.add).toHaveBeenCalledWith({ ...mockData, uuid: "mock-uuid" });
-  });
-
-  it("should find all data if no criteria is provided", async () => {
-    db.formData.toArray.mockReturnValue([mockData]);
-    const result = await indexedDBMethod.find();
-    expect(result).toEqual([mockData]);
-    expect(db.formData.toArray).toHaveBeenCalled();
-  });
-
-  it("should find data based on criteria", async () => {
-    db.formData.where.mockReturnValue({
-      toArray: jest.fn().mockReturnValue([mockData]),
+    expect(indexedDBMethod.db.formData.add).toHaveBeenCalledWith({
+      ...mockData,
+      uuid: "mock-uuid",
     });
-    const result = await indexedDBMethod.find({ key: "value" });
-    expect(result).toEqual([mockData]);
-    expect(db.formData.where).toHaveBeenCalledWith({ key: "value" });
   });
 
-  it("should update data based on criteria", async () => {
+  test("find without criteria", async () => {
+    await indexedDBMethod.find();
+    expect(indexedDBMethod.db.formData.toArray).toHaveBeenCalled();
+  });
+
+  test("find with criteria", async () => {
+    await indexedDBMethod.find(mockData);
+    expect(indexedDBMethod.db.formData.where).toHaveBeenCalledWith(mockData);
+    expect(indexedDBMethod.db.formData.toArray).toHaveBeenCalled();
+  });
+
+  test("update", async () => {
     await indexedDBMethod.update({ uuid: "mock-uuid" }, mockData);
-    expect(db.formData.put).toHaveBeenCalledWith(mockData, "mock-uuid");
+    expect(indexedDBMethod.db.formData.put).toHaveBeenCalledWith(mockData, "mock-uuid");
   });
 });

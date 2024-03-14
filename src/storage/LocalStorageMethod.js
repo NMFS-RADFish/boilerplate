@@ -7,13 +7,14 @@ import { StorageMethod } from "./StorageMethod";
  */
 export class LocalStorageMethod extends StorageMethod {
   /**
-   * Create a new local storage method.
-   * @param {string} key - The key to use for storing data in localStorage, e.g. "formData".
+   * Create a new local storage method instance.
+   * @param {string} key - The key to use for local storage, e.g. "formData" or  `import.meta.env.VITE_YOUR_KEY_NAME`.
    */
   constructor(key) {
     super();
     this.key = key;
-    this.store = localStorage.getItem(this.key);
+    this.store =
+      localStorage.getItem(this.key) || localStorage.setItem(this.key, JSON.stringify([]));
   }
 
   /**
@@ -21,6 +22,7 @@ export class LocalStorageMethod extends StorageMethod {
    * @param {Object} data - The data to store, e.g. { numberOfFish: "1", species: "Grouper" }.
    * @throws {Error} If an error occurs while stringifying the data.
    */
+
   create(data) {
     const existingData = JSON.parse(this.store) || [];
     const uuid = generateUUID();
