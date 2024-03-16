@@ -77,6 +77,7 @@ function useFormStorage() {
    * @returns {Promise} A promise that resolves when the data is updated, e.g. { numberOfFish: "10", species: "Grouper" }.
    */
   function update(criteria, data) {
+    console.log(criteria, data);
     return storageModel.update(criteria, data);
   }
 
