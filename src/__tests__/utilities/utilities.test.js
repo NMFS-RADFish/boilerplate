@@ -8,11 +8,11 @@ import {
   handleSubSpeciesVisibility,
   handleNicknameVisibility,
   handleCountryVisibility,
-} from "../../utilities/index.js";
+} from "../../utilities";
 import {
   handleComputedValuesLogic,
   handleInputVisibilityLogic,
-} from "../../contexts/FormWrapper.js";
+} from "../../contexts/FormWrapper.jsx";
 
 describe("Form Input Validators", () => {
   // Full Name Validator Tests
