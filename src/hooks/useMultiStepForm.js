@@ -47,7 +47,7 @@ function useMultStepForm(uuid) {
     stepForward,
     stepBackward,
     handleSubmit,
-    //
+    // below are composed useFormState values
     formData,
     visibleInputs,
     setFormData,

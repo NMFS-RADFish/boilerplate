@@ -107,7 +107,6 @@ export class LocalStorageMethod extends StorageMethod {
         }
         return entry;
       });
-      console.log(updatedData);
       const newData = JSON.stringify(updatedData);
       localStorage.setItem(this.key, newData);
       this.store = newData;
