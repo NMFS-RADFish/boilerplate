@@ -7,7 +7,7 @@ import { TableWrapper } from "./contexts/TableWrapper";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
-import { DemoForm } from "./components/DemoForm";
+import { ComplexForm } from "./demos/ComplexForm";
 import { DemoTable } from "./components/DemoTable";
 
 const ApiService = new RadfishAPIService("");
@@ -83,7 +83,7 @@ function App() {
               path="/"
               element={
                 <FormWrapper onSubmit={handleFormSubmit}>
-                  <DemoForm asyncFormOptions={asyncFormOptions} />
+                  <ComplexForm asyncFormOptions={asyncFormOptions} />
                 </FormWrapper>
               }
             />
@@ -100,7 +100,7 @@ function App() {
               path="/form/:id"
               element={
                 <FormWrapper onSubmit={handleFormSubmit}>
-                  <DemoForm asyncFormOptions={asyncFormOptions} />
+                  <ComplexForm asyncFormOptions={asyncFormOptions} />
                 </FormWrapper>
               }
             />
