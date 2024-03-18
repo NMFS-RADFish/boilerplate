@@ -46,8 +46,8 @@ const MultiStepForm = ({ asyncFormOptions }) => {
     handleMultiEntrySubmit,
   } = useMultStepForm(uuid);
 
+  // todo: break this into useMultiStateForm
   useEffect(() => {
-    console.log("blah");
     if (uuid) {
       const [found] = find({ uuid });
       if (!found) {
@@ -64,12 +64,10 @@ const MultiStepForm = ({ asyncFormOptions }) => {
     navigate(`${formId}`);
   };
 
-  console.log("FORM DATA", formData);
   if (!uuid) {
     return (
       <div>
         <Button onClick={handleInit}>Begin Multistep Form</Button>
-        {/* <Link to={handleStep}></Link> */}
       </div>
     );
   }
@@ -155,7 +153,7 @@ const MultiStepForm = ({ asyncFormOptions }) => {
     );
   }
 
-  if (currentStep === 3) {
+  if (formData.currentStep === 3) {
     return (
       <>
         <Label htmlFor={country}>Country</Label>

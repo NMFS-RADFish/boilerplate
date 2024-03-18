@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
 import useFormStorage from "./useFormStorage";
 import { useFormState } from "../contexts/FormWrapper";
+
+const TOTAL_STEPS = 3;
 
 function useMultStepForm(uuid) {
   const {
@@ -12,33 +13,33 @@ function useMultStepForm(uuid) {
     validationErrors,
     handleMultiEntrySubmit,
   } = useFormState();
-  const { create, find, update } = useFormStorage();
-  //   const storageMethod = new LocalStorageMethod("formData");
-  //   const storageModel = StorageModelFactory.createModel(storageMethod);
-  // const multiStepForm = new MultiStepFormModel(uuid);
-  let [currentStep, setCurrentStep] = useState(0);
+  const { create, update } = useFormStorage();
 
   function init() {
-    const uuid = create({ ...formData, currentStep: currentStep + 1 });
-    setFormData({ ...formData, currentStep: currentStep + 1 });
+    const uuid = create({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
+    setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
     return uuid;
   }
 
   function stepForward() {
-    console.log(stepForward);
-    const nextStep = formData.currentStep + 1;
-    setFormData({ ...formData, currentStep: nextStep });
-    update({ uuid }, { ...formData, currentStep: nextStep });
+    if (formData.currentStep < TOTAL_STEPS) {
+      const nextStep = formData.currentStep + 1;
+      setFormData({ ...formData, currentStep: nextStep });
+      update({ uuid }, { ...formData, currentStep: nextStep });
+    }
   }
 
   function stepBackward() {
-    const prevStep = formData.currentStep - 1;
-    setFormData({ ...formData, currentStep: prevStep });
-    update({ uuid }, { ...formData, currentStep: prevStep });
+    if (formData.currentStep > 1) {
+      const prevStep = formData.currentStep - 1;
+      setFormData({ ...formData, currentStep: prevStep });
+      update({ uuid }, { ...formData, currentStep: prevStep });
+      return;
+    }
   }
 
   function handleSubmit() {
-    console.log("handleSubmit: ", currentStep);
+    console.log("handleSubmit: ", formData);
   }
 
   return {
@@ -46,7 +47,6 @@ function useMultStepForm(uuid) {
     stepForward,
     stepBackward,
     handleSubmit,
-    currentStep,
     //
     formData,
     visibleInputs,
