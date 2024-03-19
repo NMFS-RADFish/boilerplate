@@ -15,6 +15,10 @@
     - [NOAA Branding and Style Guide](#noaa-branding-and-style-guide)
       - [Using CSS files](#using-css-files)
       - [Using `className` to modify CSS](#using-classname-to-modify-css)
+  - [Offline Storage](#offline-storage)
+    - [Configuration](#configuration)
+    - [**`useOfflineStorage` Hooks API**](#useofflinestorage-hooks-api)
+    - [**Usage**](#usage)
   - [Interfacing with backend services](#interfacing-with-backend-services)
     - [Initializing the Service](#initializing-the-service)
     - [Making API Requests](#making-api-requests)
@@ -24,7 +28,12 @@
       - [`DELETE` Request](#delete-request)
     - [Handling Responses and Errors](#handling-responses-and-errors)
   - [State Management](#state-management)
-  - [Building Complex Forms](#complex-forms)
+  - [Building Complex Forms](#building-complex-forms)
+    - [What is a complex form?](#what-is-a-complex-form)
+    - [Design pattern](#design-pattern)
+      - [Configuration](#configuration-1)
+      - [State handlers](#state-handlers)
+      - [Markup](#markup)
   - [Multi-Entry Form Submit](#multi-entry-form-submit)
   - [Handling Offline Requests](#handling-offline-requests)
     - [Prerequisites](#prerequisites)
@@ -186,6 +195,95 @@ import { Label } from "../react-radfish";
 ```
 
 By following this method, you can leverage the underlying `uswds` component, maintain the NOAA theme, and can extend if further to suit you needs as a developer.
+
+## Offline Storage
+
+To use offline data storage, use the `useOfflineStorage` hook. This React hook provides methods for managing offline form data. There are two storage methods available `LocalStorageMethod` or `IndexedDBStorageMethod`.
+
+### Configuration
+
+Step-by-step instructions to configure offline storage:
+
+1. **Set the environment variables in the `.env` files. Based on which offline storage method you select, the following env variables are required:**
+   1. **Local Storage:**
+      1. `VITE_LOCAL_STORAGE_KEY`
+   2. **Indexed DB:**
+      1. `VITE_INDEXED_DB_NAME`
+      2. `VITE_INDEXED_DB_VERSION`
+      3. `VITE_INDEXED_DB_TABLE_NAME`
+      4. `VITE_INDEXED_DB_SCHEMA`
+2. **In the `src/hooks/useOfflineStorage.js` file, initialize one of the following Storage Method instances, and pass the appropriate environment variables using `import.meta.env.REPLACE_WITH_KEY_NAME` as parameters:**
+
+   1. **`LocalStorageMethod`** — Requires one parameter, the key name for localStorage.
+
+      ```jsx
+      const storageMethod = new LocalStorageMethod(import.meta.env.VITE_LOCAL_STORAGE_KEY);
+      ```
+
+   2. **`IndexedDBStorageMethod`** — Requires two parameters, the db name and db version.
+
+      ```jsx
+      const storageMethod = new IndexedDBStorageMethod(
+        import.meta.env.VITE_INDEXED_DB_NAME,
+        import.meta.env.VITE_INDEXED_DB_VERSION,
+        import.meta.env.VITE_INDEXED_DB_TABLE_NAME,
+        import.meta.env.VITE_INDEXED_DB_SCHEMA,
+      );
+      ```
+
+3. **In the `src/hooks/useOfflineStorage.js` file, create the `StorageModelFactory` :**
+
+   ```jsx
+   // 1. Choose one of the following storage methods:
+   const storageMethod = new IndexedDBStorageMethod(
+     import.meta.env.VITE_INDEXED_DB_NAME,
+     import.meta.env.VITE_INDEXED_DB_VERSION,
+   );
+   const storageMethod = new LocalStorageMethod(import.meta.env.VITE_LOCAL_STORAGE_KEY);
+   // 2. Create Storage Method
+   const storageModel = StorageModelFactory.createModel(storageMethod);
+   ```
+
+### **`useOfflineStorage` Hooks API**
+
+The `useOfflineStorage` hook returns an object with the following methods:
+
+- **`createOfflineDataEntry(data)` —** Creates a new data entry in the storage.
+  - `data`: The data object to create.
+  - Returns a promise that resolves when the data is created.
+- **`findOfflineData(criteria)`** — Finds data in the storage based on the given criteria, returns all data if not criteria parameter is passed.
+  - `criteria`: The criteria object to use for finding data, eg `{uuid: 123}`.
+  - Returns a promise that resolves to an array of tuples:
+    - `[ [ uuid, { key: value } ], [ uuid2, { key: value } ] ]`
+- **`updateOfflineDataEntry(criteria, data)`** — Updates data in the storage.
+  - `criteria`: The criteria to use for updating data. This should be an object.
+  - `data`: The updated data object.
+  - Returns a promise that resolves to the updated data as an object:
+    - `{ numberOfFish: 10, species: salmon }`
+
+### **Usage**
+
+```jsx
+import useOfflineStorage from "./useOfflineStorage";
+
+function MyComponent() {
+  const { createOfflineDataEntry, findOfflineData, updateOfflineDataEntry } = useOfflineStorage();
+  const data = { species: "Grouper", numberOfFish: 100 };
+
+  // Create new offline data entry
+  createOfflineDataEntry(data);
+  // Find all offline data
+  findOfflineData();
+  // Find a specific offline data entry by uuid
+  findOfflineData({ uuid: "1234" });
+  // Update an offline data entry by uuid
+  updateOfflineDataEntry({ uuid: "1234" }, data);
+
+  // rest of code....
+}
+
+export default MyComponent;
+```
 
 ## Interfacing with backend services
 
