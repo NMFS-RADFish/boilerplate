@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Alert } from "@trussworks/react-uswds";
 import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../react-radfish";
 import { useFormState } from "../contexts/FormWrapper";
 import {
@@ -59,11 +60,15 @@ const DemoForm = ({ asyncFormOptions }) => {
 
   function onOfflineSubmit(e) {
     e.preventDefault();
+    if (navigator.onLine) {
+      return;
+    }
     createOfflineDataEntry(formData);
   }
 
   return (
     <>
+      <FormInfoAnnotation />
       <Label htmlFor={fullName}>Full Name</Label>
       <TextInput
         id={fullName}
@@ -103,7 +108,6 @@ const DemoForm = ({ asyncFormOptions }) => {
         onBlur={(e) => handleBlur(e, emailValidators)}
       />
       {validationErrors[email] && <ErrorMessage>{validationErrors[email]}</ErrorMessage>}
-
       <Label htmlFor={phoneNumber}>Phone Number</Label>
       <TextInput
         id={phoneNumber}
@@ -144,7 +148,6 @@ const DemoForm = ({ asyncFormOptions }) => {
         value={formData[numberOfFish] || ""}
         onChange={handleChange}
       />
-
       <Label htmlFor={addressLine1}>Address Line 1</Label>
       <TextInput
         id={addressLine1}
@@ -154,7 +157,6 @@ const DemoForm = ({ asyncFormOptions }) => {
         value={formData[addressLine1] || ""}
         onChange={handleChange}
       />
-
       <Label htmlFor={radioOption}>Have you caught fish today?</Label>
       <Radio
         id="option-catch-yes"
@@ -172,7 +174,6 @@ const DemoForm = ({ asyncFormOptions }) => {
         checked={formData[radioOption] === "option-catch-no"}
         onChange={handleChange}
       />
-
       <Label htmlFor={addressLine2}>Address Line 2</Label>
       <TextInput
         id={addressLine2}
@@ -182,7 +183,6 @@ const DemoForm = ({ asyncFormOptions }) => {
         value={formData[addressLine2] || ""}
         onChange={handleChange}
       />
-
       <Label htmlFor={city}>City</Label>
       <TextInput
         id={city}
@@ -195,7 +195,6 @@ const DemoForm = ({ asyncFormOptions }) => {
         onBlur={(e) => handleBlur(e, cityValidators)}
       />
       {validationErrors.city && <ErrorMessage>{validationErrors.city}</ErrorMessage>}
-
       <Label htmlFor={state}>State</Label>
       <TextInput
         id={state}
@@ -208,7 +207,6 @@ const DemoForm = ({ asyncFormOptions }) => {
         onBlur={(e) => handleBlur(e, stateValidators)}
       />
       {validationErrors[state] && <ErrorMessage>{validationErrors[state]}</ErrorMessage>}
-
       <Label htmlFor={zipcode}>Zip Code</Label>
       <TextInput
         id={zipcode}
@@ -221,7 +219,6 @@ const DemoForm = ({ asyncFormOptions }) => {
         onBlur={(e) => handleBlur(e, zipcodeValidators)}
       />
       {validationErrors[zipcode] && <ErrorMessage>{validationErrors[zipcode]}</ErrorMessage>}
-
       <Label htmlFor={occupation}>Occupation</Label>
       <TextInput
         id={occupation}
@@ -231,7 +228,6 @@ const DemoForm = ({ asyncFormOptions }) => {
         value={formData[occupation] || ""}
         onChange={handleChange}
       />
-
       <Label htmlFor={department}>Department</Label>
       <Select name={department} value={formData[department] || ""} onChange={handleChange}>
         <option value="">Select Department</option>
@@ -239,8 +235,11 @@ const DemoForm = ({ asyncFormOptions }) => {
         <option value="it">IT</option>
         <option value="finance">Finance</option>
       </Select>
-
       <Label htmlFor={species}>Species</Label>
+      <Alert type="info" slim={true}>
+        The species select input is dependent on data coming from a server. The current
+        implementation is using a mock server.
+      </Alert>
       <Select
         // linkedinputids tells computedPrice to update onChange
         linkedinputids={[computedPrice, subSpecies]}
@@ -271,7 +270,6 @@ const DemoForm = ({ asyncFormOptions }) => {
           />
         </>
       )}
-
       <Label htmlFor={species}>Computed Price</Label>
       <TextInput
         readOnly
@@ -282,11 +280,19 @@ const DemoForm = ({ asyncFormOptions }) => {
         value={formData[computedPrice] || ""}
         onChange={handleChange}
       />
-
+      <Alert type="info" slim={true}>
+        Button Option 1: Below is an example of a simple button, it will save data locally. It does
+        not make a server request.
+      </Alert>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
           Submit
         </Button>
+
+        <Alert type="info" slim={true}>
+          Button Option 2: Below is an example of a multi-entry button, it sends data to a server.
+          The current implementation is using a mock server.
+        </Alert>
         <Button
           role="form-submit"
           type="submit"
@@ -301,5 +307,35 @@ const DemoForm = ({ asyncFormOptions }) => {
     </>
   );
 };
+
+function FormInfoAnnotation() {
+  return (
+    <Alert type="info" headingLevel={"h1"} heading="Form Components">
+      This component is an example of a form with various input types. The form is designed to be
+      used with the `FormWrapper` component.
+      <br />
+      <br />
+      <strong>Note:</strong> Annotations are for informational purposes only. In production, you
+      would remove the annotations. Components with annotations above them are optional. You can
+      choose whether or not to use them in your application.
+      <br />
+      <br />
+      <a
+        href="https://www.notion.so/DRAFT-Work-in-progress-RADFish-Frontend-Application-Development-Guide-dc3c5589b019458e8b5ab3f4293ec183"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button type="button">Go To Documentation</Button>
+      </a>
+      <a
+        href="https://main--65de4951379b5e4412b4ffbd.chromatic.com/?path=/docs/radfish-introduction--docs"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button type="button">Go To Storybook</Button>
+      </a>
+    </Alert>
+  );
+}
 
 export { DemoForm };
