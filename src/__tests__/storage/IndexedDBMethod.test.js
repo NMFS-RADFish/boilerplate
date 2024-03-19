@@ -25,7 +25,12 @@ describe("IndexedDBMethod", () => {
     // Mock generateUUID
     generateUUID.mockReturnValue("mock-uuid");
 
-    indexedDBMethod = new IndexedDBMethod("mock-db", 1);
+    indexedDBMethod = new IndexedDBMethod(
+      "mock-db",
+      1,
+      "formData",
+      "uuid, fullName, numberOfFish, species",
+    );
     mockData = { key: "value" };
   });
 

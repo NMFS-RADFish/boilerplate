@@ -8,16 +8,18 @@ import { StorageMethod } from "./StorageMethod";
  * @extends StorageMethod
  * @param {string} dbName - The name of the database.
  * @param {number} dbVersion - The version of the database.
+ * @param {string} dbTableName - The name of the table.
+ * @param {string} dbSchema - The schema of the table.
  */
 export class IndexedDBMethod extends StorageMethod {
-  constructor(dbName, dbVersion) {
+  constructor(dbName, dbVersion, dbTableName, dbSchema) {
     super();
     this.dbName = dbName;
     this.dbVersion = dbVersion;
     this.db = new Dexie(this.dbName);
+    this.dbSchema = dbSchema;
     this.db.version(this.dbVersion).stores({
-      formData:
-        "uuid, fullName, email, phoneNumber, numberOfFish, address1, address2, city, state, zipcode, occupation, department, species, computedPrice",
+      [dbTableName]: dbSchema,
     });
   }
   /**
@@ -27,7 +29,7 @@ export class IndexedDBMethod extends StorageMethod {
    */
   async create(data) {
     try {
-      await this.db.formData.add({
+      return await this.db.formData.add({
         ...data,
         uuid: generateUUID(),
       });
