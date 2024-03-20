@@ -24,6 +24,7 @@ import {
 } from "../react-radfish";
 import { useNavigate } from "react-router-dom";
 import useFormStorage from "../hooks/useFormStorage";
+const TOAST_LIFESPAN = 2000;
 
 const ApiService = new RadfishAPIService("");
 
@@ -46,22 +47,18 @@ export const DemoTable = () => {
   } = useTableState();
   const navigate = useNavigate();
   const [toast, setToast] = useState(null);
-  const { store, create, find } = useFormStorage();
+  const { store } = useFormStorage();
   const data = store || [];
-  console.log(store, "dssssata");
   const allDrafts = data;
 
   // Transforming each element to merge the ID and data into a single object
   const draftData = allDrafts.map((draft) => {
-    const [id, data] = draft; // Destructuring the two elements of each array
+    const [id, data] = draft;
     return {
-      id, // Shorthand for id: id,
-      ...data, // Spread operator to merge the data object properties
+      id,
+      ...data,
     };
   });
-
-  // Check if the app is offline
-  // const isOffline = !navigator.onLine;
 
   /**
    * Fetches table data from the API service and sets it to the state in TableWrapper context.
@@ -135,7 +132,7 @@ export const DemoTable = () => {
         return [...filteredData, ...data];
       });
 
-      // Update localStorage to remove the submitted drafts
+      // Update localStorage to remove the submitted drafts set delete
       const existingDrafts = store;
       const idsFromApiResponse = data.map((item) => item.id);
       const updatedDrafts = existingDrafts.filter(([id, _]) => !idsFromApiResponse.includes(id));
@@ -143,9 +140,12 @@ export const DemoTable = () => {
       const { status, message } = TOAST_CONFIG.SUCCESS;
       setToast({ status, message });
     } catch (error) {
-      console.error("Failed to submit draft:", error);
       const { status, message } = TOAST_CONFIG.ERROR;
       setToast({ status, message });
+    } finally {
+      setTimeout(() => {
+        setToast(null);
+      }, TOAST_LIFESPAN);
     }
   };
 

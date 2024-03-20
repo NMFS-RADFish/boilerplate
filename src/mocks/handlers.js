@@ -62,19 +62,14 @@ export const handlers = [
       return HttpResponse.error(null, { status: 500 });
     } else {
       let modifiedResponses = [];
-
-      // Ensure response is always treated as an array
       const responseData = response.body;
 
-      // Iterate over response data, modifying each entry as needed
       responseData.forEach((data) => {
         const modifiedResponse = { ...data, isOffline: false };
         modifiedResponses.push(modifiedResponse);
       });
-      // Here, assuming `data` is an array you're adding to. Ensure `data` is declared and accessible
       data.push(...modifiedResponses);
 
-      // Return success response
       return HttpResponse.json({ data: modifiedResponses }, { status: 201 });
     }
   }),

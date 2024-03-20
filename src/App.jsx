@@ -50,7 +50,6 @@ function App() {
     window.addEventListener("online", checkConnectivity);
     window.addEventListener("offline", checkConnectivity);
 
-    // Cleanup on component unmount
     return () => {
       window.removeEventListener("online", checkConnectivity);
       window.removeEventListener("offline", checkConnectivity);
