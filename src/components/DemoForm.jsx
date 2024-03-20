@@ -12,6 +12,7 @@ import {
 } from "../utilities";
 import useOfflineStorage from "../hooks/useOfflineStorage";
 import { CONSTANTS } from "../config/form";
+import { COMMON_CONFIG } from "../config/common";
 
 const {
   fullName,
@@ -320,18 +321,10 @@ function FormInfoAnnotation() {
       choose whether or not to use them in your application.
       <br />
       <br />
-      <a
-        href="https://www.notion.so/DRAFT-Work-in-progress-RADFish-Frontend-Application-Development-Guide-dc3c5589b019458e8b5ab3f4293ec183"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href={COMMON_CONFIG.docsUrl} target="_blank" rel="noopener noreferrer">
         <Button type="button">Go To Documentation</Button>
       </a>
-      <a
-        href="https://main--65de4951379b5e4412b4ffbd.chromatic.com/?path=/docs/radfish-introduction--docs"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href={COMMON_CONFIG.storybookURL} target="_blank" rel="noopener noreferrer">
         <Button type="button">Go To Storybook</Button>
       </a>
     </Alert>

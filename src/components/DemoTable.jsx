@@ -24,6 +24,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import useOfflineStorage from "../hooks/useOfflineStorage";
 import { Alert } from "@trussworks/react-uswds";
+import { COMMON_CONFIG } from "../config/common";
 
 const ApiService = new RadfishAPIService("");
 
@@ -260,7 +261,7 @@ function TableInfoAnnotation() {
       Below is an example of a table that's populated by server and locally stored data
       (localStorage or indexedDB). The table is designed to be used with the `TableWrapper`
       component, it's built with{" "}
-      <a href="https://react-table-v7-docs.netlify.app/" target="_blank" rel="noopener noreferrer">
+      <a href={COMMON_CONFIG.reactTableURL} target="_blank" rel="noopener noreferrer">
         react-table
       </a>
       .
@@ -276,18 +277,10 @@ function TableInfoAnnotation() {
       choose whether or not to use them in your application.
       <br />
       <br />
-      <a
-        href="https://www.notion.so/DRAFT-Work-in-progress-RADFish-Frontend-Application-Development-Guide-dc3c5589b019458e8b5ab3f4293ec183"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href={COMMON_CONFIG.docsUrl} target="_blank" rel="noopener noreferrer">
         <Button type="button">Go To Documentation</Button>
       </a>
-      <a
-        href="https://main--65de4951379b5e4412b4ffbd.chromatic.com/?path=/docs/radfish-introduction--docs"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href={COMMON_CONFIG.storybookURL} target="_blank" rel="noopener noreferrer">
         <Button type="button">Go To Storybook</Button>
       </a>
     </Alert>
