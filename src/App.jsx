@@ -18,30 +18,44 @@ const TOAST_LIFESPAN = 2000;
 function App() {
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
   const [toast, setToast] = useState(null);
-
+  const [isOffline, setIsOffline] = useState(false);
   // Check if the app is offline
-  const isOffline = !navigator.onLine;
+  const checkConnectivity = async () => {
+    try {
+      const online = navigator.onLine;
+      if (online) {
+        handleOnline();
+      } else {
+        handleOffline();
+      }
+    } catch (error) {
+      handleOffline();
+    }
+  };
+
+  const handleOnline = () => {
+    setIsOffline(false);
+    setToast(true);
+  };
+
+  const handleOffline = () => {
+    setIsOffline(true);
+    const { status, message } = TOAST_CONFIG.OFFLINE;
+    setToast({ status, message });
+  };
 
   useEffect(() => {
-    const handleOnline = () => {
-      // You may want to refetch data when the app comes online
-      setToast(true);
-    };
+    checkConnectivity();
 
-    const handleOffline = () => {
-      const { status, message } = TOAST_CONFIG.OFFLINE;
-      setToast({ status, message });
-    };
+    window.addEventListener("online", checkConnectivity);
+    window.addEventListener("offline", checkConnectivity);
 
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    // need this cleanup, else event listeners are immediately removed
+    // Cleanup on component unmount
     return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener("online", checkConnectivity);
+      window.removeEventListener("offline", checkConnectivity);
     };
-  }, [isOffline]);
+  }, []);
 
   // when application mounts, fetch data from endpoint and set the payload to component state
   // this data is then passed into `DemoForm` component and used to prepopulate form fields (eg dropdown) with default options fetched from server

@@ -3,10 +3,11 @@
  * @returns {React.ReactNode} - The demo table component.
  */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTableState } from "../contexts/TableWrapper";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import RadfishAPIService from "../services/APIService";
+import { Toast, TOAST_CONFIG } from "../react-radfish";
 import {
   Table,
   TableBody,
@@ -44,7 +45,7 @@ export const DemoTable = () => {
     setShowOfflineSubmit,
   } = useTableState();
   const navigate = useNavigate();
-
+  const [toast, setToast] = useState(null);
   const { store, create, find } = useFormStorage();
   const data = store || [];
   console.log(store, "dssssata");
@@ -123,7 +124,6 @@ export const DemoTable = () => {
     e.stopPropagation();
     e.preventDefault();
     const { data } = await ApiService.post(MSW_ENDPOINT.SPECIES, { body: draftData });
-    console.log("data coming back from api", data);
     try {
       setData((prevData) => {
         // Remove the submitted drafts based on their IDs
@@ -140,13 +140,18 @@ export const DemoTable = () => {
       const idsFromApiResponse = data.map((item) => item.id);
       const updatedDrafts = existingDrafts.filter(([id, _]) => !idsFromApiResponse.includes(id));
       localStorage.setItem("formData", JSON.stringify(updatedDrafts));
+      const { status, message } = TOAST_CONFIG.SUCCESS;
+      setToast({ status, message });
     } catch (error) {
       console.error("Failed to submit draft:", error);
+      const { status, message } = TOAST_CONFIG.ERROR;
+      setToast({ status, message });
     }
   };
 
   return (
     <>
+      <Toast toast={toast} />
       <div
         style={{
           width: "100%",
