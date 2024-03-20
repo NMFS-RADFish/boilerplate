@@ -71,10 +71,21 @@ function useOfflineStorage() {
     return storageModel.update(criteria, data);
   }
 
+  /**
+   * Delete data in the storage.
+   *
+   * @param {Array} UUIDs - Array of UUIDs to delete data, e.g. ["uuid1234"] or ["uuid1234", "uuid321", "uuid987"].
+   * @returns {Promise} A promise that resolves to `true` when the data is deleted, otherwise `false`.
+   */
+  function deleteOfflineData(uuid) {
+    return storageModel.delete(uuid);
+  }
+
   return {
     createOfflineDataEntry,
     findOfflineData,
     updateOfflineDataEntry,
+    deleteOfflineData,
   };
 }
 
