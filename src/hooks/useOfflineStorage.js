@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { LocalStorageMethod, StorageModelFactory } from "../storage";
 
 /**
