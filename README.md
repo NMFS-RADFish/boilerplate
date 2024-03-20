@@ -262,6 +262,9 @@ The `useOfflineStorage` hook returns an object with the following methods:
   - `data`: The updated data object.
   - Returns a promise that resolves to the updated data as an object:
     - `{ numberOfFish: 10, species: salmon }`
+- **`deleteOfflineData(uuids)`** — Updates data in the storage.
+  - `uuids`: An array of UUIDs to use for deleting one or more items.
+  - Returns a promise that resolves to `true` if the deletion was successful.
 
 ### **Usage**
 
@@ -280,6 +283,10 @@ function MyComponent() {
   findOfflineData({ uuid: "1234" });
   // Update an offline data entry by uuid
   updateOfflineDataEntry({ uuid: "1234" }, data);
+  // Delete one offline data entry
+  deleteOfflineData(["uuid-123"]);
+  // Delete multiple offline data entries
+  deleteOfflineData(["uuid-123", "uuid-321", "uuid-987"]);
 
   // rest of code....
 }
