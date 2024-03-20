@@ -47,7 +47,7 @@ export const DemoTable = () => {
   } = useTableState();
   const navigate = useNavigate();
   const [toast, setToast] = useState(null);
-  const { store } = useFormStorage();
+  const { store, create } = useFormStorage();
   const data = store || [];
   const allDrafts = data;
 
