@@ -91,4 +91,21 @@ export class LocalStorageMethod extends StorageMethod {
       throw error;
     }
   }
+
+  /**
+   * Delete data in local storage.
+   * @param {Array} UUIDs - Array of UUIDs to delete, e.g ["uuid123"] or ["uuid1234", "uuid321", "uuid987"].
+   * @return {Boolean} Returns `true` if the data was deleted successfully, otherwise `false`.
+   * @throws {Error} If an error occurs.
+   */
+  delete(uuid) {
+    try {
+      const parsedData = JSON.parse(this.store);
+      const newData = parsedData.filter((item) => item[0] !== uuid);
+      localStorage.setItem(this.key, JSON.stringify(newData));
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
