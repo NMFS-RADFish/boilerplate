@@ -45,8 +45,10 @@ export const DemoTable = () => {
   } = useTableState();
   const navigate = useNavigate();
 
-  const { store } = useFormStorage();
-  const allDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
+  const { store, create, find } = useFormStorage();
+  const data = store || [];
+  console.log(store, "dssssata");
+  const allDrafts = data;
 
   // Transforming each element to merge the ID and data into a single object
   const draftData = allDrafts.map((draft) => {
@@ -134,7 +136,7 @@ export const DemoTable = () => {
       });
 
       // Update localStorage to remove the submitted drafts
-      const existingDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
+      const existingDrafts = store;
       const idsFromApiResponse = data.map((item) => item.id);
       const updatedDrafts = existingDrafts.filter(([id, _]) => !idsFromApiResponse.includes(id));
       localStorage.setItem("formData", JSON.stringify(updatedDrafts));
