@@ -101,7 +101,7 @@ export class LocalStorageMethod extends StorageMethod {
   delete(uuid) {
     try {
       const parsedData = JSON.parse(this.store);
-      const newData = parsedData.filter((item) => item[0] !== uuid);
+      const newData = parsedData.filter((item) => !uuid.includes(item[0]));
       localStorage.setItem(this.key, JSON.stringify(newData));
       return true;
     } catch (error) {
