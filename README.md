@@ -198,6 +198,8 @@ By following this method, you can leverage the underlying `uswds` component, mai
 
 ## Offline Storage
 
+RADFish app users (fishermen/fisherwomen) can be out at sea for an extended period of time and may not have internet access available. The offline storage functionality outlined below allows users to continue using the application to create and manage reports while offline.
+
 To use offline data storage, use the `useOfflineStorage` hook. This React hook provides methods for managing offline form data. There are two storage methods available `LocalStorageMethod` or `IndexedDBStorageMethod`.
 
 ### Configuration
