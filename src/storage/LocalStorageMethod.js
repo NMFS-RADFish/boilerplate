@@ -70,7 +70,7 @@ export class LocalStorageMethod extends StorageMethod {
    */
   update(criteria, data) {
     try {
-      const originalData = this.find(this.key);
+      const originalData = this.find();
       const updatedData = originalData.map((entry) => {
         const entryData = entry[1];
 
@@ -79,7 +79,7 @@ export class LocalStorageMethod extends StorageMethod {
             (key) => entryData[key] === criteria[key] || criteria[key] === entry[0],
           )
         ) {
-          return [entry[0], data];
+          return [entry[0], { ...entryData, ...data }];
         }
         return entry;
       });
