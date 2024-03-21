@@ -1,4 +1,4 @@
-import useFormStorage from "./useFormStorage";
+import useOfflineStorage from "./useOfflineStorage";
 import { useFormState } from "../contexts/FormWrapper";
 
 const TOTAL_STEPS = 3;
@@ -13,10 +13,10 @@ function useMultStepForm(uuid) {
     validationErrors,
     handleMultiEntrySubmit,
   } = useFormState();
-  const { create, update } = useFormStorage();
+  const { createOfflineDataEntry, updateOfflineDataEntry } = useOfflineStorage();
 
   function init() {
-    const uuid = create({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
+    const uuid = createOfflineDataEntry({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
     setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
     return uuid;
   }
@@ -25,7 +25,7 @@ function useMultStepForm(uuid) {
     if (formData.currentStep < TOTAL_STEPS) {
       const nextStep = formData.currentStep + 1;
       setFormData({ ...formData, currentStep: nextStep });
-      update({ uuid }, { ...formData, currentStep: nextStep });
+      updateOfflineDataEntry({ uuid }, { ...formData, currentStep: nextStep });
     }
   }
 
@@ -33,7 +33,7 @@ function useMultStepForm(uuid) {
     if (formData.currentStep > 1) {
       const prevStep = formData.currentStep - 1;
       setFormData({ ...formData, currentStep: prevStep });
-      update({ uuid }, { ...formData, currentStep: prevStep });
+      updateOfflineDataEntry({ uuid }, { ...formData, currentStep: prevStep });
       return;
     }
   }

@@ -30,6 +30,11 @@ const data = [
 ];
 
 export const handlers = [
+  // This handler is used to mock the response of a GET request for an SVG or WOFF2 file
+  http.get(/\.(svg|woff2)$/, async () => {
+    return;
+  }),
+
   // Returns an array of fish species. This is currently being used to demonstrate populating a dropdown form component with "data" from a server
   // Note that this implementation can/should change depending on your needs
   http.get(MSW_ENDPOINT.SPECIES, () => {
@@ -118,6 +123,11 @@ export const handlers = [
   // note that locally cached data and server provided data can often be out of sync.
   http.get("/form/:id", ({ params }) => {
     const [mockData] = data.filter((obj) => obj.id === params.id);
+
+    if (!mockData) {
+      return HttpResponse.json({}, { status: 500 });
+    }
+
     const returnData = {
       id: mockData.id,
       fullName: "John Smith",

@@ -9,7 +9,7 @@ import {
   stateValidators,
   cityValidators,
 } from "../utilities";
-import useFormStorage from "../hooks/useFormStorage";
+import useOfflineStorage from "../hooks/useOfflineStorage";
 import { CONSTANTS } from "../config/form";
 
 const {
@@ -51,7 +51,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
     handleMultiEntrySubmit,
   } = useFormState();
 
-  const { create } = useFormStorage();
+  const { create } = useOfflineStorage();
 
   useEffect(() => {
     if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../react-radfish";
-import { useFormState } from "../contexts/FormWrapper";
 import {
   fullNameValidators,
   emailValidators,
@@ -8,9 +7,8 @@ import {
   zipcodeValidators,
   stateValidators,
   cityValidators,
-  generateUUID,
 } from "../utilities";
-import useFormStorage from "../hooks/useFormStorage";
+import useOfflineStorage from "../hooks/useOfflineStorage";
 import { CONSTANTS } from "../config/multistepForm";
 import useMultStepForm from "../hooks/useMultiStepForm";
 import { useParams, useNavigate, Link } from "react-router-dom";
@@ -28,7 +26,7 @@ const { fullName, nickname, email, phoneNumber, country, city, state, zipcode } 
 const MultiStepForm = ({ asyncFormOptions }) => {
   const navigate = useNavigate();
   const { uuid } = useParams();
-  const { create, find, update } = useFormStorage();
+  const { findOfflineData } = useOfflineStorage();
   const {
     init,
     stepForward,
@@ -48,7 +46,7 @@ const MultiStepForm = ({ asyncFormOptions }) => {
   // todo: break this into useMultiStateForm
   useEffect(() => {
     if (uuid) {
-      const [found] = find({ uuid });
+      const [found] = findOfflineData({ uuid });
       if (!found) {
         navigate("/multistep");
       } else {

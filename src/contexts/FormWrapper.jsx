@@ -7,7 +7,7 @@
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
-import useFormStorage from "../hooks/useFormStorage";
+import useOfflineStorage from "../hooks/useOfflineStorage";
 import { FORM_CONFIG } from "../config/form";
 import RadfishAPIService from "../services/APIService";
 
@@ -33,7 +33,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams] = useSearchParams();
-  const { find } = useFormStorage();
+  const { findOfflineData } = useOfflineStorage();
 
   /**
    * Handles the submission of multiple entries by updating the URL with query parameters.
