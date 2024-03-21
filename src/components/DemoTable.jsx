@@ -23,7 +23,7 @@ import {
   TablePaginationSelectRowCount,
 } from "../react-radfish";
 import { useNavigate } from "react-router-dom";
-const TOAST_LIFESPAN = 2000;
+const TOAST_LIFESPAN = 3000;
 import useOfflineStorage from "../hooks/useOfflineStorage";
 import { Alert } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
@@ -49,7 +49,7 @@ export const DemoTable = () => {
   } = useTableState();
   const navigate = useNavigate();
   const [toast, setToast] = useState(null);
-  const { findOfflineData, createOfflineDataEntry, deleteOfflineData } = useOfflineStorage();
+  const { findOfflineData, deleteOfflineData } = useOfflineStorage();
   const data = findOfflineData() || [];
   const allDrafts = data;
   // Transforming each element to merge the ID and data into a single object
@@ -120,8 +120,8 @@ export const DemoTable = () => {
   const handleSubmitDraft = async (e, draftData) => {
     e.stopPropagation();
     e.preventDefault();
-    const { data } = await ApiService.post(MSW_ENDPOINT.SPECIES, { body: draftData });
     try {
+      const { data } = await ApiService.post(MSW_ENDPOINT.SPECIES, { body: draftData });
       setData((prevData) => {
         // Remove the submitted drafts based on their IDs
         const filteredData = prevData.filter(
