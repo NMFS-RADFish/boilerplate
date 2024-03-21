@@ -67,20 +67,20 @@ export const FormWrapper = ({ children, onSubmit }) => {
 
   // if id exists, query data from server with that id
   useEffect(() => {
-    // if (params.id) {
-    //   const paramFormData = async () => {
-    //     const { data, error } = await ApiService.get(`/form/${params.id}`);
-    //     if (error) {
-    //       // error fetching data, use local cache instead
-    //       const cachedData = find({ uuid: params.id })[0][1];
-    //       setFormData(cachedData);
-    //     } else {
-    //       // use data from API call
-    //       setFormData(data);
-    //     }
-    //   };
-    //   paramFormData();
-    // }
+    if (params.id) {
+      const paramFormData = async () => {
+        const { data, error } = await ApiService.get(`/form/${params.id}`);
+        if (error) {
+          // error fetching data, use local cache instead
+          const cachedData = find({ uuid: params.id })[0][1];
+          setFormData(cachedData);
+        } else {
+          // use data from API call
+          setFormData(data);
+        }
+      };
+      paramFormData();
+    }
   }, [params]);
 
   /**
@@ -180,7 +180,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
     <FormContext.Provider value={contextValue}>
       <Form
         onSubmit={(event) => {
-          console.log("submit");
           event.preventDefault();
           onSubmit?.(formData);
         }}

@@ -67,31 +67,6 @@ export class LocalStorageMethod extends StorageMethod {
    * @return {Array} The updated data.
    * @throws {Error} If an error occurs while stringifying the data.
    */
-  // update(criteria, data) {
-  //   try {
-  //     const originalData = this.find(this.key);
-  //     const updatedData = originalData.map((entry) => {
-  //       const entryData = entry[1];
-
-  //       if (
-  //         Object.keys(criteria).every(
-  //           (key) => entryData[key] === criteria[key] || criteria[key] === entry[0],
-  //         )
-  //       ) {
-  //         return [entry[0], data];
-  //       }
-  //       return entry;
-  //     });
-  //     console.log(updatedData);
-  //     const newData = JSON.stringify(updatedData);
-  //     localStorage.setItem(this.key, newData);
-  //     this.store = newData;
-  //     return updatedData;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
   update(criteria, data) {
     try {
       const originalData = JSON.parse(this.store);
