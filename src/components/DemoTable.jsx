@@ -23,7 +23,6 @@ import {
   TablePaginationSelectRowCount,
 } from "../react-radfish";
 import { useNavigate } from "react-router-dom";
-import useFormStorage from "../hooks/useFormStorage";
 const TOAST_LIFESPAN = 2000;
 import useOfflineStorage from "../hooks/useOfflineStorage";
 import { Alert } from "@trussworks/react-uswds";
@@ -50,10 +49,9 @@ export const DemoTable = () => {
   } = useTableState();
   const navigate = useNavigate();
   const [toast, setToast] = useState(null);
-  const { store, create } = useFormStorage();
-  const data = store || [];
+  const { findOfflineData, createOfflineDataEntry, deleteOfflineData } = useOfflineStorage();
+  const data = findOfflineData() || [];
   const allDrafts = data;
-
   // Transforming each element to merge the ID and data into a single object
   const draftData = allDrafts.map((draft) => {
     const [id, data] = draft;
@@ -62,7 +60,6 @@ export const DemoTable = () => {
       ...data,
     };
   });
-  const { findOfflineData } = useOfflineStorage();
 
   // Check if the app is offline
   // const isOffline = !navigator.onLine;
@@ -93,7 +90,7 @@ export const DemoTable = () => {
       });
 
       // If there is offline data, show the submit draft button
-      if (findOfflineData()) {
+      if (findOfflineData().length) {
         setShowOfflineSubmit(true);
       }
     };
@@ -113,19 +110,6 @@ export const DemoTable = () => {
   if (!table) {
     return null;
   }
-
-  // Sets the offline data in localStorage to the table data state.
-  const setOfflineData = () => {
-    setData(
-      store.map((entry) => {
-        return {
-          id: entry[0],
-          ...entry[1],
-          isOffline: true,
-        };
-      }),
-    );
-  };
 
   /**
    * This is a demo function that simulates the submission of offline data by removing the `isOffline` flag.
@@ -148,11 +132,9 @@ export const DemoTable = () => {
         return [...filteredData, ...data];
       });
 
-      // Update localStorage to remove the submitted drafts set delete
-      const existingDrafts = store;
+      //delete submitted drafts from local storage
       const idsFromApiResponse = data.map((item) => item.id);
-      const updatedDrafts = existingDrafts.filter(([id, _]) => !idsFromApiResponse.includes(id));
-      localStorage.setItem("formData", JSON.stringify(updatedDrafts));
+      deleteOfflineData(idsFromApiResponse);
       const { status, message } = TOAST_CONFIG.SUCCESS;
       setToast({ status, message });
     } catch (error) {
