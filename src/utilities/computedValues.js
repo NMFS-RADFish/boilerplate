@@ -1,14 +1,3 @@
-export const handleComputedValuesLogic = (inputIds, formData, FORM_CONFIG) => {
-  for (let inputId of inputIds) {
-    const computedCallback = FORM_CONFIG[inputId]?.computed?.callback;
-    if (computedCallback) {
-      const args = FORM_CONFIG[inputId].computed.args.map((arg) => formData[arg]);
-      const computedValue = computedCallback(args);
-      formData[inputId] = computedValue;
-    }
-  }
-};
-
 const speciesPriceMap = {
   grouper: 25.0,
   salmon: 58.0,
