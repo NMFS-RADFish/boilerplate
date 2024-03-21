@@ -1,14 +1,14 @@
-jest.mock("../../utilities/cryptoWrapper.js", () => ({
-  generateUUID: jest.fn(() => "mock-uuid"),
+vi.mock("../../utilities/cryptoWrapper.js", () => ({
+  generateUUID: vi.fn(() => "mock-uuid"),
 }));
 
-jest.mock("../../storage/indexedDB.js", () => ({
+vi.mock("../../storage/indexedDB.js", () => ({
   db: {
     formData: {
-      add: jest.fn(),
-      toArray: jest.fn(),
-      where: jest.fn(),
-      put: jest.fn(),
+      add: vi.fn(),
+      toArray: vi.fn(),
+      where: vi.fn(),
+      put: vi.fn(),
     },
   },
 }));
@@ -46,7 +46,7 @@ describe("IndexedDBMethod", () => {
 
   it("should find data based on criteria", async () => {
     db.formData.where.mockReturnValue({
-      toArray: jest.fn().mockReturnValue([mockData]),
+      toArray: vi.fn().mockReturnValue([mockData]),
     });
     const result = await indexedDBMethod.find({ key: "value" });
     expect(result).toEqual([mockData]);

@@ -4,23 +4,23 @@ import * as formWrapper from "../../contexts/FormWrapper";
 import * as reactRouter from "react-router-dom";
 
 // Mocking react-router-dom hooks
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: jest.fn(),
-  useSearchParams: jest.fn(() => [new URLSearchParams(), jest.fn()]),
+vi.mock("react-router-dom", async () => ({
+  ...(await vi.importActual("react-router-dom")),
+  useNavigate: vi.fn(),
+  useSearchParams: vi.fn(() => [new URLSearchParams(), vi.fn()]),
 }));
 
-jest.mock("../../contexts/FormWrapper", () => {
-  const originalModule = jest.requireActual("../../contexts/FormWrapper");
+vi.mock("../../contexts/FormWrapper", async () => {
   return {
-    ...originalModule,
-    useFormState: jest.fn(),
+    ...(await vi.importActual("../../contexts/FormWrapper")),
+    useFormState: vi.fn(),
   };
 });
 
 // Mocking the computePriceFromQuantitySpecies function
-jest.mock("../../utilities", () => ({
-  computePriceFromQuantitySpecies: jest.fn(),
+vi.mock("../../utilities", async () => ({
+  ...(await vi.importActual("../../utilities")),
+  computePriceFromQuantitySpecies: vi.fn(),
 }));
 
 const validationMessage = "Test validation message";
@@ -28,18 +28,18 @@ const validationMessage = "Test validation message";
 describe("FormWrapper", () => {
   it("renders children and passes context values correctly", async () => {
     const mockedValidationErrors = { species: validationMessage };
-    const mockedUseSearchParams = jest.fn(() => [new URLSearchParams(), jest.fn()]);
-    const mockedHandleChange = jest.fn();
-    const mockedHandleBlur = jest.fn();
-    const mockedUseFormState = jest.fn(() => ({
+    const mockedUseSearchParams = vi.fn(() => [new URLSearchParams(), vi.fn()]);
+    const mockedHandleChange = vi.fn();
+    const mockedHandleBlur = vi.fn();
+    const mockedUseFormState = vi.fn(() => ({
       formData: {},
       validationErrors: mockedValidationErrors,
       handleChange: mockedHandleChange,
       handleBlur: mockedHandleBlur,
     }));
 
-    jest.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
-    jest.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
+    vi.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
+    vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
 
     const TestComponent = () => {
       const { handleChange, handleBlur, validationErrors, handleMultiEntrySubmit } =
@@ -88,18 +88,18 @@ describe("FormWrapper", () => {
 
   it("does not display validation error message when there is no error", async () => {
     const mockedValidationErrors = {};
-    const mockedUseSearchParams = jest.fn(() => [new URLSearchParams(), jest.fn()]);
-    const mockedHandleChange = jest.fn();
-    const mockedHandleBlur = jest.fn();
-    const mockedUseFormState = jest.fn(() => ({
+    const mockedUseSearchParams = vi.fn(() => [new URLSearchParams(), vi.fn()]);
+    const mockedHandleChange = vi.fn();
+    const mockedHandleBlur = vi.fn();
+    const mockedUseFormState = vi.fn(() => ({
       formData: {},
       validationErrors: mockedValidationErrors,
       handleChange: mockedHandleChange,
       handleBlur: mockedHandleBlur,
     }));
 
-    jest.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
-    jest.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
+    vi.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
+    vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
 
     const TestComponent = () => {
       const { handleChange, handleBlur, validationErrors, handleMultiEntrySubmit } =
@@ -139,12 +139,12 @@ describe("handleInputVisibility", () => {
       input1: true,
       input2: false,
     };
-    const mockedUseSearchParams = jest.fn(() => [new URLSearchParams(), jest.fn()]);
-    const mockedHandleChange = jest.fn((event) => {
+    const mockedUseSearchParams = vi.fn(() => [new URLSearchParams(), vi.fn()]);
+    const mockedHandleChange = vi.fn((event) => {
       mockedVisibleInputs.input2 = event.target.value;
     });
-    const mockedHandleBlur = jest.fn();
-    const mockedUseFormState = jest.fn(() => ({
+    const mockedHandleBlur = vi.fn();
+    const mockedUseFormState = vi.fn(() => ({
       formData: {
         conditionOne: "sample input text 1",
         conditionTwo: "sample input text 2",
@@ -154,8 +154,8 @@ describe("handleInputVisibility", () => {
       handleBlur: mockedHandleBlur,
     }));
 
-    jest.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
-    jest.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
+    vi.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
+    vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
     // Mock form configuration data
     const FORM_CONFIG = {
       input1: {
