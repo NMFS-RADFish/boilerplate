@@ -50,4 +50,13 @@ export class StorageModel {
   update(criteria, data) {
     return this.storageMethod.update(criteria, data);
   }
+
+  /**
+   * Delete data in the storage.
+   * @param {Array} UUIDs - Array of UUIDs, e.g. `["uuid1234"]` or `["uuid12345", "uuid5432", "uuid987"]`.
+   * @return {Boolean} Returns `true` if the data was deleted successfully, otherwise `false`.
+   */
+  delete(uuids) {
+    return this.storageMethod.delete(uuids);
+  }
 }

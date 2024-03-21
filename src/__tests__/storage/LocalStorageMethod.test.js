@@ -1,8 +1,8 @@
+import { LocalStorageMethod } from "../../storage/LocalStorageMethod";
+
 vi.mock("../../utilities/cryptoWrapper.js", () => ({
   generateUUID: vi.fn(() => "mock-uuid"),
 }));
-
-import { LocalStorageMethod } from "../../storage/LocalStorageMethod";
 
 describe("LocalStorageMethod", () => {
   let localStorageMethod;
@@ -13,10 +13,7 @@ describe("LocalStorageMethod", () => {
 
     // Mock localStorage
     Storage.prototype.getItem = vi.fn((key) => {
-      if (key === "formData") {
-        return JSON.stringify([["mock-uuid", mockData]]);
-      }
-      return null;
+      return JSON.stringify([["mock-uuid", mockData]]);
     });
     Storage.prototype.setItem = vi.fn();
 

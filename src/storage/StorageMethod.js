@@ -32,4 +32,14 @@ export class StorageMethod {
   update(_criteria, _data) {
     throw new Error("Method not implemented.");
   }
+
+  /**
+   * Delete an object in the storage.
+   * This method should be overridden by subclasses.
+   * @param {Array} _uuids - Array of UUIDs to use for deleting data.
+   * @throws {Error} If the method is not implemented.
+   */
+  delete(_uuids) {
+    throw new Error("Method not implemented.");
+  }
 }

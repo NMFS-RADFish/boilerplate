@@ -7,13 +7,14 @@ import { StorageMethod } from "./StorageMethod";
  */
 export class LocalStorageMethod extends StorageMethod {
   /**
-   * Create a new local storage method.
-   * @param {string} key - The key to use for storing data in localStorage, e.g. "formData".
+   * Create a new local storage method instance.
+   * @param {string} key - The key to use for local storage, e.g. "formData" or  `import.meta.env.VITE_YOUR_KEY_NAME`.
    */
   constructor(key) {
     super();
     this.key = key;
-    this.store = localStorage.getItem(this.key);
+    this.store =
+      localStorage.getItem(this.key) || localStorage.setItem(this.key, JSON.stringify([]));
   }
 
   /**
@@ -21,6 +22,7 @@ export class LocalStorageMethod extends StorageMethod {
    * @param {Object} data - The data to store, e.g. { numberOfFish: "1", species: "Grouper" }.
    * @throws {Error} If an error occurs while stringifying the data.
    */
+
   create(data) {
     const existingData = JSON.parse(this.store) || [];
     const uuid = generateUUID();
@@ -68,7 +70,7 @@ export class LocalStorageMethod extends StorageMethod {
    */
   update(criteria, data) {
     try {
-      const originalData = this.find(this.key);
+      const originalData = this.find();
       const updatedData = originalData.map((entry) => {
         const entryData = entry[1];
 
@@ -77,7 +79,7 @@ export class LocalStorageMethod extends StorageMethod {
             (key) => entryData[key] === criteria[key] || criteria[key] === entry[0],
           )
         ) {
-          return [entry[0], data];
+          return [entry[0], { ...entryData, ...data }];
         }
         return entry;
       });
@@ -85,6 +87,23 @@ export class LocalStorageMethod extends StorageMethod {
       localStorage.setItem(this.key, newData);
       this.store = newData;
       return updatedData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Delete data in local storage.
+   * @param {Array} UUIDs - Array of UUIDs to delete, e.g ["uuid123"] or ["uuid1234", "uuid321", "uuid987"].
+   * @return {Boolean} Returns `true` if the data was deleted successfully, otherwise `false`.
+   * @throws {Error} If an error occurs.
+   */
+  delete(uuid) {
+    try {
+      const parsedData = JSON.parse(this.store);
+      const newData = parsedData.filter((item) => !uuid.includes(item[0]));
+      localStorage.setItem(this.key, JSON.stringify(newData));
+      return true;
     } catch (error) {
       throw error;
     }
