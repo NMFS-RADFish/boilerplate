@@ -25,6 +25,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import useFormStorage from "../hooks/useFormStorage";
 const TOAST_LIFESPAN = 2000;
+import useOfflineStorage from "../hooks/useOfflineStorage";
+import { Alert } from "@trussworks/react-uswds";
+import { COMMON_CONFIG } from "../config/common";
 
 const ApiService = new RadfishAPIService("");
 
@@ -59,31 +62,44 @@ export const DemoTable = () => {
       ...data,
     };
   });
+  const { findOfflineData } = useOfflineStorage();
+
+  // Check if the app is offline
+  // const isOffline = !navigator.onLine;
 
   /**
    * Fetches table data from the API service and sets it to the state in TableWrapper context.
    * Remember that DemoTable needs to be wrapped by a TableWrapper
-   * If app is offline, do not fetch. TODO: This should getch data from cache
    */
   useEffect(() => {
-    if (store && store.length) {
-      setOfflineData();
-      setShowOfflineSubmit(true);
-    }
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
+      const newData = data.map((item) => ({ ...item, isOffline: false }));
+
       setData((prevData) => {
-        const newData = data.map((item) => ({ ...item, isOffline: false }));
-        const combinedData = [...prevData, ...newData];
-        const uniqueData = Array.from(
+        // Get offline data
+        const offlineData = findOfflineData();
+        const offlineDataMapped = offlineData
+          ? offlineData.map((entry) => ({ id: entry[0], ...entry[1], isOffline: true }))
+          : [];
+        // Combine offline data with new data and existing data
+        const combinedData = [...offlineDataMapped, ...prevData, ...newData];
+        // Remove duplicates
+        const uniqueDataMap = Array.from(
           new Map(combinedData.map((item) => [item.id, item])).values(),
         );
-        return uniqueData;
+        // Set the state with the unique data
+        return uniqueDataMap;
       });
+
+      // If there is offline data, show the submit draft button
+      if (findOfflineData()) {
+        setShowOfflineSubmit(true);
+      }
     };
 
     fetchFormData();
-  }, [store, setData]);
+  }, [setData, setShowOfflineSubmit]);
 
   /**
    * handleRowClick gets executed in the onClick handler on TableBodyRow
@@ -152,6 +168,8 @@ export const DemoTable = () => {
   return (
     <>
       <Toast toast={toast} />
+      <TableInfoAnnotation />
+      <br />
       <div
         style={{
           width: "100%",
@@ -161,9 +179,15 @@ export const DemoTable = () => {
         }}
       >
         {showOfflineSubmit ? (
-          <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, draftData)}>
-            Submit Offline Data
-          </Button>
+          <>
+            <Alert type="info" slim={true} className="maxw-mobile-lg">
+              This button is used for submitting offline data to a server. It will only appear if
+              offline data is found in either localStorage or indexedDB.
+            </Alert>
+            <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, draftData)}>
+              Submit Offline Data
+            </Button>
+          </>
         ) : (
           ""
         )}
@@ -211,6 +235,11 @@ export const DemoTable = () => {
           </TableBody>
         </Table>
       </div>
+      <Alert type="info" slim={true}>
+        Below are examples of the different pagination components available. Each component is
+        optional and can be used as needed. Components can be found in the `react-radfish`
+        directory.
+      </Alert>
       <div className="grid-container margin-bottom-3">
         <div className="grid-row display-flex tablet:flex-justify flex-align-center mobile-lg:display-flex flex-justify-center">
           <div className="width-mobile grid-col-auto display-flex flex-no-wrap">
@@ -242,3 +271,35 @@ export const DemoTable = () => {
     </>
   );
 };
+
+function TableInfoAnnotation() {
+  return (
+    <Alert type="info" headingLevel={"h1"} heading="Table Components">
+      Below is an example of a table that's populated by server and locally stored data
+      (localStorage or indexedDB). The table is designed to be used with the `TableWrapper`
+      component, it's built with{" "}
+      <a href={COMMON_CONFIG.reactTableURL} target="_blank" rel="noopener noreferrer">
+        react-table
+      </a>
+      .
+      <br />
+      <br />
+      Offline form data entries or "drafts" are highlighted in grey, and can be submitted to the
+      server using the "submit" button in the "status" column when the application is connected to
+      the internet.
+      <br />
+      <br />
+      <strong>Note:</strong> Annotations are for informational purposes only. In production, you
+      would remove the annotations. Components with annotations above them are optional. You can
+      choose whether or not to use them in your application.
+      <br />
+      <br />
+      <a href={COMMON_CONFIG.docsUrl} target="_blank" rel="noopener noreferrer">
+        <Button type="button">Go To Documentation</Button>
+      </a>
+      <a href={COMMON_CONFIG.storybookURL} target="_blank" rel="noopener noreferrer">
+        <Button type="button">Go To Storybook</Button>
+      </a>
+    </Alert>
+  );
+}
