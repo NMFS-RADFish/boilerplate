@@ -29,7 +29,7 @@ export class StorageModel {
    * @param {Object} data - The data to create, e.g. { numberOfFish: 1, species: "Grouper" }.
    */
   create(data) {
-    this.storageMethod.create(data);
+    return this.storageMethod.create(data);
   }
 
   /**

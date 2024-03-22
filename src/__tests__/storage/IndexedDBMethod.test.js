@@ -2,8 +2,20 @@ import Dexie from "dexie";
 import { IndexedDBMethod } from "../../storage/IndexedDBMethod.js";
 import { generateUUID } from "../../utilities/cryptoWrapper.js";
 
-jest.mock("dexie");
-jest.mock("../../utilities/cryptoWrapper.js");
+vi.mock("dexie");
+
+vi.mock("../../utilities/cryptoWrapper.js");
+
+vi.mock("../../storage/indexedDB.js", () => ({
+  db: {
+    formData: {
+      add: vi.fn(),
+      toArray: vi.fn(),
+      where: vi.fn(),
+      put: vi.fn(),
+    },
+  },
+}));
 
 describe("IndexedDBMethod", () => {
   let indexedDBMethod;
@@ -12,13 +24,13 @@ describe("IndexedDBMethod", () => {
   beforeEach(() => {
     // Mock Dexie
     Dexie.mockImplementation(() => ({
-      version: jest.fn().mockReturnThis(),
-      stores: jest.fn().mockReturnThis(),
+      version: vi.fn().mockReturnThis(),
+      stores: vi.fn().mockReturnThis(),
       formData: {
-        add: jest.fn(),
-        toArray: jest.fn(),
-        where: jest.fn().mockReturnThis(),
-        put: jest.fn(),
+        add: vi.fn(),
+        toArray: vi.fn(),
+        where: vi.fn().mockReturnThis(),
+        put: vi.fn(),
       },
     }));
 

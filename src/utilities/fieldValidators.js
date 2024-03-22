@@ -1,7 +1,7 @@
 /*
   This file contains utility functions and constants that are used throughout the application.
   - Validators are used to validate form input. They are used in conjunction with the `handleChange` function in `FormWrapper` to validate form input.
-/*
+*/
 
 /**
  *
@@ -30,6 +30,7 @@ const emailValidators = [
     message: "Invalid email format.",
   },
 ];
+
 /**
  * Array of validators for the Phone Number field.
  * Checks for a valid phone number format (e.g., (123) 456-7890).
