@@ -30,6 +30,7 @@ export class LocalStorageMethod extends StorageMethod {
       const newData = JSON.stringify([...existingData, [uuid, data]]);
       localStorage.setItem(this.key, newData);
       this.store = newData;
+      return uuid;
     } catch (error) {
       throw error;
     }
