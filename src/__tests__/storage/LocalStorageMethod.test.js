@@ -1,8 +1,8 @@
-jest.mock("../../utilities/cryptoWrapper.js", () => ({
-  generateUUID: jest.fn(() => "mock-uuid"),
-}));
-
 import { LocalStorageMethod } from "../../storage/LocalStorageMethod";
+
+vi.mock("../../utilities/cryptoWrapper.js", () => ({
+  generateUUID: vi.fn(() => "mock-uuid"),
+}));
 
 describe("LocalStorageMethod", () => {
   let localStorageMethod;
@@ -12,13 +12,10 @@ describe("LocalStorageMethod", () => {
     mockData = { key: "value" };
 
     // Mock localStorage
-    Storage.prototype.getItem = jest.fn((key) => {
-      if (key === "formData") {
-        return JSON.stringify([["mock-uuid", mockData]]);
-      }
-      return null;
+    Storage.prototype.getItem = vi.fn((key) => {
+      return JSON.stringify([["mock-uuid", mockData]]);
     });
-    Storage.prototype.setItem = jest.fn();
+    Storage.prototype.setItem = vi.fn();
 
     // Initialize localStorageMethod after mocking localStorage
     localStorageMethod = new LocalStorageMethod("formData");

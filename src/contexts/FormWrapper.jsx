@@ -4,15 +4,16 @@
  * This context provider is meant to be extensible and modular. You can use this anywhere in your app to wrap a form to manage the specific form's state
  */
 
-import React, { createContext, useState, useCallback, useEffect, useMemo } from "react";
+import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
-import { computePriceFromQuantitySpecies, handleComputedValuesLogic, handleInputVisibilityLogic } from "../utilities";
-import useFormStorage from "../hooks/useFormStorage";
+import useOfflineStorage from "../hooks/useOfflineStorage";
 import { FORM_CONFIG } from "../config/form";
+import RadfishAPIService from "../services/APIService";
 
 const FormContext = createContext();
 
+const ApiService = new RadfishAPIService("");
 /**
  * Higher-order component providing form state and functionality.
  *
@@ -32,7 +33,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams] = useSearchParams();
-  const { find } = useFormStorage();
+  const { findOfflineData } = useOfflineStorage();
 
   /**
    * Handles the submission of multiple entries by updating the URL with query parameters.
@@ -68,13 +69,14 @@ export const FormWrapper = ({ children, onSubmit }) => {
   useEffect(() => {
     if (params.id) {
       const paramFormData = async () => {
-        const formData = await fetch(`/form/${params.id}`);
-        if (!formData.ok) {
-          const data = find({ uuid: params.id })[0][1];
-          setFormData(data);
+        const { data, error } = await ApiService.get(`/form/${params.id}`);
+        if (error) {
+          // error fetching data, use local cache instead
+          const cachedData = find({ uuid: params.id })[0][1];
+          setFormData(cachedData);
         } else {
-          const responseJson = await formData.json();
-          setFormData(responseJson.data);
+          // use data from API call
+          setFormData(data);
         }
       };
       paramFormData();
@@ -90,17 +92,8 @@ export const FormWrapper = ({ children, onSubmit }) => {
    * @param {Array} validators - Array of validation functions and error messages.
    * @returns {boolean} True if validation passes, false otherwise.
    */
-  const validateInput = useCallback((name, value, validators) => {
-    if (validators && validators.length > 0) {
-      for (let validator of validators) {
-        if (!validator.test(value)) {
-          setValidationErrors((prev) => ({ ...prev, [name]: validator.message }));
-          return false;
-        }
-      }
-    }
-    setValidationErrors((prev) => ({ ...prev, [name]: null }));
-    return true;
+  const validateInputCallback = useCallback((name, value, validators) => {
+    return handleInputValidationLogic(name, value, validators);
   }, []);
 
   /**
@@ -164,9 +157,12 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const handleBlur = useCallback(
     (event, validators) => {
       const { name, value } = event.target;
-      validateInput(name, value, validators);
+      setValidationErrors((prev) => ({
+        ...prev,
+        ...validateInputCallback(name, value, validators),
+      }));
     },
-    [validateInput],
+    [validateInputCallback],
   );
 
   const contextValue = {
@@ -207,4 +203,48 @@ export const useFormState = () => {
     throw new Error("useFormState must be used within a FormWrapper");
   }
   return context;
+};
+
+// callback handlers
+
+export const handleComputedValuesLogic = (inputIds, formData, FORM_CONFIG) => {
+  for (let inputId of inputIds) {
+    const computedCallback = FORM_CONFIG[inputId]?.computed?.callback;
+    if (computedCallback) {
+      const args = FORM_CONFIG[inputId].computed.args.map((arg) => formData[arg]);
+      const computedValue = computedCallback(args);
+      formData[inputId] = computedValue;
+    }
+  }
+};
+
+export const handleInputVisibilityLogic = (inputIds, formData, FORM_CONFIG) => {
+  const inputVisibility = {};
+
+  inputIds.forEach((inputId) => {
+    const visibilityCallback = FORM_CONFIG[inputId]?.visibility?.callback;
+    if (visibilityCallback) {
+      const args = FORM_CONFIG[inputId].visibility.args;
+      let result = visibilityCallback(args, formData);
+      inputVisibility[inputId] = result;
+      // whenever a form disappears, remove its value from formData
+      // this prevents non-visible fields from being submitted
+      if (result === false) {
+        formData[inputId] = ""; // Update the form data directly
+      }
+    }
+  });
+
+  return inputVisibility;
+};
+
+export const handleInputValidationLogic = (name, value, validators) => {
+  if (validators && validators.length > 0) {
+    for (let validator of validators) {
+      if (!validator.test(value)) {
+        return { [name]: validator.message };
+      }
+    }
+  }
+  return { [name]: null };
 };

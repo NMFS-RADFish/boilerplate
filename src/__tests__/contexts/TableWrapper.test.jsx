@@ -3,23 +3,23 @@ import { render, act } from "@testing-library/react";
 import { TableWrapper, useTableState } from "../../contexts/TableWrapper";
 import * as reactTable from "@tanstack/react-table";
 
-jest.mock("@tanstack/react-table", () => {
-  const originalModule = jest.requireActual("@tanstack/react-table");
+vi.mock("@tanstack/react-table", async () => {
+  const originalModule = await vi.importActual("@tanstack/react-table");
   return {
     ...originalModule,
-    useReactTable: jest.fn(),
+    useReactTable: vi.fn(),
   };
 });
 
 describe("TableWrapper", () => {
   it("renders children and passes context values correctly", async () => {
-    const mockedUseReactTable = jest.fn(() => ({
-      getFlatHeaders: jest.fn(() => [{ headers: [] }]),
-      getRowModel: jest.fn(() => ({ rows: [] })),
+    const mockedUseReactTable = vi.fn(() => ({
+      getFlatHeaders: vi.fn(() => [{ headers: [] }]),
+      getRowModel: vi.fn(() => ({ rows: [] })),
       state: { sorting: [] },
-      setSorting: jest.fn(),
+      setSorting: vi.fn(),
     }));
-    jest.spyOn(reactTable, "useReactTable").mockImplementation(mockedUseReactTable);
+    vi.spyOn(reactTable, "useReactTable").mockImplementation(mockedUseReactTable);
 
     const TestComponent = () => {
       const { tableCaption, table, headerNames, rowModel, setData } = useTableState();

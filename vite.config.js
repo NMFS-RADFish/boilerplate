@@ -7,6 +7,9 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      devOptions: {
+        enabled: process.env.NODE_ENV === "development",
+      },
       registerType: "autoUpdate",
       injectRegister: null,
       strategies: "injectManifest",
@@ -50,5 +53,10 @@ export default defineConfig({
   server: {
     open: true,
     port: 3000,
+  },
+  test: {
+    globals: true,
+    setupFiles: "./src/__tests__/setup.js",
+    environment: "jsdom",
   },
 });

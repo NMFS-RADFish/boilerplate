@@ -2,7 +2,6 @@ import RadfishAPIService from "../../services/APIService";
 
 describe("RadfishAPIService", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
     RadfishAPIService.data = null;
     RadfishAPIService.error = null;
   });
@@ -10,9 +9,9 @@ describe("RadfishAPIService", () => {
   describe("get", () => {
     it("should fetch data successfully", async () => {
       const responseData = { data: "dataValue" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(responseData),
+        json: vi.fn().mockResolvedValue(responseData),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -29,9 +28,9 @@ describe("RadfishAPIService", () => {
 
     it("should fetch data unsuccessfully", async () => {
       const responseData = { data: "dataValue" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
-        json: jest.fn().mockResolvedValue(responseData),
+        json: vi.fn().mockResolvedValue(responseData),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -48,9 +47,9 @@ describe("RadfishAPIService", () => {
 
     it("should handle error during fetch", async () => {
       const errorResponse = { error: "Error fetching data" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
-        json: jest.fn().mockResolvedValue(errorResponse),
+        json: vi.fn().mockResolvedValue(errorResponse),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -70,9 +69,9 @@ describe("RadfishAPIService", () => {
     it("should create data successfully", async () => {
       const requestData = { newData: "newDataValue" };
       const responseData = { createdData: "createdDataValue" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(responseData),
+        json: vi.fn().mockResolvedValue(responseData),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -92,9 +91,9 @@ describe("RadfishAPIService", () => {
     it("should create data unsuccessfully", async () => {
       const requestData = { newData: "newDataValue" };
       const responseData = { createdData: "createdDataValue" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
-        json: jest.fn().mockResolvedValue(responseData),
+        json: vi.fn().mockResolvedValue(responseData),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -114,9 +113,9 @@ describe("RadfishAPIService", () => {
     it("should handle error during creation", async () => {
       const requestData = { newData: "newDataValue" };
       const errorResponse = { error: "Error creating data" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
-        json: jest.fn().mockResolvedValue(errorResponse),
+        json: vi.fn().mockResolvedValue(errorResponse),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -138,9 +137,9 @@ describe("RadfishAPIService", () => {
     it("should update data successfully", async () => {
       const requestData = { updatedData: "updatedDataValue" };
       const responseData = { updatedData: "updatedDataValue" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(responseData),
+        json: vi.fn().mockResolvedValue(responseData),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -160,9 +159,9 @@ describe("RadfishAPIService", () => {
     it("should update data unsuccessfully", async () => {
       const requestData = { updatedData: "updatedDataValue" };
       const responseData = { updatedData: "updatedDataValue" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
-        json: jest.fn().mockResolvedValue(responseData),
+        json: vi.fn().mockResolvedValue(responseData),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -182,9 +181,9 @@ describe("RadfishAPIService", () => {
     it("should handle error during update", async () => {
       const requestData = { updatedData: "updatedDataValue" };
       const errorResponse = { error: "Error updating data" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
-        json: jest.fn().mockResolvedValue(errorResponse),
+        json: vi.fn().mockResolvedValue(errorResponse),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -206,9 +205,9 @@ describe("RadfishAPIService", () => {
     it("should remove data successfully", async () => {
       const requestData = { deleteData: "deleteDataValue" };
       const responseData = { message: "Data successfully deleted" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(responseData),
+        json: vi.fn().mockResolvedValue(responseData),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -228,9 +227,9 @@ describe("RadfishAPIService", () => {
     it("should remove data unsuccessfully", async () => {
       const requestData = { deleteData: "deleteDataValue" };
       const responseData = { message: "Data successfully deleted" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
-        json: jest.fn().mockResolvedValue(responseData),
+        json: vi.fn().mockResolvedValue(responseData),
       });
 
       const apiService = new RadfishAPIService("your-token");
@@ -250,9 +249,9 @@ describe("RadfishAPIService", () => {
     it("should handle error during deletion", async () => {
       const requestData = { deleteData: "deleteDataValue" };
       const errorResponse = { error: "Error deleting data" };
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
-        json: jest.fn().mockResolvedValue(errorResponse),
+        json: vi.fn().mockResolvedValue(errorResponse),
       });
 
       const apiService = new RadfishAPIService("your-token");

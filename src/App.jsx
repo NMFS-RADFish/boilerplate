@@ -7,7 +7,8 @@ import { TableWrapper } from "./contexts/TableWrapper";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
-import { DemoForm } from "./components/DemoForm";
+import { ComplexForm } from "./demos/ComplexForm";
+import { MultiStepForm } from "./demos/MultiStepForm";
 import { DemoTable } from "./components/DemoTable";
 
 const ApiService = new RadfishAPIService("");
@@ -83,7 +84,7 @@ function App() {
               path="/"
               element={
                 <FormWrapper onSubmit={handleFormSubmit}>
-                  <DemoForm asyncFormOptions={asyncFormOptions} />
+                  <ComplexForm asyncFormOptions={asyncFormOptions} />
                 </FormWrapper>
               }
             />
@@ -97,10 +98,18 @@ function App() {
               }
             />
             <Route
-              path="/form/:id"
+              path="/multistep"
               element={
                 <FormWrapper onSubmit={handleFormSubmit}>
-                  <DemoForm asyncFormOptions={asyncFormOptions} />
+                  <MultiStepForm asyncFormOptions={asyncFormOptions} />
+                </FormWrapper>
+              }
+            />
+            <Route
+              path="/multistep/:uuid"
+              element={
+                <FormWrapper onSubmit={handleFormSubmit}>
+                  <MultiStepForm asyncFormOptions={asyncFormOptions} />
                 </FormWrapper>
               }
             />
