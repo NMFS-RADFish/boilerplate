@@ -61,7 +61,7 @@ const DemoForm = ({ asyncFormOptions }) => {
 
   function onOfflineSubmit(e) {
     e.preventDefault();
-    if (navigator.onLine && false) {
+    if (navigator.onLine) {
       return;
     }
     createOfflineDataEntry(formData);
