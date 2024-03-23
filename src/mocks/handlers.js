@@ -67,31 +67,14 @@ export const handlers = [
       return HttpResponse.error(null, { status: 500 });
     } else {
       let modifiedResponses = [];
-      if (response.all) {
-        // Submit all drafts from local storage
-        const allDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
+      const responseData = response.body;
 
-        // Convert all drafts for submission and clear local storage
-        modifiedResponses = allDrafts.map(([id, draft]) => ({
-          ...draft,
-          id,
-          isOffline: false,
-        }));
-        data.push(...modifiedResponses);
-        localStorage.removeItem("formData");
-      } else {
-        // Handle a single draft submission
-        const draftId = response.id;
-        const modifiedResponse = { ...response, isOffline: false };
-
+      responseData.forEach((data) => {
+        const modifiedResponse = { ...data, isOffline: false };
         modifiedResponses.push(modifiedResponse);
-        data.push(...modifiedResponses);
+      });
+      data.push(...modifiedResponses);
 
-        // Remove the submitted draft from local storage
-        const existingDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
-        const updatedDrafts = existingDrafts.filter(([id, _]) => id !== draftId);
-        localStorage.setItem("formData", JSON.stringify(updatedDrafts));
-      }
       return HttpResponse.json({ data: modifiedResponses }, { status: 201 });
     }
   }),

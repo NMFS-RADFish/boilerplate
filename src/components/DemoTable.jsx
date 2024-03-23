@@ -3,10 +3,11 @@
  * @returns {React.ReactNode} - The demo table component.
  */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTableState } from "../contexts/TableWrapper";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import RadfishAPIService from "../services/APIService";
+import { Toast, TOAST_CONFIG } from "../react-radfish";
 import {
   Table,
   TableBody,
@@ -22,6 +23,7 @@ import {
   TablePaginationSelectRowCount,
 } from "../react-radfish";
 import { useNavigate } from "react-router-dom";
+const TOAST_LIFESPAN = 3000;
 import useOfflineStorage from "../hooks/useOfflineStorage";
 import { Alert } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
@@ -46,8 +48,18 @@ export const DemoTable = () => {
     setShowOfflineSubmit,
   } = useTableState();
   const navigate = useNavigate();
-
-  const { findOfflineData } = useOfflineStorage();
+  const [toast, setToast] = useState(null);
+  const { findOfflineData, deleteOfflineData } = useOfflineStorage();
+  const data = findOfflineData() || [];
+  const allDrafts = data;
+  // Transforming each element to merge the ID and data into a single object
+  const draftData = allDrafts.map((draft) => {
+    const [id, data] = draft;
+    return {
+      id,
+      ...data,
+    };
+  });
 
   // Check if the app is offline
   // const isOffline = !navigator.onLine;
@@ -78,7 +90,7 @@ export const DemoTable = () => {
       });
 
       // If there is offline data, show the submit draft button
-      if (findOfflineData()) {
+      if (findOfflineData().length) {
         setShowOfflineSubmit(true);
       }
     };
@@ -108,49 +120,36 @@ export const DemoTable = () => {
   const handleSubmitDraft = async (e, draftData) => {
     e.stopPropagation();
     e.preventDefault();
-    if (!draftData) return;
     try {
-      let response;
-      if (draftData === "all") {
-        // Handling the submission of all drafts
-        response = await fetch("/species", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ all: true }),
-        });
-      } else {
-        // Handling the submission of a single draft
-        response = await fetch("/species", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(draftData),
-        });
-      }
+      const { data } = await ApiService.post(MSW_ENDPOINT.SPECIES, { body: draftData });
+      setData((prevData) => {
+        // Remove the submitted drafts based on their IDs
+        const filteredData = prevData.filter(
+          (prevItem) => !data.some((submittedItem) => submittedItem.id === prevItem.id),
+        );
 
-      const responseData = await response.json();
+        // Combine the filtered previous data with the newly updated data from the server
+        return [...filteredData, ...data];
+      });
 
-      if (draftData === "all") {
-        setData(responseData.data);
-      } else {
-        setData((prevData) => {
-          const filteredData = prevData.filter((item) => item.id !== responseData.data[0].id);
-          return [...filteredData, ...responseData.data]; // Add the single updated draft
-        });
-      }
-
-      const existingDrafts = JSON.parse(localStorage.getItem("formData") || "[]");
-      setShowOfflineSubmit(existingDrafts.length > 0);
+      //delete submitted drafts from local storage
+      const idsFromApiResponse = data.map((item) => item.id);
+      deleteOfflineData(idsFromApiResponse);
+      const { status, message } = TOAST_CONFIG.SUCCESS;
+      setToast({ status, message });
     } catch (error) {
-      console.error("Failed to submit draft:", error);
+      const { status, message } = TOAST_CONFIG.ERROR;
+      setToast({ status, message });
+    } finally {
+      setTimeout(() => {
+        setToast(null);
+      }, TOAST_LIFESPAN);
     }
   };
 
   return (
     <>
+      <Toast toast={toast} />
       <TableInfoAnnotation />
       <br />
       <div
@@ -167,7 +166,7 @@ export const DemoTable = () => {
               This button is used for submitting offline data to a server. It will only appear if
               offline data is found in either localStorage or indexedDB.
             </Alert>
-            <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, "all")}>
+            <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, draftData)}>
               Submit Offline Data
             </Button>
           </>
@@ -203,7 +202,7 @@ export const DemoTable = () => {
                       >
                         {isStatusColumn && isOfflineData && (
                           <Button
-                            onClick={(e) => handleSubmitDraft(e, row.original)}
+                            onClick={(e) => handleSubmitDraft(e, [row.original])}
                             style={{ fontSize: "14px", padding: "6px", marginLeft: "10%" }}
                           >
                             Submit
