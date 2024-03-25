@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import * as formWrapper from "../../contexts/FormWrapper";
 
 vi.mock("react-router-dom", async () => ({
@@ -23,8 +23,7 @@ describe("Multistep Form", () => {
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
 
     const TestComponent = () => {
-      const { formData, handleChange, handleBlur, validationErrors, handleMultiEntrySubmit } =
-        formWrapper.useFormState();
+      const { formData } = formWrapper.useFormState();
 
       if (formData.currentStep === 1) {
         return <div>Step One</div>;
