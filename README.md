@@ -43,7 +43,8 @@
       - [3. Add Multi-Entry Button:](#3-add-multi-entry-button)
       - [4. Implement Multi-Entry Logic:](#4-implement-multi-entry-logic)
       - [5. Handle Multi-Entry Submission:](#5-handle-multi-entry-submission)
-      - [6. Submit Data:](#6-submit-data)
+      - [6. Multi-Step Form:](#multi-step-form)
+      - [7. Submit Data:](#7-submit-data)
     - [Example](#example)
   - [Testing](#testing)
     - [Running Tests](#running-tests)
@@ -725,6 +726,26 @@ const submitMultipleEntries = () => {
 // Include this button in your form JSX
 <Button onClick={submitMultipleEntries}>Add Another Catch</Button>;
 ```
+
+## Multi-Step Form
+
+There are cases where you may want to create a form that is handled in several different "steps". This means that there will be different inputs on differet pages (or steps) that should all eventually be submitted when the form's last page/step is complete.
+
+Radfish supports this type of form with the following built-in features:
+
+- Data within a multi-step form will be cached while the form is being filled. This means, that if a user leaves a multi-step form before that form is submitted, the data already inputted in the form will pre-populate the correct field when the user returns to the form.
+
+- The user's progress on the multi-step form is also cached. This means, that if a user returns to the same form, they will return to the same step that they were on previously. This is cached via the `currentStep` value in `formData`
+
+Here are some key constraints to keep in mind when building this type of form.
+
+1. A form is identified by a `uuid` in the url parameter. This means, that `/multistep/123` will attempt to load the form based on the `uuid` in the cache. Otherwise, it will create a new `formData` object in the cache based on that `uuid`. This means that the data already entered into the `123` form will get pre-populated into the UI from the cache.
+
+2. As a user progresses through the multistep form, on each step, you can execute the `stepForward` function that is exposed through the `useMultiStepForm` hook, that caches the `formData` in the cache, and also increments the `currentStep` of within the cache according to the `uuid` provided.
+
+3. Similar to above, you also have access to `stepBackward` function, which decrements the form's `currentStep` in the cache.
+
+Keep in mind, that as a developer, you will need to configure the `TOTAL_STEPS` variable within the `useMultiStep.js` hook. This will limit the multistep form, and prevent it from progressing past the final step and regressing below step `1`.
 
 ## Testing
 
