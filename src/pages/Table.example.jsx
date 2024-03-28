@@ -30,7 +30,7 @@ import { COMMON_CONFIG } from "../config/common";
 
 const ApiService = new RadfishAPIService("");
 
-export const DemoTable = () => {
+const SimpleTable = () => {
   /**
    * Retrieves table state from the context.
    * @type {object}
@@ -285,3 +285,5 @@ function TableInfoAnnotation() {
     </Alert>
   );
 }
+
+export { SimpleTable };

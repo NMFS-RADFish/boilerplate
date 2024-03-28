@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { computePriceFromQuantitySpecies } from "../utilities";
+import { computePriceFromQuantitySpecies } from "../config/form";
 
 export const MSW_ENDPOINT = {
   SPECIES: "/species",
