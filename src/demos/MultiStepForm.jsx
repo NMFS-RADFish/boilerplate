@@ -140,7 +140,7 @@ const MultiStepForm = ({ asyncFormOptions }) => {
           <Grid tablet={{
             col: true
           }}>
-            <Label className="margin-top-0" htmlFor={email}>Email Address</Label>
+            <Label htmlFor={email}>Email Address</Label>
             <TextInput
               id={email}
               name={email}
@@ -157,7 +157,7 @@ const MultiStepForm = ({ asyncFormOptions }) => {
           <Grid tablet={{
             col: true
           }}>
-            <Label className="margin-top-0" htmlFor={phoneNumber}>Phone Number</Label>
+            <Label htmlFor={phoneNumber}>Phone Number</Label>
             <TextInput
               id={phoneNumber}
               name={phoneNumber}
@@ -190,7 +190,7 @@ const MultiStepForm = ({ asyncFormOptions }) => {
     return (
       <GridContainer>
         <Grid row>
-          <Grid col={8}>
+          <Grid col>
             <Label htmlFor={city}>City</Label>
             <TextInput
               id={city}
@@ -207,7 +207,9 @@ const MultiStepForm = ({ asyncFormOptions }) => {
           </Grid>
         </Grid>
         <Grid row gap="md">
-          <Grid col>
+          <Grid tablet={{
+            col: true
+          }}>
             <Label htmlFor={country}>Country</Label>
             <TextInput
               id={country}
@@ -219,7 +221,9 @@ const MultiStepForm = ({ asyncFormOptions }) => {
               linkedinputids={[country]}
             />
           </Grid>
-          <Grid col>
+          <Grid tablet={{
+            col: true
+          }}>
             <Label htmlFor={state}>State</Label>
             <TextInput
               id={state}
@@ -233,7 +237,9 @@ const MultiStepForm = ({ asyncFormOptions }) => {
             />
             {validationErrors[state] && <ErrorMessage>{validationErrors[state]}</ErrorMessage>}
           </Grid>
-          <Grid col>
+          <Grid tablet={{
+            col: true
+          }}>
             <Label htmlFor={zipcode}>Zip Code</Label>
             <TextInput
               id={zipcode}
