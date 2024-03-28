@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../react-radfish";
+import { TextInput, Button, Label, ErrorMessage } from "../react-radfish";
 import { GridContainer, Grid } from "@trussworks/react-uswds";
 import {
   fullNameValidators,
@@ -12,7 +12,7 @@ import {
 import useOfflineStorage from "../hooks/useOfflineStorage";
 import { CONSTANTS } from "../config/multistepForm";
 import useMultStepForm from "../hooks/useMultiStepForm";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const { fullName, nickname, email, phoneNumber, country, city, state, zipcode } = CONSTANTS;
 
@@ -24,7 +24,7 @@ const { fullName, nickname, email, phoneNumber, country, city, state, zipcode } 
  * @param {Object} props.asyncFormOptions - Options for asynchronous form elements, helpful for providing default form options that are provided from centralized backend.
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
-const MultiStepForm = ({ asyncFormOptions }) => {
+const MultiStepForm = () => {
   const navigate = useNavigate();
   const { uuid } = useParams();
   const { findOfflineData } = useOfflineStorage();
@@ -33,15 +33,11 @@ const MultiStepForm = ({ asyncFormOptions }) => {
     stepForward,
     stepBackward,
     handleSubmit,
-    currentStep,
-    //
     formData,
-    visibleInputs,
     setFormData,
     handleChange,
     handleBlur,
     validationErrors,
-    handleMultiEntrySubmit,
   } = useMultStepForm(uuid);
 
   // A Ref will be needed for each step form to set focus when the form is displayed.
