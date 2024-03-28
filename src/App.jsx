@@ -7,9 +7,9 @@ import { TableWrapper } from "./contexts/TableWrapper";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
-import { ComplexForm } from "./demos/ComplexForm";
-import { MultiStepForm } from "./demos/MultiStepForm";
-import { DemoTable } from "./components/DemoTable";
+import { ComplexForm } from "./pages/ComplexForm.example";
+import { MultiStepForm } from "./pages/MultiStepForm.example";
+import { DemoTable } from "./pages/DemoTable";
 
 const ApiService = new RadfishAPIService("");
 
