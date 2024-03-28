@@ -1,5 +1,3 @@
-import { computePriceFromQuantitySpecies } from "../utilities";
-
 const CONSTANTS = {
   fullName: "fullName",
   nickname: "nickname",
