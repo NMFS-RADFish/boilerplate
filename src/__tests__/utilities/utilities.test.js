@@ -5,10 +5,12 @@ import {
   cityValidators,
   stateValidators,
   zipcodeValidators,
+} from "../../utilities";
+import {
   handleSubSpeciesVisibility,
   handleNicknameVisibility,
   handleCountryVisibility,
-} from "../../utilities";
+} from "../../config/form";
 import {
   handleComputedValuesLogic,
   handleInputVisibilityLogic,
