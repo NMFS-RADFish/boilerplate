@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../react-radfish";
+import { GridContainer, Grid } from "@trussworks/react-uswds";
 import {
   fullNameValidators,
   emailValidators,
@@ -85,45 +86,182 @@ const MultiStepForm = ({ asyncFormOptions }) => {
 
   if (formData.currentStep === 1) {
     return (
+      <GridContainer>
+        <Grid row gap="md">
+          <Grid tablet={{
+            col: true
+          }}>
+            <Label className=".mobile:margin-top-1" htmlFor={fullName}>Full Name</Label>
+            <TextInput
+              id={fullName}
+              name={fullName}
+              type="text"
+              placeholder="Full Name"
+              value={formData[fullName] || ""}
+              aria-invalid={validationErrors[fullName] ? "true" : "false"}
+              validationStatus={validationErrors[fullName] ? "error" : undefined}
+              onChange={handleChange}
+              onBlur={(e) => handleBlur(e, fullNameValidators)}
+              linkedinputids={[nickname]}
               inputRef={stepFocus[0]}
+            />
+            {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
+          </Grid>
+          <Grid tablet={{
+            col: true
+          }}>
+            <Label htmlFor={nickname}>Nickname</Label>
+            <TextInput
+              id={nickname}
+              name={nickname}
+              type="text"
+              placeholder="Nickname"
+              value={formData[nickname] || ""}
+              onChange={handleChange}
+            />
+          </Grid>
+        </Grid>
+        <Grid className="display-flex flex-row flex-justify">
+          <Button className="margin-top-1" onClick={stepBackward}>
             Prev Step
           </Button>
-          <Button onClick={stepForward} style={{ marginTop: "10px" }}>
+          <Button className="margin-top-1 margin-right-0" onClick={stepForward}>
             Next Step
           </Button>
-        </div>
-      </>
+        </Grid>
+      </GridContainer>
     );
   }
 
   if (formData.currentStep === 2) {
     return (
+      <GridContainer>
+        <Grid row gap="md">
+          <Grid tablet={{
+            col: true
+          }}>
+            <Label className="margin-top-0" htmlFor={email}>Email Address</Label>
+            <TextInput
+              id={email}
+              name={email}
+              type={email}
+              placeholder="Email Address"
+              value={formData[email] || ""}
+              validationStatus={validationErrors[email] ? "error" : undefined}
+              onChange={handleChange}
+              onBlur={(e) => handleBlur(e, emailValidators)}
               inputRef={stepFocus[1]}
+            />
+            {validationErrors[email] && <ErrorMessage>{validationErrors[email]}</ErrorMessage>}
+          </Grid>
+          <Grid tablet={{
+            col: true
+          }}>
+            <Label className="margin-top-0" htmlFor={phoneNumber}>Phone Number</Label>
+            <TextInput
+              id={phoneNumber}
+              name={phoneNumber}
+              type="tel"
+              placeholder="(000) 000-0000"
+              value={formData[phoneNumber] || ""}
+              validationStatus={validationErrors[phoneNumber] ? "error" : undefined}
+              onChange={handleChange}
+              onBlur={(e) => handleBlur(e, phoneNumberValidators)}
+              linkedinputids={[country]}
+            />
+            {validationErrors[phoneNumber] && (
+              <ErrorMessage>{validationErrors[phoneNumber]}</ErrorMessage>
+            )}
+          </Grid>
+        </Grid>
+        <Grid className="display-flex flex-row flex-justify">
+          <Button className="margin-top-1" onClick={stepBackward}>
             Prev Step
           </Button>
-          <Button onClick={stepForward} style={{ marginTop: "10px" }}>
+          <Button className="margin-top-1 margin-right-0" onClick={stepForward}>
             Next Step
           </Button>
-        </div>
-      </>
+        </Grid>
+      </GridContainer>
     );
   }
 
   if (formData.currentStep === 3) {
     return (
+      <GridContainer>
+        <Grid row>
+          <Grid col={8}>
+            <Label htmlFor={city}>City</Label>
+            <TextInput
+              id={city}
+              name={city}
+              type="text"
+              placeholder="City"
+              value={formData[city] || ""}
+              validationStatus={validationErrors[city] ? "error" : undefined}
+              onChange={handleChange}
+              onBlur={(e) => handleBlur(e, cityValidators)}
               inputRef={stepFocus[2]}
+            />
+            {validationErrors.city && <ErrorMessage>{validationErrors.city}</ErrorMessage>}
+          </Grid>
+        </Grid>
+        <Grid row gap="md">
+          <Grid col>
+            <Label htmlFor={country}>Country</Label>
+            <TextInput
+              id={country}
+              name={country}
+              type="text"
+              placeholder="Country of Origin"
+              value={formData[country] || ""}
+              onChange={handleChange}
+              linkedinputids={[country]}
+            />
+          </Grid>
+          <Grid col>
+            <Label htmlFor={state}>State</Label>
+            <TextInput
+              id={state}
+              name="state"
+              type="text"
+              placeholder="State"
+              value={formData[state] || ""}
+              validationStatus={validationErrors[state] ? "error" : undefined}
+              onChange={handleChange}
+              onBlur={(e) => handleBlur(e, stateValidators)}
+            />
+            {validationErrors[state] && <ErrorMessage>{validationErrors[state]}</ErrorMessage>}
+          </Grid>
+          <Grid col>
+            <Label htmlFor={zipcode}>Zip Code</Label>
+            <TextInput
+              id={zipcode}
+              name={zipcode}
+              type="text"
+              placeholder="Zip Code"
+              value={formData[zipcode] || ""}
+              validationStatus={validationErrors[zipcode] ? "error" : undefined}
+              onChange={handleChange}
+              onBlur={(e) => handleBlur(e, zipcodeValidators)}
+            />
+            {validationErrors[zipcode] && <ErrorMessage>{validationErrors[zipcode]}</ErrorMessage>}
+          </Grid>
+        </Grid>
+        <Grid className="display-flex flex-row flex-justify">
+          <Button className="margin-top-1" onClick={stepBackward}>
             Prev Step
           </Button>
           <Button
+            className="margin-top-1 margin-right-0"
             role="form-submit"
             type="submit"
             onClick={handleSubmit}
-            style={{ marginTop: "10px" }}
           >
             Submit MultiStep Form
           </Button>
-        </div>
-      </>
+        </Grid>
+      </GridContainer>
     );
   }
 
