@@ -1,9 +1,4 @@
-import {
-  computePriceFromQuantitySpecies,
-  handleCountryVisibility,
-  handleNicknameVisibility,
-  handleSubSpeciesVisibility,
-} from "../utilities";
+import { computePriceFromQuantitySpecies } from "../utilities";
 
 const CONSTANTS = {
   fullName: "fullName",
@@ -23,6 +18,45 @@ const CONSTANTS = {
   species: "species",
   subSpecies: "subSpecies",
   computedPrice: "computedPrice",
+};
+
+const handleSubSpeciesVisibility = (args, formData) => {
+  for (let arg of args) {
+    if (!formData[arg]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const handleNicknameVisibility = (args, formData) => {
+  let data = args[0];
+  if (!formData[data]) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+const handleCountryVisibility = (args, formData) => {
+  let data = args[0];
+  if (!formData[data]) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+const computePriceFromQuantitySpecies = (values) => {
+  const speciesPriceMap = {
+    grouper: 25.0,
+    salmon: 58.0,
+    marlin: 100.0,
+    mahimahi: 44.0,
+  };
+
+  let computedPrice = parseInt(values[0] || 0) * parseInt(speciesPriceMap[values[1]] || 0);
+  return computedPrice.toString();
 };
 
 const FORM_CONFIG = {
@@ -128,4 +162,11 @@ const FORM_CONFIG = {
   },
 };
 
-export { FORM_CONFIG, CONSTANTS };
+export {
+  FORM_CONFIG,
+  CONSTANTS,
+  handleSubSpeciesVisibility,
+  handleNicknameVisibility,
+  handleCountryVisibility,
+  computePriceFromQuantitySpecies,
+};

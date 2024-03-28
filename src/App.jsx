@@ -9,7 +9,7 @@ import RadfishAPIService from "./services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { ComplexForm } from "./pages/ComplexForm.example";
 import { MultiStepForm } from "./pages/MultiStepForm.example";
-import { DemoTable } from "./pages/DemoTable";
+import { SimpleTable } from "./pages/Table.example";
 
 const ApiService = new RadfishAPIService("");
 
@@ -106,7 +106,7 @@ function App() {
               path="/table"
               element={
                 <TableWrapper>
-                  <DemoTable />
+                  <SimpleTable />
                 </TableWrapper>
               }
             />
