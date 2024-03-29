@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Alert } from "@trussworks/react-uswds";
 import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../react-radfish";
 import { useFormState } from "../contexts/FormWrapper";
 import {
@@ -11,6 +12,7 @@ import {
 } from "../utilities";
 import useOfflineStorage from "../hooks/useOfflineStorage";
 import { CONSTANTS } from "../config/form";
+import { COMMON_CONFIG } from "../config/common";
 
 const {
   fullName,
@@ -51,7 +53,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
     handleMultiEntrySubmit,
   } = useFormState();
 
-  const { create } = useOfflineStorage();
+  const { createOfflineDataEntry } = useOfflineStorage();
 
   useEffect(() => {
     if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
@@ -59,11 +61,15 @@ const ComplexForm = ({ asyncFormOptions }) => {
 
   function onOfflineSubmit(e) {
     e.preventDefault();
-    create(formData);
+    if (navigator.onLine) {
+      return;
+    }
+    createOfflineDataEntry(formData);
   }
 
   return (
     <>
+      <FormInfoAnnotation />
       <Label htmlFor={fullName}>Full Name</Label>
       <TextInput
         id={fullName}
@@ -103,7 +109,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
         onBlur={(e) => handleBlur(e, emailValidators)}
       />
       {validationErrors[email] && <ErrorMessage>{validationErrors[email]}</ErrorMessage>}
-
       <Label htmlFor={phoneNumber}>Phone Number</Label>
       <TextInput
         id={phoneNumber}
@@ -144,7 +149,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
         value={formData[numberOfFish] || ""}
         onChange={handleChange}
       />
-
       <Label htmlFor={addressLine1}>Address Line 1</Label>
       <TextInput
         id={addressLine1}
@@ -154,7 +158,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
         value={formData[addressLine1] || ""}
         onChange={handleChange}
       />
-
       <Label htmlFor={radioOption}>Have you caught fish today?</Label>
       <Radio
         id="option-catch-yes"
@@ -172,7 +175,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
         checked={formData[radioOption] === "option-catch-no"}
         onChange={handleChange}
       />
-
       <Label htmlFor={addressLine2}>Address Line 2</Label>
       <TextInput
         id={addressLine2}
@@ -182,7 +184,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
         value={formData[addressLine2] || ""}
         onChange={handleChange}
       />
-
       <Label htmlFor={city}>City</Label>
       <TextInput
         id={city}
@@ -195,7 +196,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
         onBlur={(e) => handleBlur(e, cityValidators)}
       />
       {validationErrors.city && <ErrorMessage>{validationErrors.city}</ErrorMessage>}
-
       <Label htmlFor={state}>State</Label>
       <TextInput
         id={state}
@@ -208,7 +208,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
         onBlur={(e) => handleBlur(e, stateValidators)}
       />
       {validationErrors[state] && <ErrorMessage>{validationErrors[state]}</ErrorMessage>}
-
       <Label htmlFor={zipcode}>Zip Code</Label>
       <TextInput
         id={zipcode}
@@ -221,7 +220,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
         onBlur={(e) => handleBlur(e, zipcodeValidators)}
       />
       {validationErrors[zipcode] && <ErrorMessage>{validationErrors[zipcode]}</ErrorMessage>}
-
       <Label htmlFor={occupation}>Occupation</Label>
       <TextInput
         id={occupation}
@@ -231,7 +229,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
         value={formData[occupation] || ""}
         onChange={handleChange}
       />
-
       <Label htmlFor={department}>Department</Label>
       <Select name={department} value={formData[department] || ""} onChange={handleChange}>
         <option value="">Select Department</option>
@@ -239,8 +236,11 @@ const ComplexForm = ({ asyncFormOptions }) => {
         <option value="it">IT</option>
         <option value="finance">Finance</option>
       </Select>
-
       <Label htmlFor={species}>Species</Label>
+      <Alert type="info" slim={true}>
+        The species select input is dependent on data coming from a server. The current
+        implementation is using a mock server.
+      </Alert>
       <Select
         // linkedinputids tells computedPrice to update onChange
         linkedinputids={[computedPrice, subSpecies]}
@@ -271,7 +271,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
           />
         </>
       )}
-
       <Label htmlFor={species}>Computed Price</Label>
       <TextInput
         readOnly
@@ -282,11 +281,19 @@ const ComplexForm = ({ asyncFormOptions }) => {
         value={formData[computedPrice] || ""}
         onChange={handleChange}
       />
-
+      <Alert type="info" slim={true}>
+        Button Option 1: Below is an example of a simple button, it will save data locally. It does
+        not make a server request.
+      </Alert>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
           Submit
         </Button>
+
+        <Alert type="info" slim={true}>
+          Button Option 2: Below is an example of a multi-entry button, it sends data to a server.
+          The current implementation is using a mock server.
+        </Alert>
         <Button
           role="form-submit"
           type="submit"
@@ -301,5 +308,27 @@ const ComplexForm = ({ asyncFormOptions }) => {
     </>
   );
 };
+
+function FormInfoAnnotation() {
+  return (
+    <Alert type="info" headingLevel={"h1"} heading="Form Components">
+      This component is an example of a form with various input types. The form is designed to be
+      used with the `FormWrapper` component.
+      <br />
+      <br />
+      <strong>Note:</strong> Annotations are for informational purposes only. In production, you
+      would remove the annotations. Components with annotations above them are optional. You can
+      choose whether or not to use them in your application.
+      <br />
+      <br />
+      <a href={COMMON_CONFIG.docsUrl} target="_blank" rel="noopener noreferrer">
+        <Button type="button">Go To Documentation</Button>
+      </a>
+      <a href={COMMON_CONFIG.storybookURL} target="_blank" rel="noopener noreferrer">
+        <Button type="button">Go To Storybook</Button>
+      </a>
+    </Alert>
+  );
+}
 
 export { ComplexForm };
