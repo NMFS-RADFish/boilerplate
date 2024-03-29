@@ -117,12 +117,17 @@ const MultiStepForm = () => {
             />
           </Grid>
         </Grid>
-        <Grid className="display-flex flex-row flex-justify">
+        <Grid className="display-flex flex-justify">
+          {/* 
+            Buttons are ordered to produce the correct tab flow. The "order-last" class is added
+            to move the button to the right to give the correct placement on page while tabbing
+            in the correct order.
+          */}
+          <Button className="margin-top-1 margin-right-0 order-last" onClick={stepForward}>
+            Next Step
+          </Button>
           <Button className="margin-top-1" onClick={stepBackward}>
             Prev Step
-          </Button>
-          <Button className="margin-top-1 margin-right-0" onClick={stepForward}>
-            Next Step
           </Button>
         </Grid>
       </GridContainer>
@@ -170,12 +175,12 @@ const MultiStepForm = () => {
             )}
           </Grid>
         </Grid>
-        <Grid className="display-flex flex-row flex-justify">
+        <Grid className="display-flex flex-justify">
+          <Button className="margin-top-1 margin-right-0 order-last" onClick={stepForward}>
+            Next Step
+          </Button>
           <Button className="margin-top-1" onClick={stepBackward}>
             Prev Step
-          </Button>
-          <Button className="margin-top-1 margin-right-0" onClick={stepForward}>
-            Next Step
           </Button>
         </Grid>
       </GridContainer>
@@ -250,17 +255,17 @@ const MultiStepForm = () => {
             {validationErrors[zipcode] && <ErrorMessage>{validationErrors[zipcode]}</ErrorMessage>}
           </Grid>
         </Grid>
-        <Grid className="display-flex flex-row flex-justify">
-          <Button className="margin-top-1" onClick={stepBackward}>
-            Prev Step
-          </Button>
+        <Grid className="display-flex flex-justify">
           <Button
-            className="margin-top-1 margin-right-0"
+            className="margin-top-1 margin-right-0 order-last"
             role="form-submit"
             type="submit"
             onClick={handleSubmit}
           >
             Submit MultiStep Form
+          </Button>
+          <Button className="margin-top-1" onClick={stepBackward}>
+            Prev Step
           </Button>
         </Grid>
       </GridContainer>
