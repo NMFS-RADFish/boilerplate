@@ -8,23 +8,23 @@ import {
 } from "@trussworks/react-uswds";
 
 const RadfishInput = (props) => {
-  return <TwTextInput className="radfish-input" {...props} />;
+  return <TwTextInput {...props} className={`radfish-input ${props.className}`} />;
 };
 
 const RadfishRadio = (props) => {
-  return <TwRadio className="radfish-radio" {...props} />;
+  return <TwRadio {...props} className={`radfish-radio ${props.className}`} />;
 };
 
 const RadfishSelect = (props) => {
-  return <TwSelect className="radfish-select" {...props} />;
+  return <TwSelect {...props} className={`radfish-select ${props.className}`} />;
 };
 
 const RadfishInputLabel = (props) => {
-  return <TwLabel className="radfish-label" {...props} />;
+  return <TwLabel {...props} className={`radfish-label ${props.className}`} />;
 };
 
 const RadfishErrorMessage = (props) => {
-  return <TwErrorMessage className="radfish-error-message" {...props} />;
+  return <TwErrorMessage {...props} className={`radfish-error-message ${props.className}`} />;
 };
 
 export {

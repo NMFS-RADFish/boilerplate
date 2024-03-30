@@ -25,11 +25,7 @@ const RadfishTableHeaderCell = (props) => {
   if (isSortable) {
     return (
       <th colSpan={props.header.colSpan}>
-        <div
-          className="cursor-pointer select-none"
-          onClick={handleSort}
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
+        <div className="radfish-table-header-cell" onClick={handleSort}>
           {flexRender(props.header.column.columnDef.header, props.header.getContext())}
           <RadfishSortDirectionIcon header={props.header} />
         </div>
@@ -111,7 +107,7 @@ const RadfishTablePaginationPageCount = ({ pageIndex, getPageCount }) => {
   return (
     <>
       Page{" "}
-      <strong className="margin-x-2px">
+      <strong className="radfish-table-pagination-page-count">
         {pageIndex} of {getPageCount()}
       </strong>
     </>

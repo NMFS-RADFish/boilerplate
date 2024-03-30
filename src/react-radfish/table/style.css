@@ -11,3 +11,15 @@
 .radfish-table-row {
   cursor: pointer;
 }
+
+.radfish-table-header-cell {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.radfish-table-pagination-page-count {
+  margin-left: 2px;
+  margin-right: 2px;
+}
