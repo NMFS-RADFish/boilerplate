@@ -88,7 +88,9 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Toast toast={toast} />
+        <div className="toast-container">
+          <Toast toast={toast} />
+        </div>
         <Layout>
           {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
           <Routes>
