@@ -44,7 +44,7 @@ describe("IndexedDBMethod", () => {
   });
 
   test("create", async () => {
-    await indexedDBMethod.create(mockData);
+    await indexedDBMethod.create("formData", mockData);
     expect(indexedDBMethod.db.formData.add).toHaveBeenCalledWith({
       ...mockData,
       uuid: "mock-uuid",
@@ -52,18 +52,18 @@ describe("IndexedDBMethod", () => {
   });
 
   test("find without criteria", async () => {
-    await indexedDBMethod.find();
+    await indexedDBMethod.find("formData");
     expect(indexedDBMethod.db.formData.toArray).toHaveBeenCalled();
   });
 
   test("find with criteria", async () => {
-    await indexedDBMethod.find(mockData);
+    await indexedDBMethod.find("formData", mockData);
     expect(indexedDBMethod.db.formData.where).toHaveBeenCalledWith(mockData);
     expect(indexedDBMethod.db.formData.toArray).toHaveBeenCalled();
   });
 
   test("update", async () => {
-    await indexedDBMethod.update({ uuid: "mock-uuid" }, mockData);
+    await indexedDBMethod.update("formData", { uuid: "mock-uuid" }, mockData);
     expect(indexedDBMethod.db.formData.put).toHaveBeenCalledWith(mockData, "mock-uuid");
   });
 });

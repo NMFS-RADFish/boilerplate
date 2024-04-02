@@ -61,7 +61,7 @@ const SimpleTable = () => {
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
       const newData = data.map((item) => ({ ...item, isOffline: false }));
-      const offlineData = await findOfflineData();
+      const offlineData = await findOfflineData("formData");
 
       setData((prevData) => {
         // Get offline data
@@ -121,7 +121,7 @@ const SimpleTable = () => {
       });
       //delete submitted drafts from local storage
       const idsFromApiResponse = data.map((item) => item.id);
-      deleteOfflineData(idsFromApiResponse);
+      deleteOfflineData("formData", idsFromApiResponse);
       const { status, message } = TOAST_CONFIG.SUCCESS;
       setToast({ status, message });
     } catch (error) {

@@ -51,42 +51,46 @@ function useOfflineStorage() {
   /**
    * Create data in the storage.
    *
+   * @param {string} tableName - The name of the table to find data.
    * @param {Object} data - The data to create, e.g. { numberOfFish: "1", species: "Grouper" }.
    * @returns {Promise} A promise that resolves when the data is created.
    */
-  function createOfflineDataEntry(data) {
-    return storageModel.create(data);
+  function createOfflineDataEntry(tableName, data) {
+    return storageModel.create(tableName, data);
   }
 
   /**
    * Find data in the storage.
    *
+   * @param {string} tableName - The name of the table to find data.
    * @param {Object} criteria - The criteria to use for finding data, e.g. { uuid: "1234" }.
    * @returns {Promise} A promise that resolves with the found data.
    */
-  function findOfflineData(criteria) {
-    return storageModel.find(criteria);
+  function findOfflineData(tableName, criteria) {
+    return storageModel.find(tableName, criteria);
   }
 
   /**
    * Update data in the storage.
    *
+   * @param {string} tableName - The name of the table to find data.
    * @param {Object} criteria - The criteria to use for updating data, e.g. { uuid: "1234" }.
    * @param {Object} data - The new data.
    * @returns {Promise} A promise that resolves when the data is updated, e.g. { numberOfFish: "10", species: "Grouper" }.
    */
-  function updateOfflineDataEntry(criteria, data) {
-    return storageModel.update(criteria, data);
+  function updateOfflineDataEntry(tableName, criteria, data) {
+    return storageModel.update(tableName, criteria, data);
   }
 
   /**
    * Delete data in the storage.
    *
+   * @param {string} tableName - The name of the table to find data.
    * @param {Array} UUIDs - Array of UUIDs to delete data, e.g. ["uuid1234"] or ["uuid1234", "uuid321", "uuid987"].
    * @returns {Promise} A promise that resolves to `true` when the data is deleted, otherwise `false`.
    */
-  function deleteOfflineData(uuid) {
-    return storageModel.delete(uuid);
+  function deleteOfflineData(tableName, uuid) {
+    return storageModel.delete(tableName, uuid);
   }
 
   return {

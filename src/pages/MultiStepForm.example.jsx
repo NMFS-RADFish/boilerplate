@@ -42,7 +42,7 @@ const MultiStepForm = () => {
   // todo: break this into useMultiStateForm
   useEffect(() => {
     const loadData = async () => {
-      const [found] = await findOfflineData({ uuid });
+      const [found] = await findOfflineData("formData", { uuid });
       if (uuid) {
         if (!found) {
           navigate("/multistep");

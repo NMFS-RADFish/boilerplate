@@ -22,12 +22,13 @@ export class IndexedDBMethod extends StorageMethod {
   /**
    * Create and store data in IndexedDB.
    * @param {Object} data - The data to store, e.g. { numberOfFish: "1", species: "Grouper" }.
+   * @param {string} tableName - The name of the table to find data.
    * @return {Promise<Object>} A promise that resolves to the found data as an object.
    * @throws {Error} If an error occurs while adding the data to IndexedDB.
    */
-  async create(data) {
+  async create(tableName, data) {
     try {
-      return await this.db.formData.add({
+      return await this.db[tableName].add({
         ...data,
         uuid: generateUUID(),
       });
@@ -38,16 +39,17 @@ export class IndexedDBMethod extends StorageMethod {
 
   /**
    * Find data in IndexedDB.
+   * @param {string} tableName - The name of the table to find data.
    * @param {Object} criteria - The criteria to use for finding data, e.g. { uuid: "1234" }.
    * @return {Promise<Array>} A promise that resolves to the found data.
    * @throws {Error} If an error occurs while retrieving the data from IndexedDB.
    */
-  async find(criteria) {
+  async find(tableName, criteria) {
     try {
       if (!criteria) {
-        return await this.db.formData.toArray();
+        return await this.db[tableName].toArray();
       } else {
-        return await this.db.formData.where(criteria).toArray();
+        return await this.db[tableName].where(criteria).toArray();
       }
     } catch (error) {
       throw error;
@@ -56,14 +58,15 @@ export class IndexedDBMethod extends StorageMethod {
 
   /**
    * Update data in IndexedDB.
+   * @param {string} tableName - The name of the table to find data.
    * @param {Object} criteria - The criteria to use for updating data, e.g. { uuid: "1234" }.
    * @param {Object} data - The new data, e.g. { numberOfFish: "1", species: "Grouper" }.
    * @return {Promise<Array>} A promise that resolves to the updated data.
    * @throws {Error} If an error occurs while updating the data in IndexedDB.
    */
-  async update(criteria, data) {
+  async update(tableName, criteria, data) {
     try {
-      return await this.db.formData.put(data, criteria.uuid);
+      return await this.db[tableName].put(data, criteria.uuid);
     } catch (error) {
       throw error;
     }
@@ -72,12 +75,13 @@ export class IndexedDBMethod extends StorageMethod {
   /**
    * Delete data in IndexedDB.
    * @param {Array} UUIDs - Array of UUIDs to delete data, e.g. ["uuid123", "uuid321"].
+   * @param {string} tableName - The name of the table to find data.
    * @return {Promise<Boolean>} A promise that resolves to `true` when the data is deleted.
    * @throws {Error} If an error occurs while deleting the data in IndexedDB.
    */
-  async delete(uuids) {
+  async delete(tableName, uuids) {
     try {
-      await this.db.formData.bulkDelete(uuids);
+      await this.db[tableName].bulkDelete(uuids);
       return true;
     } catch (error) {
       throw error;
