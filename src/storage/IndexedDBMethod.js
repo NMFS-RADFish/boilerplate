@@ -12,16 +12,14 @@ import { StorageMethod } from "./StorageMethod";
  * @param {string} dbSchema - The schema of the table.
  */
 export class IndexedDBMethod extends StorageMethod {
-  constructor(dbName, dbVersion, dbTableName, dbSchema) {
+  constructor(dbName, dbVersion, dbConfig) {
     super();
     this.dbName = dbName;
     this.dbVersion = dbVersion;
     this.db = new Dexie(this.dbName);
-    this.dbSchema = dbSchema;
-    this.db.version(this.dbVersion).stores({
-      [dbTableName]: dbSchema,
-    });
+    this.db.version(this.dbVersion).stores(dbConfig);
   }
+
   /**
    * Create and store data in IndexedDB.
    * @param {Object} data - The data to store, e.g. { numberOfFish: "1", species: "Grouper" }.

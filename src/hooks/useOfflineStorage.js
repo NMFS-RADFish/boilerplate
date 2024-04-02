@@ -1,7 +1,7 @@
-import { LocalStorageMethod, StorageModelFactory } from "../storage";
+import { IndexedDBMethod, StorageModelFactory } from "../storage";
 
 /**
- * React hook for managing form data in local storage.
+ * React hook for managing offline form data using IndexedDB.
  *
  * @example
  * // In a React component
@@ -11,8 +11,9 @@ import { LocalStorageMethod, StorageModelFactory } from "../storage";
  *   const { createOfflineDataEntry, findOfflineData, updateOfflineDataEntry } = useOfflineStorage();
  *
  *   // Use the hook to create, find, or update data
+ *   const allOfflineData = async () => await findOfflineData();
+ *   const offlineData = async () => await findOfflineData({ uuid: "1234" });
  *   createOfflineDataEntry({ species: 'Grouper', numberOfFish: 10 });
- *   findOfflineData({ uuid: '1234' });
  *   updateOfflineDataEntry({ species: 'Grouper', numberOfFish: 100 }, { uuid: '1234' });
  *   const allEntries = findOfflineData().map((entry) => entry[1]);
  *
@@ -30,7 +31,15 @@ function useOfflineStorage() {
    * @type {LocalStorageMethod or IndexedDBMethod}
    * @example const storageMethod = new LocalStorageMethod("formData");
    */
-  const storageMethod = new LocalStorageMethod(import.meta.env.VITE_LOCAL_STORAGE_KEY);
+  const storageMethod = new IndexedDBMethod(
+    import.meta.env.VITE_INDEXED_DB_NAME,
+    import.meta.env.VITE_INDEXED_DB_VERSION,
+    {
+      formData:
+        "uuid, fullName, email, phoneNumber, numberOfFish, address1, address2, city, state, zipcode, occupation, department, species, computedPrice",
+      species: "name, price",
+    },
+  );
 
   /**
    * Create the Storage Model and pass in the `storageMethod` that was initialized above, e.g. `storageMethod`.

@@ -41,15 +41,18 @@ const MultiStepForm = () => {
 
   // todo: break this into useMultiStateForm
   useEffect(() => {
-    if (uuid) {
-      const [found] = findOfflineData({ uuid });
-      if (!found) {
-        navigate("/multistep");
-      } else {
-        setFormData(found[1]);
+    const loadData = async () => {
+      const [found] = await findOfflineData({ uuid });
+      if (uuid) {
+        if (!found) {
+          navigate("/multistep");
+        } else {
+          setFormData(found);
+        }
+        // we have a cached form
       }
-      // we have a cached form
-    }
+    };
+    loadData();
   }, []);
 
   const handleInit = () => {
