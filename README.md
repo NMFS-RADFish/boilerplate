@@ -213,8 +213,6 @@ Step-by-step instructions to configure offline storage:
    2. **Indexed DB:**
       1. `VITE_INDEXED_DB_NAME`
       2. `VITE_INDEXED_DB_VERSION`
-      3. `VITE_INDEXED_DB_TABLE_NAME`
-      4. `VITE_INDEXED_DB_SCHEMA`
 2. **In the `src/hooks/useOfflineStorage.js` file, initialize one of the following Storage Method instances, and pass the appropriate environment variables using `import.meta.env.REPLACE_WITH_KEY_NAME` as parameters:**
 
    1. **`LocalStorageMethod`** — Requires one parameter, the key name for localStorage.
@@ -223,14 +221,13 @@ Step-by-step instructions to configure offline storage:
       const storageMethod = new LocalStorageMethod(import.meta.env.VITE_LOCAL_STORAGE_KEY);
       ```
 
-   2. **`IndexedDBStorageMethod`** — Requires two parameters, the db name and db version.
+   2. **`IndexedDBStorageMethod`** — Requires three parameters, the db name, db version, and table configuration.
 
       ```jsx
       const storageMethod = new IndexedDBStorageMethod(
         import.meta.env.VITE_INDEXED_DB_NAME,
         import.meta.env.VITE_INDEXED_DB_VERSION,
-        import.meta.env.VITE_INDEXED_DB_TABLE_NAME,
-        import.meta.env.VITE_INDEXED_DB_SCHEMA,
+        { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" },
       );
       ```
 
@@ -241,6 +238,7 @@ Step-by-step instructions to configure offline storage:
    const storageMethod = new IndexedDBStorageMethod(
      import.meta.env.VITE_INDEXED_DB_NAME,
      import.meta.env.VITE_INDEXED_DB_VERSION,
+     { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" },
    );
    const storageMethod = new LocalStorageMethod(import.meta.env.VITE_LOCAL_STORAGE_KEY);
    // 2. Create Storage Method

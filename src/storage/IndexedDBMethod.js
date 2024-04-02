@@ -8,8 +8,7 @@ import { StorageMethod } from "./StorageMethod";
  * @extends StorageMethod
  * @param {string} dbName - The name of the database.
  * @param {number} dbVersion - The version of the database.
- * @param {string} dbTableName - The name of the table.
- * @param {string} dbSchema - The schema of the table.
+ * @param {object} dbConfig - takes an object with the key as the table name and the value as the table schema, e.g. { formData: "uuid, fullName, email", species: "name, prices" }.
  */
 export class IndexedDBMethod extends StorageMethod {
   constructor(dbName, dbVersion, dbConfig) {
