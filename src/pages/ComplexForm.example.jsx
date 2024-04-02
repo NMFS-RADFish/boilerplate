@@ -61,9 +61,9 @@ const ComplexForm = ({ asyncFormOptions }) => {
 
   function onOfflineSubmit(e) {
     e.preventDefault();
-    // if (navigator.onLine) {
-    //   return;
-    // }
+    if (navigator.onLine) {
+      return;
+    }
     createOfflineDataEntry(formData);
   }
 
