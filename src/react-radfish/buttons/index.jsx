@@ -10,7 +10,7 @@ const RadfishButton = (props) => {
 };
 
 const RadfishNavMenuButton = (props) => {
-  return <TwNavMenuButton {...props} className={`radfish-menu-btn ${props.className}`} />;
+  return <TwNavMenuButton {...props} className={`radfish-menu-btn ${props.className || ""}`} />;
 };
 
 export { RadfishButton as Button, RadfishNavMenuButton as NavMenuButton };
