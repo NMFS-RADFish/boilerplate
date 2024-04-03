@@ -25,8 +25,9 @@ import {
 import { useNavigate } from "react-router-dom";
 const TOAST_LIFESPAN = 3000;
 import useOfflineStorage from "../hooks/useOfflineStorage";
-import { Alert } from "@trussworks/react-uswds";
+import { Alert, Grid } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
+import { GridContainer } from "@trussworks/react-uswds";
 
 const ApiService = new RadfishAPIService("");
 
@@ -152,21 +153,14 @@ const SimpleTable = () => {
       <Toast toast={toast} />
       <TableInfoAnnotation />
       <br />
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-        }}
-      >
+      <div className="margin-left-auto display-flex flex-column flex-align-end width-auto">
         {showOfflineSubmit ? (
           <>
             <Alert type="info" slim={true} className="maxw-mobile-lg">
               This button is used for submitting offline data to a server. It will only appear if
               offline data is found in either localStorage or indexedDB.
             </Alert>
-            <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, draftData)}>
+            <Button className="margin-left-auto" onClick={(e) => handleSubmitDraft(e, draftData)}>
               Submit Offline Data
             </Button>
           </>
@@ -184,12 +178,11 @@ const SimpleTable = () => {
           <TableBody table={table}>
             {rowModel.rows.map((row) => {
               const isOfflineData = row.original.isOffline && !row.original.isSubmitted;
-              const rowStyle = isOfflineData ? { backgroundColor: "lightgrey" } : {};
               return (
                 <TableBodyRow
                   row={row}
                   onClick={() => handleRowClick(row)}
-                  style={rowStyle}
+                  className={isOfflineData && "bg-gray-10"}
                   key={row.original.id}
                 >
                   {row.getVisibleCells().map((cell) => {
@@ -203,7 +196,7 @@ const SimpleTable = () => {
                         {isStatusColumn && isOfflineData && (
                           <Button
                             onClick={(e) => handleSubmitDraft(e, [row.original])}
-                            style={{ fontSize: "14px", padding: "6px", marginLeft: "10%" }}
+                            className="font-ui-3xs padding-3px margin-left-205"
                           >
                             Submit
                           </Button>

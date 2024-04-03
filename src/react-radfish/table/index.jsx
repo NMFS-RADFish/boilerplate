@@ -47,7 +47,7 @@ const RadfishTableBody = (props) => {
 
 const RadfishTableBodyRow = (props) => {
   return (
-    <tr className="radfish-table-row" style={props.style} onClick={props.onClick}>
+    <tr {...props} className={`radfish-table-row ${props.className}`} onClick={props.onClick}>
       {props.children}
     </tr>
   );
@@ -55,7 +55,7 @@ const RadfishTableBodyRow = (props) => {
 
 const RadfishTableBodyCell = (props) => {
   return (
-    <td {...props}>
+    <td {...props} className={props.className}>
       {flexRender(props.cell.column.columnDef.cell, props.cell.getContext())}
       {props.children}
     </td>
