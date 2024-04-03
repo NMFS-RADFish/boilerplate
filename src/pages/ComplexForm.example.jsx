@@ -301,7 +301,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
           onClick={() =>
             handleMultiEntrySubmit({ numberOfFish: Number(formData.numberOfFish) + 1 })
           }
-          // style={{ marginTop: "10px" }}
           className="margin-top-10px border-105"
         >
           Multi Entry Submit
