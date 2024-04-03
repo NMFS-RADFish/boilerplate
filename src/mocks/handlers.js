@@ -56,14 +56,6 @@ export const handlers = [
         formData.append(key, response[key]);
       }
 
-      if (localStorage.getItem("formData")) {
-        const mapData = JSON.parse(localStorage.getItem("formData"));
-        mapData.push([id, Object.fromEntries(formData)]);
-        localStorage.setItem("formData", JSON.stringify(mapData));
-      } else {
-        localStorage.setItem("formData", JSON.stringify([[id, Object.fromEntries(formData)]]));
-      }
-
       return HttpResponse.error(null, { status: 500 });
     } else {
       let modifiedResponses = [];
@@ -104,7 +96,7 @@ export const handlers = [
 
   // endpoint to return a form's prepopulated data based on it's uuid. this returns a mock server response.
   // note that locally cached data and server provided data can often be out of sync.
-  http.get("/form/:id", ({ params }) => {
+  http.get("/complexform/:uuid", ({ params }) => {
     const [mockData] = data.filter((obj) => obj.id === params.id);
 
     if (!mockData) {

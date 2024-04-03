@@ -50,17 +50,6 @@ const SimpleTable = () => {
   const navigate = useNavigate();
   const [toast, setToast] = useState(null);
   const { findOfflineData, deleteOfflineData } = useOfflineStorage();
-  const data = findOfflineData() || [];
-  const allDrafts = data;
-  // Transforming each element to merge the ID and data into a single object
-  const draftData = allDrafts.map((draft) => {
-    const [id, data] = draft;
-    return {
-      id,
-      ...data,
-    };
-  });
-
   // Check if the app is offline
   // const isOffline = !navigator.onLine;
 
@@ -72,12 +61,12 @@ const SimpleTable = () => {
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
       const newData = data.map((item) => ({ ...item, isOffline: false }));
+      const offlineData = await findOfflineData("formData");
 
       setData((prevData) => {
         // Get offline data
-        const offlineData = findOfflineData();
         const offlineDataMapped = offlineData
-          ? offlineData.map((entry) => ({ id: entry[0], ...entry[1], isOffline: true }))
+          ? offlineData.map((entry) => ({ id: entry.uuid, ...entry, isOffline: true }))
           : [];
         // Combine offline data with new data and existing data
         const combinedData = [...offlineDataMapped, ...prevData, ...newData];
@@ -90,7 +79,7 @@ const SimpleTable = () => {
       });
 
       // If there is offline data, show the submit draft button
-      if (findOfflineData().length) {
+      if (offlineData.length) {
         setShowOfflineSubmit(true);
       }
     };
@@ -127,14 +116,12 @@ const SimpleTable = () => {
         const filteredData = prevData.filter(
           (prevItem) => !data.some((submittedItem) => submittedItem.id === prevItem.id),
         );
-
         // Combine the filtered previous data with the newly updated data from the server
         return [...filteredData, ...data];
       });
-
       //delete submitted drafts from local storage
       const idsFromApiResponse = data.map((item) => item.id);
-      deleteOfflineData(idsFromApiResponse);
+      deleteOfflineData("formData", idsFromApiResponse);
       const { status, message } = TOAST_CONFIG.SUCCESS;
       setToast({ status, message });
     } catch (error) {
@@ -166,7 +153,15 @@ const SimpleTable = () => {
               This button is used for submitting offline data to a server. It will only appear if
               offline data is found in either localStorage or indexedDB.
             </Alert>
-            <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, draftData)}>
+            <Button
+              style={{ marginLeft: "auto" }}
+              onClick={(e) =>
+                handleSubmitDraft(
+                  e,
+                  table.options.data.filter((row) => row.isOffline),
+                )
+              }
+            >
               Submit Offline Data
             </Button>
           </>

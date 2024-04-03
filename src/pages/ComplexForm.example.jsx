@@ -64,7 +64,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
     if (navigator.onLine) {
       return;
     }
-    createOfflineDataEntry(formData);
+    createOfflineDataEntry("formData", formData);
   }
 
   return (
