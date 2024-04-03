@@ -16,29 +16,29 @@ export default defineConfig({
       srcDir: "src",
       filename: "service-worker.js",
       manifest: {
-        short_name: "PWA Boilerplate",
+        short_name: "RADFish PWA Boilerplate",
         name: "RADFish PWA Boilerplate",
         icons: [
           {
-            src: "favicon.ico",
+            src: "icons/radfish-144.ico",
             sizes: "144x144 64x64 32x32 24x24 16x16",
             type: "image/x-icon",
           },
           {
-            src: "144.png",
-            type: "image/png",
+            src: "icons/radfish-144.ico",
+            type: "image/icon",
             sizes: "144x144",
             purpose: "any",
           },
           {
-            src: "192.png",
-            type: "image/png",
+            src: "icons/radfish-192.ico",
+            type: "image/icon",
             sizes: "192x192",
             purpose: "any",
           },
           {
-            src: "512.png",
-            type: "image/png",
+            src: "icons/radfish-512.ico",
+            type: "image/icon",
             sizes: "512x512",
             purpose: "any",
           },
