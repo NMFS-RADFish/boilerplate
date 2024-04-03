@@ -65,7 +65,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
     if (navigator.onLine) {
       return;
     }
-    createOfflineDataEntry(formData);
+    createOfflineDataEntry("formData", formData);
   }
 
   return (
@@ -258,9 +258,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
       </Select>
       {visibleInputs[subSpecies] && (
         <>
-          <Label htmlFor={subSpecies} isVisible={true}>
-            Sub species
-          </Label>
+          <Label htmlFor={subSpecies}>Sub species</Label>
           <TextInput
             id={subSpecies}
             name={subSpecies}
@@ -268,7 +266,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
             placeholder="Sub-species"
             value={formData[subSpecies] || ""}
             onChange={handleChange}
-            isVisible={true}
           />
         </>
       )}

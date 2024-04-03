@@ -119,10 +119,26 @@ function App() {
               }
             />
             <Route
-              path="/multistep/:uuid"
+              path="/multistep/:id"
               element={
                 <FormWrapper onSubmit={handleFormSubmit}>
                   <MultiStepForm asyncFormOptions={asyncFormOptions} />
+                </FormWrapper>
+              }
+            />
+            <Route
+              path="/complexform"
+              element={
+                <FormWrapper onSubmit={handleFormSubmit}>
+                  <ComplexForm asyncFormOptions={asyncFormOptions} />
+                </FormWrapper>
+              }
+            />
+            <Route
+              path="/complexform/:id"
+              element={
+                <FormWrapper onSubmit={handleFormSubmit}>
+                  <ComplexForm asyncFormOptions={asyncFormOptions} />
                 </FormWrapper>
               }
             />

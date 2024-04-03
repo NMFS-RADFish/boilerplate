@@ -7,9 +7,11 @@ import App from "./App";
 
 async function enableMocking() {
   const { worker } = await import("./mocks/browser");
+  const onUnhandledRequest = "bypass";
 
   if (import.meta.env.MODE === "development") {
     return worker.start({
+      onUnhandledRequest,
       serviceWorker: {
         url: `/mockServiceWorker.js`,
       },
@@ -19,6 +21,7 @@ async function enableMocking() {
   // `worker.start()` returns a Promise that resolves
   // once the Service Worker is up and ready to intercept requests.
   return worker.start({
+    onUnhandledRequest,
     serviceWorker: {
       url: `/service-worker.js`,
     },
