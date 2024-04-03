@@ -13,6 +13,7 @@ import {
 import useOfflineStorage from "../hooks/useOfflineStorage";
 import { CONSTANTS } from "../config/form";
 import { COMMON_CONFIG } from "../config/common";
+import "../styles/theme.css";
 
 const {
   fullName,
@@ -282,7 +283,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
         Button Option 1: Below is an example of a simple button, it will save data locally. It does
         not make a server request.
       </Alert>
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div className="grid-row flex-column">
         <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
           Submit
         </Button>
@@ -297,7 +298,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
           onClick={() =>
             handleMultiEntrySubmit({ numberOfFish: Number(formData.numberOfFish) + 1 })
           }
-          style={{ marginTop: "10px" }}
+          className="margin-top-10px border-105"
         >
           Multi Entry Submit
         </Button>

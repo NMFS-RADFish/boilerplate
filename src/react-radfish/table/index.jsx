@@ -25,11 +25,7 @@ const RadfishTableHeaderCell = (props) => {
   if (isSortable) {
     return (
       <th colSpan={props.header.colSpan}>
-        <div
-          className="cursor-pointer select-none"
-          onClick={handleSort}
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
+        <div className="radfish-table-header-cell" onClick={handleSort}>
           {flexRender(props.header.column.columnDef.header, props.header.getContext())}
           <RadfishSortDirectionIcon header={props.header} />
         </div>
@@ -51,7 +47,7 @@ const RadfishTableBody = (props) => {
 
 const RadfishTableBodyRow = (props) => {
   return (
-    <tr className="radfish-table-row" style={props.style} onClick={props.onClick}>
+    <tr {...props} className={`radfish-table-row ${props.className || ""}`} onClick={props.onClick}>
       {props.children}
     </tr>
   );
@@ -59,7 +55,7 @@ const RadfishTableBodyRow = (props) => {
 
 const RadfishTableBodyCell = (props) => {
   return (
-    <td {...props}>
+    <td {...props} style={{ background: "transparent" }}>
       {flexRender(props.cell.column.columnDef.cell, props.cell.getContext())}
       {props.children}
     </td>
@@ -111,7 +107,7 @@ const RadfishTablePaginationPageCount = ({ pageIndex, getPageCount }) => {
   return (
     <>
       Page{" "}
-      <strong className="margin-x-2px">
+      <strong className="margin-x-1">
         {pageIndex} of {getPageCount()}
       </strong>
     </>
