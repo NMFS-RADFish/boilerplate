@@ -104,7 +104,7 @@ const SimpleTable = () => {
    */
   const handleRowClick = (row) => {
     // row.original.id should be the id used when generating the form. this can come from MSW or alternatively from IndexDB/localStorage as needed when offline
-    navigate(`/form/${row.original.id}`);
+    navigate(`/complexform/${row.original.id}`);
   };
 
   if (!table) {
