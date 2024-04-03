@@ -55,7 +55,7 @@ const RadfishTableBodyRow = (props) => {
 
 const RadfishTableBodyCell = (props) => {
   return (
-    <td {...props} className={props.className}>
+    <td {...props} className={props.className} style={{ background: "transparent" }}>
       {flexRender(props.cell.column.columnDef.cell, props.cell.getContext())}
       {props.children}
     </td>
@@ -107,7 +107,7 @@ const RadfishTablePaginationPageCount = ({ pageIndex, getPageCount }) => {
   return (
     <>
       Page{" "}
-      <strong className="radfish-table-pagination-page-count">
+      <strong className="margin-x-1">
         {pageIndex} of {getPageCount()}
       </strong>
     </>

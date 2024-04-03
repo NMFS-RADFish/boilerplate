@@ -188,11 +188,7 @@ const SimpleTable = () => {
                   {row.getVisibleCells().map((cell) => {
                     const isStatusColumn = cell.column.id === "isOffline";
                     return (
-                      <TableBodyCell
-                        style={{ background: "transparent" }}
-                        key={cell.id}
-                        cell={cell}
-                      >
+                      <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
                         {isStatusColumn && isOfflineData && (
                           <Button
                             onClick={(e) => handleSubmitDraft(e, [row.original])}
