@@ -1,7 +1,8 @@
 import React from "react";
-import { render, fireEvent, getAllByRole, queryAllByRole, screen } from "@testing-library/react";
+import { render, fireEvent, screen } from "@testing-library/react";
 import * as formWrapper from "../../contexts/FormWrapper";
 import * as reactRouter from "react-router-dom";
+import useOfflineStorage from "../../hooks/useOfflineStorage";
 
 // Mocking react-router-dom hooks
 vi.mock("react-router-dom", async () => ({
@@ -22,6 +23,15 @@ vi.mock("../../utilities", async () => ({
   ...(await vi.importActual("../../utilities")),
   computePriceFromQuantitySpecies: vi.fn(),
 }));
+
+// Mocking useOfflineStorage hook
+vi.mock("../../hooks/useOfflineStorage.js", async () => {
+  const actual = await vi.importActual("../../hooks/useOfflineStorage.js");
+  return {
+    ...actual,
+    useOfflineStorage: vi.fn(),
+  };
+});
 
 const validationMessage = "Test validation message";
 
@@ -156,6 +166,7 @@ describe("handleInputVisibility", () => {
 
     vi.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
+
     // Mock form configuration data
     const FORM_CONFIG = {
       input1: {

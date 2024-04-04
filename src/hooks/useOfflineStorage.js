@@ -32,8 +32,8 @@ function useOfflineStorage() {
    * @example const storageMethod = new LocalStorageMethod("formData");
    */
   const storageMethod = new IndexedDBMethod(
-    import.meta.env.VITE_INDEXED_DB_NAME,
-    import.meta.env.VITE_INDEXED_DB_VERSION,
+    import.meta.env.VITE_INDEXED_DB_NAME || "radfish_dev",
+    import.meta.env.VITE_INDEXED_DB_VERSION || 1,
     {
       formData:
         "uuid, fullName, email, phoneNumber, numberOfFish, address1, address2, city, state, zipcode, occupation, department, species, computedPrice",
