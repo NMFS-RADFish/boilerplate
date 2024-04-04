@@ -46,12 +46,12 @@ export class StorageModel {
   /**
    * Update data in the storage.
    * @param {String} tableNameOrKeyName - The name of the database (indexedDB) or key name to use for creating data (localStorage).
-   * @param {Object} criteria - The criteria to use for updating data, e.g. { uuid: "1234" }.
    * @param {Object} data - The new data, e.g. { numberOfFish: 2, species: "Grouper" }.
+   * @param {Object} criteria - The criteria to use for updating data, e.g. { uuid: "1234" } (required for localStorage only).
    * @return {Array|Promise<Array>} The updated data.
    */
-  update(tableNameOrKeyName, criteria, data) {
-    return this.storageMethod.update(tableNameOrKeyName, criteria, data);
+  update(tableNameOrKeyName, data, criteria) {
+    return this.storageMethod.update(tableNameOrKeyName, data, criteria);
   }
 
   /**

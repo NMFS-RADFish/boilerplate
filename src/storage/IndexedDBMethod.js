@@ -59,14 +59,14 @@ export class IndexedDBMethod extends StorageMethod {
   /**
    * Update data in IndexedDB.
    * @param {string} tableName - The name of the table to find data.
-   * @param {Object} criteria - The criteria to use for updating data, e.g. { uuid: "1234" }.
-   * @param {Object} data - The new data, e.g. { numberOfFish: "1", species: "Grouper" }.
+   * @param {Array} criteria - The criteria to use for updating data, e.g. ["uuid-123"] or ["uuid-123", "uuid-987", "uuid-456"].
+   * @param {Array} data - Array of the updated data, e.g. [{ numberOfFish: "1", species: "Grouper" }] or [{name: "Grouper", price: 5.00}, {name: "Salmon", price: 10.00}].
    * @return {Promise<Array>} A promise that resolves to the updated data.
    * @throws {Error} If an error occurs while updating the data in IndexedDB.
    */
-  async update(tableName, criteria, data) {
+  async update(tableName, data) {
     try {
-      return await this.db[tableName].put(data, criteria.uuid);
+      return await this.db[tableName].bulkPut(data, { allKeys: true });
     } catch (error) {
       throw error;
     }
