@@ -10,6 +10,7 @@ import { MSW_ENDPOINT } from "./mocks/handlers";
 import { ComplexForm } from "./pages/ComplexForm.example";
 import { MultiStepForm } from "./pages/MultiStepForm.example";
 import { SimpleTable } from "./pages/Table.example";
+import useOfflineStorage from "./hooks/useOfflineStorage";
 
 const ApiService = new RadfishAPIService("");
 
@@ -20,6 +21,8 @@ function App() {
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
   const [toast, setToast] = useState(null);
   const [isOffline, setIsOffline] = useState(false);
+  const { updateOfflineData } = useOfflineStorage();
+
   // Check if the app is offline
   const checkConnectivity = async () => {
     try {
@@ -63,6 +66,20 @@ function App() {
     // this function fetches any data needed for the business requirements in DemoForm
     const fetchFormData = async () => {
       const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
+      const milisecondsIn24Hours = 86400000;
+      const currentTimeStamp = Date.now();
+      const speciesLastUpdated = localStorage.getItem("speciesLastUpdated");
+      const isSpeciesLastUpdateOver24Hours =
+        speciesLastUpdated + milisecondsIn24Hours > currentTimeStamp;
+
+      if (!speciesLastUpdated || isSpeciesLastUpdateOver24Hours) {
+        const species = data.map((item) => ({ name: item }));
+        const updated = await updateOfflineData("species", species);
+        // if all data is updated, set the last updated timestamp
+        if (updated.length === data.length) {
+          localStorage.setItem("speciesLastUpdated", currentTimeStamp);
+        }
+      }
       // add any other async requests here
       const newData = { species: data };
       setAsyncFormOptions((prev) => ({ ...prev, ...newData }));
