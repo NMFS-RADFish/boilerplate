@@ -49,13 +49,6 @@ export const handlers = [
     const response = await request.json();
 
     if (!navigator.onLine) {
-      const formData = new FormData();
-      const id = crypto.randomUUID();
-
-      for (let key in response) {
-        formData.append(key, response[key]);
-      }
-
       return HttpResponse.error(null, { status: 500 });
     } else {
       let modifiedResponses = [];
@@ -96,7 +89,7 @@ export const handlers = [
 
   // endpoint to return a form's prepopulated data based on it's uuid. this returns a mock server response.
   // note that locally cached data and server provided data can often be out of sync.
-  http.get("/complexform/:uuid", ({ params }) => {
+  http.get("/form/:id", ({ params }) => {
     const [mockData] = data.filter((obj) => obj.id === params.id);
 
     if (!mockData) {
