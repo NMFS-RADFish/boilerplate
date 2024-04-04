@@ -249,19 +249,18 @@ Step-by-step instructions to configure offline storage:
 
 The `useOfflineStorage` hook returns an object with the following methods:
 
-- **`createOfflineDataEntry(data)` —** Creates a new data entry in the storage.
+- **`createOfflineData("formData", data)`** Creates a new data entry in the storage.
   - `data`: The data object to create.
   - Returns a promise that resolves when the data is created.
-- **`findOfflineData(criteria)`** — Finds data in the storage based on the given criteria, returns all data if not criteria parameter is passed.
+- **`findOfflineData("formData", criteria)`** — Finds data in the storage based on the given criteria, returns all data if not criteria parameter is passed.
   - `criteria`: The criteria object to use for finding data, eg `{uuid: 123}`.
   - Returns a promise that resolves to an array of tuples:
     - `[ [ uuid, { key: value } ], [ uuid2, { key: value } ] ]`
-- **`updateOfflineDataEntry(criteria, data)`** — Updates data in the storage.
-  - `criteria`: The criteria to use for updating data. This should be an object.
-  - `data`: The updated data object.
-  - Returns a promise that resolves to the updated data as an object:
-    - `{ numberOfFish: 10, species: salmon }`
-- **`deleteOfflineData(uuids)`** — Updates data in the storage.
+- **`updateOfflineData("formData", data)`** — Updates data in the storage.
+  - `data`: Array of data objects to update, the key name (e.g. uuid, name, id, etc) must be included in the data object.
+  - Returns a promise that resolves to the updated data as an object.
+    - `[{ uuid: 123, numberOfFish: 10, species: salmon }]`
+- **`deleteOfflineData("formData", uuids)`** — Updates data in the storage.
   - `uuids`: An array of UUIDs to use for deleting one or more items.
   - Returns a promise that resolves to `true` if the deletion was successful.
 
@@ -273,17 +272,17 @@ Example usage when using IndexedDB
 import useOfflineStorage from "./useOfflineStorage";
 
 function MyComponent() {
-  const { createOfflineDataEntry, findOfflineData, updateOfflineDataEntry } = useOfflineStorage();
+  const { createOfflineData, findOfflineData, updateOfflineData } = useOfflineStorage();
   const data = { species: "Grouper", numberOfFish: 100 };
 
   // Create new offline data entry
-  createOfflineDataEntry(data);
+  createOfflineData(data);
   // Find all offline data
   const allOfflineData = async () => await findOfflineData();
   // Find a specific offline data entry by uuid
   const offlineData = async () => await findOfflineData({ uuid: "1234" });
   // Update an offline data entry by uuid
-  updateOfflineDataEntry({ uuid: "1234" }, data);
+  updateOfflineData({ uuid: "1234" }, data);
   // Delete one offline data entry
   deleteOfflineData(["uuid-123"]);
   // Delete multiple offline data entries
