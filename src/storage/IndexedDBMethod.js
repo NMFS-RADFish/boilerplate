@@ -15,8 +15,8 @@ export class IndexedDBMethod extends StorageMethod {
     super();
     this.dbName = dbName;
     this.dbVersion = dbVersion;
-    this.db = new Dexie(this.dbName);
-    this.db.version(this.dbVersion).stores(dbConfig);
+    this.db = new Dexie(dbName);
+    this.db.version(dbVersion).stores(dbConfig);
   }
 
   /**
