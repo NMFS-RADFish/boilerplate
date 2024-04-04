@@ -23,6 +23,13 @@ vi.mock("../../utilities", async () => ({
   computePriceFromQuantitySpecies: vi.fn(),
 }));
 
+vi.mock("../../hooks/useOfflineStorage.js", async () => {
+  return {
+    ...(await vi.importActual("../../hooks/useOfflineStorage.js")),
+    useOfflineStorage: vi.fn(),
+  };
+});
+
 const validationMessage = "Test validation message";
 
 describe("FormWrapper", () => {
