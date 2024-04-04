@@ -29,10 +29,7 @@ vi.mock("../../hooks/useOfflineStorage.js", async () => {
   const actual = await vi.importActual("../../hooks/useOfflineStorage.js");
   return {
     ...actual,
-    useOfflineStorage: vi.fn().mockImplementation(() => {
-      const dbVersion = 1;
-      actual.db.version(dbVersion).stores(actual.dbConfig);
-    }),
+    useOfflineStorage: vi.fn(),
   };
 });
 
