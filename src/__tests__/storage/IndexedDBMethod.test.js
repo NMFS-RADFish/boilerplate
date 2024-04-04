@@ -12,7 +12,8 @@ vi.mock("../../storage/indexedDB.js", () => ({
       add: vi.fn(),
       toArray: vi.fn(),
       where: vi.fn(),
-      put: vi.fn(),
+      bulkPut: vi.fn(),
+      bulkDelete: vi.fn(),
     },
   },
 }));
@@ -30,7 +31,8 @@ describe("IndexedDBMethod", () => {
         add: vi.fn(),
         toArray: vi.fn(),
         where: vi.fn().mockReturnThis(),
-        put: vi.fn(),
+        bulkPut: vi.fn(),
+        bulkDelete: vi.fn(),
       },
     }));
 
@@ -63,7 +65,12 @@ describe("IndexedDBMethod", () => {
   });
 
   test("update", async () => {
-    await indexedDBMethod.update("formData", { uuid: "mock-uuid" }, mockData);
-    expect(indexedDBMethod.db.formData.put).toHaveBeenCalledWith(mockData, "mock-uuid");
+    await indexedDBMethod.update("formData", [mockData]);
+    expect(indexedDBMethod.db.formData.bulkPut).toHaveBeenCalled();
+  });
+
+  test("delete", async () => {
+    await indexedDBMethod.delete("formData", ["uuid-123"]);
+    expect(indexedDBMethod.db.formData.bulkDelete).toHaveBeenCalledWith(["uuid-123"]);
   });
 });
