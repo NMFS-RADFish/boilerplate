@@ -31,6 +31,8 @@ function useOfflineStorage() {
    * @type {LocalStorageMethod or IndexedDBMethod}
    * @example const storageMethod = new LocalStorageMethod("formData");
    */
+  console.log(import.meta.env.VITE_INDEXED_DB_NAME);
+  console.log(import.meta.env.VITE_INDEXED_DB_VERSION);
   const storageMethod = new IndexedDBMethod(
     import.meta.env.VITE_INDEXED_DB_NAME,
     import.meta.env.VITE_INDEXED_DB_VERSION,
