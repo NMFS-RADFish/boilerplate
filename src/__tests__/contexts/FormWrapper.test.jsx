@@ -1,7 +1,8 @@
 import React from "react";
-import { render, fireEvent, getAllByRole, queryAllByRole, screen } from "@testing-library/react";
+import { render, fireEvent, screen } from "@testing-library/react";
 import * as formWrapper from "../../contexts/FormWrapper";
 import * as reactRouter from "react-router-dom";
+import useOfflineStorage from "../hooks/useOfflineStorage";
 
 // Mocking react-router-dom hooks
 vi.mock("react-router-dom", async () => ({
@@ -23,6 +24,7 @@ vi.mock("../../utilities", async () => ({
   computePriceFromQuantitySpecies: vi.fn(),
 }));
 
+// Mocking useOfflineStorage hook
 vi.mock("../../hooks/useOfflineStorage.js", async () => {
   return {
     ...(await vi.importActual("../../hooks/useOfflineStorage.js")),
@@ -44,9 +46,11 @@ describe("FormWrapper", () => {
       handleChange: mockedHandleChange,
       handleBlur: mockedHandleBlur,
     }));
+    const mockedUseOfflineStorage = vi.fn();
 
     vi.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
+    vi.spyOn(useOfflineStorage, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
 
     const TestComponent = () => {
       const { handleChange, handleBlur, validationErrors, handleMultiEntrySubmit } =
@@ -104,9 +108,11 @@ describe("FormWrapper", () => {
       handleChange: mockedHandleChange,
       handleBlur: mockedHandleBlur,
     }));
+    const mockedUseOfflineStorage = vi.fn();
 
     vi.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
+    vi.spyOn(useOfflineStorage, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
 
     const TestComponent = () => {
       const { handleChange, handleBlur, validationErrors, handleMultiEntrySubmit } =
@@ -160,9 +166,12 @@ describe("handleInputVisibility", () => {
       handleChange: mockedHandleChange,
       handleBlur: mockedHandleBlur,
     }));
+    const mockedUseOfflineStorage = vi.fn();
 
     vi.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
+    vi.spyOn(useOfflineStorage, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
+
     // Mock form configuration data
     const FORM_CONFIG = {
       input1: {
