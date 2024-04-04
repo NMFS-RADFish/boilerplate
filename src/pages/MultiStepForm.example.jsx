@@ -41,11 +41,7 @@ const MultiStepForm = () => {
   } = useMultStepForm(uuid);
 
   // A Ref will be needed for each step form to set focus when the form is displayed.
-  const stepFocus = [
-    useRef(null),
-    useRef(null),
-    useRef(null),
-  ];
+  const stepFocus = [useRef(null), useRef(null), useRef(null)];
 
   // todo: break this into useMultiStateForm
   useEffect(() => {
@@ -70,8 +66,8 @@ const MultiStepForm = () => {
     }
   }, [formData.currentStep]);
 
-  const handleInit = () => {
-    const formId = init(uuid);
+  const handleInit = async () => {
+    const formId = await init(uuid);
     navigate(`${formId}`);
   };
 
@@ -87,10 +83,14 @@ const MultiStepForm = () => {
     return (
       <GridContainer>
         <Grid row gap="md">
-          <Grid tablet={{
-            col: true
-          }}>
-            <Label className=".mobile:margin-top-1" htmlFor={fullName}>Full Name</Label>
+          <Grid
+            tablet={{
+              col: true,
+            }}
+          >
+            <Label className=".mobile:margin-top-1" htmlFor={fullName}>
+              Full Name
+            </Label>
             <TextInput
               id={fullName}
               name={fullName}
@@ -104,11 +104,15 @@ const MultiStepForm = () => {
               linkedinputids={[nickname]}
               inputRef={stepFocus[0]}
             />
-            {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
+            {validationErrors[fullName] && (
+              <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>
+            )}
           </Grid>
-          <Grid tablet={{
-            col: true
-          }}>
+          <Grid
+            tablet={{
+              col: true,
+            }}
+          >
             <Label htmlFor={nickname}>Nickname</Label>
             <TextInput
               id={nickname}
@@ -141,9 +145,11 @@ const MultiStepForm = () => {
     return (
       <GridContainer>
         <Grid row gap="md">
-          <Grid tablet={{
-            col: true
-          }}>
+          <Grid
+            tablet={{
+              col: true,
+            }}
+          >
             <Label htmlFor={email}>Email Address</Label>
             <TextInput
               id={email}
@@ -158,9 +164,11 @@ const MultiStepForm = () => {
             />
             {validationErrors[email] && <ErrorMessage>{validationErrors[email]}</ErrorMessage>}
           </Grid>
-          <Grid tablet={{
-            col: true
-          }}>
+          <Grid
+            tablet={{
+              col: true,
+            }}
+          >
             <Label htmlFor={phoneNumber}>Phone Number</Label>
             <TextInput
               id={phoneNumber}
@@ -211,9 +219,11 @@ const MultiStepForm = () => {
           </Grid>
         </Grid>
         <Grid row gap="md">
-          <Grid tablet={{
-            col: true
-          }}>
+          <Grid
+            tablet={{
+              col: true,
+            }}
+          >
             <Label htmlFor={country}>Country</Label>
             <TextInput
               id={country}
@@ -225,9 +235,11 @@ const MultiStepForm = () => {
               linkedinputids={[country]}
             />
           </Grid>
-          <Grid tablet={{
-            col: true
-          }}>
+          <Grid
+            tablet={{
+              col: true,
+            }}
+          >
             <Label htmlFor={state}>State</Label>
             <TextInput
               id={state}
@@ -241,9 +253,11 @@ const MultiStepForm = () => {
             />
             {validationErrors[state] && <ErrorMessage>{validationErrors[state]}</ErrorMessage>}
           </Grid>
-          <Grid tablet={{
-            col: true
-          }}>
+          <Grid
+            tablet={{
+              col: true,
+            }}
+          >
             <Label htmlFor={zipcode}>Zip Code</Label>
             <TextInput
               id={zipcode}
