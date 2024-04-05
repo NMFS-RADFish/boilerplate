@@ -132,7 +132,11 @@ const RadfishTablePaginationGoToPage = ({ pageIndex, setPageIndex }) => {
   );
 };
 
-const RadfishTablePaginationSelectRowCount = ({ setPageSize, pageSize }) => {
+const RadfishTablePaginationSelectRowCount = ({
+  setPageSize,
+  pageSize,
+  paginations = [10, 20, 30, 40, 50],
+}) => {
   return (
     <Select
       id="radfish-table-pagination-select"
@@ -141,7 +145,7 @@ const RadfishTablePaginationSelectRowCount = ({ setPageSize, pageSize }) => {
         setPageSize(Number(e.target.value));
       }}
     >
-      {[10, 20, 30, 40, 50].map((pageSize) => (
+      {paginations.map((pageSize) => (
         <option key={pageSize} value={pageSize}>
           Show {pageSize}
         </option>
