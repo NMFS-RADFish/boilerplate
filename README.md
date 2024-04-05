@@ -71,6 +71,87 @@ You have the following scripts available to you during development to setup this
 - `npm run format` lints, updates, and saves changed files for commit
 - `npm run serve` runs the application as a production bundle (need to `npm run build` first). Helpful for debugging service worker behavior in a "production like" environment
 
+## Directory Structure
+
+Once you bootstrap a new radfish app, you will be given the following file structure:
+
+```
+├── _tests_
+├── assets
+├── components
+│   ├── HeaderNav.jsx
+│   └── Layout.jsx
+├── config
+│   └── form.js
+├── contexts
+│   ├── FormWrapper.jsx
+│   └── TableWrapper.jsx
+├── hooks
+│   └── useOfflineStorage.js
+├── mocks
+│   ├── browser.js
+│   └── handlers.js
+├── pages
+│   ├── Form.example.jsx
+│   └── Table.example.jsx
+├── react-radfish
+├── services
+│   └── APIService.js
+├── storage
+├── styles
+│   └── theme.css
+├── utilities
+│   ├── cryptoWrapper.js
+│   └── fieldValidators.js
+├── App.jsx
+├── index.css
+└── index.jsx
+```
+
+`pages`
+
+The files within pages are collections of components that can be built leveraging a combination of the application specific components in the `components` directory, along with any components from the `react-radfish` package.
+
+You will notice that the files shipped in this directory have an `.example` file extension. This is by design, to make it clear that these are examples of how to build pages with radfish design patterns as described in this guide.
+
+Feel free to copy/paste/refactor these pages to suit your application's needs.
+
+`components`
+
+The files within this directory should be application specific. They should be reusable components that can be created and imported to created pages. They should be modular, DRY, and reusable so that they can be used within your application pages as needed.
+
+`context`
+
+This boilerplate leverages React's context API to manage application state. `FormWrapper` and `TableWrapper` manage the state of either a `Form` or `Table` component as needed, and exports helper function to modify it's state.
+
+> TODO: This should be broken out into `packages` directory.
+
+`hooks`
+
+The files in this folder contain re-usable hooks for you to use within your components. Hooks extract logic into reusable pieces, and can also hook into context providers as needed. See more about react hooks here: https://react.dev/reference/react/hooks
+
+`mocks`
+
+This should contain the mock server implementation that can simulate a backend API for your Radfish application to leverage. You can find out about the mock server implementation, and how to extend it later [in this doc](#mock-api)
+
+`config`
+
+This folder will contain configurations needed for various components. You can see `form.js` as a working copy of this. Keep in mind that this is an `.example` file and is expected to be modified to suit your needs. See [building complex forms](#building-complex-forms) for more details on this configuration.
+
+You can also house other application specific configurations as needed within this folder.
+
+`styles`
+
+This folder will contain any application specific theme `css` files as needed. Learn more about styling options [here](#styling)
+
+`services`
+
+This folder will contain files that represent services used in interface with 3rd party integrations or internal business logic. It's a good idea to use Object Oriented principles when creating and extending these services.
+
+`storage`
+
+> TODO: break into `packages` directory
+
 ## React RADFish Components
 
 ### Building your first page and form
@@ -398,6 +479,56 @@ useEffect(() => {
 ### Handling Responses and Errors
 
 Responses and errors from the API are returned as promises.
+
+### Mock API
+
+As a frontend developer, it can sometimes be a blocker when you are developing a feature that has a dependency on an external API. Often times, you can be waiting for a backend developer to finish building our their API endpoints before you can continue building your feature. RadfishApp ships with a built-in mock server that allows the frontend developer to “stub out” and mock API requests/responses without this hard dependency during development.
+
+More specifically, RadfishApp ships with [mock service worker](https://mswjs.io/) and is preconfigured in the boilerplate application.
+
+At the entrypoint of the React application, we enable API mocking with the `enableMocking` function:
+
+```jsx
+async function enableMocking() {
+  const { worker } = await import("./mocks/browser");
+
+  // `worker.start()` returns a Promise that resolves
+  // once the Service Worker is up and ready to intercept requests.
+  return worker.start();
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+enableMocking().then(() => {
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  );
+});
+```
+
+Keep in mind that mocking should only be available during development, and should not ship with the production application. It can be useful to use a `NODE_ENV` environment variable to ensure that API mocks are only used in `DEVELOPMENT`. The `public/mockServiceWorker.js` file installs and configures the mock server. You should not need to modify this file.
+
+**Configuring mock endpoints:**
+
+In `src/mocks` you will notice a `browser.js` file and a `handlers.js` file. As a developer, you will do most of your work in `handlers.js` file, where you can add different mock http handlers to your application. For each handler you create, the mock service worker will intercept the request, and handle that request as defined in the file.
+
+For instance:
+
+```jsx
+export const handlers = [
+  http.get("/species", () => {
+    return HttpResponse.json({ data: ["grouper", "marlin"] }, { status: 200 });
+  }),
+  http.post("/species", async ({ request }) => {
+    const response = await request.json();
+    return HttpResponse.json({ data: response }, { status: 201 });
+  }),
+];
+```
+
+This file creates two handlers, a `GET` and `POST` request that returns a `HttpResponse` to the application. We recommend looking at the [msw docs](https://mswjs.io/) for more detailed information on how to further customize this for your needs.
 
 ## State Management
 
