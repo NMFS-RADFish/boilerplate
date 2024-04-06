@@ -43,9 +43,9 @@
       - [3. Add Multi-Entry Button:](#3-add-multi-entry-button)
       - [4. Implement Multi-Entry Logic:](#4-implement-multi-entry-logic)
       - [5. Handle Multi-Entry Submission:](#5-handle-multi-entry-submission)
-      - [6. Multi-Step Form:](#multi-step-form)
-      - [7. Submit Data:](#7-submit-data)
+      - [6. Submit Data:](#6-submit-data)
     - [Example](#example)
+  - [Multi-Step Form](#multi-step-form)
   - [Testing](#testing)
     - [Running Tests](#running-tests)
     - [Unit Tests](#unit-tests)
@@ -70,6 +70,87 @@ You have the following scripts available to you during development to setup this
 - `npm run lint:fix` lints and updates code to correct format
 - `npm run format` lints, updates, and saves changed files for commit
 - `npm run serve` runs the application as a production bundle (need to `npm run build` first). Helpful for debugging service worker behavior in a "production like" environment
+
+## Directory Structure
+
+Once you bootstrap a new radfish app, you will be given the following file structure:
+
+```
+├── _tests_
+├── assets
+├── components
+│   ├── HeaderNav.jsx
+│   └── Layout.jsx
+├── config
+│   └── form.js
+├── contexts
+│   ├── FormWrapper.jsx
+│   └── TableWrapper.jsx
+├── hooks
+│   └── useOfflineStorage.js
+├── mocks
+│   ├── browser.js
+│   └── handlers.js
+├── pages
+│   ├── Form.example.jsx
+│   └── Table.example.jsx
+├── react-radfish
+├── services
+│   └── APIService.js
+├── storage
+├── styles
+│   └── theme.css
+├── utilities
+│   ├── cryptoWrapper.js
+│   └── fieldValidators.js
+├── App.jsx
+├── index.css
+└── index.jsx
+```
+
+`pages`
+
+The files within pages are collections of components that can be built leveraging a combination of the application specific components in the `components` directory, along with any components from the `react-radfish` package.
+
+You will notice that the files shipped in this directory have an `.example` file extension. This is by design, to make it clear that these are examples of how to build pages with radfish design patterns as described in this guide.
+
+Feel free to copy/paste/refactor these pages to suit your application's needs.
+
+`components`
+
+The files within this directory should be application specific. They should be reusable components that can be created and imported to created pages. They should be modular, DRY, and reusable so that they can be used within your application pages as needed.
+
+`context`
+
+This boilerplate leverages React's context API to manage application state. `FormWrapper` and `TableWrapper` manage the state of either a `Form` or `Table` component as needed, and exports helper function to modify it's state.
+
+> TODO: This should be broken out into `packages` directory.
+
+`hooks`
+
+The files in this folder contain re-usable hooks for you to use within your components. Hooks extract logic into reusable pieces, and can also hook into context providers as needed. See more about react hooks here: https://react.dev/reference/react/hooks
+
+`mocks`
+
+This should contain the mock server implementation that can simulate a backend API for your Radfish application to leverage. You can find out about the mock server implementation, and how to extend it later [in this doc](#mock-api)
+
+`config`
+
+This folder will contain configurations needed for various components. You can see `form.js` as a working copy of this. Keep in mind that this is an `.example` file and is expected to be modified to suit your needs. See [building complex forms](#building-complex-forms) for more details on this configuration.
+
+You can also house other application specific configurations as needed within this folder.
+
+`styles`
+
+This folder will contain any application specific theme `css` files as needed. Learn more about styling options [here](#styling)
+
+`services`
+
+This folder will contain files that represent services used in interface with 3rd party integrations or internal business logic. It's a good idea to use Object Oriented principles when creating and extending these services.
+
+`storage`
+
+> TODO: break into `packages` directory
 
 ## React RADFish Components
 
@@ -213,8 +294,6 @@ Step-by-step instructions to configure offline storage:
    2. **Indexed DB:**
       1. `VITE_INDEXED_DB_NAME`
       2. `VITE_INDEXED_DB_VERSION`
-      3. `VITE_INDEXED_DB_TABLE_NAME`
-      4. `VITE_INDEXED_DB_SCHEMA`
 2. **In the `src/hooks/useOfflineStorage.js` file, initialize one of the following Storage Method instances, and pass the appropriate environment variables using `import.meta.env.REPLACE_WITH_KEY_NAME` as parameters:**
 
    1. **`LocalStorageMethod`** — Requires one parameter, the key name for localStorage.
@@ -223,14 +302,13 @@ Step-by-step instructions to configure offline storage:
       const storageMethod = new LocalStorageMethod(import.meta.env.VITE_LOCAL_STORAGE_KEY);
       ```
 
-   2. **`IndexedDBStorageMethod`** — Requires two parameters, the db name and db version.
+   2. **`IndexedDBStorageMethod`** — Requires three parameters, the db name, db version, and table configuration.
 
       ```jsx
       const storageMethod = new IndexedDBStorageMethod(
         import.meta.env.VITE_INDEXED_DB_NAME,
         import.meta.env.VITE_INDEXED_DB_VERSION,
-        import.meta.env.VITE_INDEXED_DB_TABLE_NAME,
-        import.meta.env.VITE_INDEXED_DB_SCHEMA,
+        { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" },
       );
       ```
 
@@ -241,6 +319,7 @@ Step-by-step instructions to configure offline storage:
    const storageMethod = new IndexedDBStorageMethod(
      import.meta.env.VITE_INDEXED_DB_NAME,
      import.meta.env.VITE_INDEXED_DB_VERSION,
+     { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" },
    );
    const storageMethod = new LocalStorageMethod(import.meta.env.VITE_LOCAL_STORAGE_KEY);
    // 2. Create Storage Method
@@ -251,39 +330,40 @@ Step-by-step instructions to configure offline storage:
 
 The `useOfflineStorage` hook returns an object with the following methods:
 
-- **`createOfflineDataEntry(data)` —** Creates a new data entry in the storage.
+- **`createOfflineData("formData", data)`** Creates a new data entry in the storage.
   - `data`: The data object to create.
   - Returns a promise that resolves when the data is created.
-- **`findOfflineData(criteria)`** — Finds data in the storage based on the given criteria, returns all data if not criteria parameter is passed.
+- **`findOfflineData("formData", criteria)`** — Finds data in the storage based on the given criteria, returns all data if not criteria parameter is passed.
   - `criteria`: The criteria object to use for finding data, eg `{uuid: 123}`.
   - Returns a promise that resolves to an array of tuples:
     - `[ [ uuid, { key: value } ], [ uuid2, { key: value } ] ]`
-- **`updateOfflineDataEntry(criteria, data)`** — Updates data in the storage.
-  - `criteria`: The criteria to use for updating data. This should be an object.
-  - `data`: The updated data object.
-  - Returns a promise that resolves to the updated data as an object:
-    - `{ numberOfFish: 10, species: salmon }`
-- **`deleteOfflineData(uuids)`** — Updates data in the storage.
+- **`updateOfflineData("formData", data)`** — Updates data in the storage.
+  - `data`: Array of data objects to update, the key name (e.g. uuid, name, id, etc) must be included in the data object.
+  - Returns a promise that resolves to the updated data as an object.
+    - `[{ uuid: 123, numberOfFish: 10, species: salmon }]`
+- **`deleteOfflineData("formData", uuids)`** — Updates data in the storage.
   - `uuids`: An array of UUIDs to use for deleting one or more items.
   - Returns a promise that resolves to `true` if the deletion was successful.
 
 ### **Usage**
 
+Example usage when using IndexedDB
+
 ```jsx
 import useOfflineStorage from "./useOfflineStorage";
 
 function MyComponent() {
-  const { createOfflineDataEntry, findOfflineData, updateOfflineDataEntry } = useOfflineStorage();
+  const { createOfflineData, findOfflineData, updateOfflineData } = useOfflineStorage();
   const data = { species: "Grouper", numberOfFish: 100 };
 
   // Create new offline data entry
-  createOfflineDataEntry(data);
+  createOfflineData(data);
   // Find all offline data
-  findOfflineData();
+  const allOfflineData = async () => await findOfflineData();
   // Find a specific offline data entry by uuid
-  findOfflineData({ uuid: "1234" });
+  const offlineData = async () => await findOfflineData({ uuid: "1234" });
   // Update an offline data entry by uuid
-  updateOfflineDataEntry({ uuid: "1234" }, data);
+  updateOfflineData({ uuid: "1234" }, data);
   // Delete one offline data entry
   deleteOfflineData(["uuid-123"]);
   // Delete multiple offline data entries
@@ -398,6 +478,56 @@ useEffect(() => {
 ### Handling Responses and Errors
 
 Responses and errors from the API are returned as promises.
+
+### Mock API
+
+As a frontend developer, it can sometimes be a blocker when you are developing a feature that has a dependency on an external API. Often times, you can be waiting for a backend developer to finish building our their API endpoints before you can continue building your feature. RadfishApp ships with a built-in mock server that allows the frontend developer to “stub out” and mock API requests/responses without this hard dependency during development.
+
+More specifically, RadfishApp ships with [mock service worker](https://mswjs.io/) and is preconfigured in the boilerplate application.
+
+At the entrypoint of the React application, we enable API mocking with the `enableMocking` function:
+
+```jsx
+async function enableMocking() {
+  const { worker } = await import("./mocks/browser");
+
+  // `worker.start()` returns a Promise that resolves
+  // once the Service Worker is up and ready to intercept requests.
+  return worker.start();
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+enableMocking().then(() => {
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  );
+});
+```
+
+Keep in mind that mocking should only be available during development, and should not ship with the production application. It can be useful to use a `NODE_ENV` environment variable to ensure that API mocks are only used in `DEVELOPMENT`. The `public/mockServiceWorker.js` file installs and configures the mock server. You should not need to modify this file.
+
+**Configuring mock endpoints:**
+
+In `src/mocks` you will notice a `browser.js` file and a `handlers.js` file. As a developer, you will do most of your work in `handlers.js` file, where you can add different mock http handlers to your application. For each handler you create, the mock service worker will intercept the request, and handle that request as defined in the file.
+
+For instance:
+
+```jsx
+export const handlers = [
+  http.get("/species", () => {
+    return HttpResponse.json({ data: ["grouper", "marlin"] }, { status: 200 });
+  }),
+  http.post("/species", async ({ request }) => {
+    const response = await request.json();
+    return HttpResponse.json({ data: response }, { status: 201 });
+  }),
+];
+```
+
+This file creates two handlers, a `GET` and `POST` request that returns a `HttpResponse` to the application. We recommend looking at the [msw docs](https://mswjs.io/) for more detailed information on how to further customize this for your needs.
 
 ## State Management
 

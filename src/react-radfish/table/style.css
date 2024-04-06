@@ -11,3 +11,10 @@
 .radfish-table-row {
   cursor: pointer;
 }
+
+.radfish-table-header-cell {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}

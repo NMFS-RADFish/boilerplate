@@ -25,8 +25,9 @@ import {
 import { useNavigate } from "react-router-dom";
 const TOAST_LIFESPAN = 3000;
 import useOfflineStorage from "../hooks/useOfflineStorage";
-import { Alert } from "@trussworks/react-uswds";
+import { Alert, Grid } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
+import { GridContainer } from "@trussworks/react-uswds";
 
 const ApiService = new RadfishAPIService("");
 
@@ -50,17 +51,6 @@ const SimpleTable = () => {
   const navigate = useNavigate();
   const [toast, setToast] = useState(null);
   const { findOfflineData, deleteOfflineData } = useOfflineStorage();
-  const data = findOfflineData() || [];
-  const allDrafts = data;
-  // Transforming each element to merge the ID and data into a single object
-  const draftData = allDrafts.map((draft) => {
-    const [id, data] = draft;
-    return {
-      id,
-      ...data,
-    };
-  });
-
   // Check if the app is offline
   // const isOffline = !navigator.onLine;
 
@@ -72,12 +62,12 @@ const SimpleTable = () => {
     const fetchFormData = async () => {
       const { data } = await ApiService.get(`${MSW_ENDPOINT.TABLE}?numberOfFish=0`);
       const newData = data.map((item) => ({ ...item, isOffline: false }));
+      const offlineData = await findOfflineData("formData");
 
       setData((prevData) => {
         // Get offline data
-        const offlineData = findOfflineData();
         const offlineDataMapped = offlineData
-          ? offlineData.map((entry) => ({ id: entry[0], ...entry[1], isOffline: true }))
+          ? offlineData.map((entry) => ({ id: entry.uuid, ...entry, isOffline: true }))
           : [];
         // Combine offline data with new data and existing data
         const combinedData = [...offlineDataMapped, ...prevData, ...newData];
@@ -90,7 +80,7 @@ const SimpleTable = () => {
       });
 
       // If there is offline data, show the submit draft button
-      if (findOfflineData().length) {
+      if (offlineData.length) {
         setShowOfflineSubmit(true);
       }
     };
@@ -104,7 +94,7 @@ const SimpleTable = () => {
    */
   const handleRowClick = (row) => {
     // row.original.id should be the id used when generating the form. this can come from MSW or alternatively from IndexDB/localStorage as needed when offline
-    navigate(`/form/${row.original.id}`);
+    navigate(`/complexform/${row.original.id}`);
   };
 
   if (!table) {
@@ -127,14 +117,12 @@ const SimpleTable = () => {
         const filteredData = prevData.filter(
           (prevItem) => !data.some((submittedItem) => submittedItem.id === prevItem.id),
         );
-
         // Combine the filtered previous data with the newly updated data from the server
         return [...filteredData, ...data];
       });
-
       //delete submitted drafts from local storage
       const idsFromApiResponse = data.map((item) => item.id);
-      deleteOfflineData(idsFromApiResponse);
+      deleteOfflineData("formData", idsFromApiResponse);
       const { status, message } = TOAST_CONFIG.SUCCESS;
       setToast({ status, message });
     } catch (error) {
@@ -152,21 +140,22 @@ const SimpleTable = () => {
       <Toast toast={toast} />
       <TableInfoAnnotation />
       <br />
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-        }}
-      >
+      <div className="margin-left-auto display-flex flex-column flex-align-end width-auto">
         {showOfflineSubmit ? (
           <>
             <Alert type="info" slim={true} className="maxw-mobile-lg">
               This button is used for submitting offline data to a server. It will only appear if
               offline data is found in either localStorage or indexedDB.
             </Alert>
-            <Button style={{ marginLeft: "auto" }} onClick={(e) => handleSubmitDraft(e, draftData)}>
+            <Button
+              className="margin-left-auto"
+              onClick={(e) =>
+                handleSubmitDraft(
+                  e,
+                  table.options.data.filter((row) => row.isOffline),
+                )
+              }
+            >
               Submit Offline Data
             </Button>
           </>
@@ -184,26 +173,21 @@ const SimpleTable = () => {
           <TableBody table={table}>
             {rowModel.rows.map((row) => {
               const isOfflineData = row.original.isOffline && !row.original.isSubmitted;
-              const rowStyle = isOfflineData ? { backgroundColor: "lightgrey" } : {};
               return (
                 <TableBodyRow
                   row={row}
                   onClick={() => handleRowClick(row)}
-                  style={rowStyle}
+                  className={isOfflineData && "bg-gray-10"}
                   key={row.original.id}
                 >
                   {row.getVisibleCells().map((cell) => {
                     const isStatusColumn = cell.column.id === "isOffline";
                     return (
-                      <TableBodyCell
-                        style={{ background: "transparent" }}
-                        key={cell.id}
-                        cell={cell}
-                      >
+                      <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
                         {isStatusColumn && isOfflineData && (
                           <Button
                             onClick={(e) => handleSubmitDraft(e, [row.original])}
-                            style={{ fontSize: "14px", padding: "6px", marginLeft: "10%" }}
+                            className="font-ui-3xs padding-3px margin-left-205"
                           >
                             Submit
                           </Button>

@@ -12,7 +12,8 @@ vi.mock("../../storage/indexedDB.js", () => ({
       add: vi.fn(),
       toArray: vi.fn(),
       where: vi.fn(),
-      put: vi.fn(),
+      bulkPut: vi.fn(),
+      bulkDelete: vi.fn(),
     },
   },
 }));
@@ -30,24 +31,22 @@ describe("IndexedDBMethod", () => {
         add: vi.fn(),
         toArray: vi.fn(),
         where: vi.fn().mockReturnThis(),
-        put: vi.fn(),
+        bulkPut: vi.fn(),
+        bulkDelete: vi.fn(),
       },
     }));
 
     // Mock generateUUID
     generateUUID.mockReturnValue("mock-uuid");
 
-    indexedDBMethod = new IndexedDBMethod(
-      "mock-db",
-      1,
-      "formData",
-      "uuid, fullName, numberOfFish, species",
-    );
+    indexedDBMethod = new IndexedDBMethod("mock-db", 1, {
+      formData: "uuid, fullName, numberOfFish, species",
+    });
     mockData = { key: "value" };
   });
 
   test("create", async () => {
-    await indexedDBMethod.create(mockData);
+    await indexedDBMethod.create("formData", mockData);
     expect(indexedDBMethod.db.formData.add).toHaveBeenCalledWith({
       ...mockData,
       uuid: "mock-uuid",
@@ -55,18 +54,23 @@ describe("IndexedDBMethod", () => {
   });
 
   test("find without criteria", async () => {
-    await indexedDBMethod.find();
+    await indexedDBMethod.find("formData");
     expect(indexedDBMethod.db.formData.toArray).toHaveBeenCalled();
   });
 
   test("find with criteria", async () => {
-    await indexedDBMethod.find(mockData);
+    await indexedDBMethod.find("formData", mockData);
     expect(indexedDBMethod.db.formData.where).toHaveBeenCalledWith(mockData);
     expect(indexedDBMethod.db.formData.toArray).toHaveBeenCalled();
   });
 
   test("update", async () => {
-    await indexedDBMethod.update({ uuid: "mock-uuid" }, mockData);
-    expect(indexedDBMethod.db.formData.put).toHaveBeenCalledWith(mockData, "mock-uuid");
+    await indexedDBMethod.update("formData", [mockData]);
+    expect(indexedDBMethod.db.formData.bulkPut).toHaveBeenCalled();
+  });
+
+  test("delete", async () => {
+    await indexedDBMethod.delete("formData", ["uuid-123"]);
+    expect(indexedDBMethod.db.formData.bulkDelete).toHaveBeenCalledWith(["uuid-123"]);
   });
 });

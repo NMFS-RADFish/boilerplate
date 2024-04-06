@@ -7,9 +7,9 @@
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Form } from "../react-radfish";
-import useOfflineStorage from "../hooks/useOfflineStorage";
 import { FORM_CONFIG } from "../config/form";
 import RadfishAPIService from "../services/APIService";
+import useOfflineStorage from "../hooks/useOfflineStorage";
 
 const FormContext = createContext();
 
@@ -69,14 +69,13 @@ export const FormWrapper = ({ children, onSubmit }) => {
   useEffect(() => {
     if (params.id) {
       const paramFormData = async () => {
-        const { data, error } = await ApiService.get(`/form/${params.id}`);
-        if (error) {
-          // error fetching data, use local cache instead
-          const cachedData = find({ uuid: params.id })[0][1];
-          setFormData(cachedData);
-        } else {
-          // use data from API call
+        const { data } = await ApiService.get(`/form/${params.id}`);
+
+        if (data) {
           setFormData(data);
+        } else {
+          const cachedData = await findOfflineData("formData", { uuid: params.id });
+          setFormData(cachedData[0]);
         }
       };
       paramFormData();

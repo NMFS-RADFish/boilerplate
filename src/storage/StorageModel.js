@@ -26,37 +26,41 @@ export class StorageModel {
 
   /**
    * Create data in the storage.
+   * @param {String} tableNameOrKeyName - The name of the database (indexedDB) or key name to use for creating data (localStorage).
    * @param {Object} data - The data to create, e.g. { numberOfFish: 1, species: "Grouper" }.
    */
-  create(data) {
-    return this.storageMethod.create(data);
+  create(tableNameOrKeyName, data) {
+    return this.storageMethod.create(tableNameOrKeyName, data);
   }
 
   /**
    * Find data in the storage.
+   * @param {String} tableNameOrKeyName - The name of the database (indexedDB) or key name to use for creating data (localStorage).
    * @param {Object} criteria - The criteria to use for finding data, e.g. { uuid: "1234" }.
    * @return {Array|Promise<Array>} The found data.
    */
-  find(criteria) {
-    return this.storageMethod.find(criteria);
+  find(tableNameOrKeyName, criteria) {
+    return this.storageMethod.find(tableNameOrKeyName, criteria);
   }
 
   /**
    * Update data in the storage.
-   * @param {Object} criteria - The criteria to use for updating data, e.g. { uuid: "1234" }.
+   * @param {String} tableNameOrKeyName - The name of the database (indexedDB) or key name to use for creating data (localStorage).
    * @param {Object} data - The new data, e.g. { numberOfFish: 2, species: "Grouper" }.
+   * @param {Object} criteria - The criteria to use for updating data, e.g. { uuid: "1234" } (required for localStorage only).
    * @return {Array|Promise<Array>} The updated data.
    */
-  update(criteria, data) {
-    return this.storageMethod.update(criteria, data);
+  update(tableNameOrKeyName, data, criteria) {
+    return this.storageMethod.update(tableNameOrKeyName, data, criteria);
   }
 
   /**
    * Delete data in the storage.
+   * @param {String} tableNameOrKeyName - The name of the database (indexedDB) or key name to use for creating data (localStorage).
    * @param {Array} UUIDs - Array of UUIDs, e.g. `["uuid1234"]` or `["uuid12345", "uuid5432", "uuid987"]`.
    * @return {Boolean} Returns `true` if the data was deleted successfully, otherwise `false`.
    */
-  delete(uuids) {
-    return this.storageMethod.delete(uuids);
+  delete(tableNameOrKeyName, uuids) {
+    return this.storageMethod.delete(tableNameOrKeyName, uuids);
   }
 }

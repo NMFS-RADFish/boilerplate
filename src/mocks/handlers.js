@@ -49,21 +49,6 @@ export const handlers = [
     const response = await request.json();
 
     if (!navigator.onLine) {
-      const formData = new FormData();
-      const id = crypto.randomUUID();
-
-      for (let key in response) {
-        formData.append(key, response[key]);
-      }
-
-      if (localStorage.getItem("formData")) {
-        const mapData = JSON.parse(localStorage.getItem("formData"));
-        mapData.push([id, Object.fromEntries(formData)]);
-        localStorage.setItem("formData", JSON.stringify(mapData));
-      } else {
-        localStorage.setItem("formData", JSON.stringify([[id, Object.fromEntries(formData)]]));
-      }
-
       return HttpResponse.error(null, { status: 500 });
     } else {
       let modifiedResponses = [];

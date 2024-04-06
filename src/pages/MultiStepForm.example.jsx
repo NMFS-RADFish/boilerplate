@@ -45,15 +45,18 @@ const MultiStepForm = () => {
 
   // todo: break this into useMultiStateForm
   useEffect(() => {
-    if (uuid) {
-      const [found] = findOfflineData({ uuid });
-      if (!found) {
-        navigate("/multistep");
-      } else {
-        setFormData(found[1]);
+    const loadData = async () => {
+      const [found] = await findOfflineData("formData", { uuid });
+      if (uuid) {
+        if (!found) {
+          navigate("/multistep");
+        } else {
+          setFormData(found);
+        }
+        // we have a cached form
       }
-      // we have a cached form
-    }
+    };
+    loadData();
   }, []);
 
   // Set input focus on first input of active step form
@@ -63,8 +66,8 @@ const MultiStepForm = () => {
     }
   }, [formData.currentStep]);
 
-  const handleInit = () => {
-    const formId = init(uuid);
+  const handleInit = async () => {
+    const formId = await init(uuid);
     navigate(`${formId}`);
   };
 
@@ -157,7 +160,7 @@ const MultiStepForm = () => {
                 type={email}
                 placeholder="Email Address"
                 value={formData[email] || ""}
-                validationStatus="error"
+                validationStatus={validationErrors[email] ? "error" : undefined}
                 onChange={handleChange}
                 onBlur={(e) => handleBlur(e, emailValidators)}
                 inputRef={stepFocus[1]}

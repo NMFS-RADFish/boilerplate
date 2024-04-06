@@ -20,7 +20,7 @@ const RadfishNavigation = (props) => {
         mobileExpanded={props.expanded}
         onToggleMobileNav={props.onClick}
       >
-        <Search size="small" onSubmit={() => null} />
+        <Search size="small" onSubmit={() => console.log("search submit not implemented")} />
       </TwPrimaryNav>
     </div>
   );

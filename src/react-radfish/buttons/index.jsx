@@ -3,14 +3,14 @@ import { Button as TwButton, NavMenuButton as TwNavMenuButton } from "@trusswork
 
 const RadfishButton = (props) => {
   return (
-    <TwButton className="radfish-button" {...props}>
+    <TwButton {...props} className={`radfish-button ${props.className || ""}`}>
       {props.children}
     </TwButton>
   );
 };
 
 const RadfishNavMenuButton = (props) => {
-  return <TwNavMenuButton className="radfish-menu-btn" {...props} />;
+  return <TwNavMenuButton {...props} className={`radfish-menu-btn ${props.className || ""}`} />;
 };
 
 export { RadfishButton as Button, RadfishNavMenuButton as NavMenuButton };
