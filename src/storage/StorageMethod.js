@@ -28,11 +28,11 @@ export class StorageMethod {
    * Update data in the storage.
    * This method should be overridden by subclasses.
    * @param {String} _tableNameOrKeyName - The name of the database (indexedDB) or key name to use for creating data (localStorage).
-   * @param {Object} _criteria - The criteria to use for updating data.
    * @param {Object} _data - The new data.
+   * @param {Object} _criteria - The criteria to use for updating data (required for localStorage only).
    * @throws {Error} If the method is not implemented.
    */
-  update(_tableNameOrKeyName, _criteria, _data) {
+  update(_tableNameOrKeyName, _data, _criteria) {
     throw new Error("Method not implemented.");
   }
 

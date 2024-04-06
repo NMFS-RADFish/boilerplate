@@ -8,13 +8,13 @@ import { IndexedDBMethod, StorageModelFactory } from "../storage";
  * import useOfflineStorage from './useOfflineStorage';
  *
  * function MyComponent() {
- *   const { createOfflineDataEntry, findOfflineData, updateOfflineDataEntry } = useOfflineStorage();
+ *   const { createOfflineData, findOfflineData, updateOfflineData } = useOfflineStorage();
  *
  *   // Use the hook to create, find, or update data
  *   const allOfflineData = async () => await findOfflineData();
  *   const offlineData = async () => await findOfflineData({ uuid: "1234" });
- *   createOfflineDataEntry({ species: 'Grouper', numberOfFish: 10 });
- *   updateOfflineDataEntry({ species: 'Grouper', numberOfFish: 100 }, { uuid: '1234' });
+ *   createOfflineData({ species: 'Grouper', numberOfFish: 10 });
+ *   updateOfflineData({ species: 'Grouper', numberOfFish: 100 }, { uuid: '1234' });
  *   const allEntries = findOfflineData().map((entry) => entry[1]);
  *
  *   // Render the component
@@ -23,7 +23,7 @@ import { IndexedDBMethod, StorageModelFactory } from "../storage";
  *
  * export default MyComponent;
  *
- * @returns {Object} The storage methods for creating, finding, and updating data, e.g. `{ createOfflineDataEntry, findOfflineData, updateOfflineDataEntry }`.
+ * @returns {Object} The storage methods for creating, finding, and updating data, e.g. `{ createOfflineData, findOfflineData, updateOfflineData }`.
  */
 function useOfflineStorage() {
   /**
@@ -32,8 +32,8 @@ function useOfflineStorage() {
    * @example const storageMethod = new LocalStorageMethod("formData");
    */
   const storageMethod = new IndexedDBMethod(
-    import.meta.env.VITE_INDEXED_DB_NAME,
-    import.meta.env.VITE_INDEXED_DB_VERSION,
+    import.meta.env.VITE_INDEXED_DB_NAME || "radfish_dev",
+    import.meta.env.VITE_INDEXED_DB_VERSION || 1,
     {
       formData:
         "uuid, fullName, email, phoneNumber, numberOfFish, address1, address2, city, state, zipcode, occupation, department, species, computedPrice",
@@ -55,7 +55,7 @@ function useOfflineStorage() {
    * @param {Object} data - The data to create, e.g. { numberOfFish: "1", species: "Grouper" }.
    * @returns {Promise} A promise that resolves when the data is created.
    */
-  function createOfflineDataEntry(tableName, data) {
+  function createOfflineData(tableName, data) {
     return storageModel.create(tableName, data);
   }
 
@@ -74,12 +74,11 @@ function useOfflineStorage() {
    * Update data in the storage.
    *
    * @param {string} tableName - The name of the table to find data.
-   * @param {Object} criteria - The criteria to use for updating data, e.g. { uuid: "1234" }.
    * @param {Object} data - The new data.
    * @returns {Promise} A promise that resolves when the data is updated, e.g. { numberOfFish: "10", species: "Grouper" }.
    */
-  function updateOfflineDataEntry(tableName, criteria, data) {
-    return storageModel.update(tableName, criteria, data);
+  function updateOfflineData(tableName, data) {
+    return storageModel.update(tableName, data);
   }
 
   /**
@@ -94,9 +93,9 @@ function useOfflineStorage() {
   }
 
   return {
-    createOfflineDataEntry,
+    createOfflineData,
     findOfflineData,
-    updateOfflineDataEntry,
+    updateOfflineData,
     deleteOfflineData,
   };
 }

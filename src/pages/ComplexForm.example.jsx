@@ -54,7 +54,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
     handleMultiEntrySubmit,
   } = useFormState();
 
-  const { createOfflineDataEntry } = useOfflineStorage();
+  const { createOfflineData } = useOfflineStorage();
 
   useEffect(() => {
     if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
@@ -65,7 +65,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
     if (navigator.onLine) {
       return;
     }
-    createOfflineDataEntry("formData", formData);
+    createOfflineData("formData", formData);
   }
 
   return (

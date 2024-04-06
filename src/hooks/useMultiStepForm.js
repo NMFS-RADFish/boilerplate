@@ -13,10 +13,14 @@ function useMultStepForm(uuid) {
     validationErrors,
     handleMultiEntrySubmit,
   } = useFormState();
-  const { createOfflineDataEntry, updateOfflineDataEntry } = useOfflineStorage();
+  const { createOfflineData, updateOfflineData } = useOfflineStorage();
 
-  function init() {
-    const uuid = createOfflineDataEntry({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
+  async function init() {
+    const uuid = await createOfflineData("formData", {
+      ...formData,
+      currentStep: 1,
+      totalSteps: TOTAL_STEPS,
+    });
     setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
     return uuid;
   }
@@ -25,7 +29,7 @@ function useMultStepForm(uuid) {
     if (formData.currentStep < TOTAL_STEPS) {
       const nextStep = formData.currentStep + 1;
       setFormData({ ...formData, currentStep: nextStep });
-      updateOfflineDataEntry({ uuid }, { ...formData, currentStep: nextStep });
+      updateOfflineData("formData", { ...formData, uuid, currentStep: nextStep });
     }
   }
 
@@ -33,7 +37,7 @@ function useMultStepForm(uuid) {
     if (formData.currentStep > 1) {
       const prevStep = formData.currentStep - 1;
       setFormData({ ...formData, currentStep: prevStep });
-      updateOfflineDataEntry({ uuid }, { ...formData, currentStep: prevStep });
+      updateOfflineData("formData", { ...formData, uuid, currentStep: prevStep });
       return;
     }
   }
