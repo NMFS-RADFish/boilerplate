@@ -24,7 +24,7 @@ const RadfishInputLabel = (props) => {
 };
 
 const RadfishErrorMessage = (props) => {
-  return <TwErrorMessage {...props} className={`radfish-error-message ${props.className || ""}`} />;
+  return <TwErrorMessage {...props} className={`${props.className || ""}`} />;
 };
 
 export {
