@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Checkbox } from "@trussworks/react-uswds";
+import { Alert, Checkbox, FormGroup } from "@trussworks/react-uswds";
 import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../react-radfish";
 import { useFormState } from "../contexts/FormWrapper";
 import { fullNameValidators } from "../utilities";
@@ -39,21 +39,28 @@ const ComplexForm = ({ asyncFormOptions }) => {
 
   return (
     <>
-      <Label htmlFor={fullName}>Full Name</Label>
-      <TextInput
-        id={fullName}
-        name={fullName}
-        type="text"
-        placeholder="Full Name"
-        value={formData[fullName] || ""}
-        aria-invalid={validationErrors[fullName] ? "true" : "false"}
-        validationStatus={validationErrors[fullName] ? "error" : undefined}
-        onChange={handleChange}
-        onBlur={(e) => handleBlur(e, fullNameValidators)}
-      />
-      {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
+      <FormGroup error={validationErrors[fullName]}>
+        <Label htmlFor={fullName}>Full Name</Label>
+        {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
+        <TextInput
+          id={fullName}
+          name={fullName}
+          type="text"
+          placeholder="Full Name"
+          value={formData[fullName] || ""}
+          aria-invalid={validationErrors[fullName] ? "true" : "false"}
+          validationStatus={validationErrors[fullName] ? "error" : undefined}
+          onChange={handleChange}
+          onBlur={(e) => handleBlur(e, fullNameValidators)}
+        />
+      </FormGroup>
 
-      <Label htmlFor={radioOption}>Example Radio Inputs</Label>
+      <Label htmlFor="checkbox">Checkbox Example</Label>
+      <Checkbox id="Oahu" name="islands" value="Oahu" label="Oahu" defaultChecked />
+      <Checkbox id="Kauai" name="islands" value="Kauai" label="Kauai" />
+      <Checkbox id="Mauai" name="islands" value="Mauai" label="Mauai" />
+
+      <Label htmlFor={radioOption}>Have you caught fish today?</Label>
       <Radio
         id="option-catch-yes"
         name={radioOption}
@@ -71,17 +78,13 @@ const ComplexForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
       />
 
-      <Label htmlFor="checkbox">Checkbox Example</Label>
-      <Checkbox id="Oahu" name="islands" value="Oahu" label="Oahu" defaultChecked />
-      <Checkbox id="Kauai" name="islands" value="Kauai" label="Kauai" />
-      <Checkbox id="Mauai" name="islands" value="Mauai" label="Mauai" />
-
       <Label htmlFor={numberOfFish}>Number of Fish</Label>
       <Alert type="info" slim={true}>
         Example of a linked input. The value of this input is used to compute the price.
       </Alert>
       <TextInput
         id={numberOfFish}
+        // linkedInputId tells computedPrice to update onChange
         linkedinputids={[computedPrice]}
         name={numberOfFish}
         type="number"
@@ -89,9 +92,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
         value={formData[numberOfFish] || ""}
         onChange={handleChange}
       />
-      {validationErrors[numberOfFish] && (
-        <ErrorMessage>{validationErrors[numberOfFish]}</ErrorMessage>
-      )}
 
       <Label htmlFor={species}>Species</Label>
       <Alert type="info" slim={true}>
