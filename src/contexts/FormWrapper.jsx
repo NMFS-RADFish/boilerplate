@@ -6,10 +6,12 @@
 
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
-import { Form } from "../react-radfish";
+import { Alert } from "@trussworks/react-uswds";
+import { Form, Button } from "../react-radfish";
 import { FORM_CONFIG } from "../config/form";
 import RadfishAPIService from "../services/APIService";
 import useOfflineStorage from "../hooks/useOfflineStorage";
+import { COMMON_CONFIG } from "../config/common";
 
 const FormContext = createContext();
 
@@ -177,6 +179,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
 
   return (
     <FormContext.Provider value={contextValue}>
+      <FormInfoAnnotation />
       <Form
         onSubmit={(event) => {
           event.preventDefault();
@@ -247,3 +250,25 @@ export const handleInputValidationLogic = (name, value, validators) => {
   }
   return { [name]: null };
 };
+
+function FormInfoAnnotation() {
+  return (
+    <Alert type="info" headingLevel={"h1"} heading="Example Form">
+      This is an example of a form with various input types. The form is designed to be used with
+      the `FormWrapper` component.
+      <br />
+      <br />
+      <strong>Note:</strong> Annotations are for informational purposes only. In production, you
+      would remove the annotations. Components with annotations above them are optional. You can
+      choose whether or not to use them in your application.
+      <br />
+      <br />
+      <a href={COMMON_CONFIG.docsUrl} target="_blank" rel="noopener noreferrer">
+        <Button type="button">Go To Documentation</Button>
+      </a>
+      <a href={COMMON_CONFIG.storybookURL} target="_blank" rel="noopener noreferrer">
+        <Button type="button">Go To Storybook</Button>
+      </a>
+    </Alert>
+  );
+}

@@ -26,7 +26,7 @@ const { fullName, nickname, email, phoneNumber, country, city, state, zipcode } 
  */
 const MultiStepForm = () => {
   const navigate = useNavigate();
-  const { uuid } = useParams();
+  const { id } = useParams();
   const { findOfflineData } = useOfflineStorage();
   const {
     init,
@@ -38,7 +38,7 @@ const MultiStepForm = () => {
     handleChange,
     handleBlur,
     validationErrors,
-  } = useMultStepForm(uuid);
+  } = useMultStepForm(id);
 
   // A Ref will be needed for each step form to set focus when the form is displayed.
   const stepFocus = [useRef(null), useRef(null), useRef(null)];
@@ -46,18 +46,18 @@ const MultiStepForm = () => {
   // todo: break this into useMultiStateForm
   useEffect(() => {
     const loadData = async () => {
-      const [found] = await findOfflineData("formData", { uuid });
-      if (uuid) {
-        if (!found) {
-          navigate("/multistep");
-        } else {
-          setFormData(found);
-        }
-        // we have a cached form
+      if (id) {
+        const found = await findOfflineData("formData", {
+          uuid: id,
+        });
+
+        setFormData({ ...found[0], currentStep: 1, totalSteps: 3 });
+      } else {
+        navigate("/multistep");
       }
     };
     loadData();
-  }, []);
+  }, [id]);
 
   // Set input focus on first input of active step form
   useEffect(() => {
@@ -67,11 +67,11 @@ const MultiStepForm = () => {
   }, [formData.currentStep]);
 
   const handleInit = async () => {
-    const formId = await init(uuid);
+    const formId = await init(id);
     navigate(`${formId}`);
   };
 
-  if (!uuid) {
+  if (!id) {
     return (
       <div>
         <Button onClick={handleInit}>Begin Multistep Form</Button>
@@ -79,7 +79,7 @@ const MultiStepForm = () => {
     );
   }
 
-  if (formData.currentStep === 1) {
+  if (formData || formData.currentStep === 1) {
     return (
       <GridContainer>
         <Grid row gap="md">

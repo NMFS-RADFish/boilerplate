@@ -1,39 +1,13 @@
-import React, { useEffect } from "react";
-import { Alert, FormGroup } from "@trussworks/react-uswds";
+import React from "react";
+import { Alert, Checkbox, FormGroup } from "@trussworks/react-uswds";
 import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../react-radfish";
 import { useFormState } from "../contexts/FormWrapper";
-import {
-  fullNameValidators,
-  emailValidators,
-  phoneNumberValidators,
-  zipcodeValidators,
-  stateValidators,
-  cityValidators,
-} from "../utilities";
+import { fullNameValidators } from "../utilities";
 import useOfflineStorage from "../hooks/useOfflineStorage";
 import { CONSTANTS } from "../config/form";
-import { COMMON_CONFIG } from "../config/common";
 import "../styles/theme.css";
 
-const {
-  fullName,
-  nickname,
-  email,
-  phoneNumber,
-  country,
-  addressLine1,
-  numberOfFish,
-  addressLine2,
-  radioOption,
-  city,
-  state,
-  zipcode,
-  occupation,
-  department,
-  species,
-  subSpecies,
-  computedPrice,
-} = CONSTANTS;
+const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
 
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
@@ -47,7 +21,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
   const {
     formData,
     visibleInputs,
-    setFormData,
     handleChange,
     handleBlur,
     validationErrors,
@@ -55,10 +28,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
   } = useFormState();
 
   const { createOfflineData } = useOfflineStorage();
-
-  useEffect(() => {
-    if (formData.fullName && formData.email) setFormData((prev) => ({ ...prev, city: "Honolulu" }));
-  }, [formData.fullName, formData.email, setFormData]);
 
   function onOfflineSubmit(e) {
     e.preventDefault();
@@ -70,7 +39,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
 
   return (
     <>
-      <FormInfoAnnotation />
       <FormGroup error={validationErrors[fullName]}>
         <Label htmlFor={fullName}>Full Name</Label>
         {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
@@ -84,87 +52,14 @@ const ComplexForm = ({ asyncFormOptions }) => {
           validationStatus={validationErrors[fullName] ? "error" : undefined}
           onChange={handleChange}
           onBlur={(e) => handleBlur(e, fullNameValidators)}
-          linkedinputids={[nickname]}
         />
       </FormGroup>
-      {visibleInputs[nickname] && (
-        <>
-          <Label htmlFor={nickname}>Nickname</Label>
-          <TextInput
-            id={nickname}
-            name={nickname}
-            type="text"
-            placeholder="Nickname"
-            value={formData[nickname] || ""}
-            onChange={handleChange}
-          />
-        </>
-      )}
-      <FormGroup error={validationErrors[email]}>
-        <Label htmlFor={email}>Email Address</Label>
-        {validationErrors[email] && <ErrorMessage>{validationErrors[email]}</ErrorMessage>}
-        <TextInput
-          id={email}
-          name={email}
-          type={email}
-          placeholder="Email Address"
-          value={formData[email] || ""}
-          validationStatus="error"
-          onChange={handleChange}
-          onBlur={(e) => handleBlur(e, emailValidators)}
-        />
-      </FormGroup>
-      <FormGroup error={validationErrors[phoneNumber]}>
-        <Label htmlFor={phoneNumber}>Phone Number</Label>
-        {validationErrors[phoneNumber] && (
-          <ErrorMessage>{validationErrors[phoneNumber]}</ErrorMessage>
-        )}
-        <TextInput
-          id={phoneNumber}
-          name={phoneNumber}
-          type="tel"
-          placeholder="(000) 000-0000"
-          value={formData[phoneNumber] || ""}
-          validationStatus={validationErrors[phoneNumber] ? "error" : undefined}
-          onChange={handleChange}
-          onBlur={(e) => handleBlur(e, phoneNumberValidators)}
-          linkedinputids={[country]}
-        />
-      </FormGroup>
-      {visibleInputs[country] && (
-        <>
-          <Label htmlFor={country}>Country</Label>
-          <TextInput
-            id={country}
-            name={country}
-            type="text"
-            placeholder="Country of Origin"
-            value={formData[country] || ""}
-            onChange={handleChange}
-            linkedinputids={[country]}
-          />
-        </>
-      )}
-      <Label htmlFor={numberOfFish}>Number of Fish</Label>
-      <TextInput
-        id={numberOfFish}
-        // linkedInputId tells computedPrice to update onChange
-        linkedinputids={[computedPrice]}
-        name={numberOfFish}
-        type="number"
-        placeholder="0"
-        value={formData[numberOfFish] || ""}
-        onChange={handleChange}
-      />
-      <Label htmlFor={addressLine1}>Address Line 1</Label>
-      <TextInput
-        id={addressLine1}
-        name={addressLine1}
-        type="text"
-        placeholder="Address Line 1"
-        value={formData[addressLine1] || ""}
-        onChange={handleChange}
-      />
+
+      <Label htmlFor="checkbox">Checkbox Example</Label>
+      <Checkbox id="Oahu" name="islands" value="Oahu" label="Oahu" defaultChecked />
+      <Checkbox id="Kauai" name="islands" value="Kauai" label="Kauai" />
+      <Checkbox id="Mauai" name="islands" value="Mauai" label="Mauai" />
+
       <Label htmlFor={radioOption}>Have you caught fish today?</Label>
       <Radio
         id="option-catch-yes"
@@ -182,73 +77,22 @@ const ComplexForm = ({ asyncFormOptions }) => {
         checked={formData[radioOption] === "option-catch-no"}
         onChange={handleChange}
       />
-      <Label htmlFor={addressLine2}>Address Line 2</Label>
+
+      <Label htmlFor={numberOfFish}>Number of Fish</Label>
+      <Alert type="info" slim={true}>
+        Example of a linked input. The value of this input is used to compute the price.
+      </Alert>
       <TextInput
-        id={addressLine2}
-        name={addressLine2}
-        type="text"
-        placeholder="Address Line 2"
-        value={formData[addressLine2] || ""}
+        id={numberOfFish}
+        // linkedInputId tells computedPrice to update onChange
+        linkedinputids={[computedPrice]}
+        name={numberOfFish}
+        type="number"
+        placeholder="0"
+        value={formData[numberOfFish] || ""}
         onChange={handleChange}
       />
-      <FormGroup error={validationErrors[city]}>
-        <Label htmlFor={city}>City</Label>
-        {validationErrors.city && <ErrorMessage>{validationErrors.city}</ErrorMessage>}
-        <TextInput
-          id={city}
-          name={city}
-          type="text"
-          placeholder="City"
-          value={formData[city] || ""}
-          validationStatus={validationErrors[city] ? "error" : undefined}
-          onChange={handleChange}
-          onBlur={(e) => handleBlur(e, cityValidators)}
-        />
-      </FormGroup>
-      <FormGroup error={validationErrors[state]}>
-        <Label htmlFor={state}>State</Label>
-        {validationErrors[state] && <ErrorMessage>{validationErrors[state]}</ErrorMessage>}
-        <TextInput
-          id={state}
-          name="state"
-          type="text"
-          placeholder="State"
-          value={formData[state] || ""}
-          validationStatus={validationErrors[state] ? "error" : undefined}
-          onChange={handleChange}
-          onBlur={(e) => handleBlur(e, stateValidators)}
-        />
-      </FormGroup>
-      <FormGroup error={validationErrors[zipcode]}>
-        <Label htmlFor={zipcode}>Zip Code</Label>
-        {validationErrors[zipcode] && <ErrorMessage>{validationErrors[zipcode]}</ErrorMessage>}
-        <TextInput
-          id={zipcode}
-          name={zipcode}
-          type="text"
-          placeholder="Zip Code"
-          value={formData[zipcode] || ""}
-          validationStatus={validationErrors[zipcode] ? "error" : undefined}
-          onChange={handleChange}
-          onBlur={(e) => handleBlur(e, zipcodeValidators)}
-        />
-      </FormGroup>
-      <Label htmlFor={occupation}>Occupation</Label>
-      <TextInput
-        id={occupation}
-        name={occupation}
-        type="text"
-        placeholder="Occupation"
-        value={formData[occupation] || ""}
-        onChange={handleChange}
-      />
-      <Label htmlFor={department}>Department</Label>
-      <Select name={department} value={formData[department] || ""} onChange={handleChange}>
-        <option value="">Select Department</option>
-        <option value="hr">Human Resources</option>
-        <option value="it">IT</option>
-        <option value="finance">Finance</option>
-      </Select>
+
       <Label htmlFor={species}>Species</Label>
       <Alert type="info" slim={true}>
         The species select input is dependent on data coming from a server. The current
@@ -271,6 +115,9 @@ const ComplexForm = ({ asyncFormOptions }) => {
       {visibleInputs[subSpecies] && (
         <>
           <Label htmlFor={subSpecies}>Sub species</Label>
+          <Alert type="info" slim={true}>
+            Only visible when a species is selected.
+          </Alert>
           <TextInput
             id={subSpecies}
             name={subSpecies}
@@ -281,7 +128,11 @@ const ComplexForm = ({ asyncFormOptions }) => {
           />
         </>
       )}
+
       <Label htmlFor={species}>Computed Price</Label>
+      <Alert type="info" slim={true}>
+        Readonly input. Its value is calculated based on the number of fish and species selected.
+      </Alert>
       <TextInput
         readOnly
         id={computedPrice}
@@ -291,6 +142,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
         value={formData[computedPrice] || ""}
         onChange={handleChange}
       />
+
       <Alert type="info" slim={true}>
         Button Option 1: Below is an example of a simple button, it will save data locally. It does
         not make a server request.
@@ -318,27 +170,5 @@ const ComplexForm = ({ asyncFormOptions }) => {
     </>
   );
 };
-
-function FormInfoAnnotation() {
-  return (
-    <Alert type="info" headingLevel={"h1"} heading="Form Components">
-      This component is an example of a form with various input types. The form is designed to be
-      used with the `FormWrapper` component.
-      <br />
-      <br />
-      <strong>Note:</strong> Annotations are for informational purposes only. In production, you
-      would remove the annotations. Components with annotations above them are optional. You can
-      choose whether or not to use them in your application.
-      <br />
-      <br />
-      <a href={COMMON_CONFIG.docsUrl} target="_blank" rel="noopener noreferrer">
-        <Button type="button">Go To Documentation</Button>
-      </a>
-      <a href={COMMON_CONFIG.storybookURL} target="_blank" rel="noopener noreferrer">
-        <Button type="button">Go To Storybook</Button>
-      </a>
-    </Alert>
-  );
-}
 
 export { ComplexForm };
