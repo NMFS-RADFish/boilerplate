@@ -59,8 +59,7 @@ export class IndexedDBMethod extends StorageMethod {
   /**
    * Update data in IndexedDB.
    * @param {string} tableName - The name of the table to find data.
-   * @param {Array} criteria - The criteria to use for updating data, e.g. ["uuid-123"] or ["uuid-123", "uuid-987", "uuid-456"].
-   * @param {Array} data - Array of the updated data, e.g. [{ numberOfFish: "1", species: "Grouper" }] or [{name: "Grouper", price: 5.00}, {name: "Salmon", price: 10.00}].
+   * @param {Array} data - Array of the updated data, e.g. [{ uuid: 1234, numberOfFish: "1", species: "Grouper" }] or [{ uuid: 5678, name: "Grouper", price: 5.00}, { uuid: 9012, name: "Salmon", price: 10.00 }]. Be sure the uuid is included in each data object.
    * @return {Promise<Array>} A promise that resolves to the updated data.
    * @throws {Error} If an error occurs while updating the data in IndexedDB.
    */
