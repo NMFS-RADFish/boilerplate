@@ -29,7 +29,7 @@ function useMultStepForm(uuid) {
     if (formData.currentStep < TOTAL_STEPS) {
       const nextStep = formData.currentStep + 1;
       setFormData({ ...formData, currentStep: nextStep });
-      updateOfflineData("formData", { ...formData, uuid, currentStep: nextStep });
+      updateOfflineData("formData", [{ ...formData, uuid, currentStep: nextStep }]);
     }
   }
 
@@ -37,8 +37,7 @@ function useMultStepForm(uuid) {
     if (formData.currentStep > 1) {
       const prevStep = formData.currentStep - 1;
       setFormData({ ...formData, currentStep: prevStep });
-      updateOfflineData("formData", { ...formData, uuid, currentStep: prevStep });
-      return;
+      updateOfflineData("formData", [{ ...formData, uuid, currentStep: prevStep }]);
     }
   }
 
