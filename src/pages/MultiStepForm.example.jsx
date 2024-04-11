@@ -74,7 +74,9 @@ const MultiStepForm = () => {
   if (!id) {
     return (
       <div>
-        <Button onClick={handleInit}>Begin Multistep Form</Button>
+        <Button type="button" onClick={handleInit}>
+          Begin Multistep Form
+        </Button>
       </div>
     );
   }
