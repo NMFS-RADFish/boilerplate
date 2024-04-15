@@ -50,8 +50,9 @@ jobs:
       - name: Serve App
         run: nohup serve -s build -l 3000 > /dev/null 2>&1 &
 
-      - name: Wait for Server to be Ready
-        run: sleep 10 # Give some time for the server to start
+      - name: Ensure Server is Ready
+        run: |
+          timeout 60 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000)" != "200" ]]; do sleep 1; done' || echo "Server not ready in time"
 
       - name: Verify Server is Running
         run: curl http://localhost:3000
