@@ -48,9 +48,10 @@ jobs:
         run: npm install -g serve
 
       - name: Serve App
-        run: serve -s build -l 3000 &
-        shell: bash
-        background: true
+        run: nohup serve -s build -l 3000 > /dev/null 2>&1 &
+
+      - name: Wait for Server to be Ready
+        run: sleep 10 # Give some time for the server to start
 
       - name: Verify Server is Running
         run: curl http://localhost:3000
