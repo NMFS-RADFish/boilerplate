@@ -54,6 +54,7 @@
     - [Snapshot Tests](#snapshot-tests)
     - [Writing Browser Tests](#writing-browser-tests)
     - [Additional Jest Configuration](#additional-jest-configuration)
+    - [508 Compliance](#508-compliance)
 
 ## Getting Started
 
@@ -947,3 +948,49 @@ it("should display the homepage", async () => {
 ### Additional Jest Configuration
 
 Jest and React Testing Library is included in the RADFish framework by default. Modifying the Jest test configuration can be configured in the `jest.config.js` file. Please see the official Jest docs for the latest configuration options: https://jestjs.io/docs/configuration.
+
+### 508 Compliance
+
+# Guide to Testing Section 508 Compliance in a React Project
+
+## 1. Introduction to Section 508 Compliance
+
+Section 508 of the Rehabilitation Act mandates that federal agencies' electronic and information technology is accessible to people with disabilities, aligning with the Web Content Accessibility Guidelines (WCAG).
+
+## 2. Set Up Your React Project
+
+Ensure your React application is operational locally, typically accessed at `http://localhost:3000`.
+
+## 3. Automated Testing with Lighthouse
+
+- **Open Google Chrome**: Ensure Google Chrome is installed and open your project by navigating to `http://localhost:3000`.
+- **Access Chrome DevTools**: Right-click on the page and select "Inspect", or use `Ctrl+Shift+I` (Windows/Linux) or `Cmd+Option+I` (Mac) to open DevTools.
+- **Run Lighthouse Audit**:
+  - Click on the "Lighthouse" tab in the DevTools panel.
+  - Check the "Accessibility" box to focus the audit on accessibility compliance.
+  - Click "Analyze page load" to start the audit. Review the report that Lighthouse provides, detailing accessibility issues and suggestions for improvements.
+
+## 4. Implement Recommendations
+
+Address each listed accessibility issue based on Lighthouse’s suggestions, such as adding alt text to images, ensuring proper use of semantic HTML, and correcting ARIA labels.
+
+## 5. Rerun the Audit
+
+After making changes, rerun Lighthouse to verify improvements and ensure no new issues have arisen.
+
+## 6. Manual Checks (Optional)
+
+- **Keyboard Navigation**: Verify that all interactive elements are accessible via keyboard alone.
+- **Screen Reader Testing**: Use the [VoiceOver](https://www.accessibilitychecker.org/blog/section-508-tools/#:~:text=Developed%20for%20Apple%20devices%2C%20VoiceOver,are%20compatible%20with%20screen%20readers) tool to ensure all content is navigable and readable.
+- **Color Contrast**: Use the [WebAIM Color Contrast Checker Chrome Extension](https://wave.webaim.org/extension/) to ensure sufficient contrast between text and backgrounds.
+
+
+## 7. Continuous Integration (Optional)
+
+Integrate accessibility checks into your CI/CD pipeline using Lighthouse CLI to automate testing.
+
+## 8. Documentation and Reporting
+
+Maintain a concise record of accessibility audits and changes to demonstrate compliance and continuous improvement.
+
+By following this simplified process, you can effectively test and enhance the Section 508 compliance of your Radfish project, ensuring accessibility for all users with minimal complexity. Regular testing and updates are key to maintaining accessibility standards.

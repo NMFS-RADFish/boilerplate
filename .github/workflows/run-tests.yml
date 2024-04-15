@@ -25,3 +25,47 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  lighthouse:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Static Server
+        run: npm install -g serve
+
+      - name: Serve App
+        run: serve -s build -l 3000 &
+        shell: bash
+        background: true
+
+      - name: Verify Server is Running
+        run: curl http://localhost:3000
+        continue-on-error: true
+
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@v8
+        with:
+          urls: "http://localhost:3000"
+          temporaryPublicStorage: true
+          runs: 1
+          configPath: "./lighthouse/lighthouserc.json"
+
+      - name: Archive Production Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: lighthouse-reports
+          path: ./lighthouse/reports/
