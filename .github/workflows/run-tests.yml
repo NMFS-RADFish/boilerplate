@@ -61,7 +61,7 @@ jobs:
           urls: "http://localhost:3000"
           temporaryPublicStorage: true
           runs: 1
-          configPath: "./lighthouse/lighthouserc.json"
+          configPath: "./lighthouserc.json"
           chromeFlags: "--no-sandbox --headless --disable-gpu --disable-dev-shm-usage"
 
       - name: Debug Output if Failed
