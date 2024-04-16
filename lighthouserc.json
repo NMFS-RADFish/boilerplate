@@ -4,7 +4,10 @@
       "url": ["http://127.0.0.1:4000"],
       "startServerCommand": "http-server ./build/client -p 4000 -g",
       "startServerReadyPattern": "Available on",
-      "numberOfRuns": 1
+      "numberOfRuns": 1,
+      "settings": {
+        "chromeFlags": ["--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage"]
+      }
     },
     "upload": {
       "target": "temporary-public-storage"
