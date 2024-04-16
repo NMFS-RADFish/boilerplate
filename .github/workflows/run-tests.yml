@@ -26,46 +26,25 @@ jobs:
       - name: Run tests
         run: npm test
 
+jobs:
   lighthouse:
-    needs: test
+    name: Lighthouse CI
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
-          node-version: "18"
+          ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: Build
-        run: npm run build
+      - name: lighthouse mobile audit
+        run: npm lhci:mobile
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
-      - name: Install Static Server
-        run: npm install -g http-server # Installs http-server globally
-
-      - name: Serve App
-        run: nohup http-server build -p 3000 -c-1 > /dev/null 2>&1 & # Serve the build directory on port 3000
-
-      - name: Ensure Server is Ready
-        run: |
-          echo "Checking if server is ready at http://localhost:3000"
-          curl -v http://localhost:3000 || echo "Server not responding as expected"
-
-      - name: Run Lighthouse
-        uses: treosh/lighthouse-ci-action@v8
-        with:
-          urls: "http://localhost:3000"
-          temporaryPublicStorage: true
-          runs: 1
-          configPath: "./lighthouserc.json"
-          chromeFlags: "--no-sandbox --headless --disable-gpu --disable-dev-shm-usage"
-
-      - name: Debug Output if Failed
-        if: failure()
-        run: |
-          echo "Lighthouse failed to run, checking environment and outputting logs..."
-          cat /tmp/lighthouse.*/*.log || echo "No logs found"
+      - name: lighthouse desktop audit
+        run: npm lhci:desktop
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
