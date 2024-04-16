@@ -978,19 +978,12 @@ Address each listed accessibility issue based on Lighthouse’s suggestions, suc
 
 After making changes, rerun Lighthouse to verify improvements and ensure no new issues have arisen.
 
-## 6. Manual Checks (Optional)
+## 6. Continuous Integration
+
+Lighthouse CI is integrated into our project's CI/CD pipeline. When a pull request is made to the main branch, the GitHub Actions workflow automatically triggers a Lighthouse audit. This ensures that accessibility standards are consistently met before any code is merged.
+
+## 7. Manual Checks (Optional)
 
 - **Keyboard Navigation**: Verify that all interactive elements are accessible via keyboard alone.
 - **Screen Reader Testing**: Use the [VoiceOver](https://www.accessibilitychecker.org/blog/section-508-tools/#:~:text=Developed%20for%20Apple%20devices%2C%20VoiceOver,are%20compatible%20with%20screen%20readers) tool to ensure all content is navigable and readable.
 - **Color Contrast**: Use the [WebAIM Color Contrast Checker Chrome Extension](https://wave.webaim.org/extension/) to ensure sufficient contrast between text and backgrounds.
-
-
-## 7. Continuous Integration (Optional)
-
-Integrate accessibility checks into your CI/CD pipeline using Lighthouse CLI to automate testing.
-
-## 8. Documentation and Reporting
-
-Maintain a concise record of accessibility audits and changes to demonstrate compliance and continuous improvement.
-
-By following this simplified process, you can effectively test and enhance the Section 508 compliance of your Radfish project, ensuring accessibility for all users with minimal complexity. Regular testing and updates are key to maintaining accessibility standards.
