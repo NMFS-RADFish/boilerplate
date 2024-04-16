@@ -80,7 +80,7 @@ const SimpleTable = () => {
       });
 
       // If there is offline data, show the submit draft button
-      if (offlineData.length) {
+      if (offlineData?.length) {
         setShowOfflineSubmit(true);
       }
     };
