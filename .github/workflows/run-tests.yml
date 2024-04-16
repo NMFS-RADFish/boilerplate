@@ -44,11 +44,11 @@ jobs:
       - name: Build
         run: npm run build
 
-            - name: Install Static Server
-        run: npm install -g http-server  # Installs http-server globally
+      - name: Install Static Server
+        run: npm install -g http-server # Installs http-server globally
 
       - name: Serve App
-        run: nohup http-server build -p 3000 -c-1 > /dev/null 2>&1 &  # Serve the build directory on port 3000
+        run: nohup http-server build -p 3000 -c-1 > /dev/null 2>&1 & # Serve the build directory on port 3000
 
       - name: Ensure Server is Ready
         run: |
