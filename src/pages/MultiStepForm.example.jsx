@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { TextInput, Button, Label, ErrorMessage } from "../react-radfish";
-import { GridContainer, Grid, FormGroup } from "@trussworks/react-uswds";
+import { TextInput, Button, Label, ErrorMessage } from "../packages/react-components";
+import { GridContainer, Grid } from "@trussworks/react-uswds";
 import {
   fullNameValidators,
   emailValidators,
@@ -9,9 +9,9 @@ import {
   stateValidators,
   cityValidators,
 } from "../utilities";
-import useOfflineStorage from "../hooks/useOfflineStorage";
+import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { CONSTANTS } from "../config/multistepForm";
-import useMultiStepForm from "../hooks/useMultiStepForm";
+import useMultStepForm from "../hooks/useMultiStepForm";
 import { useParams, useNavigate } from "react-router-dom";
 
 const { fullName, nickname, email, phoneNumber, country, city, state, zipcode } = CONSTANTS;
@@ -38,7 +38,7 @@ const MultiStepForm = () => {
     handleChange,
     handleBlur,
     validationErrors,
-  } = useMultiStepForm(id);
+  } = useMultStepForm(id);
 
   // A Ref will be needed for each step form to set focus when the form is displayed.
   const stepFocus = [useRef(null), useRef(null), useRef(null)];
@@ -74,14 +74,12 @@ const MultiStepForm = () => {
   if (!id) {
     return (
       <div>
-        <Button type="button" onClick={handleInit}>
-          Begin Multistep Form
-        </Button>
+        <Button onClick={handleInit}>Begin Multistep Form</Button>
       </div>
     );
   }
 
-  if (formData.currentStep === 1) {
+  if (formData || formData.currentStep === 1) {
     return (
       <GridContainer>
         <Grid row gap="md">
@@ -134,14 +132,10 @@ const MultiStepForm = () => {
             to move the button to the right to give the correct placement on page while tabbing
             in the correct order.
           */}
-          <Button
-            type="button"
-            className="margin-top-1 margin-right-0 order-last"
-            onClick={stepForward}
-          >
+          <Button className="margin-top-1 margin-right-0 order-last" onClick={stepForward}>
             Next Step
           </Button>
-          <Button type="button" className="margin-top-1" onClick={stepBackward}>
+          <Button className="margin-top-1" onClick={stepBackward}>
             Prev Step
           </Button>
         </Grid>
@@ -199,14 +193,10 @@ const MultiStepForm = () => {
           </Grid>
         </Grid>
         <Grid className="display-flex flex-justify">
-          <Button
-            type="button"
-            className="margin-top-1 margin-right-0 order-last"
-            onClick={stepForward}
-          >
+          <Button className="margin-top-1 margin-right-0 order-last" onClick={stepForward}>
             Next Step
           </Button>
-          <Button type="button" className="margin-top-1" onClick={stepBackward}>
+          <Button className="margin-top-1" onClick={stepBackward}>
             Prev Step
           </Button>
         </Grid>
@@ -305,7 +295,7 @@ const MultiStepForm = () => {
           >
             Submit MultiStep Form
           </Button>
-          <Button type="button" className="margin-top-1" onClick={stepBackward}>
+          <Button className="margin-top-1" onClick={stepBackward}>
             Prev Step
           </Button>
         </Grid>

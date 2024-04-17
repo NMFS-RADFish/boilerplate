@@ -1,6 +1,6 @@
 import React from "react";
 import { render, act } from "@testing-library/react";
-import { TableWrapper, useTableState } from "../../contexts/TableWrapper";
+import { TableWrapper, useTableState } from "../../contexts/TableWrapper.example";
 import * as reactTable from "@tanstack/react-table";
 
 vi.mock("@tanstack/react-table", async () => {

@@ -6,7 +6,7 @@ import { Alert } from "@trussworks/react-uswds";
  * Toast configuration constants.
  * @constant {Object}
  */
-const TOAST_CONFIG = {
+const ToastStatus = {
   OFFLINE: {
     status: "offline",
     message: "Application currently offline",
@@ -35,35 +35,35 @@ const RadfishToast = ({ toast }) => {
   }
 
   switch (toast.status) {
-    case TOAST_CONFIG.OFFLINE.status:
+    case ToastStatus.OFFLINE.status:
       return (
         <Alert
           role="toast-notification"
           type={"error"}
           headingLevel={"h1"}
-          hidden={toast.status !== TOAST_CONFIG.OFFLINE.status}
+          hidden={toast.status !== ToastStatus.OFFLINE.status}
         >
           {toast.message}
         </Alert>
       );
-    case TOAST_CONFIG.SUCCESS.status:
+    case ToastStatus.SUCCESS.status:
       return (
         <Alert
           role="toast-notification"
           type={"success"}
           headingLevel={"h1"}
-          hidden={toast.status !== TOAST_CONFIG.SUCCESS.status}
+          hidden={toast.status !== ToastStatus.SUCCESS.status}
         >
           {toast.message}
         </Alert>
       );
-    case TOAST_CONFIG.ERROR.status:
+    case ToastStatus.ERROR.status:
       return (
         <Alert
           role="toast-notification"
           type={"error"}
           headingLevel={"h1"}
-          hidden={toast.status !== TOAST_CONFIG.ERROR.status}
+          hidden={toast.status !== ToastStatus.ERROR.status}
         >
           {toast.message}
         </Alert>
@@ -73,4 +73,4 @@ const RadfishToast = ({ toast }) => {
   }
 };
 
-export { RadfishToast as Toast, TOAST_CONFIG };
+export { RadfishToast as Toast, ToastStatus as TOAST_CONFIG };

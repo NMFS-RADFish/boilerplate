@@ -1,4 +1,4 @@
-import { IndexedDBMethod, StorageModelFactory } from "../storage";
+import { IndexedDBMethod, StorageModelFactory } from "../packages/storage";
 
 /**
  * React hook for managing offline form data using IndexedDB.

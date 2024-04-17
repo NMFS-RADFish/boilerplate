@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import RadfishAuthenticationService from "../../services/AuthenticationService";
+import RadfishAuthenticationService from "../../packages/services/AuthenticationService";
 
 describe("RadfishAuthenticationService", () => {
   beforeEach(() => {
