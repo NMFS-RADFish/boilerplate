@@ -889,7 +889,7 @@ Run tests with the following command: `npm test`
 
 Unit tests focus on testing individual components or functions in isolation.
 
-## Pattern #1 Functional unit tests - utilities and internal modules
+## Pattern 1 Functional unit tests - utilities and internal modules
 
 You can unit test your application functions in order to ensure that they behave correctly when given certain data as parameters. Let's take a look at the unit test for the`handleComputedValuesLogic` function:
 
@@ -930,7 +930,7 @@ In this unit test, we import the function from the application code into the uni
 
 Writing this type of unit test ensures that your application remains stable. Should another developer come in, and modify the original function with breaking changes, the unit test will fail. It is a good idea to write test for edge cases as well. You can reference the `utilities.test.js` file for a deeper dive into how to address these types of cases.
 
-## Pattern #2 Functional unit tests - components and interactions
+## Pattern 2 Functional unit tests - components and interactions
 
 #### Basic Unit Test (component)
 
@@ -983,6 +983,8 @@ it("should display the homepage", () => {
 
 In this test, we are testing that whenever a row is clicked, the `navigate` function is called from `react-router-dom`. Here we introduce another concept of "mocking"
 
+> Notice how we are using a `queryByTestId` method here. This is a useful hook to implement in your application code to make testing your components simpler, by making it easy to query for them within the testing library. Learn more about `data-testid` here: https://testing-library.com/docs/queries/bytestid/
+
 ### Testing mocks
 
 When writing unit tests, you should only be concerned with testing the code that you or your team authored, and shouldn't be concerned about unit testing third party code. This is the case with `react-router-dom`. In our case, we simply want to make sure that the `navigate` function is being called when the row is clicked, and shouldn't be concerned (at this point) what navigate actually does under the hood. With mocks, we can intercept these third party function calls, and return static values in order to validate that our integration is behaving as expected at the unit test level.
@@ -1001,7 +1003,7 @@ Here, we are importing the actual `"react-router-dom"` dependency, and then over
 
 > learn more about mock functions here at the official vitest documentation: https://vitest.dev/api/vi.html#vi-fn
 
-## Pattern #3 Browser integration testing (In progress)
+## Pattern 3 Browser integration testing (In progress)
 
 Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Jest. Please note Puppeteer does not come included by default in the RADFish framework.
 
@@ -1017,7 +1019,7 @@ it("should display the homepage", async () => {
 });
 ```
 
-## Pattern #4 Accessibility Testing (In progress)
+## Pattern 4 Accessibility Testing (In progress)
 
 ### Additional Jest Configuration
 
