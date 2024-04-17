@@ -73,4 +73,4 @@ const RadfishToast = ({ toast }) => {
   }
 };
 
-export { RadfishToast as Toast, ToastStatus as TOAST_CONFIG };
+export { RadfishToast as Toast, ToastStatus };

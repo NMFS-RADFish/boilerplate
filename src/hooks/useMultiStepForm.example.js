@@ -3,7 +3,7 @@ import { useFormState } from "../contexts/FormWrapper.example";
 
 const TOTAL_STEPS = 3;
 
-function useMultStepForm(uuid) {
+function useMultiStepForm(uuid) {
   const {
     formData,
     visibleInputs,
@@ -61,4 +61,4 @@ function useMultStepForm(uuid) {
   };
 }
 
-export default useMultStepForm;
+export default useMultiStepForm;
