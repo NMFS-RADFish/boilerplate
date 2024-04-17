@@ -1,8 +1,10 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { SimpleTable } from "../../pages/Table.example";
 import * as tableWrapper from "../../contexts/TableWrapper";
 import * as tanstackTable from "@tanstack/react-table";
+import * as reactRouterDom from "react-router-dom";
 import Dexie from "dexie";
 import { generateUUID } from "../../utilities/cryptoWrapper.js";
 import { IndexedDBMethod } from "../../storage/IndexedDBMethod.js";
@@ -29,9 +31,10 @@ vi.mock("../../storage/indexedDB.js", () => ({
   },
 }));
 
+const mockedUsedNavigate = vi.fn();
 vi.mock("react-router-dom", async () => ({
   ...(await vi.importActual("react-router-dom")),
-  useNavigate: vi.fn(),
+  useNavigate: () => mockedUsedNavigate,
   useSearchParams: vi.fn(() => [new URLSearchParams(), vi.fn()]),
 }));
 
@@ -159,9 +162,13 @@ describe("Table", () => {
     const tableHeaderElems = container.querySelectorAll("th");
     const tableCellElems = container.querySelectorAll("td");
 
+    const tableRow = screen.queryByTestId("table-body-row");
+    userEvent.click(tableRow);
+
     expect(tableCaption).not.toBeNull();
     expect(tapleCaptionText).toBe("Mock Table Caption");
     expect(tableHeaderElems.length).toBe(1);
     expect(tableCellElems.length).toBe(1);
+    expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
   });
 });

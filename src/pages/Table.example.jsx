@@ -179,6 +179,7 @@ const SimpleTable = () => {
                   onClick={() => handleRowClick(row)}
                   className={isOfflineData && "bg-gray-10"}
                   key={row.original.id}
+                  data-testid="table-body-row"
                 >
                   {row.getVisibleCells().map((cell) => {
                     const isStatusColumn = cell.column.id === "isOffline";
