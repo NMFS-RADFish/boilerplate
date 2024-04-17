@@ -879,7 +879,7 @@ Keep in mind, that as a developer, you will need to configure the `TOTAL_STEPS` 
 
 ## Testing
 
-Testing is a critical part of the software development process, ensuring the reliability and maintainability of your React application. This section provides an overview of writing tests, and outlines a few useful testing patterns using [Vitest](https://vitest.dev/), along with additional frameworks like [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and [Puppeteer](https://pptr.dev/). We will cover 4 different types of tests: functional, interactive, rendering, and browser testing. This section also covers debugging techniques for broken or failed tests and best practices for effective test writing.
+Testing is a critical part of the software development process, ensuring the reliability and maintainability of your React application. This section provides an overview of writing tests, and outlines a few useful testing patterns using [Vitest](https://vitest.dev/), along with additional frameworks like [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and [Puppeteer](https://pptr.dev/). We will cover 4 different types of tests: unit tests - functional, unit tests - rendering, integration tests, and accessibility tests. This section also covers debugging techniques for broken or failed tests and best practices for effective test writing.
 
 ### Running Tests
 
@@ -889,7 +889,7 @@ Run tests with the following command: `npm test`
 
 Unit tests focus on testing individual components or functions in isolation.
 
-#### Basic Unit Test (function)
+## Pattern #1 Functional unit tests - utilities and internal modules
 
 You can unit test your application functions in order to ensure that they behave correctly when given certain data as parameters. Let's take a look at the unit test for the`handleComputedValuesLogic` function:
 
@@ -929,6 +929,8 @@ it("should compute values for specified inputs", () => {
 In this unit test, we import the function from the application code into the unit testing suite. Then, we provide the function with a set of parameters to test against. We then assert (or expect) that the result should be that which is expected.
 
 Writing this type of unit test ensures that your application remains stable. Should another developer come in, and modify the original function with breaking changes, the unit test will fail. It is a good idea to write test for edge cases as well. You can reference the `utilities.test.js` file for a deeper dive into how to address these types of cases.
+
+## Pattern #2 Functional unit tests - components and interactions
 
 #### Basic Unit Test (component)
 
@@ -995,11 +997,11 @@ vi.mock("react-router-dom", async () => ({
 }));
 ```
 
-Here, we are importing the actual `"react-router-dom"` dependency, and then overwriting specific methods from that module. We then assign the `useNaviate` hook to an anonymous function, which is also a mocked `vi.fn()` that we can hook into at the unit test level to ensure it is being called when our row is clicked.
+Here, we are importing the actual `"react-router-dom"` dependency, and then overwriting specific methods from that module. We then assign the `useNaviate` hook to an anonymous function, which is also a mocked `vi.fn()` that we can hook into at the unit test level to ensure it is being called when our row is clicked. Keep in mind that this pattern of mocking can be used in both functional and component unit testing patterns.
 
 > learn more about mock functions here at the official vitest documentation: https://vitest.dev/api/vi.html#vi-fn
 
-### Writing Browser Tests
+## Pattern #3 Browser integration testing (In progress)
 
 Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Jest. Please note Puppeteer does not come included by default in the RADFish framework.
 
@@ -1014,6 +1016,8 @@ it("should display the homepage", async () => {
   await browser.close();
 });
 ```
+
+## Pattern #4 Accessibility Testing (In progress)
 
 ### Additional Jest Configuration
 
