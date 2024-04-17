@@ -1,4 +1,4 @@
-import RadfishAPIService from "../../services/APIService";
+import RadfishAPIService from "../../packages/services/APIService";
 
 describe("RadfishAPIService", () => {
   beforeEach(() => {

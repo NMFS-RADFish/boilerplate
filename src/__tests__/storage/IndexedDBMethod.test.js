@@ -1,5 +1,5 @@
 import Dexie from "dexie";
-import { IndexedDBMethod } from "../../storage/IndexedDBMethod.js";
+import { IndexedDBMethod } from "../../packages/storage/IndexedDBMethod.js";
 import { generateUUID } from "../../utilities/cryptoWrapper.js";
 
 vi.mock("dexie");

@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import * as formWrapper from "../../contexts/FormWrapper";
+import * as formWrapper from "../../contexts/FormWrapper.example";
 
 vi.mock("react-router-dom", async () => ({
   ...(await vi.importActual("react-router-dom")),
