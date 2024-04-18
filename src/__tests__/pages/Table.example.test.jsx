@@ -6,7 +6,7 @@ import * as tableWrapper from "../../contexts/TableWrapper.example";
 import * as tanstackTable from "@tanstack/react-table";
 import Dexie from "dexie";
 import { generateUUID } from "../../utilities/cryptoWrapper.js";
-import { IndexedDBMethod } from "../../storage/IndexedDBMethod.js";
+import { IndexedDBMethod } from "../../packages/storage/IndexedDBMethod.js";
 
 global.fetch = vi.fn().mockResolvedValue({
   ok: true,
@@ -18,7 +18,7 @@ global.fetch = vi.fn().mockResolvedValue({
 vi.mock("dexie");
 vi.mock("../../utilities/cryptoWrapper.js");
 
-vi.mock("../../storage/indexedDB.js", () => ({
+vi.mock("../../packages/storage/indexedDB.js", () => ({
   db: {
     formData: {
       add: vi.fn(),
@@ -89,9 +89,9 @@ const mockHeader = {
   },
 };
 
-vi.mock("../../contexts/TableWrapper", async () => {
+vi.mock("../../contexts/TableWrapper.example", async () => {
   return {
-    ...(await vi.importActual("../../contexts/TableWrapper")),
+    ...(await vi.importActual("../../contexts/TableWrapper.example")),
     useTableState: vi.fn(() => {
       return {
         tableCaption: "Mock Table Caption",
