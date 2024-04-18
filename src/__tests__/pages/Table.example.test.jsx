@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 import { SimpleTable } from "../../pages/Table.example";
 import * as tableWrapper from "../../contexts/TableWrapper";
 import * as tanstackTable from "@tanstack/react-table";
-import * as reactRouterDom from "react-router-dom";
 import Dexie from "dexie";
 import { generateUUID } from "../../utilities/cryptoWrapper.js";
 import { IndexedDBMethod } from "../../storage/IndexedDBMethod.js";
