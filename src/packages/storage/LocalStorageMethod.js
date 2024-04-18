@@ -1,4 +1,4 @@
-import { generateUUID } from "../utilities";
+import { generateUUID } from "../../utilities";
 import { StorageMethod } from "./StorageMethod";
 
 /**

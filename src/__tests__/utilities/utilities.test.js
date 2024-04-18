@@ -14,7 +14,7 @@ import {
 import {
   handleComputedValuesLogic,
   handleInputVisibilityLogic,
-} from "../../contexts/FormWrapper.jsx";
+} from "../../contexts/FormWrapper.example.jsx";
 
 describe("Form Input Validators", () => {
   // Full Name Validator Tests
