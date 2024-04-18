@@ -889,7 +889,7 @@ Run tests with the following command: `npm test`
 
 Unit tests focus on testing individual components or functions in isolation.
 
-## Pattern 1 Functional unit tests - utilities and internal modules
+## Pattern 1 Functional Unit Tests - utilities and internal modules
 
 You can unit test your application functions in order to ensure that they behave correctly when given certain data as parameters. Let's take a look at the unit test for the`handleComputedValuesLogic` function:
 
@@ -930,7 +930,7 @@ In this unit test, we import the function from the application code into the uni
 
 Writing this type of unit test ensures that your application remains stable. Should another developer come in, and modify the original function with breaking changes, the unit test will fail. It is a good idea to write test for edge cases as well. You can reference the `utilities.test.js` file for a deeper dive into how to address these types of cases.
 
-## Pattern 2 Functional unit tests - components and interactions
+## Pattern 2 Functional Unit Tests - components and interactions
 
 #### Basic Unit Test (component)
 
