@@ -76,7 +76,7 @@ const MultiStepForm = () => {
   if (!id) {
     return (
       <div>
-        <Button type="button" onClick={handleInit} data-testid="init-multistep">
+        <Button id="step-forward" type="button" onClick={handleInit} data-testid="init-multistep">
           Begin Multistep Form
         </Button>
       </div>
@@ -137,6 +137,7 @@ const MultiStepForm = () => {
             in the correct order.
           */}
           <Button
+            id="step-forward"
             type="button"
             className="margin-top-1 margin-right-0 order-last"
             onClick={stepForward}
@@ -145,6 +146,7 @@ const MultiStepForm = () => {
             Next Step
           </Button>
           <Button
+            id="step-backward"
             type="button"
             className="margin-top-1"
             onClick={stepBackward}
@@ -208,13 +210,14 @@ const MultiStepForm = () => {
         </Grid>
         <Grid className="display-flex flex-justify">
           <Button
+            id="step-forward"
             type="button"
             className="margin-top-1 margin-right-0 order-last"
             onClick={stepForward}
           >
             Next Step
           </Button>
-          <Button type="button" className="margin-top-1" onClick={stepBackward}>
+          <Button id="step-backward" type="button" className="margin-top-1" onClick={stepBackward}>
             Prev Step
           </Button>
         </Grid>
@@ -313,7 +316,7 @@ const MultiStepForm = () => {
           >
             Submit MultiStep Form
           </Button>
-          <Button type="button" className="margin-top-1" onClick={stepBackward}>
+          <Button id="step-backward" type="button" className="margin-top-1" onClick={stepBackward}>
             Prev Step
           </Button>
         </Grid>

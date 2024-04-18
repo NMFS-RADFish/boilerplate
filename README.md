@@ -1005,7 +1005,7 @@ Here, we are importing the actual `"react-router-dom"` dependency, and then over
 
 ## Pattern 3 Browser integration testing (In progress)
 
-Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Jest. Please note Puppeteer does not come included by default in the RADFish framework.
+Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Jest.
 
 ```jsx
 const puppeteer = require("puppeteer");
