@@ -30,10 +30,10 @@ vi.mock("../../storage/indexedDB.js", () => ({
   },
 }));
 
-const mockedUsedNavigate = vi.fn();
+const mockedUseNavigate = vi.fn();
 vi.mock("react-router-dom", async () => ({
   ...(await vi.importActual("react-router-dom")),
-  useNavigate: () => mockedUsedNavigate,
+  useNavigate: () => mockedUseNavigate,
   useSearchParams: vi.fn(() => [new URLSearchParams(), vi.fn()]),
 }));
 
@@ -168,6 +168,6 @@ describe("Table", () => {
     expect(tapleCaptionText).toBe("Mock Table Caption");
     expect(tableHeaderElems.length).toBe(1);
     expect(tableCellElems.length).toBe(1);
-    expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
+    expect(mockedUseNavigate).toHaveBeenCalledTimes(1);
   });
 });
