@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import * as formWrapper from "../../contexts/FormWrapper";
+import * as formWrapper from "../../contexts/FormWrapper.example";
 import { ComplexForm } from "../../pages/ComplexForm.example";
 
 // Mocking react-router-dom hooks

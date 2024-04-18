@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import * as formWrapper from "../../contexts/FormWrapper";
+import * as formWrapper from "../../contexts/FormWrapper.example";
 import { MultiStepForm } from "../../pages/MultiStepForm.example";
 import Dexie from "dexie";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SimpleTable } from "../../pages/Table.example";
-import * as tableWrapper from "../../contexts/TableWrapper";
+import * as tableWrapper from "../../contexts/TableWrapper.example";
 import * as tanstackTable from "@tanstack/react-table";
 import Dexie from "dexie";
 import { generateUUID } from "../../utilities/cryptoWrapper.js";
