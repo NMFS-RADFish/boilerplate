@@ -1,15 +1,15 @@
 import puppeteer from "puppeteer";
 
-describe("MultiStepForm", () => {
+describe("Integration", () => {
   let browser;
   let page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
   });
 
-  it("navigate through steps, ensure it can progress from initial page to first step", async () => {
+  it("should be able to navigate through application", async () => {
     await page.goto("http://localhost:3000/multistep");
     await page.waitForSelector("#step-forward");
     await page.click("#step-forward");
