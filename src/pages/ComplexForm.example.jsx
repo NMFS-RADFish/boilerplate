@@ -59,6 +59,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
           validationStatus={validationErrors[fullName] ? "error" : undefined}
           onChange={handleChange}
           onBlur={(e) => handleBlur(e, fullNameValidators)}
+          data-testid="inputId"
         />
       </FormGroup>
 

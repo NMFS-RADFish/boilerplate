@@ -880,7 +880,7 @@ Keep in mind, that as a developer, you will need to configure the `TOTAL_STEPS` 
 
 ## Testing
 
-Testing is a critical part of the software development process, ensuring the reliability and maintainability of your React application. This section provides an overview of writing tests using [Jest](https://jestjs.io/), along with additional frameworks like [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for different types of tests: snapshot, unit, and browser testing. This section also covers debugging techniques for broken or failed tests and best practices for effective test writing.
+Testing is a critical part of the software development process, ensuring the reliability and maintainability of your React application. This section provides an overview of writing tests, and outlines a few useful testing patterns using [Vitest](https://vitest.dev/), along with additional frameworks like [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and [Puppeteer](https://pptr.dev/). We will cover 4 different types of tests: unit tests - functional, unit tests - rendering, integration tests, and accessibility tests. This section also covers debugging techniques for broken or failed tests and best practices for effective test writing.
 
 ### Running Tests
 
@@ -890,46 +890,121 @@ Run tests with the following command: `npm test`
 
 Unit tests focus on testing individual components or functions in isolation.
 
-#### Basic Unit Test
+## Pattern 1 Functional Unit Tests - utilities and internal modules
 
-```jsx
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import MyComponent from "./MyComponent";
+You can unit test your application functions in order to ensure that they behave correctly when given certain data as parameters. Let's take a look at the unit test for the`handleComputedValuesLogic` function:
 
-it("renders the correct content", () => {
-  render(<MyComponent />);
-  expect(screen.getByText("Content")).toBeInTheDocument();
+```js
+it("should compute values for specified inputs", () => {
+  import { handleComputedValuesLogic } from "../../contexts/FormWrapper.jsx";
+
+  const inputIds = ["input1", "input2"]; // Mock input IDs
+  const formData = {
+    value1: 5,
+    value2: 10,
+  }; // Mock form data
+  const FORM_CONFIG = {
+    input1: {
+      computed: {
+        callback: (args) => args[0] * 2, // Double the value
+        args: ["value1"], // Argument from the form data
+      },
+    },
+    input2: {
+      computed: {
+        callback: (args) => args.reduce((acc, val) => acc + val, 0), // Sum of values
+        args: ["value1", "value2"], // Arguments from the form data
+      },
+    },
+  }; // Mock form configuration
+
+  // Invoke the function to compute values
+  handleComputedValuesLogic(inputIds, formData, FORM_CONFIG);
+
+  // Assert that the computed values are correct
+  expect(formData.input1).toBe(10); // Computed value of input1 should be 10 (5 * 2)
+  expect(formData.input2).toBe(15); // Computed value of input2 should be 15 (5 + 10)
 });
 ```
 
+In this unit test, we import the function from the application code into the unit testing suite. Then, we provide the function with a set of parameters to test against. We then assert (or expect) that the result should be that which is expected.
+
+Writing this type of unit test ensures that your application remains stable. Should another developer come in, and modify the original function with breaking changes, the unit test will fail. It is a good idea to write test for edge cases as well. You can reference the `utilities.test.js` file for a deeper dive into how to address these types of cases.
+
+## Pattern 2 Functional Unit Tests - components and interactions
+
+#### Basic Unit Test (component)
+
+When testing a React component, you will need to render out the component somehow within the unit test. This is where `@testing-library/react` comes into play. This library exposes several helper functions that can be used to make testing your React UI in a similar pattern that you would a basic function. Remember that in the end, React components are just JavaScript functions.
+
+```jsx
+import { render, screen } from "@testing-library/react";
+import { Toast } from "../../react-radfish";
+
+it("renders Success Alert when toast status is 'success'", () => {
+  const toast = { status: "offline", message: "Application currently offline" };
+  render(<Toast toast={toast} />);
+  const offlineAlert = screen.getByRole("toast-notification");
+  expect(offlineAlert).toBeInTheDocument();
+  expect(offlineAlert).toHaveTextContent("Application currently offline");
+});
+```
+
+The `render` method from the testing library allows you to render your component, and the `screen` object behaves in a similar way to how the browser DOM works. You can then pass your component the props that you want to test against, and then assert (or expect) their behaviors as needed.
+
+> The `screen.debug()` method is extremely useful, and allows you to visualize the entire component as the testing suite evaluates it. This can help you troubleshoot why your test isn't behaving as you'd expect it to. Read up more here: https://testing-library.com/docs/dom-testing-library/api-debugging/#screendebug
+
 #### Testing User Interactions
 
-Utilize user-event or fireEvent from React Testing Library to simulate user actions.
+Another pattern you can follow, is to fire off events as they are called within the unit test suite. You can do this through the `userEvent` object from the testing library. Let's say, that we want to ensure that each of our `TableRow` elements retain their click event handlers, and therefore remain clickable:
 
 ```jsx
 import userEvent from "@testing-library/user-event";
 
-// Example: Clicking a button
-userEvent.click(screen.getByRole("button"));
-```
+const mockedUsedNavigate = vi.fn();
+vi.mock("react-router-dom", async () => ({
+  ...(await vi.importActual("react-router-dom")),
+  useNavigate: () => mockedUsedNavigate,
+  useSearchParams: vi.fn(() => [new URLSearchParams(), vi.fn()]),
+}));
 
-### Snapshot Tests
+it("should display the homepage", () => {
+  const { queryByText, container } = render(
+    <tableWrapper.TableWrapper>
+      <SimpleTable />
+    </tableWrapper.TableWrapper>,
+  );
 
-Snapshot testing captures the rendered output of a component and ensures that it does not change unexpectedly.
+  const tableRow = screen.queryByTestId("table-body-row");
+  userEvent.click(tableRow);
 
-```jsx
-import React from "react";
-import renderer from "react-test-renderer";
-import MyComponent from "./MyComponent";
-
-it("renders correctly", () => {
-  const tree = renderer.create(<MyComponent />).toJSON();
-  expect(tree).toMatchSnapshot();
+  expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
 });
 ```
 
-### Writing Browser Tests
+In this test, we are testing that whenever a row is clicked, the `navigate` function is called from `react-router-dom`. Here we introduce another concept of "mocking"
+
+> Notice how we are using a `queryByTestId` method here. This is a useful hook to implement in your application code to make testing your components simpler, by making it easy to query for them within the testing library. Learn more about `data-testid` here: https://testing-library.com/docs/queries/bytestid/
+
+### Testing mocks
+
+When writing unit tests, you should only be concerned with testing the code that you or your team authored, and shouldn't be concerned about unit testing third party code. This is the case with `react-router-dom`. In our case, we simply want to make sure that the `navigate` function is being called when the row is clicked, and shouldn't be concerned (at this point) what navigate actually does under the hood. With mocks, we can intercept these third party function calls, and return static values in order to validate that our integration is behaving as expected at the unit test level.
+
+If we look at the `SimpleTable` component, we are actually using the `navigate` as a reassignment from the `useNavigate` hook within the component body. Let's take a closer look at how we can mock this out:
+
+```jsx
+const mockedUsedNavigate = vi.fn();
+vi.mock("react-router-dom", async () => ({
+  ...(await vi.importActual("react-router-dom")),
+  useNavigate: () => mockedUsedNavigate,
+}));
+```
+
+Here, we are importing the actual `"react-router-dom"` dependency, and then overwriting specific methods from that module. We then assign the `useNaviate` hook to an anonymous function, which is also a mocked `vi.fn()` that we can hook into at the unit test level to ensure it is being called when our row is clicked. Keep in mind that this pattern of mocking can be used in both functional and component unit testing patterns.
+
+> learn more about mock functions here at the official vitest documentation: https://vitest.dev/api/vi.html#vi-fn
+
+## Pattern 3 Browser integration testing (In progress)
 
 Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Jest. Please note Puppeteer does not come included by default in the RADFish framework.
 
@@ -944,6 +1019,8 @@ it("should display the homepage", async () => {
   await browser.close();
 });
 ```
+
+## Pattern 4 Accessibility Testing (In progress)
 
 ### Additional Jest Configuration
 
