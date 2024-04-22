@@ -77,7 +77,9 @@ export const FormWrapper = ({ children, onSubmit }) => {
           setFormData(data);
         } else {
           const cachedData = await findOfflineData("formData", { uuid: params.id });
-          setFormData(cachedData[0]);
+          if (cachedData) {
+            setFormData(cachedData[0]);
+          }
         }
       };
       paramFormData();

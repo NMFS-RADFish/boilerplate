@@ -51,7 +51,9 @@ const MultiStepForm = () => {
           uuid: id,
         });
 
-        setFormData({ ...found[0], currentStep: 1, totalSteps: 3 });
+        if (found) {
+          setFormData({ ...found[0], currentStep: 1, totalSteps: 3 });
+        }
       } else {
         navigate("/multistep");
       }
@@ -74,7 +76,7 @@ const MultiStepForm = () => {
   if (!id) {
     return (
       <div>
-        <Button type="button" onClick={handleInit}>
+        <Button type="button" onClick={handleInit} data-testid="init-multistep">
           Begin Multistep Form
         </Button>
       </div>
@@ -138,10 +140,16 @@ const MultiStepForm = () => {
             type="button"
             className="margin-top-1 margin-right-0 order-last"
             onClick={stepForward}
+            data-testid="step-forward"
           >
             Next Step
           </Button>
-          <Button type="button" className="margin-top-1" onClick={stepBackward}>
+          <Button
+            type="button"
+            className="margin-top-1"
+            onClick={stepBackward}
+            data-testid="step-backward"
+          >
             Prev Step
           </Button>
         </Grid>

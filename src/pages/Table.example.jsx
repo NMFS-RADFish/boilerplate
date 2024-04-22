@@ -81,7 +81,7 @@ const SimpleTable = () => {
       });
 
       // If there is offline data, show the submit draft button
-      if (offlineData.length) {
+      if (offlineData?.length) {
         setShowOfflineSubmit(true);
       }
     };
@@ -180,6 +180,7 @@ const SimpleTable = () => {
                   onClick={() => handleRowClick(row)}
                   className={isOfflineData && "bg-gray-10"}
                   key={row.original.id}
+                  data-testid="table-body-row"
                 >
                   {row.getVisibleCells().map((cell) => {
                     const isStatusColumn = cell.column.id === "isOffline";
