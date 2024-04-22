@@ -151,15 +151,18 @@ const ComplexForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
       />
 
-      <Alert type="info" slim={true}>
-        Button Option 1: Below is an example of a simple button, it will save data locally. It does
-        not make a server request.
-      </Alert>
       <div className="grid-row flex-column">
-        <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
-          Submit
-        </Button>
-
+        {!navigator.onLine && (
+          <>
+            <Alert type="info" slim={true}>
+              Button Option 1: Below is an example of a simple button, it will save data locally. It
+              does not make a server request.
+            </Alert>
+            <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
+              Submit
+            </Button>
+          </>
+        )}
         <Alert type="info" slim={true}>
           Button Option 2: Below is an example of a multi-entry button, it sends data to a server.
           The current implementation is using a mock server.
