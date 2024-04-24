@@ -33,11 +33,12 @@ function useOfflineStorage() {
    */
   const storageMethod = new IndexedDBMethod(
     import.meta.env.VITE_INDEXED_DB_NAME || "radfish_dev",
-    import.meta.env.VITE_INDEXED_DB_VERSION || 1,
+    import.meta.env.VITE_INDEXED_DB_VERSION || 2,
     {
       formData:
         "uuid, fullName, email, phoneNumber, numberOfFish, address1, address2, city, state, zipcode, occupation, department, species, computedPrice",
       species: "name, price",
+      sets: "id, deployDate, setStatus",
     },
   );
 

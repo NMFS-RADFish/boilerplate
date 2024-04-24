@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "targetSpecies": 110,
+    "deployDate": "2024-04-24T18:25:34Z",
+    "deployTime": "10:25",
+    "deployLat": 56.866667,
+    "deployLong": 162.4,
+    "begGearDepth": 60,
+    "endGearDepth": 60,
+    "setStatus": "Submitted"
+  },
+  {
+    "id": 2,
+    "targetSpecies": 110,
+    "deployDate": "2024-04-24T18:25:34Z",
+    "deployTime": "10:25",
+    "deployLat": 56.866667,
+    "deployLong": 162.4,
+    "begGearDepth": 60,
+    "endGearDepth": 60,
+    "setStatus": "Saved"
+  },
+  {
+    "id": 3,
+    "targetSpecies": 110,
+    "deployDate": "2024-04-24T18:25:34Z",
+    "deployTime": "10:25",
+    "deployLat": 56.866667,
+    "deployLong": 162.4,
+    "begGearDepth": 60,
+    "endGearDepth": 60,
+    "setStatus": "Saved"
+  },
+  {
+    "id": 4,
+    "targetSpecies": 110,
+    "deployDate": "2024-04-24T18:25:34Z",
+    "deployTime": "10:25",
+    "deployLat": 56.866667,
+    "deployLong": 162.4,
+    "begGearDepth": 60,
+    "endGearDepth": 60,
+    "setStatus": "Draft"
+  }
+]

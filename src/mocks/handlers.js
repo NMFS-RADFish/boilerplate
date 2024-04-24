@@ -1,9 +1,12 @@
 import { http, HttpResponse } from "msw";
 import { computePriceFromQuantitySpecies } from "../config/form";
 
+import setsJsonData from "./data/mockSets.json";
+
 export const MSW_ENDPOINT = {
   SPECIES: "/species",
   TABLE: "/table",
+  SETS: "/sets",
 };
 
 const data = [
@@ -43,6 +46,11 @@ export const handlers = [
       { status: 200 },
     );
   }),
+
+  http.get(MSW_ENDPOINT.SETS, () => {
+    return HttpResponse.json({ data: setsJsonData }, { status: 200 });
+  }),
+
   // This endpoint simply returns the data that is submitted to from a form
   // In a full stack implementation, there will likely be some logic on the server to handle/store persistent data
   http.post(MSW_ENDPOINT.SPECIES, async ({ request }) => {

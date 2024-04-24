@@ -4,6 +4,7 @@ import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { Toast, ToastStatus } from "./packages/react-components";
 import { FormWrapper } from "./contexts/FormWrapper.example";
 import { TableWrapper } from "./contexts/TableWrapper.example";
+import { SetsTableWrapper } from "./contexts/SetsTableWrapper";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
@@ -66,6 +67,7 @@ function App() {
   useEffect(() => {
     // this function fetches any data needed for the business requirements in DemoForm
     const fetchFormData = async () => {
+      const setsData = await ApiService.get(MSW_ENDPOINT.SETS);
       const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
       const milisecondsIn24Hours = 86400000;
       const currentTimeStamp = Date.now();
@@ -92,6 +94,7 @@ function App() {
           localStorage.setItem("speciesLastUpdated", currentTimeStamp);
         }
       }
+      await updateOfflineData("sets", setsData.data);
     };
     fetchFormData();
   }, [isOffline]);
@@ -124,9 +127,9 @@ function App() {
             <Route
               path="/"
               element={
-                <TableWrapper>
+                <SetsTableWrapper>
                   <SetsTable />
-                </TableWrapper>
+                </SetsTableWrapper>
               }
             />
             {/* On "/table" route, render the DemoTable component along with it's context for state management */}
