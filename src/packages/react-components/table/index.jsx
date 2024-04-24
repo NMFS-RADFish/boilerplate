@@ -56,7 +56,6 @@ const RadfishTableBodyRow = (props) => {
 const RadfishTableBodyCell = (props) => {
   return (
     <td {...props} style={{ background: "transparent" }}>
-      {flexRender(props.cell.column.columnDef.cell, props.cell.getContext())}
       {props.children}
     </td>
   );

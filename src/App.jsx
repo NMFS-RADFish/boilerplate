@@ -66,20 +66,31 @@ function App() {
     if (!isOffline) {
       setIsLoading(true);
       console.log("syncing...");
-      await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
+      await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
       const { data: tripReportData } = await ApiService.get(MSW_ENDPOINT.TRIP_REPORT);
 
-      await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
+      await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
       const { data: tripReportDataClamLobster } = await ApiService.get(
         MSW_ENDPOINT.TRIP_REPORT_CLAM_LOBSTER,
       );
 
-      await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
-      console.log("caching offline data...");
+      await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
+      const { data: activityData } = await ApiService.get(MSW_ENDPOINT.ACTIVITY);
 
+      await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
+      const { data: speciesData } = await ApiService.get(MSW_ENDPOINT.SPECIES);
+
+      await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
+      const { data: tripTypesData } = await ApiService.get(MSW_ENDPOINT.TRIP_TYPES);
+
+      await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
+      console.log("caching offline data...");
       await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
       await updateOfflineData("offlineTripReportData", tripReportData);
       await updateOfflineData("offlineTripReportClamLobsterData", tripReportDataClamLobster);
+      await updateOfflineData("activityData", activityData);
+      await updateOfflineData("speciesData", speciesData);
+      await updateOfflineData("tripTypesData", tripTypesData);
 
       initializeLaunchSequence();
       localStorage.setItem("lastHomebaseSync", Date.now());

@@ -1,0 +1,203 @@
+{
+  "fields": {
+    "trip": [
+      {
+        "trapsInWater": {
+          "label": [
+            {
+              "en": "Total Number of Pots in Water",
+              "es": "Numero Total de trampas en el Agua "
+            }
+          ],
+          "helptext": [
+            {
+              "en": "Enter the total number of pots in the water in all areas.",
+              "es": "Introduzca el número total de macetas en el agua en todas las areas."
+            }
+          ],
+          "error_text": [
+            {
+              "total_traps_water_empty": {
+                "en": "No Total Number of Pots in Water provided."
+              },
+              "total_traps_water_invalid": {
+                "en": "Invalid Total Number of Pots in Water provided."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "trapsPerString": {
+          "label": [
+            {
+              "en": "Average Number of Pots Per String in Water"
+            }
+          ],
+          "helptext": [
+            {
+              "en": "Enter the average number of pots per string in all areas."
+            }
+          ],
+          "error_text": [
+            {
+              "avg_num_traps_empty": {
+                "en": "No Average Number of Pots Per String provided."
+              },
+              "avg_number_traps_invalid": {
+                "en": "Invalid Average Number of Pots provided."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "stringsHauled": {
+          "label": [
+            {
+              "en": "Number of Strings Hauled This Trip"
+            }
+          ],
+          "helptext": [
+            {
+              "en": "Enter the number of strings that were hauled on this trip."
+            }
+          ],
+          "error_text": [
+            {
+              "strings_hauled_format": {
+                "en": "Invalid Total Number of Strings Hauled provided."
+              },
+              "strings_hauled_empty": {
+                "en": "No Total Number of Strings Hauled provided."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "avgSoakTime": {
+          "label": [
+            {
+              "en": "Average Soak time of Strings Hauled This Trip"
+            }
+          ],
+          "helptext": [
+            {
+              "en": "Enter the average soak time of all the strings hauled on this trip.  Decimal values are acceptable."
+            }
+          ],
+          "error_text": [
+            {
+              "avg_soak_time_min_format": {
+                "en": "Invalid Average Soak Time of all Strings Hauled provided. Only two decimals values allowed for this field."
+              },
+              "avg_soak_time_format": {
+                "en": "Invalid Average Soak Time of all Strings Hauled provided."
+              },
+              "avg_soak_time_empty": {
+                "en": "No Average Soak Time of all Strings Hauled provided."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "totNrBuoyLines": {
+          "label": [
+            {
+              "en": "Total Number of Buoy Lines in Water"
+            }
+          ],
+          "helptext": [
+            {
+              "en": "Enter the total number of buoy lines in the water in all areas."
+            }
+          ],
+          "error_text": [
+            {
+              "bouy_lines_empty": { "en": "No Total Number of Buoy Lines provided." },
+              "buoy_lines_format": { "en": "Invalid number of Buoy Lines provided." }
+            }
+          ]
+        }
+      },
+      {
+        "date_land": {
+          "error_text": [
+            {
+              "date_land_empty": {
+                "en": "No date land provided."
+              },
+              "date_land_before": {
+                "en": "Date land before minimum date allowed."
+              },
+              "date_land_after": {
+                "en": "Date land after maximum date land."
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "effort": [
+      {
+        "numTrapsInWater": {
+          "label": [
+            {
+              "en": "Total Number of Pots in This Area"
+            }
+          ],
+          "helptext": [
+            {
+              "en": "Enter the total number of pots in the water in this area.",
+              "es": "Introduzca el numero total de macetas en el agua en esta area."
+            }
+          ]
+        }
+      },
+      {
+        "numTrapsHauled": {
+          "label": [
+            {
+              "en": "Number of Pots Hauled This Area"
+            }
+          ],
+          "helptext": [
+            {
+              "en": "Enter the number of pots that were hauled in this area."
+            }
+          ]
+        }
+      },
+      {
+        "numTrapsPerString": {
+          "label": [
+            {
+              "en": "Average Number of Pots Per String Hauled This Area"
+            }
+          ],
+          "helptext": [
+            {
+              "en": "Enter the average number of pots per string that were hauled in this area."
+            }
+          ]
+        }
+      },
+      {
+        "numBuoyLines": {
+          "label": [
+            {
+              "en": "Total Number of Buoy Lines in This Area"
+            }
+          ],
+          "helptext": [
+            {
+              "en": "Enter the total number of buoy lines in the water in this area."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

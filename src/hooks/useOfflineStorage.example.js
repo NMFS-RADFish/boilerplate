@@ -7,6 +7,9 @@ function useOfflineStorage() {
     {
       offlineTripReportData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
       offlineTripReportClamLobsterData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
+      activityData: "KEY, VALUE",
+      speciesData: "SPPSYN, SPPCODE, SPPNAME, ITIS",
+      tripTypesData: "KEY, VALUE",
     },
   );
 

@@ -1,0 +1,1882 @@
+[
+  {
+    "SPPSYN": "ALB",
+    "SPPCODE": "ALB",
+    "SPPNAME": "TUNA, ALBACORE",
+    "ITIS": "172419"
+  },
+  {
+    "SPPSYN": "ALWF",
+    "SPPCODE": "ALWF",
+    "SPPNAME": "ALEWIFE",
+    "ITIS": "161706"
+  },
+  {
+    "SPPSYN": "AMBGR",
+    "SPPCODE": "AMBGR",
+    "SPPNAME": "AMBERJACK,GREATER",
+    "ITIS": "168689"
+  },
+  {
+    "SPPSYN": "AMBLR",
+    "SPPCODE": "AMBLR",
+    "SPPNAME": "AMBERJACK,LESSER",
+    "ITIS": "168690"
+  },
+  {
+    "SPPSYN": "ANCH",
+    "SPPCODE": "ANCH",
+    "SPPNAME": "ANCHOVY,SPECIES NOT SPECIFIED",
+    "ITIS": "553173"
+  },
+  {
+    "SPPSYN": "ANVY",
+    "SPPCODE": "ANVY",
+    "SPPNAME": "ANCHOVY,BAY",
+    "ITIS": "161839"
+  },
+  {
+    "SPPSYN": "ARGT",
+    "SPPCODE": "ARGT",
+    "SPPNAME": "ARGENTINES,SPECIES NOT SPECIFIED",
+    "ITIS": "162057"
+  },
+  {
+    "SPPSYN": "BANK",
+    "SPPCODE": "BANK",
+    "SPPNAME": "SEA BASS,BANK",
+    "ITIS": "167690"
+  },
+  {
+    "SPPSYN": "BAR",
+    "SPPCODE": "BAR",
+    "SPPNAME": "BARRELFISH",
+    "ITIS": "172512"
+  },
+  {
+    "SPPSYN": "BARRA",
+    "SPPCODE": "BARRA",
+    "SPPNAME": "BARRACUDA",
+    "ITIS": "170424"
+  },
+  {
+    "SPPSYN": "BBR",
+    "SPPCODE": "BBR",
+    "SPPNAME": "BLACK BELLIED ROSEFISH",
+    "ITIS": "166787"
+  },
+  {
+    "SPPSYN": "BET",
+    "SPPCODE": "BET",
+    "SPPNAME": "TUNA, BIG EYE",
+    "ITIS": "172428"
+  },
+  {
+    "SPPSYN": "BFT",
+    "SPPCODE": "BFT",
+    "SPPNAME": "TUNA, BLUEFIN",
+    "ITIS": "172421"
+  },
+  {
+    "SPPSYN": "BLKFT",
+    "SPPCODE": "BLKFT",
+    "SPPNAME": "TUNA, BLACKFIN",
+    "ITIS": "172427"
+  },
+  {
+    "SPPSYN": "BLO",
+    "SPPCODE": "BLO",
+    "SPPNAME": "BLOODWORMS",
+    "ITIS": "66107"
+  },
+  {
+    "SPPSYN": "BLU",
+    "SPPCODE": "BLU",
+    "SPPNAME": "BLUEFISH",
+    "ITIS": "168559"
+  },
+  {
+    "SPPSYN": "BON",
+    "SPPCODE": "BON",
+    "SPPNAME": "BONITO",
+    "ITIS": "172409"
+  },
+  {
+    "SPPSYN": "BSB",
+    "SPPCODE": "BSB",
+    "SPPNAME": "BLACK SEA BASS",
+    "ITIS": "167687"
+  },
+  {
+    "SPPSYN": "BULL",
+    "SPPCODE": "BULL",
+    "SPPNAME": "BULLHEADS",
+    "ITIS": "163996"
+  },
+  {
+    "SPPSYN": "BUM",
+    "SPPCODE": "BUM",
+    "SPPNAME": "MARLIN, BLUE",
+    "ITIS": "172491"
+  },
+  {
+    "SPPSYN": "BUT",
+    "SPPCODE": "BUT",
+    "SPPNAME": "BUTTERFISH",
+    "ITIS": "172567"
+  },
+  {
+    "SPPSYN": "CARP",
+    "SPPCODE": "CARP",
+    "SPPNAME": "CARP",
+    "ITIS": "163344"
+  },
+  {
+    "SPPSYN": "CAT",
+    "SPPCODE": "CAT",
+    "SPPNAME": "WOLFFISH \/ OCEAN CATFISH",
+    "ITIS": "171341"
+  },
+  {
+    "SPPSYN": "CATB",
+    "SPPCODE": "CATB",
+    "SPPNAME": "CATFISH, BLUE",
+    "ITIS": "163997"
+  },
+  {
+    "SPPSYN": "CATF",
+    "SPPCODE": "CATF",
+    "SPPNAME": "CATFISH, FLATHEAD",
+    "ITIS": "164029"
+  },
+  {
+    "SPPSYN": "CATN",
+    "SPPCODE": "CATN",
+    "SPPNAME": "WOLFISH, NORTHERN",
+    "ITIS": "550561"
+  },
+  {
+    "SPPSYN": "CLA",
+    "SPPCODE": "CLA",
+    "SPPNAME": "CLAM, ARCTIC SURF",
+    "ITIS": "80983",
+    "X_RPT_TYPE": [
+      "3"
+    ]
+  },
+  {
+    "SPPSYN": "CLBA",
+    "SPPCODE": "CLBA",
+    "SPPNAME": "CLAM,BLOODARC",
+    "ITIS": "79342"
+  },
+  {
+    "SPPSYN": "CLH",
+    "SPPCODE": "CLH",
+    "SPPNAME": "HARD QUAHOG",
+    "ITIS": "81496",
+    "X_RPT_TYPE": [
+      "3"
+    ]
+  },
+  {
+    "SPPSYN": "CLHB",
+    "SPPCODE": "CLHB",
+    "SPPNAME": "HARD QUAHOG \/ BUSHEL",
+    "ITIS": "81496-2",
+    "REQUIRED_UOM": "BU",
+    "X_RPT_TYPE": [
+      "1"
+    ]
+  },
+  {
+    "SPPSYN": "CLPR",
+    "SPPCODE": "CLPR",
+    "SPPNAME": "CLAM, PROPELLER",
+    "ITIS": "81763"
+  },
+  {
+    "SPPSYN": "CLQBG",
+    "SPPCODE": "CLQBG",
+    "SPPNAME": "CLAM,OCEAN QUAHOG\/BAG",
+    "ITIS": "81343",
+    "REQUIRED_UOM": "BAG",
+    "X_RPT_TYPE": [
+      "3"
+    ]
+  },
+  {
+    "SPPSYN": "CLQU",
+    "SPPCODE": "CLQU",
+    "SPPNAME": "OCEAN QUAHOG",
+    "ITIS": "81343-2",
+    "X_RPT_TYPE": [
+      "3"
+    ]
+  },
+  {
+    "SPPSYN": "CLQUB",
+    "SPPCODE": "CLQUB",
+    "SPPNAME": "QUAHOGS\/BUSHEL",
+    "ITIS": "81343-3",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "CLR",
+    "SPPCODE": "CLR",
+    "SPPNAME": "CLAM, RAZOR",
+    "ITIS": "81022"
+  },
+  {
+    "SPPSYN": "CLSO",
+    "SPPCODE": "CLSO",
+    "SPPNAME": "CLAM, SOFT",
+    "ITIS": "81692",
+    "X_RPT_TYPE": [
+      "3"
+    ]
+  },
+  {
+    "SPPSYN": "CLSOB",
+    "SPPCODE": "CLSOB",
+    "SPPNAME": "CLAM, SOFT\/BUSHEL",
+    "ITIS": "81692-2",
+    "REQUIRED_UOM": "BU",
+    "X_RPT_TYPE": [
+      "1"
+    ]
+  },
+  {
+    "SPPSYN": "CLSU",
+    "SPPCODE": "CLSU",
+    "SPPNAME": "CLAM, SURF",
+    "ITIS": "80944",
+    "X_RPT_TYPE": [
+      "3"
+    ]
+  },
+  {
+    "SPPSYN": "CLSUB",
+    "SPPCODE": "CLSUB",
+    "SPPNAME": "CLAM, SURF\/BUSHEL",
+    "ITIS": "80944-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "COBIA",
+    "SPPCODE": "COBIA",
+    "SPPNAME": "COBIA",
+    "ITIS": "168566"
+  },
+  {
+    "SPPSYN": "COD",
+    "SPPCODE": "COD",
+    "SPPNAME": "COD",
+    "ITIS": "164712"
+  },
+  {
+    "SPPSYN": "CODM",
+    "SPPCODE": "CODM",
+    "SPPNAME": "COD,MILT",
+    "ITIS": "164712-2"
+  },
+  {
+    "SPPSYN": "CRB",
+    "SPPCODE": "CRB",
+    "SPPNAME": "CRAB, BLUE",
+    "ITIS": "98696"
+  },
+  {
+    "SPPSYN": "CRBB",
+    "SPPCODE": "CRBB",
+    "SPPNAME": "CRAB, BLUE\/BUSHEL",
+    "ITIS": "98696-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "CRC",
+    "SPPCODE": "CRC",
+    "SPPNAME": "CRAB, CANCER",
+    "ITIS": "98671"
+  },
+  {
+    "SPPSYN": "CREV",
+    "SPPCODE": "CREV",
+    "SPPNAME": "CREVALLE",
+    "ITIS": "168609"
+  },
+  {
+    "SPPSYN": "CRG",
+    "SPPCODE": "CRG",
+    "SPPNAME": "CRAB, GREEN",
+    "ITIS": "98734"
+  },
+  {
+    "SPPSYN": "CRGB",
+    "SPPCODE": "CRGB",
+    "SPPNAME": "CRAB, GREEN\/BUSHEL",
+    "ITIS": "98734-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "CRH",
+    "SPPCODE": "CRH",
+    "SPPNAME": "CRAB, HERMIT",
+    "ITIS": "97775"
+  },
+  {
+    "SPPSYN": "CRHS",
+    "SPPCODE": "CRHS",
+    "SPPNAME": "CRAB, HORSESHOE",
+    "ITIS": "82703"
+  },
+  {
+    "SPPSYN": "CRJ",
+    "SPPCODE": "CRJ",
+    "SPPNAME": "CRAB, JONAH",
+    "ITIS": "98678"
+  },
+  {
+    "SPPSYN": "CRJB",
+    "SPPCODE": "CRJB",
+    "SPPNAME": "CRAB, JONAH\/BUSHEL",
+    "ITIS": "98678-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "CRJS",
+    "SPPCODE": "CRJS",
+    "SPPNAME": "CRAB,JAPANESE SHORE",
+    "ITIS": "99034"
+  },
+  {
+    "SPPSYN": "CRL",
+    "SPPCODE": "CRL",
+    "SPPNAME": "CRAB, LADY",
+    "ITIS": "98714"
+  },
+  {
+    "SPPSYN": "CRO",
+    "SPPCODE": "CRO",
+    "SPPNAME": "CROAKER, ATLANTIC",
+    "ITIS": "169283"
+  },
+  {
+    "SPPSYN": "CRQS",
+    "SPPCODE": "CRQS",
+    "SPPNAME": "CRAB, QUEEN SNOW",
+    "ITIS": "98428"
+  },
+  {
+    "SPPSYN": "CRRD",
+    "SPPCODE": "CRRD",
+    "SPPNAME": "CRAB, RED",
+    "ITIS": "620992"
+  },
+  {
+    "SPPSYN": "CRRDB",
+    "SPPCODE": "CRRDB",
+    "SPPNAME": "CRAB, RED\/BUSHEL",
+    "ITIS": "620992-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "CRRK",
+    "SPPCODE": "CRRK",
+    "SPPNAME": "CRAB, ROCK",
+    "ITIS": "98679"
+  },
+  {
+    "SPPSYN": "CRRKB",
+    "SPPCODE": "CRRKB",
+    "SPPNAME": "CRAB, ROCK\/BUSHEL",
+    "ITIS": "98679-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "CRSP",
+    "SPPCODE": "CRSP",
+    "SPPNAME": "CRAB, SPIDER",
+    "ITIS": "98417"
+  },
+  {
+    "SPPSYN": "CSKEEL",
+    "SPPCODE": "CSKEEL",
+    "SPPNAME": "CUSK EEL,SPECIES NOT SPECIFIED",
+    "ITIS": "164807"
+  },
+  {
+    "SPPSYN": "CUC",
+    "SPPCODE": "CUC",
+    "SPPNAME": "SEA CUCUMBERS",
+    "ITIS": "158140"
+  },
+  {
+    "SPPSYN": "CUCB",
+    "SPPCODE": "CUCB",
+    "SPPNAME": "SEA CUCUMBERS\/BOX",
+    "ITIS": "158140-2",
+    "REQUIRED_UOM": "BOX"
+  },
+  {
+    "SPPSYN": "CUN",
+    "SPPCODE": "CUN",
+    "SPPNAME": "CUNNER",
+    "ITIS": "170481"
+  },
+  {
+    "SPPSYN": "CUSK",
+    "SPPCODE": "CUSK",
+    "SPPNAME": "CUSK",
+    "ITIS": "164740"
+  },
+  {
+    "SPPSYN": "CUTL",
+    "SPPCODE": "CUTL",
+    "SPPNAME": "CUTLASSFISH, ATLANTIC",
+    "ITIS": "172385"
+  },
+  {
+    "SPPSYN": "DGCH",
+    "SPPCODE": "DGCH",
+    "SPPNAME": "DOGFISH, CHAIN",
+    "ITIS": "160060"
+  },
+  {
+    "SPPSYN": "DGSM",
+    "SPPCODE": "DGSM",
+    "SPPNAME": "DOGFISH, SMOOTH",
+    "ITIS": "160230"
+  },
+  {
+    "SPPSYN": "DGSMF",
+    "SPPCODE": "DGSMF",
+    "SPPNAME": "DOGFISH,SMOOTH,FINS",
+    "ITIS": "160230-2"
+  },
+  {
+    "SPPSYN": "DGSP",
+    "SPPCODE": "DGSP",
+    "SPPNAME": "DOGFISH, SPINY",
+    "ITIS": "160617"
+  },
+  {
+    "SPPSYN": "DGSPF",
+    "SPPCODE": "DGSPF",
+    "SPPNAME": "DOGFISH,SPINY,FINS",
+    "ITIS": "160617-2"
+  },
+  {
+    "SPPSYN": "DOL",
+    "SPPCODE": "DOL",
+    "SPPNAME": "DOLPHIN FISH \/ MAHI-MAHI",
+    "ITIS": "168790"
+  },
+  {
+    "SPPSYN": "DRUMB",
+    "SPPCODE": "DRUMB",
+    "SPPNAME": "DRUM, BLACK",
+    "ITIS": "169288"
+  },
+  {
+    "SPPSYN": "DRUMR",
+    "SPPCODE": "DRUMR",
+    "SPPNAME": "DRUM, RED",
+    "ITIS": "169290"
+  },
+  {
+    "SPPSYN": "EELA",
+    "SPPCODE": "EELA",
+    "SPPNAME": "EEL, AMERICAN",
+    "ITIS": "161127"
+  },
+  {
+    "SPPSYN": "EELC",
+    "SPPCODE": "EELC",
+    "SPPNAME": "EEL, CONGER",
+    "ITIS": "161326"
+  },
+  {
+    "SPPSYN": "EELCT",
+    "SPPCODE": "EELCT",
+    "SPPNAME": "EEL, CUTTHROAT",
+    "ITIS": "635305"
+  },
+  {
+    "SPPSYN": "ESC",
+    "SPPCODE": "ESC",
+    "SPPNAME": "ESCOLAR",
+    "ITIS": "172362"
+  },
+  {
+    "SPPSYN": "FLBB",
+    "SPPCODE": "FLBB",
+    "SPPNAME": "FLOUNDER, WINTER \/ BLACKBACK",
+    "ITIS": "172905"
+  },
+  {
+    "SPPSYN": "FLDAB",
+    "SPPCODE": "FLDAB",
+    "SPPNAME": "FLOUNDER, AMERICAN PLAICE \/DAB",
+    "ITIS": "172877"
+  },
+  {
+    "SPPSYN": "FLFSP",
+    "SPPCODE": "FLFSP",
+    "SPPNAME": "FLOUNDER, FOURSPOT",
+    "ITIS": "172739"
+  },
+  {
+    "SPPSYN": "FLGS",
+    "SPPCODE": "FLGS",
+    "SPPNAME": "FLOUNDER, WITCH \/ GRAY SOLE",
+    "ITIS": "172873"
+  },
+  {
+    "SPPSYN": "FLSD",
+    "SPPCODE": "FLSD",
+    "SPPNAME": "FLOUNDER, SAND-DAB \/ WINDOWPANE \/ BRILL",
+    "ITIS": "172746"
+  },
+  {
+    "SPPSYN": "FLSOU",
+    "SPPCODE": "FLSOU",
+    "SPPNAME": "FLOUNDER, SOUTHERN",
+    "ITIS": "172738"
+  },
+  {
+    "SPPSYN": "FLUKE",
+    "SPPCODE": "FLUKE",
+    "SPPNAME": "FLOUNDER, SUMMER \/ FLUKE",
+    "ITIS": "172735"
+  },
+  {
+    "SPPSYN": "FLYT",
+    "SPPCODE": "FLYT",
+    "SPPNAME": "FLOUNDER, YELLOWTAIL",
+    "ITIS": "172909"
+  },
+  {
+    "SPPSYN": "FRI",
+    "SPPCODE": "FRI",
+    "SPPNAME": "MACKEREL, FRIGATE",
+    "ITIS": "172456"
+  },
+  {
+    "SPPSYN": "GAG",
+    "SPPCODE": "GAG",
+    "SPPNAME": "GAG",
+    "ITIS": "167759"
+  },
+  {
+    "SPPSYN": "GAR",
+    "SPPCODE": "GAR",
+    "SPPNAME": "GARFISH",
+    "ITIS": "161092"
+  },
+  {
+    "SPPSYN": "GRAYSBY",
+    "SPPCODE": "GRAYSBY",
+    "SPPNAME": "GRAYSBY",
+    "ITIS": "181220"
+  },
+  {
+    "SPPSYN": "GREN",
+    "SPPCODE": "GREN",
+    "SPPNAME": "GREENEYES,SPECIES NOT SPECIFIED",
+    "ITIS": "162427"
+  },
+  {
+    "SPPSYN": "GRPBL",
+    "SPPCODE": "GRPBL",
+    "SPPNAME": "GROUPER, BLACK",
+    "ITIS": "167760"
+  },
+  {
+    "SPPSYN": "GRPCO",
+    "SPPCODE": "GRPCO",
+    "SPPNAME": "GROUPER,CONEY",
+    "ITIS": "167740"
+  },
+  {
+    "SPPSYN": "GRPRED",
+    "SPPCODE": "GRPRED",
+    "SPPNAME": "GROUPER,RED",
+    "ITIS": "167702"
+  },
+  {
+    "SPPSYN": "GRPSN",
+    "SPPCODE": "GRPSN",
+    "SPPNAME": "GROUPER, SNOWY",
+    "ITIS": "167705"
+  },
+  {
+    "SPPSYN": "GRPW",
+    "SPPCODE": "GRPW",
+    "SPPNAME": "GROUPER,WARSAW",
+    "ITIS": "167704"
+  },
+  {
+    "SPPSYN": "GRPYE",
+    "SPPCODE": "GRPYE",
+    "SPPNAME": "GROUPER, YELLOW EDGE",
+    "ITIS": "167699"
+  },
+  {
+    "SPPSYN": "GRTU",
+    "SPPCODE": "GRTU",
+    "SPPNAME": "TURTLE, GREEN",
+    "ITIS": "173833"
+  },
+  {
+    "SPPSYN": "GRUNT",
+    "SPPCODE": "GRUNT",
+    "SPPNAME": "GRUNT",
+    "ITIS": "169055"
+  },
+  {
+    "SPPSYN": "GRUNTW",
+    "SPPCODE": "GRUNTW",
+    "SPPNAME": "GRUNT,WHITE",
+    "ITIS": "613026"
+  },
+  {
+    "SPPSYN": "HADD",
+    "SPPCODE": "HADD",
+    "SPPNAME": "HADDOCK",
+    "ITIS": "164744"
+  },
+  {
+    "SPPSYN": "HADDR",
+    "SPPCODE": "HADDR",
+    "SPPNAME": "HADDOCK ROE",
+    "ITIS": "164744-2"
+  },
+  {
+    "SPPSYN": "HAG",
+    "SPPCODE": "HAG",
+    "SPPNAME": "HAGFISH",
+    "ITIS": "159753"
+  },
+  {
+    "SPPSYN": "HAKNS",
+    "SPPCODE": "HAKNS",
+    "SPPNAME": "HAKE, SPECIES NOT SPECIFIED",
+    "ITIS": "164729"
+  },
+  {
+    "SPPSYN": "HAL",
+    "SPPCODE": "HAL",
+    "SPPNAME": "HALIBUT, ATLANTIC",
+    "ITIS": "172933"
+  },
+  {
+    "SPPSYN": "HALF",
+    "SPPCODE": "HALF",
+    "SPPNAME": "HALFBEAKS,SPECIES NOT SPECIFIED",
+    "ITIS": "553172"
+  },
+  {
+    "SPPSYN": "HALG",
+    "SPPCODE": "HALG",
+    "SPPNAME": "HALIBUT, GREENLAND",
+    "ITIS": "172930"
+  },
+  {
+    "SPPSYN": "HARV",
+    "SPPCODE": "HARV",
+    "SPPNAME": "HARVEST FISH",
+    "ITIS": "172570"
+  },
+  {
+    "SPPSYN": "HATCH",
+    "SPPCODE": "HATCH",
+    "SPPNAME": "HATCHETFISHES, SPECIES NOT SPECIFIED",
+    "ITIS": "162212"
+  },
+  {
+    "SPPSYN": "HATU",
+    "SPPCODE": "HATU",
+    "SPPNAME": "TURTLE, HAWKSBILL",
+    "ITIS": "173836"
+  },
+  {
+    "SPPSYN": "HERR",
+    "SPPCODE": "HERR",
+    "SPPNAME": "HERRING, ATLANTIC",
+    "ITIS": "161722"
+  },
+  {
+    "SPPSYN": "HERRB",
+    "SPPCODE": "HERRB",
+    "SPPNAME": "HERRING\/BUSHEL",
+    "ITIS": "161722-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "HGF",
+    "SPPCODE": "HGF",
+    "SPPNAME": "HOGFISH",
+    "ITIS": "170566"
+  },
+  {
+    "SPPSYN": "HINDRED",
+    "SPPCODE": "HINDRED",
+    "SPPNAME": "HIND, RED",
+    "ITIS": "167700"
+  },
+  {
+    "SPPSYN": "HINDRO",
+    "SPPCODE": "HINDRO",
+    "SPPNAME": "HIND,ROCK",
+    "ITIS": "167696"
+  },
+  {
+    "SPPSYN": "HINDSP",
+    "SPPCODE": "HINDSP",
+    "SPPNAME": "HIND,SPECKLED",
+    "ITIS": "167698"
+  },
+  {
+    "SPPSYN": "HRAT",
+    "SPPCODE": "HRAT",
+    "SPPNAME": "HERRING,ATLANTIC THREAD",
+    "ITIS": "161748"
+  },
+  {
+    "SPPSYN": "HRBB",
+    "SPPCODE": "HRBB",
+    "SPPNAME": "HERRING, BLUE BACK",
+    "ITIS": "161703"
+  },
+  {
+    "SPPSYN": "HRRD",
+    "SPPCODE": "HRRD",
+    "SPPNAME": "HERRING,ROUND",
+    "ITIS": "161743"
+  },
+  {
+    "SPPSYN": "ILX",
+    "SPPCODE": "ILX",
+    "SPPNAME": "SQUID \/ ILLEX",
+    "ITIS": "82521"
+  },
+  {
+    "SPPSYN": "JACKA",
+    "SPPCODE": "JACKA",
+    "SPPNAME": "JACK,ALMACO",
+    "ITIS": "168691"
+  },
+  {
+    "SPPSYN": "JDO",
+    "SPPCODE": "JDO",
+    "SPPNAME": "JOHN DORY",
+    "ITIS": "166283"
+  },
+  {
+    "SPPSYN": "JLY",
+    "SPPCODE": "JLY",
+    "SPPNAME": "JELLY FISH",
+    "ITIS": "51483"
+  },
+  {
+    "SPPSYN": "JPG",
+    "SPPCODE": "JPG",
+    "SPPNAME": "PORGY,JOLTHEAD",
+    "ITIS": "169197"
+  },
+  {
+    "SPPSYN": "KGM",
+    "SPPCODE": "KGM",
+    "SPPNAME": "MACKEREL, KING",
+    "ITIS": "172435"
+  },
+  {
+    "SPPSYN": "KILL",
+    "SPPCODE": "KILL",
+    "SPPNAME": "KILLIFISH",
+    "ITIS": "165647"
+  },
+  {
+    "SPPSYN": "LADY",
+    "SPPCODE": "LADY",
+    "SPPNAME": "LADYFISH",
+    "ITIS": "161111"
+  },
+  {
+    "SPPSYN": "LANT",
+    "SPPCODE": "LANT",
+    "SPPNAME": "LANTERNFISH,SPECIES NOT SPECIFIED",
+    "ITIS": "162575"
+  },
+  {
+    "SPPSYN": "LETU",
+    "SPPCODE": "LETU",
+    "SPPNAME": "TURTLE, LEATHERBACK",
+    "ITIS": "173843"
+  },
+  {
+    "SPPSYN": "LOB",
+    "SPPCODE": "LOB",
+    "SPPNAME": "LOBSTER, AMERICAN",
+    "ITIS": "97314"
+  },
+  {
+    "SPPSYN": "LOL",
+    "SPPCODE": "LOL",
+    "SPPNAME": "SQUID \/ LOLIGO",
+    "ITIS": "82372"
+  },
+  {
+    "SPPSYN": "LOTU",
+    "SPPCODE": "LOTU",
+    "SPPNAME": "TURTLE, LOGGERHEAD",
+    "ITIS": "173830"
+  },
+  {
+    "SPPSYN": "LTA",
+    "SPPCODE": "LTA",
+    "SPPNAME": "TUNA, LITTLE",
+    "ITIS": "172402"
+  },
+  {
+    "SPPSYN": "LUMP",
+    "SPPCODE": "LUMP",
+    "SPPNAME": "LUMPFISH",
+    "ITIS": "167612"
+  },
+  {
+    "SPPSYN": "MACB",
+    "SPPCODE": "MACB",
+    "SPPNAME": "MACKEREL,BULLET",
+    "ITIS": "172455"
+  },
+  {
+    "SPPSYN": "MACC",
+    "SPPCODE": "MACC",
+    "SPPNAME": "MACKEREL, CHUB",
+    "ITIS": "172413"
+  },
+  {
+    "SPPSYN": "MACK",
+    "SPPCODE": "MACK",
+    "SPPNAME": "MACKEREL, ATLANTIC",
+    "ITIS": "172414"
+  },
+  {
+    "SPPSYN": "MARG",
+    "SPPCODE": "MARG",
+    "SPPNAME": "MARGATE",
+    "ITIS": "169060"
+  },
+  {
+    "SPPSYN": "MEN",
+    "SPPCODE": "MEN",
+    "SPPNAME": "MENHADEN",
+    "ITIS": "161731"
+  },
+  {
+    "SPPSYN": "MENB",
+    "SPPCODE": "MENB",
+    "SPPNAME": "MENHADEN, BUSHELS",
+    "ITIS": "161732",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "MOLL",
+    "SPPCODE": "MOLL",
+    "SPPNAME": "MOLLUSKS,SPECIES NOT SPECIFIED",
+    "ITIS": "69458"
+  },
+  {
+    "SPPSYN": "MONK",
+    "SPPCODE": "MONK",
+    "SPPNAME": "MONKFISH \/ ANGLERFISH \/ GOOSEFISH",
+    "ITIS": "164499"
+  },
+  {
+    "SPPSYN": "MONKH",
+    "SPPCODE": "MONKH",
+    "SPPNAME": "MONK HEADS",
+    "ITIS": "164499-2"
+  },
+  {
+    "SPPSYN": "MONKL",
+    "SPPCODE": "MONKL",
+    "SPPNAME": "MONK LIVERS",
+    "ITIS": "164499-3"
+  },
+  {
+    "SPPSYN": "MONKT",
+    "SPPCODE": "MONKT",
+    "SPPNAME": "MONK TAILS",
+    "ITIS": "164499-4"
+  },
+  {
+    "SPPSYN": "MUL",
+    "SPPCODE": "MUL",
+    "SPPNAME": "MULLETS",
+    "ITIS": "170333"
+  },
+  {
+    "SPPSYN": "MUS",
+    "SPPCODE": "MUS",
+    "SPPNAME": "MUSSELS",
+    "ITIS": "79454"
+  },
+  {
+    "SPPSYN": "MUSB",
+    "SPPCODE": "MUSB",
+    "SPPNAME": "MUSSEL\/BUSHEL",
+    "ITIS": "79454-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "MUSBL",
+    "SPPCODE": "MUSBL",
+    "SPPNAME": "MUSSEL,BLUE",
+    "ITIS": "79454-3"
+  },
+  {
+    "SPPSYN": "NC",
+    "SPPCODE": "NC",
+    "SPPNAME": "NO CATCH",
+    "ITIS": "0"
+  },
+  {
+    "SPPSYN": "NDL",
+    "SPPCODE": "NDL",
+    "SPPNAME": "NEEDLEFISH, ATLANTIC",
+    "ITIS": "165551"
+  },
+  {
+    "SPPSYN": "NSG",
+    "SPPCODE": "NSG",
+    "SPPNAME": "STARGAZER,NORTHERN",
+    "ITIS": "171055"
+  },
+  {
+    "SPPSYN": "OPAH",
+    "SPPCODE": "OPAH",
+    "SPPNAME": "OPAH \/ MOONFISH",
+    "ITIS": "166326"
+  },
+  {
+    "SPPSYN": "OYS",
+    "SPPCODE": "OYS",
+    "SPPNAME": "OYSTERS,PUBLIC UNCLASSIFIED",
+    "ITIS": "79872"
+  },
+  {
+    "SPPSYN": "OYSB",
+    "SPPCODE": "OYSB",
+    "SPPNAME": "OYSTER\/BUSHEL",
+    "ITIS": "79872-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "PERSA",
+    "SPPCODE": "PERSA",
+    "SPPNAME": "PERCH, SAND",
+    "ITIS": "167793"
+  },
+  {
+    "SPPSYN": "PERW",
+    "SPPCODE": "PERW",
+    "SPPNAME": "PERCH, WHITE",
+    "ITIS": "167678"
+  },
+  {
+    "SPPSYN": "PERY",
+    "SPPCODE": "PERY",
+    "SPPNAME": "PERCH,YELLOW",
+    "ITIS": "168469"
+  },
+  {
+    "SPPSYN": "PIG",
+    "SPPCODE": "PIG",
+    "SPPNAME": "PIGFISH",
+    "ITIS": "169077"
+  },
+  {
+    "SPPSYN": "PIN",
+    "SPPCODE": "PIN",
+    "SPPNAME": "PINFISH",
+    "ITIS": "169187"
+  },
+  {
+    "SPPSYN": "POLL",
+    "SPPCODE": "POLL",
+    "SPPNAME": "POLLOCK",
+    "ITIS": "164727"
+  },
+  {
+    "SPPSYN": "POM",
+    "SPPCODE": "POM",
+    "SPPNAME": "POMPANO, COMMON",
+    "ITIS": "168708"
+  },
+  {
+    "SPPSYN": "POMF",
+    "SPPCODE": "POMF",
+    "SPPNAME": "POMFRET",
+    "ITIS": "170287"
+  },
+  {
+    "SPPSYN": "POUT",
+    "SPPCODE": "POUT",
+    "SPPNAME": "OCEAN POUT",
+    "ITIS": "630979"
+  },
+  {
+    "SPPSYN": "POUTA",
+    "SPPCODE": "POUTA",
+    "SPPNAME": "POUT, ATLANTIC SOFT",
+    "ITIS": "165296"
+  },
+  {
+    "SPPSYN": "PUF",
+    "SPPCODE": "PUF",
+    "SPPNAME": "PUFFER, NORTHERN",
+    "ITIS": "173290"
+  },
+  {
+    "SPPSYN": "RAYCO",
+    "SPPCODE": "RAYCO",
+    "SPPNAME": "RAY,COWNOSE",
+    "ITIS": "160985"
+  },
+  {
+    "SPPSYN": "RED",
+    "SPPCODE": "RED",
+    "SPPNAME": "REDFISH \/ OCEAN PERCH",
+    "ITIS": "166774"
+  },
+  {
+    "SPPSYN": "REDG",
+    "SPPCODE": "REDG",
+    "SPPNAME": "REDFISH, GOLDEN",
+    "ITIS": "166781"
+  },
+  {
+    "SPPSYN": "RHAK",
+    "SPPCODE": "RHAK",
+    "SPPNAME": "HAKE, RED \/ LING",
+    "ITIS": "164730"
+  },
+  {
+    "SPPSYN": "RIB",
+    "SPPCODE": "RIB",
+    "SPPNAME": "RIBBONFISH",
+    "ITIS": "172385-2"
+  },
+  {
+    "SPPSYN": "RITU",
+    "SPPCODE": "RITU",
+    "SPPNAME": "TURTLE, KEMPS RIDLEY",
+    "ITIS": "551770"
+  },
+  {
+    "SPPSYN": "RNG",
+    "SPPCODE": "RNG",
+    "SPPNAME": "GRENADIER, ROUNDNOSE",
+    "ITIS": "165332"
+  },
+  {
+    "SPPSYN": "RPG",
+    "SPPCODE": "RPG",
+    "SPPNAME": "RED PORGY",
+    "ITIS": "169207"
+  },
+  {
+    "SPPSYN": "RSC",
+    "SPPCODE": "RSC",
+    "SPPNAME": "ROUGH SCAD",
+    "ITIS": "168587"
+  },
+  {
+    "SPPSYN": "RUDB",
+    "SPPCODE": "RUDB",
+    "SPPNAME": "RUDDERFISH,BANDED",
+    "ITIS": "168693"
+  },
+  {
+    "SPPSYN": "RUNB",
+    "SPPCODE": "RUNB",
+    "SPPNAME": "BLUE RUNNER",
+    "ITIS": "168612"
+  },
+  {
+    "SPPSYN": "SAL",
+    "SPPCODE": "SAL",
+    "SPPNAME": "ATLANTIC SALMON",
+    "ITIS": "161996"
+  },
+  {
+    "SPPSYN": "SAND",
+    "SPPCODE": "SAND",
+    "SPPNAME": "SAND LANCE,SPECIES NOT SPECIFIED",
+    "ITIS": "171671"
+  },
+  {
+    "SPPSYN": "SANDW",
+    "SPPCODE": "SANDW",
+    "SPPNAME": "SANDWORMS",
+    "ITIS": "65902"
+  },
+  {
+    "SPPSYN": "SARSC",
+    "SPPCODE": "SARSC",
+    "SPPNAME": "SARDINE,SCALED",
+    "ITIS": "161755"
+  },
+  {
+    "SPPSYN": "SARSP",
+    "SPPCODE": "SARSP",
+    "SPPNAME": "SARDINE,SPANISH",
+    "ITIS": "161763"
+  },
+  {
+    "SPPSYN": "SAURY",
+    "SPPCODE": "SAURY",
+    "SPPNAME": "SAURY,ATLANTIC",
+    "ITIS": "165612"
+  },
+  {
+    "SPPSYN": "SCAL",
+    "SPPCODE": "SCAL",
+    "SPPNAME": "SCALLOP, SEA",
+    "ITIS": "79718"
+  },
+  {
+    "SPPSYN": "SCALB",
+    "SPPCODE": "SCALB",
+    "SPPNAME": "SCALLOPS\/BUSHEL",
+    "ITIS": "79718-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "SCALG",
+    "SPPCODE": "SCALG",
+    "SPPNAME": "SCALLOPS\/GALLON",
+    "ITIS": "79718-3",
+    "REQUIRED_UOM": "GAL"
+  },
+  {
+    "SPPSYN": "SCALS",
+    "SPPCODE": "SCALS",
+    "SPPNAME": "SCALLOPS\/SHELLS",
+    "ITIS": "79718-4"
+  },
+  {
+    "SPPSYN": "SCAMP",
+    "SPPCODE": "SCAMP",
+    "SPPNAME": "SCAMP",
+    "ITIS": "167763"
+  },
+  {
+    "SPPSYN": "SCB",
+    "SPPCODE": "SCB",
+    "SPPNAME": "SCALLOP, BAY",
+    "ITIS": "79737"
+  },
+  {
+    "SPPSYN": "SCBS",
+    "SPPCODE": "SCBS",
+    "SPPNAME": "SCALLOPS,BAY\/SHELLS",
+    "ITIS": "79737-2"
+  },
+  {
+    "SPPSYN": "SCC",
+    "SPPCODE": "SCC",
+    "SPPNAME": "SCALLOP, CALICO",
+    "ITIS": "79734"
+  },
+  {
+    "SPPSYN": "SCI",
+    "SPPCODE": "SCI",
+    "SPPNAME": "SCALLOP, ICELANDIC",
+    "ITIS": "79619"
+  },
+  {
+    "SPPSYN": "SCORP",
+    "SPPCODE": "SCORP",
+    "SPPNAME": "SCORPIONFISH",
+    "ITIS": "166704"
+  },
+  {
+    "SPPSYN": "SCUL",
+    "SPPCODE": "SCUL",
+    "SPPNAME": "SCULPINS",
+    "ITIS": "167196"
+  },
+  {
+    "SPPSYN": "SCUP",
+    "SPPCODE": "SCUP",
+    "SPPNAME": "SCUP \/ PORGY",
+    "ITIS": "169182"
+  },
+  {
+    "SPPSYN": "SHA",
+    "SPPCODE": "SHA",
+    "SPPNAME": "SHARK, ANGEL",
+    "ITIS": "160787"
+  },
+  {
+    "SPPSYN": "SHAD",
+    "SPPCODE": "SHAD",
+    "SPPNAME": "SHAD, AMERICAN",
+    "ITIS": "161702"
+  },
+  {
+    "SPPSYN": "SHAK",
+    "SPPCODE": "SHAK",
+    "SPPNAME": "HAKE, SILVER \/ WHITING",
+    "ITIS": "164791"
+  },
+  {
+    "SPPSYN": "SHBA",
+    "SPPCODE": "SHBA",
+    "SPPNAME": "SHARK, BASKING",
+    "ITIS": "159907"
+  },
+  {
+    "SPPSYN": "SHBL",
+    "SPPCODE": "SHBL",
+    "SPPNAME": "SHARK, BLUE",
+    "ITIS": "160424"
+  },
+  {
+    "SPPSYN": "SHBN",
+    "SPPCODE": "SHBN",
+    "SPPNAME": "SHARK, BIGNOSE",
+    "ITIS": "160307"
+  },
+  {
+    "SPPSYN": "SHBT",
+    "SPPCODE": "SHBT",
+    "SPPNAME": "SHARK, BLACKTIP",
+    "ITIS": "160318"
+  },
+  {
+    "SPPSYN": "SHBU",
+    "SPPCODE": "SHBU",
+    "SPPNAME": "SHARK, BULL",
+    "ITIS": "160275"
+  },
+  {
+    "SPPSYN": "SHDG",
+    "SPPCODE": "SHDG",
+    "SPPNAME": "SHAD, GIZZARD",
+    "ITIS": "161737"
+  },
+  {
+    "SPPSYN": "SHDH",
+    "SPPCODE": "SHDH",
+    "SPPNAME": "SHAD, HICKORY",
+    "ITIS": "161704"
+  },
+  {
+    "SPPSYN": "SHDU",
+    "SPPCODE": "SHDU",
+    "SPPNAME": "SHARK, DUSKY",
+    "ITIS": "160268"
+  },
+  {
+    "SPPSYN": "SHEEP",
+    "SPPCODE": "SHEEP",
+    "SPPNAME": "SHEEPSHEAD",
+    "ITIS": "169189"
+  },
+  {
+    "SPPSYN": "SHFI",
+    "SPPCODE": "SHFI",
+    "SPPNAME": "SHARK, FINETOOTH",
+    "ITIS": "160409"
+  },
+  {
+    "SPPSYN": "SHG",
+    "SPPCODE": "SHG",
+    "SPPNAME": "SHARK, GREENLAND",
+    "ITIS": "160611"
+  },
+  {
+    "SPPSYN": "SHHA",
+    "SPPCODE": "SHHA",
+    "SPPNAME": "SHARK, HAMMERHEAD",
+    "ITIS": "160497"
+  },
+  {
+    "SPPSYN": "SHLE",
+    "SPPCODE": "SHLE",
+    "SPPNAME": "SHARK, LEMON",
+    "ITIS": "160433"
+  },
+  {
+    "SPPSYN": "SHML",
+    "SPPCODE": "SHML",
+    "SPPNAME": "SHARK, MAKO, LONGFIN",
+    "ITIS": "159926"
+  },
+  {
+    "SPPSYN": "SHMS",
+    "SPPCODE": "SHMS",
+    "SPPNAME": "SHARK, MAKO, SHORTFIN",
+    "ITIS": "159924"
+  },
+  {
+    "SPPSYN": "SHNI",
+    "SPPCODE": "SHNI",
+    "SPPNAME": "SHARK, NIGHT",
+    "ITIS": "160413"
+  },
+  {
+    "SPPSYN": "SHNU",
+    "SPPCODE": "SHNU",
+    "SPPNAME": "SHARK, NURSE",
+    "ITIS": "159977"
+  },
+  {
+    "SPPSYN": "SHPB",
+    "SPPCODE": "SHPB",
+    "SPPNAME": "SHARK, PORBEAGLE",
+    "ITIS": "159911"
+  },
+  {
+    "SPPSYN": "SHR",
+    "SPPCODE": "SHR",
+    "SPPNAME": "SHRIMP (PANDALID)",
+    "ITIS": "96967"
+  },
+  {
+    "SPPSYN": "SHRM",
+    "SPPCODE": "SHRM",
+    "SPPNAME": "SHRIMP (MANTIS)",
+    "ITIS": "99140"
+  },
+  {
+    "SPPSYN": "SHRNS",
+    "SPPCODE": "SHRNS",
+    "SPPNAME": "SHRIMP, SPECIES NOT SPECIFIED",
+    "ITIS": "96106"
+  },
+  {
+    "SPPSYN": "SHRP",
+    "SPPCODE": "SHRP",
+    "SPPNAME": "SHRIMP (PANAEID)",
+    "ITIS": "95602"
+  },
+  {
+    "SPPSYN": "SHSB",
+    "SPPCODE": "SHSB",
+    "SPPNAME": "SHARK, SANDBAR",
+    "ITIS": "160289"
+  },
+  {
+    "SPPSYN": "SHSI",
+    "SPPCODE": "SHSI",
+    "SPPNAME": "SHARK, SILKY",
+    "ITIS": "160310"
+  },
+  {
+    "SPPSYN": "SHSN",
+    "SPPCODE": "SHSN",
+    "SPPNAME": "SHARK, SHARPNOSE",
+    "ITIS": "160200"
+  },
+  {
+    "SPPSYN": "SHSP",
+    "SPPCODE": "SHSP",
+    "SPPNAME": "SHARK, SPINNER",
+    "ITIS": "160401"
+  },
+  {
+    "SPPSYN": "SHST",
+    "SPPCODE": "SHST",
+    "SPPNAME": "SHARK, SAND TIGER",
+    "ITIS": "159888"
+  },
+  {
+    "SPPSYN": "SHTB",
+    "SPPCODE": "SHTB",
+    "SPPNAME": "SHARK, THRESHER, BIGEYE",
+    "ITIS": "159921"
+  },
+  {
+    "SPPSYN": "SHTH",
+    "SPPCODE": "SHTH",
+    "SPPNAME": "SHARK, THRESHER",
+    "ITIS": "159915"
+  },
+  {
+    "SPPSYN": "SHTI",
+    "SPPCODE": "SHTI",
+    "SPPNAME": "SHARK, TIGER",
+    "ITIS": "160189"
+  },
+  {
+    "SPPSYN": "SHWH",
+    "SPPCODE": "SHWH",
+    "SPPNAME": "SHARK, WHITE",
+    "ITIS": "159903"
+  },
+  {
+    "SPPSYN": "SHWT",
+    "SPPCODE": "SHWT",
+    "SPPNAME": "SHARK, WHITETIP",
+    "ITIS": "160330"
+  },
+  {
+    "SPPSYN": "SIL",
+    "SPPCODE": "SIL",
+    "SPPNAME": "SILVERSIDES, ATLANTIC",
+    "ITIS": "165994"
+  },
+  {
+    "SPPSYN": "SILNS",
+    "SPPCODE": "SILNS",
+    "SPPNAME": "SILVERSIDES,SPECIES NOT SPECIFIED",
+    "ITIS": "165984"
+  },
+  {
+    "SPPSYN": "SKATE",
+    "SPPCODE": "SKATE",
+    "SPPNAME": "SKATE, UNCLASSIFIED",
+    "ITIS": "160845"
+  },
+  {
+    "SPPSYN": "SKATW",
+    "SPPCODE": "SKATW",
+    "SPPNAME": "SKATE WINGS",
+    "ITIS": "160845-2"
+  },
+  {
+    "SPPSYN": "SKBARN",
+    "SPPCODE": "SKBARN",
+    "SPPNAME": "SKATE, BARNDOOR",
+    "ITIS": "564139"
+  },
+  {
+    "SPPSYN": "SKBARNW",
+    "SPPCODE": "SKBARNW",
+    "SPPNAME": "SKATE WINGS, BARNDOOR",
+    "ITIS": "564139-2"
+  },
+  {
+    "SPPSYN": "SKCL",
+    "SPPCODE": "SKCL",
+    "SPPNAME": "SKATE, CLEARNOSE",
+    "ITIS": "160855"
+  },
+  {
+    "SPPSYN": "SKCLW",
+    "SPPCODE": "SKCLW",
+    "SPPNAME": "SKATE WINGS, CLEARNOSE",
+    "ITIS": "160855-2"
+  },
+  {
+    "SPPSYN": "SKHEAD",
+    "SPPCODE": "SKHEAD",
+    "SPPNAME": "SKATE, HEAD",
+    "ITIS": "160845-3"
+  },
+  {
+    "SPPSYN": "SKJ",
+    "SPPCODE": "SKJ",
+    "SPPNAME": "TUNA, SKIPJACK",
+    "ITIS": "172401"
+  },
+  {
+    "SPPSYN": "SKL",
+    "SPPCODE": "SKL",
+    "SPPNAME": "SKATE, LITTLE (SUMMER)",
+    "ITIS": "564130"
+  },
+  {
+    "SPPSYN": "SKLARGE",
+    "SPPCODE": "SKLARGE",
+    "SPPNAME": "SKATE, LARGE DISCARDED",
+    "ITIS": "160845-4"
+  },
+  {
+    "SPPSYN": "SKLW",
+    "SPPCODE": "SKLW",
+    "SPPNAME": "SKATE WINGS, LITTLE (SUMMER)",
+    "ITIS": "564130-2"
+  },
+  {
+    "SPPSYN": "SKLWIN",
+    "SPPCODE": "SKLWIN",
+    "SPPNAME": "SKATE, LITTLE\/WINTER MIXED",
+    "ITIS": "564037"
+  },
+  {
+    "SPPSYN": "SKLWINW",
+    "SPPCODE": "SKLWINW",
+    "SPPNAME": "SKATE WINGS, LITTLE\/WINTER MIXED",
+    "ITIS": "564037-2"
+  },
+  {
+    "SPPSYN": "SKRACK",
+    "SPPCODE": "SKRACK",
+    "SPPNAME": "SKATE, RACK",
+    "ITIS": "160845-5"
+  },
+  {
+    "SPPSYN": "SKROSE",
+    "SPPCODE": "SKROSE",
+    "SPPNAME": "SKATE, ROSETT",
+    "ITIS": "564136"
+  },
+  {
+    "SPPSYN": "SKROSEW",
+    "SPPCODE": "SKROSEW",
+    "SPPNAME": "SKATE WINGS, ROSETTE",
+    "ITIS": "564136-2"
+  },
+  {
+    "SPPSYN": "SKSHT",
+    "SPPCODE": "SKSHT",
+    "SPPNAME": "SKATE, SHORTTAIL",
+    "ITIS": "564207"
+  },
+  {
+    "SPPSYN": "SKSM",
+    "SPPCODE": "SKSM",
+    "SPPNAME": "SKATE, SMOOTH",
+    "ITIS": "564151"
+  },
+  {
+    "SPPSYN": "SKSMALL",
+    "SPPCODE": "SKSMALL",
+    "SPPNAME": "SKATE, SMALL DISCARDED",
+    "ITIS": "160845-6"
+  },
+  {
+    "SPPSYN": "SKSMW",
+    "SPPCODE": "SKSMW",
+    "SPPNAME": "SKATE WINGS, SMOOTH",
+    "ITIS": "564151-2"
+  },
+  {
+    "SPPSYN": "SKSPT",
+    "SPPCODE": "SKSPT",
+    "SPPNAME": "SKATE, SPINYTAIL",
+    "ITIS": "160932"
+  },
+  {
+    "SPPSYN": "SKTHOR",
+    "SPPCODE": "SKTHOR",
+    "SPPNAME": "SKATE, THORNY",
+    "ITIS": "564149"
+  },
+  {
+    "SPPSYN": "SKTHORW",
+    "SPPCODE": "SKTHORW",
+    "SPPNAME": "SKATE WINGS, THORNY",
+    "ITIS": "564149-2"
+  },
+  {
+    "SPPSYN": "SKWIN",
+    "SPPCODE": "SKWIN",
+    "SPPNAME": "SKATE, WINTER (BIG)",
+    "ITIS": "564145"
+  },
+  {
+    "SPPSYN": "SKWINW",
+    "SPPCODE": "SKWINW",
+    "SPPNAME": "SKATE WINGS, WINTER (BIG)",
+    "ITIS": "564145-2"
+  },
+  {
+    "SPPSYN": "SMLT",
+    "SPPCODE": "SMLT",
+    "SPPNAME": "SMELT",
+    "ITIS": "162028"
+  },
+  {
+    "SPPSYN": "SNAPG",
+    "SPPCODE": "SNAPG",
+    "SPPNAME": "SNAPPER,GRAY",
+    "ITIS": "168848"
+  },
+  {
+    "SPPSYN": "SNAPR",
+    "SPPCODE": "SNAPR",
+    "SPPNAME": "SNAPPER, RED",
+    "ITIS": "168853"
+  },
+  {
+    "SPPSYN": "SNAPV",
+    "SPPCODE": "SNAPV",
+    "SPPNAME": "SNAPPER, VERMILLION",
+    "ITIS": "168909"
+  },
+  {
+    "SPPSYN": "SPADE",
+    "SPPCODE": "SPADE",
+    "SPPNAME": "SPADEFISH",
+    "ITIS": "169537"
+  },
+  {
+    "SPPSYN": "SPEAR",
+    "SPPCODE": "SPEAR",
+    "SPPNAME": "SPEARFISH",
+    "ITIS": "172498"
+  },
+  {
+    "SPPSYN": "SPHAK",
+    "SPPCODE": "SPHAK",
+    "SPPNAME": "HAKE,SPOTTED",
+    "ITIS": "164731"
+  },
+  {
+    "SPPSYN": "SPOT",
+    "SPPCODE": "SPOT",
+    "SPPNAME": "SPOT",
+    "ITIS": "169267"
+  },
+  {
+    "SPPSYN": "SQRF",
+    "SPPCODE": "SQRF",
+    "SPPNAME": "SQUIRRELFISH",
+    "ITIS": "166170"
+  },
+  {
+    "SPPSYN": "SRAV",
+    "SPPCODE": "SRAV",
+    "SPPNAME": "SEA RAVEN",
+    "ITIS": "167289"
+  },
+  {
+    "SPPSYN": "SROB",
+    "SPPCODE": "SROB",
+    "SPPNAME": "SEA ROBINS",
+    "ITIS": "166972"
+  },
+  {
+    "SPPSYN": "SSM",
+    "SPPCODE": "SSM",
+    "SPPNAME": "MACKEREL, SPANISH",
+    "ITIS": "172436"
+  },
+  {
+    "SPPSYN": "STAR",
+    "SPPCODE": "STAR",
+    "SPPNAME": "STARFISH",
+    "ITIS": "156862"
+  },
+  {
+    "SPPSYN": "STB",
+    "SPPCODE": "STB",
+    "SPPNAME": "STRIPED BASS",
+    "ITIS": "167680"
+  },
+  {
+    "SPPSYN": "STSN",
+    "SPPCODE": "STSN",
+    "SPPNAME": "STURGEON, SHORT-NOSE",
+    "ITIS": "161069"
+  },
+  {
+    "SPPSYN": "STUR",
+    "SPPCODE": "STUR",
+    "SPPNAME": "STURGEON, ATLANTIC",
+    "ITIS": "553269"
+  },
+  {
+    "SPPSYN": "SUN",
+    "SPPCODE": "SUN",
+    "SPPNAME": "OCEAN SUNFISH \/ MOOLA",
+    "ITIS": "168093"
+  },
+  {
+    "SPPSYN": "SWO",
+    "SPPCODE": "SWO",
+    "SPPNAME": "SWORDFISH",
+    "ITIS": "172482"
+  },
+  {
+    "SPPSYN": "TAU",
+    "SPPCODE": "TAU",
+    "SPPNAME": "TAUTOG",
+    "ITIS": "170479"
+  },
+  {
+    "SPPSYN": "TILE",
+    "SPPCODE": "TILE",
+    "SPPNAME": "TILEFISH",
+    "ITIS": "168537"
+  },
+  {
+    "SPPSYN": "TILEB",
+    "SPPCODE": "TILEB",
+    "SPPNAME": "TILEFISH, BLUELINE",
+    "ITIS": "168543"
+  },
+  {
+    "SPPSYN": "TILEG",
+    "SPPCODE": "TILEG",
+    "SPPNAME": "TILEFISH, GOLDEN",
+    "ITIS": "168546"
+  },
+  {
+    "SPPSYN": "TILES",
+    "SPPCODE": "TILES",
+    "SPPNAME": "TILEFISH, SAND",
+    "ITIS": "168548"
+  },
+  {
+    "SPPSYN": "TOAD",
+    "SPPCODE": "TOAD",
+    "SPPNAME": "TOADFISH, OYSTER",
+    "ITIS": "164412"
+  },
+  {
+    "SPPSYN": "TOMT",
+    "SPPCODE": "TOMT",
+    "SPPNAME": "TOMTATE",
+    "ITIS": "169058"
+  },
+  {
+    "SPPSYN": "TRIG",
+    "SPPCODE": "TRIG",
+    "SPPNAME": "TRIGGERFISH",
+    "ITIS": "173128"
+  },
+  {
+    "SPPSYN": "TRIGGR",
+    "SPPCODE": "TRIGGR",
+    "SPPNAME": "TRIGGERFISH,GRAY",
+    "ITIS": "173138"
+  },
+  {
+    "SPPSYN": "TRIP",
+    "SPPCODE": "TRIP",
+    "SPPNAME": "TRIPLETAIL",
+    "ITIS": "169007"
+  },
+  {
+    "SPPSYN": "UNTU",
+    "SPPCODE": "UNTU",
+    "SPPNAME": "TURTLE, UNIDENTIFIED",
+    "ITIS": "173749"
+  },
+  {
+    "SPPSYN": "URCH",
+    "SPPCODE": "URCH",
+    "SPPNAME": "SEA URCHINS",
+    "ITIS": "157968"
+  },
+  {
+    "SPPSYN": "WAH",
+    "SPPCODE": "WAH",
+    "SPPNAME": "WAHOO",
+    "ITIS": "172451"
+  },
+  {
+    "SPPSYN": "WHAK",
+    "SPPCODE": "WHAK",
+    "SPPNAME": "HAKE, WHITE",
+    "ITIS": "164732"
+  },
+  {
+    "SPPSYN": "WHB",
+    "SPPCODE": "WHB",
+    "SPPNAME": "WHITING, BLACK",
+    "ITIS": "164793"
+  },
+  {
+    "SPPSYN": "WHK",
+    "SPPCODE": "WHK",
+    "SPPNAME": "WHITING, KING \/ KINGFISH",
+    "ITIS": "169273"
+  },
+  {
+    "SPPSYN": "WHKC",
+    "SPPCODE": "WHKC",
+    "SPPNAME": "WHELK, CHANNELED",
+    "ITIS": "74096"
+  },
+  {
+    "SPPSYN": "WHKCB",
+    "SPPCODE": "WHKCB",
+    "SPPNAME": "WHELK, CHANNELED\/BUSHEL",
+    "ITIS": "74096-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "WHKL",
+    "SPPCODE": "WHKL",
+    "SPPNAME": "WHELK, LIGHTNING",
+    "ITIS": "74075"
+  },
+  {
+    "SPPSYN": "WHKLB",
+    "SPPCODE": "WHKLB",
+    "SPPNAME": "WHELK, LIGHTNING\/BUSHEL",
+    "ITIS": "74075-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "WHKN",
+    "SPPCODE": "WHKN",
+    "SPPNAME": "WHELK, KNOBBED",
+    "ITIS": "74071"
+  },
+  {
+    "SPPSYN": "WHKNB",
+    "SPPCODE": "WHKNB",
+    "SPPNAME": "WHELK, KNOBBED\/BUSHEL",
+    "ITIS": "74071-2",
+    "REQUIRED_UOM": "BU"
+  },
+  {
+    "SPPSYN": "WHKNS",
+    "SPPCODE": "WHKNS",
+    "SPPNAME": "WHELK \/ CONCH, SPECIES NOT SPECIFIED",
+    "ITIS": "72554"
+  },
+  {
+    "SPPSYN": "WHM",
+    "SPPCODE": "WHM",
+    "SPPNAME": "MARLIN, WHITE",
+    "ITIS": "172499"
+  },
+  {
+    "SPPSYN": "WHWV",
+    "SPPCODE": "WHWV",
+    "SPPNAME": "WHELK,WAVED",
+    "ITIS": "73795"
+  },
+  {
+    "SPPSYN": "WKSP",
+    "SPPCODE": "WKSP",
+    "SPPNAME": "WEAKFISH, SPOTTED \/ SPOTTED SEA TROUT",
+    "ITIS": "169239"
+  },
+  {
+    "SPPSYN": "WKSQ",
+    "SPPCODE": "WKSQ",
+    "SPPNAME": "WEAKFISH \/ SQUETEAGUE \/ GRAY SEA TROUT",
+    "ITIS": "169241"
+  },
+  {
+    "SPPSYN": "WPG",
+    "SPPCODE": "WPG",
+    "SPPNAME": "PORGY,WHITEBONE",
+    "ITIS": "169200"
+  },
+  {
+    "SPPSYN": "WRCK",
+    "SPPCODE": "WRCK",
+    "SPPNAME": "WRECKFISH",
+    "ITIS": "167914"
+  },
+  {
+    "SPPSYN": "YFT",
+    "SPPCODE": "YFT",
+    "SPPNAME": "TUNA, YELLOWFIN",
+    "ITIS": "172423"
+  }
+]

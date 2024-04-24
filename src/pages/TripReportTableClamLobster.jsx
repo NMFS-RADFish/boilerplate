@@ -3,7 +3,8 @@
  * @returns {React.ReactNode} - The demo table component.
  */
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { flexRender } from "@tanstack/react-table";
 import { useTableState } from "../contexts/TableWrapper.example";
 import {
   Table,
@@ -13,31 +14,34 @@ import {
   TableHeader,
   TableHeaderRow,
   TableBodyCell,
-  Button,
 } from "../packages/react-components";
 import { useNavigate } from "react-router-dom";
 import useOfflineStorage from "../hooks/useOfflineStorage.example";
+import { generateUUID } from "../utilities";
 
 const TripReportTableClamLobster = () => {
   const { tableCaption, table, headerNames, rowModel, setData, setShowOfflineSubmit } =
     useTableState();
   const navigate = useNavigate();
   const { findOfflineData } = useOfflineStorage();
+  const [tripTypes, setTripTypes] = useState();
 
   useEffect(() => {
     const getTableData = async () => {
       const offlineTripReportClamLobsterData = await findOfflineData(
         "offlineTripReportClamLobsterData",
       );
+      const tripTypesData = await findOfflineData("tripTypesData");
       setData(offlineTripReportClamLobsterData);
+      setTripTypes(tripTypesData);
     };
 
     getTableData();
   }, [setData, setShowOfflineSubmit]);
 
   const handleRowClick = (row) => {
-    console.log(row);
-    navigate(`/tripReport/${row.id}`);
+    const uuid = generateUUID();
+    navigate(`/tripReport/${row.id}/${uuid}`);
   };
 
   if (!table) {
@@ -57,27 +61,29 @@ const TripReportTableClamLobster = () => {
           </TableHeader>
           <TableBody table={table}>
             {rowModel.rows.map((row) => {
-              const isOfflineData = row.original.isOffline && !row.original.isSubmitted;
               return (
                 <TableBodyRow
                   row={row}
                   onClick={() => handleRowClick(row)}
-                  className={isOfflineData && "bg-gray-10"}
-                  key={row.original.id}
+                  key={row.id}
                   data-testid="table-body-row"
                 >
                   {row.getVisibleCells().map((cell) => {
-                    const isStatusColumn = cell.column.id === "isOffline";
+                    if (cell.column.id === "TRIP_TYPE") {
+                      const cellTripType = tripTypes.find((trip) => trip.KEY === cell.getValue());
+                      return (
+                        <TableBodyCell
+                          className="radfish-table-body-cell"
+                          key={cell.id}
+                          cell={cell}
+                        >
+                          {cellTripType.VALUE}
+                        </TableBodyCell>
+                      );
+                    }
                     return (
                       <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
-                        {isStatusColumn && isOfflineData && (
-                          <Button
-                            onClick={(e) => handleSubmitDraft(e, [row.original])}
-                            className="font-ui-3xs padding-3px margin-left-205"
-                          >
-                            Submit
-                          </Button>
-                        )}
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableBodyCell>
                     );
                   })}

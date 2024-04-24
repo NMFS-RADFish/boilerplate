@@ -1,0 +1,11 @@
+[
+  { "VALUE": "Fishing trip with effort(s)", "KEY": 0 },
+  { "VALUE": "Set only trip", "KEY": 1 },
+  { "VALUE": "Mechanical Breakdown", "KEY": 2 },
+  { "VALUE": "Turned around due to weather", "KEY": 3 },
+  { "VALUE": "Transiting trip (Discontinued)", "KEY": 4 },
+  { "VALUE": "Carrier vessel (Discontinued)", "KEY": 5 },
+  { "VALUE": "Illness or Injury", "KEY": 6 },
+  { "VALUE": "Other (Entanglement, Good Samaritan,etc)", "KEY": 7 },
+  { "VALUE": "Transit with product onboard", "KEY": 8 }
+]
