@@ -9,12 +9,15 @@ import { MSW_ENDPOINT } from "./mocks/handlers";
 import { TripReportTable } from "./pages/TripReportTable";
 import { TripReportTableClamLobster } from "./pages/TripReportTableClamLobster";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
+import { HomePage } from "./pages/HomePage";
 
 const ApiService = new RadfishAPIService("");
 
 function App() {
   const [toast, setToast] = useState(null);
   const [isOffline, setIsOffline] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSynced, setIsSynced] = useState(false);
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
   const checkConnectivity = async () => {
@@ -60,24 +63,35 @@ function App() {
   }, [isOffline]);
 
   const syncToHomebase = async () => {
-    console.log("syncing...");
-    await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
-    const { data: tripReportData } = await ApiService.get(MSW_ENDPOINT.TRIP_REPORT);
+    if (!isOffline) {
+      setIsLoading(true);
+      console.log("syncing...");
+      await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
+      const { data: tripReportData } = await ApiService.get(MSW_ENDPOINT.TRIP_REPORT);
 
-    await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
-    const { data: tripReportDataClamLobster } = await ApiService.get(
-      MSW_ENDPOINT.TRIP_REPORT_CLAM_LOBSTER,
-    );
+      await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
+      const { data: tripReportDataClamLobster } = await ApiService.get(
+        MSW_ENDPOINT.TRIP_REPORT_CLAM_LOBSTER,
+      );
 
-    await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
-    console.log("caching offline data...");
+      await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
+      console.log("caching offline data...");
 
-    await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
-    await updateOfflineData("offlineTripReportData", tripReportData);
-    await updateOfflineData("offlineTripReportClamLobsterData", tripReportDataClamLobster);
+      await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
+      await updateOfflineData("offlineTripReportData", tripReportData);
+      await updateOfflineData("offlineTripReportClamLobsterData", tripReportDataClamLobster);
 
-    initializeLaunchSequence();
-    localStorage.setItem("lastHomebaseSync", Date.now());
+      initializeLaunchSequence();
+      localStorage.setItem("lastHomebaseSync", Date.now());
+      setIsLoading(false);
+    } else {
+      console.log("No network conection, unable to sync with server");
+      console.log("Application in offline mode, using cache.");
+      console.log(
+        `${localStorage.getItem("lastHomebaseSync") ? `Last sync at: ${localStorage.getItem("lastHomebaseSync")}` : "Application has not yet been synced with homebase"}`,
+      );
+      setIsLoading(false);
+    }
   };
 
   const initializeLaunchSequence = async () => {
@@ -87,9 +101,11 @@ function App() {
       "offlineTripReportClamLobsterData",
     );
     if (!offlineTripReportData.length || !offlineTripReportClamLobsterData.length) {
+      setIsSynced(false);
       throw new Error("data not synced, try resyncing");
     }
     if (offlineTripReportData.length === 7 && offlineTripReportClamLobsterData.length === 7) {
+      setIsSynced(true);
       console.log("all data cached, ready to launch!");
     }
   };
@@ -105,12 +121,14 @@ function App() {
             <Route
               path="/"
               element={
-                <div>
-                  <h1>Trip Reporting App</h1>
-                  <button onClick={syncToHomebase}>sync to homebase</button>
-                </div>
+                <HomePage
+                  syncToHomebase={syncToHomebase}
+                  isLoading={isLoading}
+                  isSynced={isSynced}
+                />
               }
             />
+
             <Route
               path="/tripReport"
               element={

@@ -18,7 +18,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import useOfflineStorage from "../hooks/useOfflineStorage.example";
 
-const TripReportTable = () => {
+const TripReportTable = ({ isSynced }) => {
   const { tableCaption, table, headerNames, rowModel, setData, setShowOfflineSubmit } =
     useTableState();
   const navigate = useNavigate();
@@ -27,9 +27,6 @@ const TripReportTable = () => {
   useEffect(() => {
     const getTableData = async () => {
       const offlineTripReportData = await findOfflineData("offlineTripReportData");
-      const offlineTripReportClamLobsterData = await findOfflineData(
-        "offlineTripReportClamLobsterData",
-      );
       setData(offlineTripReportData);
     };
 
@@ -37,7 +34,6 @@ const TripReportTable = () => {
   }, [setData, setShowOfflineSubmit]);
 
   const handleRowClick = (row) => {
-    console.log(row);
     navigate(`/tripReport/${row.id}`);
   };
 
