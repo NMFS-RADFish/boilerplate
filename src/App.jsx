@@ -11,6 +11,7 @@ import { ComplexForm } from "./pages/ComplexForm.example";
 import { MultiStepForm } from "./pages/MultiStepForm.example";
 import { SimpleTable } from "./pages/Table.example";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
+import { SetsTable } from "./pages/SetsTable";
 
 const ApiService = new RadfishAPIService("");
 
@@ -44,7 +45,7 @@ function App() {
 
   const handleOffline = () => {
     setIsOffline(true);
-    const { status, message } = ToastStatus.OFFLINE;
+    const { status, message } = TOAST_CONFIG.OFFLINE;
     setToast({ status, message });
   };
 
@@ -98,10 +99,10 @@ function App() {
   const handleFormSubmit = async (submittedData) => {
     try {
       await ApiService.post(MSW_ENDPOINT.SPECIES, submittedData);
-      const { status, message } = ToastStatus.SUCCESS;
+      const { status, message } = TOAST_CONFIG.SUCCESS;
       setToast({ status, message });
     } catch (err) {
-      const { status, message } = ToastStatus.ERROR;
+      const { status, message } = TOAST_CONFIG.ERROR;
       setToast({ status, message });
     } finally {
       setTimeout(() => {
@@ -123,9 +124,9 @@ function App() {
             <Route
               path="/"
               element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <ComplexForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
+                <TableWrapper>
+                  <SetsTable />
+                </TableWrapper>
               }
             />
             {/* On "/table" route, render the DemoTable component along with it's context for state management */}
