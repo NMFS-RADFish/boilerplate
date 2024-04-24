@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { generateUUID } from "../utilities";
 
-const TripReportTable = ({ isSynced }) => {
+const TripReportTable = () => {
   const { tableCaption, table, headerNames, rowModel, setData, setShowOfflineSubmit } =
     useTableState();
   const navigate = useNavigate();
@@ -45,8 +45,6 @@ const TripReportTable = ({ isSynced }) => {
   if (!table) {
     return null;
   }
-
-  console.log(tripTypes);
 
   return (
     <>
@@ -85,7 +83,7 @@ const TripReportTable = ({ isSynced }) => {
                     }
                     return (
                       <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {cell.getValue()}
                       </TableBodyCell>
                     );
                   })}

@@ -83,7 +83,7 @@ const TripReportTableClamLobster = () => {
                     }
                     return (
                       <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {cell.getValue()}
                       </TableBodyCell>
                     );
                   })}
