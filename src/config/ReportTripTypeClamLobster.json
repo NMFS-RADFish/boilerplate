@@ -1,0 +1,51 @@
+[
+  {
+    "VALUE": "Lobster - Commercial",
+    "KEY": 8,
+    "REPORT_TYPE": 2,
+    "TRIP_TYPE": 1,
+    "SORT_KEY": 1
+  },
+  {
+    "VALUE": "Clam ITQ - Commercial",
+    "KEY": 7,
+    "REPORT_TYPE": 3,
+    "TRIP_TYPE": 1,
+    "SORT_KEY": 2
+  },
+  {
+    "VALUE": "Commercial",
+    "KEY": 1,
+    "REPORT_TYPE": 1,
+    "TRIP_TYPE": 1,
+    "SORT_KEY": 3
+  },
+  {
+    "VALUE": "Party",
+    "KEY": 2,
+    "REPORT_TYPE": 1,
+    "TRIP_TYPE": 2,
+    "SORT_KEY": 4
+  },
+  {
+    "VALUE": "Lobster - Charter",
+    "KEY": 9,
+    "REPORT_TYPE": 2,
+    "TRIP_TYPE": 1,
+    "SORT_KEY": 5
+  },
+  {
+    "VALUE": "Charter",
+    "KEY": 3,
+    "REPORT_TYPE": 1,
+    "TRIP_TYPE": 3,
+    "SORT_KEY": 6
+  },
+  {
+    "VALUE": "Private Recreational - Private use of a federally permitted vessel",
+    "KEY": 6,
+    "REPORT_TYPE": 1,
+    "TRIP_TYPE": 6,
+    "SORT_KEY": 7
+  }
+]

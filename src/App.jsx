@@ -1,29 +1,22 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Toast, ToastStatus } from "./packages/react-components";
-import { FormWrapper } from "./contexts/FormWrapper.example";
+import { Toast } from "./packages/react-components";
 import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
-import { ComplexForm } from "./pages/ComplexForm.example";
-import { MultiStepForm } from "./pages/MultiStepForm.example";
-import { SimpleTable } from "./pages/Table.example";
+import { TripReportTable } from "./pages/TripReportTable";
+import { TripReportTableClamLobster } from "./pages/TripReportTableClamLobster";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
 
 const ApiService = new RadfishAPIService("");
 
-// lifespan toast message should be visible in ms
-const TOAST_LIFESPAN = 2000;
-
 function App() {
-  const [asyncFormOptions, setAsyncFormOptions] = useState({});
   const [toast, setToast] = useState(null);
   const [isOffline, setIsOffline] = useState(false);
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
-  // Check if the app is offline
   const checkConnectivity = async () => {
     try {
       const online = navigator.onLine;
@@ -60,53 +53,44 @@ function App() {
     };
   }, []);
 
-  // when application mounts, fetch data from endpoint and set the payload to component state
-  // this data is then passed into `DemoForm` component and used to prepopulate form fields (eg dropdown) with default options fetched from server
   useEffect(() => {
-    // this function fetches any data needed for the business requirements in DemoForm
-    const fetchFormData = async () => {
-      const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
-      const milisecondsIn24Hours = 86400000;
-      const currentTimeStamp = Date.now();
-      const speciesLastUpdated = localStorage.getItem("speciesLastUpdated");
-      const isSpeciesLastUpdateOver24Hours =
-        speciesLastUpdated + milisecondsIn24Hours > currentTimeStamp;
-
-      // if offline, fetch species data from indexedDB
-      if (!navigator.onLine) {
-        const species = await findOfflineData("species");
-        const speciesList = species?.map((item) => item?.name);
-        setAsyncFormOptions((prev) => ({ ...prev, species: speciesList }));
-      } else {
-        // add any other async requests here
-        const newData = { species: data };
-        setAsyncFormOptions((prev) => ({ ...prev, ...newData }));
-      }
-
-      if (!speciesLastUpdated || isSpeciesLastUpdateOver24Hours) {
-        const species = data.map((item) => ({ name: item }));
-        const updated = await updateOfflineData("species", species);
-        // if all data is updated, set the last updated timestamp
-        if (updated.length === data.length) {
-          localStorage.setItem("speciesLastUpdated", currentTimeStamp);
-        }
-      }
-    };
-    fetchFormData();
+    if (!isOffline) {
+      initializeLaunchSequence();
+    }
   }, [isOffline]);
 
-  const handleFormSubmit = async (submittedData) => {
-    try {
-      await ApiService.post(MSW_ENDPOINT.SPECIES, submittedData);
-      const { status, message } = TOAST_CONFIG.SUCCESS;
-      setToast({ status, message });
-    } catch (err) {
-      const { status, message } = TOAST_CONFIG.ERROR;
-      setToast({ status, message });
-    } finally {
-      setTimeout(() => {
-        setToast(null);
-      }, TOAST_LIFESPAN);
+  const syncToHomebase = async () => {
+    console.log("syncing...");
+    await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
+    const { data: tripReportData } = await ApiService.get(MSW_ENDPOINT.TRIP_REPORT);
+
+    await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
+    const { data: tripReportDataClamLobster } = await ApiService.get(
+      MSW_ENDPOINT.TRIP_REPORT_CLAM_LOBSTER,
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
+    console.log("caching offline data...");
+
+    await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
+    await updateOfflineData("offlineTripReportData", tripReportData);
+    await updateOfflineData("offlineTripReportClamLobsterData", tripReportDataClamLobster);
+
+    initializeLaunchSequence();
+    localStorage.setItem("lastHomebaseSync", Date.now());
+  };
+
+  const initializeLaunchSequence = async () => {
+    console.log("checking if all data is present...");
+    const offlineTripReportData = await findOfflineData("offlineTripReportData");
+    const offlineTripReportClamLobsterData = await findOfflineData(
+      "offlineTripReportClamLobsterData",
+    );
+    if (!offlineTripReportData.length || !offlineTripReportClamLobsterData.length) {
+      throw new Error("data not synced, try resyncing");
+    }
+    if (offlineTripReportData.length === 7 && offlineTripReportClamLobsterData.length === 7) {
+      console.log("all data cached, ready to launch!");
     }
   };
 
@@ -117,56 +101,30 @@ function App() {
           <Toast toast={toast} />
         </div>
         <Layout>
-          {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
           <Routes>
-            {/* On root route "/", render the DemoForm component along with it's context for state management */}
             <Route
               path="/"
               element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <ComplexForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
+                <div>
+                  <h1>Trip Reporting App</h1>
+                  <button onClick={syncToHomebase}>sync to homebase</button>
+                </div>
               }
             />
-            {/* On "/table" route, render the DemoTable component along with it's context for state management */}
             <Route
-              path="/table"
+              path="/tripReport"
               element={
                 <TableWrapper>
-                  <SimpleTable />
+                  <TripReportTable />
                 </TableWrapper>
               }
             />
             <Route
-              path="/multistep"
+              path="/tripReportClamLobster"
               element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <MultiStepForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
-              }
-            />
-            <Route
-              path="/multistep/:id"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <MultiStepForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
-              }
-            />
-            <Route
-              path="/complexform"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <ComplexForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
-              }
-            />
-            <Route
-              path="/complexform/:id"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <ComplexForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
+                <TableWrapper>
+                  <TripReportTableClamLobster />
+                </TableWrapper>
               }
             />
           </Routes>

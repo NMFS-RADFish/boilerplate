@@ -1,0 +1,65 @@
+[
+  {
+    "VALUE": "Lobster - Commercial",
+    "KEY": 9,
+    "REPORT_TYPE": 2,
+    "TRIP_TYPE": 1,
+    "SORT_KEY": 0,
+    "DEFAULT_UOM": "LBS",
+    "DEFAULT_SPECIES_UOM": "LBS"
+  },
+  {
+    "VALUE": "Clam ITQ - Commercial",
+    "KEY": 7,
+    "SORT_KEY": 1,
+    "REPORT_TYPE": 3,
+    "TRIP_TYPE": 1,
+    "DEFAULT_UOM": "BU",
+    "DEFAULT_SPECIES_UOM": "LBS"
+  },
+  {
+    "VALUE": "Commercial",
+    "KEY": 1,
+    "REPORT_TYPE": 1,
+    "TRIP_TYPE": 1,
+    "SORT_KEY": 2,
+    "DEFAULT_UOM": "LBS",
+    "DEFAULT_SPECIES_UOM": "LBS"
+  },
+  {
+    "VALUE": "Party",
+    "KEY": 2,
+    "REPORT_TYPE": 1,
+    "TRIP_TYPE": 2,
+    "SORT_KEY": 3,
+    "DEFAULT_UOM": "CNT",
+    "DEFAULT_SPECIES_UOM": "CNT"
+  },
+  {
+    "VALUE": "Lobster - Charter",
+    "KEY": 8,
+    "REPORT_TYPE": 2,
+    "TRIP_TYPE": 3,
+    "SORT_KEY": 4,
+    "DEFAULT_UOM": "CNT",
+    "DEFAULT_SPECIES_UOM": "CNT"
+  },
+  {
+    "VALUE": "Charter",
+    "KEY": 3,
+    "REPORT_TYPE": 1,
+    "TRIP_TYPE": 3,
+    "SORT_KEY": 5,
+    "DEFAULT_UOM": "CNT",
+    "DEFAULT_SPECIES_UOM": "CNT"
+  },
+  {
+    "VALUE": "Private Recreational - Private use of a federally permitted vessel",
+    "KEY": 6,
+    "REPORT_TYPE": 1,
+    "TRIP_TYPE": 6,
+    "SORT_KEY": 6,
+    "DEFAULT_UOM": "CNT",
+    "DEFAULT_SPECIES_UOM": "CNT"
+  }
+]
