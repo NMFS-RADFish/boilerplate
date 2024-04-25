@@ -4,10 +4,9 @@
  */
 
 import { useEffect, useState } from "react";
-import { useTableState } from "../contexts/TableWrapper";
+import { useTableState } from "../contexts/TableWrapper.example";
 import { MSW_ENDPOINT } from "../mocks/handlers";
-import RadfishAPIService from "../services/APIService";
-import { Toast, TOAST_CONFIG } from "../react-radfish";
+import RadfishAPIService from "../packages/services/APIService";
 import {
   Table,
   TableBody,
@@ -21,10 +20,12 @@ import {
   TablePaginationPageCount,
   TablePaginationGoToPage,
   TablePaginationSelectRowCount,
-} from "../react-radfish";
+  Toast,
+  ToastStatus,
+} from "../packages/react-components";
 import { useNavigate } from "react-router-dom";
 const TOAST_LIFESPAN = 3000;
-import useOfflineStorage from "../hooks/useOfflineStorage";
+import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { Alert, Grid } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
 import { GridContainer } from "@trussworks/react-uswds";
@@ -80,7 +81,7 @@ const SimpleTable = () => {
       });
 
       // If there is offline data, show the submit draft button
-      if (offlineData.length) {
+      if (offlineData?.length) {
         setShowOfflineSubmit(true);
       }
     };
@@ -123,10 +124,10 @@ const SimpleTable = () => {
       //delete submitted drafts from local storage
       const idsFromApiResponse = data.map((item) => item.id);
       deleteOfflineData("formData", idsFromApiResponse);
-      const { status, message } = TOAST_CONFIG.SUCCESS;
+      const { status, message } = ToastStatus.SUCCESS;
       setToast({ status, message });
     } catch (error) {
-      const { status, message } = TOAST_CONFIG.ERROR;
+      const { status, message } = ToastStatus.ERROR;
       setToast({ status, message });
     } finally {
       setTimeout(() => {
@@ -179,6 +180,7 @@ const SimpleTable = () => {
                   onClick={() => handleRowClick(row)}
                   className={isOfflineData && "bg-gray-10"}
                   key={row.original.id}
+                  data-testid="table-body-row"
                 >
                   {row.getVisibleCells().map((cell) => {
                     const isStatusColumn = cell.column.id === "isOffline";

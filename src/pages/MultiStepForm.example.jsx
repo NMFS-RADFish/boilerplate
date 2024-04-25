@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { TextInput, Button, Label, ErrorMessage } from "../react-radfish";
+import { TextInput, Button, Label, ErrorMessage } from "../packages/react-components";
 import { GridContainer, Grid, FormGroup } from "@trussworks/react-uswds";
 import {
   fullNameValidators,
@@ -9,9 +9,9 @@ import {
   stateValidators,
   cityValidators,
 } from "../utilities";
-import useOfflineStorage from "../hooks/useOfflineStorage";
+import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { CONSTANTS } from "../config/multistepForm";
-import useMultiStepForm from "../hooks/useMultiStepForm";
+import useMultiStepForm from "../hooks/useMultiStepForm.example";
 import { useParams, useNavigate } from "react-router-dom";
 
 const { fullName, nickname, email, phoneNumber, country, city, state, zipcode } = CONSTANTS;
@@ -51,7 +51,9 @@ const MultiStepForm = () => {
           uuid: id,
         });
 
-        setFormData({ ...found[0], currentStep: 1, totalSteps: 3 });
+        if (found) {
+          setFormData({ ...found[0], currentStep: 1, totalSteps: 3 });
+        }
       } else {
         navigate("/multistep");
       }
@@ -74,7 +76,7 @@ const MultiStepForm = () => {
   if (!id) {
     return (
       <div>
-        <Button type="button" onClick={handleInit}>
+        <Button type="button" onClick={handleInit} data-testid="init-multistep">
           Begin Multistep Form
         </Button>
       </div>
@@ -138,10 +140,16 @@ const MultiStepForm = () => {
             type="button"
             className="margin-top-1 margin-right-0 order-last"
             onClick={stepForward}
+            data-testid="step-forward"
           >
             Next Step
           </Button>
-          <Button type="button" className="margin-top-1" onClick={stepBackward}>
+          <Button
+            type="button"
+            className="margin-top-1"
+            onClick={stepBackward}
+            data-testid="step-backward"
+          >
             Prev Step
           </Button>
         </Grid>

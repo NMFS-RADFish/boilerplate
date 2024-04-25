@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, Checkbox, FormGroup } from "@trussworks/react-uswds";
-import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "../react-radfish";
-import { useFormState } from "../contexts/FormWrapper";
+import {
+  TextInput,
+  Radio,
+  Select,
+  Button,
+  Label,
+  ErrorMessage,
+  Toast,
+  ToastStatus,
+} from "../packages/react-components";
+import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
-import useOfflineStorage from "../hooks/useOfflineStorage";
+import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { CONSTANTS } from "../config/form";
 import "../styles/theme.css";
 
@@ -26,19 +35,32 @@ const ComplexForm = ({ asyncFormOptions }) => {
     validationErrors,
     handleMultiEntrySubmit,
   } = useFormState();
+  const [toast, setToast] = useState(null);
+  const TOAST_LIFESPAN = 2000;
 
   const { createOfflineData } = useOfflineStorage();
 
-  function onOfflineSubmit(e) {
+  const onOfflineSubmit = async (e) => {
     e.preventDefault();
-    if (navigator.onLine) {
-      return;
+    try {
+      await createOfflineData("formData", formData);
+      const { status, message } = ToastStatus.SUCCESS;
+      setToast({ status, message });
+    } catch (err) {
+      const { status, message } = ToastStatus.ERROR;
+      setToast({ status, message });
+    } finally {
+      setTimeout(() => {
+        setToast(null);
+      }, TOAST_LIFESPAN);
     }
-    createOfflineData("formData", formData);
-  }
+  };
 
   return (
     <>
+      <div className="toast-container">
+        <Toast toast={toast} />
+      </div>
       <FormGroup error={validationErrors[fullName]}>
         <Label htmlFor={fullName}>Full Name</Label>
         {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
@@ -52,6 +74,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
           validationStatus={validationErrors[fullName] ? "error" : undefined}
           onChange={handleChange}
           onBlur={(e) => handleBlur(e, fullNameValidators)}
+          data-testid="inputId"
         />
       </FormGroup>
 
@@ -143,15 +166,18 @@ const ComplexForm = ({ asyncFormOptions }) => {
         onChange={handleChange}
       />
 
-      <Alert type="info" slim={true}>
-        Button Option 1: Below is an example of a simple button, it will save data locally. It does
-        not make a server request.
-      </Alert>
       <div className="grid-row flex-column">
-        <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
-          Submit
-        </Button>
-
+        {!navigator.onLine && (
+          <>
+            <Alert type="info" slim={true}>
+              Button Option 1: Below is an example of a simple button, it will save data locally. It
+              does not make a server request.
+            </Alert>
+            <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
+              Send Data to IndexDB
+            </Button>
+          </>
+        )}
         <Alert type="info" slim={true}>
           Button Option 2: Below is an example of a multi-entry button, it sends data to a server.
           The current implementation is using a mock server.

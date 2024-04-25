@@ -1,16 +1,16 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Toast, TOAST_CONFIG } from "./react-radfish";
-import { FormWrapper } from "./contexts/FormWrapper";
-import { TableWrapper } from "./contexts/TableWrapper";
+import { Toast, ToastStatus } from "./packages/react-components";
+import { FormWrapper } from "./contexts/FormWrapper.example";
+import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
-import RadfishAPIService from "./services/APIService";
+import RadfishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { ComplexForm } from "./pages/ComplexForm.example";
 import { MultiStepForm } from "./pages/MultiStepForm.example";
 import { SimpleTable } from "./pages/Table.example";
-import useOfflineStorage from "./hooks/useOfflineStorage";
+import useOfflineStorage from "./hooks/useOfflineStorage.example";
 
 const ApiService = new RadfishAPIService("");
 
@@ -44,7 +44,7 @@ function App() {
 
   const handleOffline = () => {
     setIsOffline(true);
-    const { status, message } = TOAST_CONFIG.OFFLINE;
+    const { status, message } = ToastStatus.OFFLINE;
     setToast({ status, message });
   };
 
@@ -98,10 +98,10 @@ function App() {
   const handleFormSubmit = async (submittedData) => {
     try {
       await ApiService.post(MSW_ENDPOINT.SPECIES, submittedData);
-      const { status, message } = TOAST_CONFIG.SUCCESS;
+      const { status, message } = ToastStatus.SUCCESS;
       setToast({ status, message });
     } catch (err) {
-      const { status, message } = TOAST_CONFIG.ERROR;
+      const { status, message } = ToastStatus.ERROR;
       setToast({ status, message });
     } finally {
       setTimeout(() => {
