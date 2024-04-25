@@ -309,7 +309,6 @@ const MultiStepForm = () => {
             className="margin-top-1 margin-right-0 order-last"
             role="form-submit"
             type="submit"
-            onClick={handleSubmit}
           >
             Submit MultiStep Form
           </Button>
