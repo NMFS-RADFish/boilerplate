@@ -39,7 +39,7 @@ const TripReportTable = () => {
 
   const handleRowClick = (row) => {
     const uuid = generateUUID();
-    navigate(`/tripReport/${row.id}/${uuid}`);
+    navigate(`/tripReport/${row.original.KEY}/${uuid}`);
   };
 
   if (!table) {

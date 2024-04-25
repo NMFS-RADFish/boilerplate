@@ -10,6 +10,8 @@ import { TripReportTable } from "./pages/TripReportTable";
 import { TripReportTableClamLobster } from "./pages/TripReportTableClamLobster";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
 import { HomePage } from "./pages/HomePage";
+import { FormWrapper } from "./contexts/FormWrapper";
+import { ReportForm } from "./pages/ReportForm";
 
 const ApiService = new RadfishAPIService("");
 
@@ -121,6 +123,10 @@ function App() {
     }
   };
 
+  const handleFormSubmit = (data) => {
+    console.log("FORM SUBMIT: ", data);
+  };
+
   return (
     <Router>
       <div className="App">
@@ -139,13 +145,20 @@ function App() {
                 />
               }
             />
-
             <Route
               path="/tripReport"
               element={
                 <TableWrapper>
                   <TripReportTable />
                 </TableWrapper>
+              }
+            />
+            <Route
+              path="/tripReport/:tripReportId/:formId"
+              element={
+                <FormWrapper>
+                  <ReportForm />
+                </FormWrapper>
               }
             />
             <Route
