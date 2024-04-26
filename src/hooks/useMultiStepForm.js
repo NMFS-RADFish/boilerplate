@@ -1,7 +1,7 @@
 import useOfflineStorage from "./useOfflineStorage.example";
 import { useFormState } from "../contexts/FormWrapper";
 
-const TOTAL_STEPS = 4;
+export const TOTAL_STEPS = 4;
 
 function useMultiStepForm(uuid) {
   const {
@@ -17,20 +17,7 @@ function useMultiStepForm(uuid) {
 
   async function init() {
     const uuid = await createOfflineData("formData", {
-      vesselName: "vesselName",
-      activity: "activity",
-      species: "species",
-      trapsInWater: "trapsInWater",
-      trapsPerString: "trapsPerString",
-      stringsHauled: "stringsHauled",
-      avgSoakTime: "avgSoakTime",
-      totNrBuoyLines: "totNrBuoyLines",
-      date_lan: "date_lan",
-      numTrapsInWater: "numTrapsInWater",
-      numTrapsHauled: "numTrapsHauled",
-      numTrapsPerString: "numTrapsPerString",
-      numBuoyLines: "numBuoyLines",
-      // currentStep: 1,
+      currentStep: 1,
     });
     setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
     return uuid;

@@ -4,8 +4,8 @@ import { Button } from "../../packages/react-components";
 import useMultiStepForm from "../../hooks/useMultiStepForm";
 
 export const StepControl = () => {
-  const { tripReportId } = useParams();
-  const { stepForward, stepBackward } = useMultiStepForm(tripReportId);
+  const { formId } = useParams();
+  const { stepForward, stepBackward } = useMultiStepForm(formId);
   return (
     <Grid className="display-flex flex-justify">
       <Button

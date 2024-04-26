@@ -9,8 +9,8 @@ import { StepControl } from "./StepControl";
 const { trapsPerString, trapsInWater, avgSoakTime, totNrBuoyLines, date_land } = CONSTANTS;
 
 export const StepThree = () => {
-  const { tripReportId } = useParams();
-  const { formData, handleChange } = useMultiStepForm(tripReportId);
+  const { formId } = useParams();
+  const { formData, handleChange } = useMultiStepForm(formId);
   return (
     <FormGroup error={false}>
       <h3>Step 3: Trip Information</h3>

@@ -9,8 +9,8 @@ import { FormSubmit } from "./FormSubmit";
 const { numTrapsInWater, numTrapsHauled, numTrapsPerString, numBuoyLines } = CONSTANTS;
 
 export const StepFour = () => {
-  const { tripReportId } = useParams();
-  const { formData, handleChange } = useMultiStepForm(tripReportId);
+  const { formId } = useParams();
+  const { formData, handleChange } = useMultiStepForm(formId);
   return (
     <FormGroup error={false}>
       <h3>Step 4: Effort Information</h3>

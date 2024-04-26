@@ -8,8 +8,8 @@ import { StepControl } from "./StepControl";
 const { species } = CONSTANTS;
 
 export const StepTwo = ({ speciesData }) => {
-  const { tripReportId } = useParams();
-  const { formData, handleChange } = useMultiStepForm(tripReportId);
+  const { formId } = useParams();
+  const { formData, handleChange } = useMultiStepForm(formId);
   return (
     <FormGroup error={false}>
       <h3>Step 2: Catch Information</h3>
