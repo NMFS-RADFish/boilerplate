@@ -67,25 +67,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
     }
   }, [searchParams]);
 
-  // if id exists, query data from server with that id
-  useEffect(() => {
-    if (params.id) {
-      const paramFormData = async () => {
-        const { data } = await ApiService.get(`/form/${params.id}`);
-
-        if (data) {
-          setFormData(data);
-        } else {
-          const cachedData = await findOfflineData("formData", { uuid: params.id });
-          if (cachedData) {
-            setFormData(cachedData[0]);
-          }
-        }
-      };
-      paramFormData();
-    }
-  }, [params]);
-
   /**
    * Validates the input value based on provided validators.
    *
