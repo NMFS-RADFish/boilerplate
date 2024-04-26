@@ -8,7 +8,7 @@ import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Alert } from "@trussworks/react-uswds";
 import { Form, Button } from "../packages/react-components";
-import { FORM_CONFIG } from "../config/form";
+import { CONSTANTS, FORM_CONFIG } from "../config/form";
 import RadfishAPIService from "../packages/services/APIService";
 import useOfflineStorage from "../hooks/useOfflineStorage.example";
 // import { COMMON_CONFIG } from "../config/common";
@@ -25,7 +25,7 @@ const ApiService = new RadfishAPIService("");
  * @returns {JSX.Element} The JSX element representing the form wrapper.
  */
 export const FormWrapper = ({ children, onSubmit }) => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState();
   const [visibleInputs, setVisibleInputs] = useState(() =>
     Object.fromEntries(
       Object.entries(FORM_CONFIG).map(([key, config]) => [key, config.visibility?.visibleOnMount]),

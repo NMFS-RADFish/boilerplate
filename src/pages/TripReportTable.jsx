@@ -4,7 +4,6 @@
  */
 
 import { useEffect, useState } from "react";
-import { flexRender } from "@tanstack/react-table";
 import { useTableState } from "../contexts/TableWrapper.example";
 import {
   Table,
@@ -39,7 +38,7 @@ const TripReportTable = () => {
 
   const handleRowClick = (row) => {
     const uuid = generateUUID();
-    navigate(`/tripReport/${row.original.KEY}/${uuid}`);
+    navigate(`/tripReport/${row.original.KEY}`);
   };
 
   if (!table) {

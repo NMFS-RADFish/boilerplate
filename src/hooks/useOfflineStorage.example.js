@@ -10,6 +10,8 @@ function useOfflineStorage() {
       activityData: "KEY, VALUE",
       speciesData: "SPPSYN, SPPCODE, SPPNAME, ITIS",
       tripTypesData: "KEY, VALUE",
+      formData:
+        "uuid, vesselName, activity, species, trapsInWater, trapsPerString, stringsHauled, avgSoakTime, totNrBuoyLines, date_lan, numTrapsInWater, numTrapsHauled, numTrapsPerString, numBuoyLines",
     },
   );
 

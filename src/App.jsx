@@ -154,6 +154,14 @@ function App() {
               }
             />
             <Route
+              path="/tripReport/:tripReportId"
+              element={
+                <FormWrapper>
+                  <ReportForm />
+                </FormWrapper>
+              }
+            />
+            <Route
               path="/tripReport/:tripReportId/:formId"
               element={
                 <FormWrapper>

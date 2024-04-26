@@ -1,0 +1,75 @@
+import useOfflineStorage from "./useOfflineStorage.example";
+import { useFormState } from "../contexts/FormWrapper";
+
+const TOTAL_STEPS = 4;
+
+function useMultiStepForm(uuid) {
+  const {
+    formData,
+    visibleInputs,
+    setFormData,
+    handleChange,
+    handleBlur,
+    validationErrors,
+    handleMultiEntrySubmit,
+  } = useFormState();
+  const { createOfflineData, updateOfflineData } = useOfflineStorage();
+
+  async function init() {
+    const uuid = await createOfflineData("formData", {
+      vesselName: "vesselName",
+      activity: "activity",
+      species: "species",
+      trapsInWater: "trapsInWater",
+      trapsPerString: "trapsPerString",
+      stringsHauled: "stringsHauled",
+      avgSoakTime: "avgSoakTime",
+      totNrBuoyLines: "totNrBuoyLines",
+      date_lan: "date_lan",
+      numTrapsInWater: "numTrapsInWater",
+      numTrapsHauled: "numTrapsHauled",
+      numTrapsPerString: "numTrapsPerString",
+      numBuoyLines: "numBuoyLines",
+      // currentStep: 1,
+    });
+    setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
+    return uuid;
+  }
+
+  function stepForward() {
+    if (formData.currentStep < TOTAL_STEPS) {
+      const nextStep = formData.currentStep + 1;
+      setFormData({ ...formData, currentStep: nextStep });
+      updateOfflineData("formData", [{ ...formData, uuid, currentStep: nextStep }]);
+    }
+  }
+
+  function stepBackward() {
+    if (formData.currentStep > 1) {
+      const prevStep = formData.currentStep - 1;
+      setFormData({ ...formData, currentStep: prevStep });
+      updateOfflineData("formData", [{ ...formData, uuid, currentStep: prevStep }]);
+    }
+  }
+
+  function handleSubmit() {
+    console.log("handleSubmit: ", formData);
+  }
+
+  return {
+    init,
+    stepForward,
+    stepBackward,
+    handleSubmit,
+    // below are composed useFormState values
+    formData,
+    visibleInputs,
+    setFormData,
+    handleChange,
+    handleBlur,
+    validationErrors,
+    handleMultiEntrySubmit,
+  };
+}
+
+export default useMultiStepForm;
