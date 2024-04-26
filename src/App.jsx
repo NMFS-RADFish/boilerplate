@@ -18,10 +18,10 @@ const ApiService = new RadfishAPIService("");
 const TOAST_LIFESPAN = 2000;
 
 function App() {
+  const { updateOfflineData, findOfflineData } = useOfflineStorage();
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
   const [toast, setToast] = useState(null);
   const [isOffline, setIsOffline] = useState(false);
-  const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
   // Check if the app is offline
   const checkConnectivity = async () => {

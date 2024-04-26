@@ -9,10 +9,10 @@ import {
   stateValidators,
   cityValidators,
 } from "../utilities";
-import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { CONSTANTS } from "../config/multistepForm";
 import useMultiStepForm from "../hooks/useMultiStepForm.example";
 import { useParams, useNavigate } from "react-router-dom";
+import { useOfflineStorage } from "../contexts/OfflineStorageWrapper.example";
 
 const { fullName, nickname, email, phoneNumber, country, city, state, zipcode } = CONSTANTS;
 

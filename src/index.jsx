@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
+import { OfflineStorageWrapper } from "./contexts/OfflineStorageWrapper.example";
 
 async function enableMocking() {
   const { worker } = await import("./mocks/browser");
@@ -31,7 +32,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 enableMocking().then(() => {
   root.render(
     <React.StrictMode>
-      <App />
+      <OfflineStorageWrapper>
+        <App />
+      </OfflineStorageWrapper>
     </React.StrictMode>,
   );
 });

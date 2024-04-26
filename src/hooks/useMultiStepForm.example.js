@@ -1,5 +1,5 @@
-import useOfflineStorage from "./useOfflineStorage.example";
 import { useFormState } from "../contexts/FormWrapper.example";
+import { useOfflineStorage } from "../contexts/OfflineStorageWrapper.example";
 
 const TOTAL_STEPS = 3;
 
