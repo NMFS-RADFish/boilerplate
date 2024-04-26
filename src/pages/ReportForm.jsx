@@ -62,24 +62,20 @@ const ReportForm = () => {
     navigate(`/tripReport/${tripReportId}/${uuid}`);
   };
 
-  if (!formData || !reportType || !tripType) {
-    return null;
-  }
-
   return (
     <>
       <h1>{reportType} Report Form</h1>
       <p>Trip Type: {tripType}</p>
 
-      {!formData.currentStep && (
+      {!formData?.currentStep && (
         <Button type="button" onClick={initializeMultistepForm}>
           Initialize Report Form
         </Button>
       )}
-      {formData.currentStep === 1 && <StepOne activityData={activityData} />}
-      {formData.currentStep === 2 && <StepTwo speciesData={speciesData} />}
-      {formData.currentStep === 3 && <StepThree />}
-      {formData.currentStep === 4 && <StepFour />}
+      {formData?.currentStep === 1 && <StepOne activityData={activityData} />}
+      {formData?.currentStep === 2 && <StepTwo speciesData={speciesData} />}
+      {formData?.currentStep === 3 && <StepThree />}
+      {formData?.currentStep === 4 && <StepFour />}
     </>
   );
 };

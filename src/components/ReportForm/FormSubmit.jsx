@@ -5,7 +5,7 @@ import useMultiStepForm from "../../hooks/useMultiStepForm";
 
 export const FormSubmit = () => {
   const { formId } = useParams();
-  const { stepBackward } = useMultiStepForm(formId);
+  const { stepBackward, handleSubmit } = useMultiStepForm(formId);
   return (
     <Grid className="display-flex flex-justify">
       <Button
@@ -16,7 +16,7 @@ export const FormSubmit = () => {
       >
         Prev Step
       </Button>
-      <Button role="form-submit" type="submit">
+      <Button role="form-submit" type="submit" onClick={handleSubmit}>
         {navigator.onLine ? "Online Submit" : "Offline Submit"}
       </Button>
     </Grid>

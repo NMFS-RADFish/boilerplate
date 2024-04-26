@@ -1,29 +1,13 @@
-/**
- * Manages state for any child Radfish form.
- * This context should wrap the RadfisForm component and will manage it's state related to input fields, input validations, and form submissions
- * This context provider is meant to be extensible and modular. You can use this anywhere in your app to wrap a form to manage the specific form's state
- */
-
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
-import { Alert } from "@trussworks/react-uswds";
-import { Form, Button } from "../packages/react-components";
-import { CONSTANTS, FORM_CONFIG } from "../config/form";
+import { Form } from "../packages/react-components";
+import { FORM_CONFIG } from "../config/form";
 import RadfishAPIService from "../packages/services/APIService";
 import useOfflineStorage from "../hooks/useOfflineStorage.example";
-// import { COMMON_CONFIG } from "../config/common";
 
 const FormContext = createContext();
-
 const ApiService = new RadfishAPIService("");
-/**
- * Higher-order component providing form state and functionality.
- *
- * @component
- * @param {Object} props - React component props.
- * @param {Function} props.onSubmit - Callback function to handle form submission.
- * @returns {JSX.Element} The JSX element representing the form wrapper.
- */
+
 export const FormWrapper = ({ children, onSubmit }) => {
   const [formData, setFormData] = useState();
   const [visibleInputs, setVisibleInputs] = useState(() =>
@@ -37,22 +21,11 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const [searchParams] = useSearchParams();
   const { findOfflineData } = useOfflineStorage();
 
-  /**
-   * Handles the submission of multiple entries by updating the URL with query parameters.
-   *
-   * @function
-   * @param {Object} params - Query parameters for multi-entry submission.
-   */
   const handleMultiEntrySubmit = (params) => {
     const queryString = new URLSearchParams(params).toString();
     navigate(`/?${queryString}`);
   };
 
-  /**
-   * useEffect hook to update form data based on URL search parameters. Useful for multi step forms
-   *
-   * @function
-   */
   useEffect(() => {
     const newFormData = {};
     let hasNewData = false;
@@ -103,8 +76,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
     (event) => {
       const { name, value } = event.target;
       const linkedinputids = event.target.getAttribute("linkedinputids")?.split(",");
-      // if field being updated has a linked field that needs to be computed, update state after computing linked fields
-      // else just return updatedForm without needing to linked computedValues
       setFormData((prev) => {
         const updatedForm = { ...prev, [name]: value };
         if (linkedinputids) {
@@ -118,7 +89,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
       });
     },
     [handleComputedValuesCallback, handleInputVisibilityCallback],
-  ); // Include 'handleComputedValues' in the dependency array
+  );
 
   const handleBlur = useCallback(
     (event, validators) => {
@@ -130,10 +101,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
     },
     [validateInputCallback],
   );
-
-  const handleSubmit = (data) => {
-    console.log("SUBMIT: ", data);
-  };
 
   const contextValue = {
     formData,
@@ -151,7 +118,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
       <Form
         onSubmit={(event) => {
           event.preventDefault();
-          handleSubmit(formData);
         }}
       >
         {children}

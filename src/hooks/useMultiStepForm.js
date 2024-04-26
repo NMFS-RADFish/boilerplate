@@ -18,6 +18,7 @@ function useMultiStepForm(uuid) {
   async function init() {
     const uuid = await createOfflineData("formData", {
       currentStep: 1,
+      isDraft: true,
     });
     setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
     return uuid;
@@ -40,20 +41,24 @@ function useMultiStepForm(uuid) {
   }
 
   function handleSubmit() {
-    console.log("handleSubmit: ", formData);
+    if (navigator.onLine) {
+      updateOfflineData("formData", [{ ...formData, uuid, isDraft: false, offlineSubmit: false }]);
+    } else {
+      updateOfflineData("formData", [{ ...formData, uuid, isDraft: false, offlineSubmit: true }]);
+    }
   }
 
   return {
     init,
     stepForward,
     stepBackward,
-    handleSubmit,
     // below are composed useFormState values
     formData,
     visibleInputs,
     setFormData,
     handleChange,
     handleBlur,
+    handleSubmit,
     validationErrors,
     handleMultiEntrySubmit,
   };
