@@ -41,15 +41,10 @@ function useMultiStepForm(uuid) {
     }
   }
 
-  // function handleSubmit() {
-  //   console.log("handleSubmit: ", formData);
-  // }
-
   return {
     init,
     stepForward,
     stepBackward,
-    // handleSubmit,
     // below are composed useFormState values
     formData,
     visibleInputs,

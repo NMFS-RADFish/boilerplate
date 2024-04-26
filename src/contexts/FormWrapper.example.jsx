@@ -165,7 +165,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
       <FormInfoAnnotation />
       <Form
         onSubmit={(event) => {
-          console.log("EVENT: ", event);
           event.preventDefault();
           onSubmit?.(formData);
         }}
