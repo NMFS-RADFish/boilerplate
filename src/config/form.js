@@ -1,5 +1,5 @@
 const CONSTANTS = {
-  fullName: "fullName",
+  middleName: "middleName",
   nickname: "nickname",
   email: "email",
   phoneNumber: "phoneNumber",
@@ -58,7 +58,7 @@ const computePriceFromQuantitySpecies = (values) => {
 };
 
 const FORM_CONFIG = {
-  [CONSTANTS.fullName]: {
+  [CONSTANTS.middleName]: {
     visibility: null,
     computed: null,
     validation: null,

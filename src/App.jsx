@@ -13,6 +13,7 @@ import { MultiStepForm } from "./pages/MultiStepForm.example";
 import { SimpleTable } from "./pages/Table.example";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
 import { SetsTable } from "./pages/SetsTable";
+import { CoolForm } from "./pages/CoolForm";
 
 const ApiService = new RadfishAPIService("");
 
@@ -162,6 +163,14 @@ function App() {
               element={
                 <FormWrapper onSubmit={handleFormSubmit}>
                   <ComplexForm asyncFormOptions={asyncFormOptions} />
+                </FormWrapper>
+              }
+            />
+            <Route
+              path="/coolform"
+              element={
+                <FormWrapper onSubmit={handleFormSubmit}>
+                  <CoolForm asyncFormOptions={asyncFormOptions} />
                 </FormWrapper>
               }
             />

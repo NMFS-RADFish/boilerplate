@@ -31,6 +31,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
       Object.entries(FORM_CONFIG).map(([key, config]) => [key, config.visibility?.visibleOnMount]),
     ),
   );
+  console.log(visibleInputs);
   const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
   const params = useParams();
