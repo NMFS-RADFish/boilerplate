@@ -123,10 +123,6 @@ function App() {
     }
   };
 
-  const handleFormSubmit = (data) => {
-    console.log("FORM SUBMIT: ", data);
-  };
-
   return (
     <Router>
       <div className="App">
