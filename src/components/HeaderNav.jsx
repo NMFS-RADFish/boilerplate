@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Title, Tag } from "@trussworks/react-uswds";
 import { Header, Navigation } from "../packages/react-components";
 import { version } from "../../package.json";
@@ -20,8 +21,13 @@ import Logo from "../assets/noaa-logo-circle.svg";
  */
 
 const HeaderNav = ({ children }) => {
+  let location = useLocation();
   const [expanded, setExpanded] = useState(false);
   const onExpandNavMenuClick = () => setExpanded((prvExpanded) => !prvExpanded);
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [location]);
 
   return (
     <>
