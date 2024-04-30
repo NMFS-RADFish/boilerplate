@@ -114,7 +114,8 @@ const RadfishTablePaginationPageCount = ({ pageIndex, getPageCount }) => {
   );
 };
 
-const RadfishTablePaginationGoToPage = ({ pageIndex, setPageIndex }) => {
+const RadfishTablePaginationGoToPage = ({ pageIndex, setPageIndex, getPageCount }) => {
+  const pageCount = getPageCount();
   return (
     <>
       | Go to page:
@@ -125,7 +126,9 @@ const RadfishTablePaginationGoToPage = ({ pageIndex, setPageIndex }) => {
         value={pageIndex}
         onChange={(e) => {
           const page = e.target.value ? Number(e.target.value) - 1 : 0;
-          setPageIndex(page);
+          if (page < pageCount) {
+            setPageIndex(page);
+          }
         }}
       />
     </>
