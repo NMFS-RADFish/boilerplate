@@ -47,7 +47,7 @@ const SimpleTable = () => {
     setShowOfflineSubmit,
   } = useTableState();
   const navigate = useNavigate();
-  const { toast, showToast } = useToast();
+  const { showToast, dismissToast } = useToast();
   const { findOfflineData, deleteOfflineData } = useOfflineStorage();
   // Check if the app is offline
   // const isOffline = !navigator.onLine;
@@ -124,6 +124,10 @@ const SimpleTable = () => {
       showToast(TOAST_CONFIG.SUCCESS);
     } catch (error) {
       showToast(TOAST_CONFIG.ERROR);
+    } finally {
+      setTimeout(() => {
+        dismissToast();
+      }, TOAST_LIFESPAN);
     }
   };
 

@@ -15,7 +15,7 @@ import { fullNameValidators } from "../utilities";
 import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { CONSTANTS } from "../config/form";
 import "../styles/theme.css";
-import { TOAST_CONFIG, useToast } from "../hooks/useToast";
+import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
 
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
 
@@ -36,7 +36,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
     validationErrors,
     handleMultiEntrySubmit,
   } = useFormState();
-  const { toast, showToast } = useToast();
+  const { showToast, dismissToast } = useToast();
 
   const { createOfflineData } = useOfflineStorage();
 
@@ -47,6 +47,10 @@ const ComplexForm = ({ asyncFormOptions }) => {
       showToast(TOAST_CONFIG.SUCCESS);
     } catch (err) {
       showToast(TOAST_CONFIG.ERROR);
+    } finally {
+      setTimeout(() => {
+        dismissToast();
+      }, TOAST_LIFESPAN);
     }
   };
 

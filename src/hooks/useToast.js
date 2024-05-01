@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // lifespan toast message should be visible in ms
-const TOAST_LIFESPAN = 2000;
+export const TOAST_LIFESPAN = 2000;
 /**
  * Toast configuration constants.
  * @constant {Object}
@@ -26,10 +26,11 @@ export const useToast = () => {
 
   const showToast = (toastObj) => {
     setToast({ status: toastObj.status, message: toastObj.message });
-    setTimeout(() => {
-      setToast(null);
-    }, TOAST_LIFESPAN);
   };
 
-  return { toast, showToast };
+  const dismissToast = () => {
+    setToast(null);
+  };
+
+  return { toast, showToast, dismissToast };
 };

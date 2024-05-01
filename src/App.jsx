@@ -13,19 +13,22 @@ import { SimpleTable } from "./pages/Table.example";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
 import { useOfflineStatus } from "./hooks/useOfflineStatus";
 import { ServerSync } from "./components/ServerSync";
-import { TOAST_CONFIG, useToast } from "./hooks/useToast";
+import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
 
 const ApiService = new RadfishAPIService("");
 
 function App() {
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
-  const { toast, showToast } = useToast();
+  const { toast, showToast, dismissToast } = useToast();
   const { isOffline } = useOfflineStatus();
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
   useEffect(() => {
     if (isOffline) {
       showToast(TOAST_CONFIG.OFFLINE);
+      setTimeout(() => {
+        dismissToast();
+      }, TOAST_LIFESPAN);
     }
   }, [isOffline]);
 
@@ -70,6 +73,10 @@ function App() {
       showToast(TOAST_CONFIG.SUCCESS);
     } catch (err) {
       showToast(TOAST_CONFIG.ERROR);
+    } finally {
+      setTimeout(() => {
+        dismissToast();
+      }, TOAST_LIFESPAN);
     }
   };
 
