@@ -24,8 +24,8 @@ export const TOAST_CONFIG = {
 export const useToast = () => {
   const [toast, setToast] = useState(null);
 
-  const showToast = (toast) => {
-    setToast({ status: toast.status, message: toast.message });
+  const showToast = (toastObj) => {
+    setToast({ status: toastObj.status, message: toastObj.message });
     setTimeout(() => {
       setToast(null);
     }, TOAST_LIFESPAN);

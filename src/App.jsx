@@ -1,7 +1,7 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Button, Toast } from "./packages/react-components";
+import { Toast } from "./packages/react-components";
 import { FormWrapper } from "./contexts/FormWrapper.example";
 import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
@@ -17,14 +17,17 @@ import { TOAST_CONFIG, useToast } from "./hooks/useToast";
 
 const ApiService = new RadfishAPIService("");
 
-// lifespan toast message should be visible in ms
-const TOAST_LIFESPAN = 2000;
-
 function App() {
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
   const { toast, showToast } = useToast();
   const { isOffline } = useOfflineStatus();
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
+
+  useEffect(() => {
+    if (isOffline) {
+      showToast(TOAST_CONFIG.OFFLINE);
+    }
+  }, [isOffline]);
 
   // when application mounts, fetch data from endpoint and set the payload to component state
   // this data is then passed into `DemoForm` component and used to prepopulate form fields (eg dropdown) with default options fetched from server

@@ -11,11 +11,7 @@ import { Alert } from "@trussworks/react-uswds";
  * @returns {JSX.Element | undefined} The JSX element representing the toast notification.
  */
 const RadfishToast = ({ toast }) => {
-  if (!toast) {
-    return;
-  }
-
-  switch (toast.status) {
+  switch (toast?.status) {
     case "success":
       return (
         <Alert role="toast-notification" type={"success"} headingLevel={"h1"}>
