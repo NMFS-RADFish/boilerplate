@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
-import { OfflineStorageWrapper } from "./contexts/OfflineStorageWrapper.example";
+import { OfflineStorageWrapper } from "./packages/contexts/OfflineStorageWrapper";
 
 async function enableMocking() {
   const { worker } = await import("./mocks/browser");
@@ -27,12 +27,22 @@ async function enableMocking() {
   });
 }
 
+const offlineStorageConfig = {
+  type: "indexedDB",
+  name: import.meta.env.VITE_INDEXED_DB_NAME || "radfish_dev",
+  version: import.meta.env.VITE_INDEXED_DB_VERSION || 1,
+  stores: {
+    formData: "uuid, fullName, numberOfFish, species, computedPrice",
+    species: "name, price",
+  },
+};
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 enableMocking().then(() => {
   root.render(
     <React.StrictMode>
-      <OfflineStorageWrapper>
+      <OfflineStorageWrapper config={offlineStorageConfig}>
         <App />
       </OfflineStorageWrapper>
     </React.StrictMode>,
