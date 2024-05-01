@@ -14,7 +14,7 @@ import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import { CONSTANTS } from "../config/form";
 import "../styles/theme.css";
-import { useOfflineStorage } from "../contexts/OfflineStorageWrapper.example";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
 

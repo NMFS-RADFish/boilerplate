@@ -12,7 +12,7 @@ import {
 import { CONSTANTS } from "../config/multistepForm";
 import useMultiStepForm from "../hooks/useMultiStepForm.example";
 import { useParams, useNavigate } from "react-router-dom";
-import { useOfflineStorage } from "../contexts/OfflineStorageWrapper.example";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const { fullName, nickname, email, phoneNumber, country, city, state, zipcode } = CONSTANTS;
 

@@ -28,7 +28,7 @@ const TOAST_LIFESPAN = 3000;
 import { Alert, Grid } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
 import { GridContainer } from "@trussworks/react-uswds";
-import { useOfflineStorage } from "../contexts/OfflineStorageWrapper.example";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const ApiService = new RadfishAPIService("");
 

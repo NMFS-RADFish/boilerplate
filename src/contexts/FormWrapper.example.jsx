@@ -11,7 +11,7 @@ import { Form, Button } from "../packages/react-components";
 import { FORM_CONFIG } from "../config/form";
 import RadfishAPIService from "../packages/services/APIService";
 import { COMMON_CONFIG } from "../config/common";
-import { useOfflineStorage } from "./OfflineStorageWrapper.example";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const FormContext = createContext();
 

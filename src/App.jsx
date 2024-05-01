@@ -10,7 +10,7 @@ import { MSW_ENDPOINT } from "./mocks/handlers";
 import { ComplexForm } from "./pages/ComplexForm.example";
 import { MultiStepForm } from "./pages/MultiStepForm.example";
 import { SimpleTable } from "./pages/Table.example";
-import useOfflineStorage from "./hooks/useOfflineStorage.example";
+import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 
 const ApiService = new RadfishAPIService("");
 
