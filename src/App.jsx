@@ -11,6 +11,8 @@ import { ComplexForm } from "./pages/ComplexForm.example";
 import { MultiStepForm } from "./pages/MultiStepForm.example";
 import { SimpleTable } from "./pages/Table.example";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
+import { useOfflineStatus } from "./hooks/useOfflineStatus";
+import { ServerSync } from "./components/ServerSync";
 
 const ApiService = new RadfishAPIService("");
 
@@ -20,45 +22,8 @@ const TOAST_LIFESPAN = 2000;
 function App() {
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
   const [toast, setToast] = useState(null);
-  const [isOffline, setIsOffline] = useState(false);
+  const { isOffline } = useOfflineStatus();
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
-
-  // Check if the app is offline
-  const checkConnectivity = async () => {
-    try {
-      const online = navigator.onLine;
-      if (online) {
-        handleOnline();
-      } else {
-        handleOffline();
-      }
-    } catch (error) {
-      handleOffline();
-    }
-  };
-
-  const handleOnline = () => {
-    setIsOffline(false);
-    setToast(true);
-  };
-
-  const handleOffline = () => {
-    setIsOffline(true);
-    const { status, message } = ToastStatus.OFFLINE;
-    setToast({ status, message });
-  };
-
-  useEffect(() => {
-    checkConnectivity();
-
-    window.addEventListener("online", checkConnectivity);
-    window.addEventListener("offline", checkConnectivity);
-
-    return () => {
-      window.removeEventListener("online", checkConnectivity);
-      window.removeEventListener("offline", checkConnectivity);
-    };
-  }, []);
 
   // when application mounts, fetch data from endpoint and set the payload to component state
   // this data is then passed into `DemoForm` component and used to prepopulate form fields (eg dropdown) with default options fetched from server
@@ -117,6 +82,7 @@ function App() {
           <Toast toast={toast} />
         </div>
         <Layout>
+          <ServerSync />
           {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
           <Routes>
             {/* On root route "/", render the DemoForm component along with it's context for state management */}
