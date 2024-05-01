@@ -1,18 +1,13 @@
 import { createContext, useContext } from "react";
-import { IndexedDBMethod, StorageModelFactory } from "../packages/storage";
+import { IndexedDBMethod, LocalStorageMethod, StorageModelFactory } from "../storage";
 
 export const OfflineStorageContext = createContext();
 
-export const OfflineStorageWrapper = ({ children }) => {
-  const storageMethod = new IndexedDBMethod(
-    import.meta.env.VITE_INDEXED_DB_NAME || "radfish_dev",
-    import.meta.env.VITE_INDEXED_DB_VERSION || 1,
-    {
-      formData:
-        "uuid, fullName, email, phoneNumber, numberOfFish, address1, address2, city, state, zipcode, occupation, department, species, computedPrice",
-      species: "name, price",
-    },
-  );
+export const OfflineStorageWrapper = ({ children, config }) => {
+  const storageMethod =
+    config.type === "indexedDB"
+      ? new IndexedDBMethod(config.name, config.version, config.stores)
+      : new LocalStorageMethod(config.name);
 
   const storageModel = StorageModelFactory.createModel(storageMethod);
 
