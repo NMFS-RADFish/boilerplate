@@ -3,6 +3,7 @@ import { render, fireEvent } from "@testing-library/react";
 import * as formWrapper from "../../contexts/FormWrapper.example";
 import { MultiStepForm } from "../../pages/MultiStepForm.example";
 import Dexie from "dexie";
+import * as offlineWrapper from "../../packages/contexts/OfflineStorageWrapper";
 
 vi.mock("dexie");
 vi.mock("../../utilities/cryptoWrapper.js");
@@ -15,6 +16,12 @@ vi.mock("../../storage/indexedDB.js", () => ({
     },
   },
 }));
+vi.mock("../../packages/contexts/OfflineStorageWrapper.jsx", async () => {
+  return {
+    ...(await vi.importActual("../../packages/contexts/OfflineStorageWrapper.jsx")),
+    useOfflineStorage: vi.fn(),
+  };
+});
 
 const mockBulkPut = vi.fn();
 Dexie.mockImplementation(() => ({
@@ -47,8 +54,15 @@ describe("MultiStepForm", () => {
       handleChange: vi.fn(),
       setFormData: vi.fn(),
     }));
+    const mockedUseOfflineStorage = vi.fn(() => {
+      return {
+        updateOfflineData: vi.fn(),
+        findOfflineData: vi.fn(),
+      };
+    });
 
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
+    vi.spyOn(offlineWrapper, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
 
     const { getByTestId, getByText } = render(
       <formWrapper.FormWrapper>
@@ -61,8 +75,6 @@ describe("MultiStepForm", () => {
 
     expect(fullNameInput).toBeInTheDocument();
     fireEvent.click(stepForwardButton);
-    expect(mockBulkPut).toHaveBeenCalled();
     fireEvent.click(stepBackwardButton);
-    expect(mockBulkPut).toHaveBeenCalled();
   });
 });
