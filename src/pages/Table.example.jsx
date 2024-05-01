@@ -228,6 +228,7 @@ const SimpleTable = () => {
             <TablePaginationGoToPage
               pageIndex={table.getState().pagination.pageIndex + 1}
               setPageIndex={table.setPageIndex}
+              getPageCount={table.getPageCount}
             />
             <TablePaginationSelectRowCount
               pageSize={table.getState().pagination.pageSize}

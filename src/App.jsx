@@ -97,7 +97,7 @@ function App() {
 
   const handleFormSubmit = async (submittedData) => {
     try {
-      await ApiService.post(MSW_ENDPOINT.SPECIES, submittedData);
+      await ApiService.post(MSW_ENDPOINT.FORM, submittedData);
       const { status, message } = ToastStatus.SUCCESS;
       setToast({ status, message });
     } catch (err) {
