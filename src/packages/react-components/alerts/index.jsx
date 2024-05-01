@@ -3,25 +3,6 @@ import React from "react";
 import { Alert } from "@trussworks/react-uswds";
 
 /**
- * Toast configuration constants.
- * @constant {Object}
- */
-const ToastStatus = {
-  OFFLINE: {
-    status: "offline",
-    message: "Application currently offline",
-  },
-  SUCCESS: {
-    status: "success",
-    message: "Successful form submission",
-  },
-  ERROR: {
-    status: "error",
-    message: "Error submitting form",
-  },
-};
-
-/**
  * Functional component for rendering a toast notification based on the provided toast object.
  *
  * @component
@@ -35,42 +16,21 @@ const RadfishToast = ({ toast }) => {
   }
 
   switch (toast.status) {
-    case ToastStatus.OFFLINE.status:
+    case "success":
       return (
-        <Alert
-          role="toast-notification"
-          type={"error"}
-          headingLevel={"h1"}
-          hidden={toast.status !== ToastStatus.OFFLINE.status}
-        >
+        <Alert role="toast-notification" type={"success"} headingLevel={"h1"}>
           {toast.message}
         </Alert>
       );
-    case ToastStatus.SUCCESS.status:
+    case "error":
       return (
-        <Alert
-          role="toast-notification"
-          type={"success"}
-          headingLevel={"h1"}
-          hidden={toast.status !== ToastStatus.SUCCESS.status}
-        >
-          {toast.message}
-        </Alert>
-      );
-    case ToastStatus.ERROR.status:
-      return (
-        <Alert
-          role="toast-notification"
-          type={"error"}
-          headingLevel={"h1"}
-          hidden={toast.status !== ToastStatus.ERROR.status}
-        >
+        <Alert role="toast-notification" type={"error"} headingLevel={"h1"}>
           {toast.message}
         </Alert>
       );
     default:
-      return;
+      return null;
   }
 };
 
-export { RadfishToast as Toast, ToastStatus };
+export { RadfishToast as Toast };

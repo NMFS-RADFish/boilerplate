@@ -1,7 +1,7 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Toast, ToastStatus } from "./packages/react-components";
+import { Button, Toast } from "./packages/react-components";
 import { FormWrapper } from "./contexts/FormWrapper.example";
 import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
@@ -13,6 +13,7 @@ import { SimpleTable } from "./pages/Table.example";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
 import { useOfflineStatus } from "./hooks/useOfflineStatus";
 import { ServerSync } from "./components/ServerSync";
+import { TOAST_CONFIG, useToast } from "./hooks/useToast";
 
 const ApiService = new RadfishAPIService("");
 
@@ -21,7 +22,7 @@ const TOAST_LIFESPAN = 2000;
 
 function App() {
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
-  const [toast, setToast] = useState(null);
+  const { toast, showToast } = useToast();
   const { isOffline } = useOfflineStatus();
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
@@ -63,15 +64,9 @@ function App() {
   const handleFormSubmit = async (submittedData) => {
     try {
       await ApiService.post(MSW_ENDPOINT.FORM, submittedData);
-      const { status, message } = ToastStatus.SUCCESS;
-      setToast({ status, message });
+      showToast(TOAST_CONFIG.SUCCESS);
     } catch (err) {
-      const { status, message } = ToastStatus.ERROR;
-      setToast({ status, message });
-    } finally {
-      setTimeout(() => {
-        setToast(null);
-      }, TOAST_LIFESPAN);
+      showToast(TOAST_CONFIG.ERROR);
     }
   };
 
