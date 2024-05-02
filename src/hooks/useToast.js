@@ -8,7 +8,7 @@ export const TOAST_LIFESPAN = 2000;
  */
 export const TOAST_CONFIG = {
   OFFLINE: {
-    status: "error",
+    status: "warning",
     message: "Application currently offline",
   },
   SUCCESS: {

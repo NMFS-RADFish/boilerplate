@@ -24,6 +24,18 @@ const RadfishToast = ({ toast }) => {
           {toast.message}
         </Alert>
       );
+    case "info":
+      return (
+        <Alert role="toast-notification" type={"info"} headingLevel={"h1"}>
+          {toast.message}
+        </Alert>
+      );
+    case "warning":
+      return (
+        <Alert role="toast-notification" type={"warning"} headingLevel={"h1"}>
+          {toast.message}
+        </Alert>
+      );
     default:
       return null;
   }

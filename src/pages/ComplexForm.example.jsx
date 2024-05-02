@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Alert, Checkbox, FormGroup } from "@trussworks/react-uswds";
 import {
   TextInput,
@@ -7,8 +7,6 @@ import {
   Button,
   Label,
   ErrorMessage,
-  // Toast,
-  // ToastStatus,
 } from "../packages/react-components";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
