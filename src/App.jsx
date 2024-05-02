@@ -1,7 +1,7 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Toast, ToastStatus } from "./packages/react-components";
+import { Toast } from "./packages/react-components";
 import { FormWrapper } from "./contexts/FormWrapper.example";
 import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
@@ -13,17 +13,24 @@ import { SimpleTable } from "./pages/Table.example";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
 import { useOfflineStatus } from "./hooks/useOfflineStatus";
 import { ServerSync } from "./components/ServerSync";
+import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
 
 const ApiService = new RadfishAPIService("");
 
-// lifespan toast message should be visible in ms
-const TOAST_LIFESPAN = 2000;
-
 function App() {
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
-  const [toast, setToast] = useState(null);
+  const { toast, showToast, dismissToast } = useToast();
   const { isOffline } = useOfflineStatus();
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
+
+  useEffect(() => {
+    if (isOffline) {
+      showToast(TOAST_CONFIG.OFFLINE);
+      setTimeout(() => {
+        dismissToast();
+      }, TOAST_LIFESPAN);
+    }
+  }, [isOffline]);
 
   // when application mounts, fetch data from endpoint and set the payload to component state
   // this data is then passed into `DemoForm` component and used to prepopulate form fields (eg dropdown) with default options fetched from server
@@ -63,14 +70,12 @@ function App() {
   const handleFormSubmit = async (submittedData) => {
     try {
       await ApiService.post(MSW_ENDPOINT.FORM, submittedData);
-      const { status, message } = ToastStatus.SUCCESS;
-      setToast({ status, message });
+      showToast(TOAST_CONFIG.SUCCESS);
     } catch (err) {
-      const { status, message } = ToastStatus.ERROR;
-      setToast({ status, message });
+      showToast(TOAST_CONFIG.ERROR);
     } finally {
       setTimeout(() => {
-        setToast(null);
+        dismissToast();
       }, TOAST_LIFESPAN);
     }
   };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Alert, Checkbox, FormGroup } from "@trussworks/react-uswds";
 import {
   TextInput,
@@ -7,14 +7,13 @@ import {
   Button,
   Label,
   ErrorMessage,
-  Toast,
-  ToastStatus,
 } from "../packages/react-components";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { CONSTANTS } from "../config/form";
 import "../styles/theme.css";
+import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
 
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
 
@@ -35,8 +34,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
     validationErrors,
     handleMultiEntrySubmit,
   } = useFormState();
-  const [toast, setToast] = useState(null);
-  const TOAST_LIFESPAN = 2000;
+  const { showToast, dismissToast } = useToast();
 
   const { createOfflineData } = useOfflineStorage();
 
@@ -44,23 +42,18 @@ const ComplexForm = ({ asyncFormOptions }) => {
     e.preventDefault();
     try {
       await createOfflineData("formData", formData);
-      const { status, message } = ToastStatus.SUCCESS;
-      setToast({ status, message });
+      showToast(TOAST_CONFIG.SUCCESS);
     } catch (err) {
-      const { status, message } = ToastStatus.ERROR;
-      setToast({ status, message });
+      showToast(TOAST_CONFIG.ERROR);
     } finally {
       setTimeout(() => {
-        setToast(null);
+        dismissToast();
       }, TOAST_LIFESPAN);
     }
   };
 
   return (
     <>
-      <div className="toast-container">
-        <Toast toast={toast} />
-      </div>
       <FormGroup error={validationErrors[fullName]}>
         <Label htmlFor={fullName}>Full Name</Label>
         {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
