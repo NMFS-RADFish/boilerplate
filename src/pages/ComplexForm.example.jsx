@@ -42,6 +42,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
 
   const onOfflineSubmit = async (e) => {
     e.preventDefault();
+    formData.isDraft = true;
     try {
       await createOfflineData("formData", formData);
       const { status, message } = ToastStatus.SUCCESS;
