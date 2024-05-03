@@ -35,7 +35,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams] = useSearchParams();
-  const { findOfflineData } = useOfflineStorage();
+  const { updateOfflineData, createOfflineData } = useOfflineStorage();
 
   /**
    * Handles the submission of multiple entries by updating the URL with query parameters.
@@ -91,6 +91,19 @@ export const FormWrapper = ({ children, onSubmit }) => {
     handleComputedValuesLogic(inputIds, formData, FORM_CONFIG);
   }, []);
 
+  const saveOfflineData = async (tableName, data) => {
+    try {
+      if (params.id) {
+        await updateOfflineData(tableName, [{ uuid: params.id, ...data }]);
+      }
+      // else {
+      //   await createOfflineData(tableName, data);
+      // }
+    } catch (error) {
+      return error;
+    }
+  };
+
   /**
    * Callback function for handling input visibility based on form data and configuration.
    *
@@ -122,8 +135,10 @@ export const FormWrapper = ({ children, onSubmit }) => {
           const updatedComputedForm =
             handleComputedValuesCallback(linkedinputids, updatedForm) || updatedForm;
           handleInputVisibilityCallback(linkedinputids, updatedComputedForm);
+          saveOfflineData("formData", updatedComputedForm);
           return updatedComputedForm;
         } else {
+          saveOfflineData("formData", updatedForm);
           return updatedForm;
         }
       });
