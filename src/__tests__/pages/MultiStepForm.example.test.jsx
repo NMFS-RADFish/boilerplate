@@ -65,9 +65,11 @@ describe("MultiStepForm", () => {
     vi.spyOn(offlineWrapper, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
 
     const { getByTestId, getByText } = render(
-      <formWrapper.FormWrapper>
-        <MultiStepForm />
-      </formWrapper.FormWrapper>,
+      <offlineWrapper.OfflineStorageWrapper config={{ type: "indexDB" }}>
+        <formWrapper.FormWrapper>
+          <MultiStepForm />
+        </formWrapper.FormWrapper>
+      </offlineWrapper.OfflineStorageWrapper>,
     );
     const fullNameInput = getByText("Full Name");
     const stepForwardButton = getByTestId("step-forward");
