@@ -44,7 +44,7 @@ function App() {
 
   const handleOffline = () => {
     setIsOffline(true);
-    const { status, message } = TOAST_CONFIG.OFFLINE;
+    const { status, message } = ToastStatus.OFFLINE;
     setToast({ status, message });
   };
 
@@ -97,11 +97,11 @@ function App() {
 
   const handleFormSubmit = async (submittedData) => {
     try {
-      await ApiService.post(MSW_ENDPOINT.SPECIES, submittedData);
-      const { status, message } = TOAST_CONFIG.SUCCESS;
+      await ApiService.post(MSW_ENDPOINT.FORM, submittedData);
+      const { status, message } = ToastStatus.SUCCESS;
       setToast({ status, message });
     } catch (err) {
-      const { status, message } = TOAST_CONFIG.ERROR;
+      const { status, message } = ToastStatus.ERROR;
       setToast({ status, message });
     } finally {
       setTimeout(() => {

@@ -4,6 +4,7 @@ import { computePriceFromQuantitySpecies } from "../config/form";
 export const MSW_ENDPOINT = {
   SPECIES: "/species",
   TABLE: "/table",
+  FORM: "/form",
 };
 
 const data = [
@@ -33,6 +34,10 @@ export const handlers = [
   // This handler is used to mock the response of a GET request for an SVG or WOFF2 file
   http.get(/\.(svg|woff2)$/, async () => {
     return;
+  }),
+
+  http.post(MSW_ENDPOINT.FORM, ({ request }) => {
+    return HttpResponse.json({ data: request.body }, { status: 201 });
   }),
 
   // Returns an array of fish species. This is currently being used to demonstrate populating a dropdown form component with "data" from a server

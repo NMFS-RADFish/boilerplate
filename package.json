@@ -1,6 +1,6 @@
 {
   "name": "radfish-boilerplate",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -35,7 +35,9 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "format": "prettier --write src --config ./.prettierrc",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "lhci:mobile": "lhci autorun",
+    "lhci:desktop": "lhci autorun --collect.settings.preset=desktop"
   },
   "eslintConfig": {
     "extends": [
@@ -58,9 +60,9 @@
   "devDependencies": {
     "@babel/preset-env": "^7.24.0",
     "@babel/preset-react": "^7.23.3",
-    "@testing-library/jest-dom": "^6.4.2",
+    "@lhci/cli": "^0.13.0",
+    "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "^14.2.2",
-    "@types/jest": "29.5.12",
     "@vitejs/plugin-react": "^4.2.1",
     "babel-jest": "^29.7.0",
     "concurrently": "^8.2.2",
