@@ -7,6 +7,15 @@ import useOfflineStorage from "../hooks/useOfflineStorage.example";
 
 const ApiService = new RadfishAPIService("");
 
+const offlineErrorMsg = "No network conection, unable to sync with server";
+const lastSyncMsg = `Last sync at: ${localStorage.getItem("lastHomebaseSync")}`;
+const noSyncMsg = "Application has not yet been synced with homebase";
+const dataNotSyncedMsg = "Data not synced, try resyncing";
+const dataIsSyncedMsg = "All data cached, ready to launch!";
+
+const HOME_BASE_DATA = "homebaseData";
+const LAST_HOMEBASE_SYNC = "lastHomebaseSync";
+
 export const ServerSync = () => {
   const { isOffline } = useOfflineStatus();
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
@@ -16,39 +25,32 @@ export const ServerSync = () => {
   const syncToHomebase = async () => {
     if (!isOffline) {
       setIsLoading(true);
-
-      console.log("syncing...");
       await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
       const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
 
-      console.log("caching offline data...");
       await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
-      await updateOfflineData("homebaseData", homebaseData);
+      await updateOfflineData(HOME_BASE_DATA, homebaseData);
 
-      localStorage.setItem("lastHomebaseSync", Date.now());
+      localStorage.setItem(LAST_HOMEBASE_SYNC, Date.now());
 
       initializeLaunchSequence();
       setIsLoading(false);
     } else {
-      console.log("No network conection, unable to sync with server");
-      console.log("Application in offline mode, using cache.");
-      console.log(
-        `${localStorage.getItem("lastHomebaseSync") ? `Last sync at: ${localStorage.getItem("lastHomebaseSync")}` : "Application has not yet been synced with homebase"}`,
-      );
+      console.log(offlineErrorMsg);
+      console.log(`${localStorage.getItem(LAST_HOMEBASE_SYNC) ? lastSyncMsg : noSyncMsg}`);
       setIsLoading(false);
     }
   };
 
   const initializeLaunchSequence = async () => {
-    console.log("checking if all data is present...");
-    const homebaseData = await findOfflineData("homebaseData");
+    const homebaseData = await findOfflineData(HOME_BASE_DATA);
 
     if (!homebaseData.length) {
-      setSyncStatus({ status: false, message: "data not synced, try resyncing" });
+      setSyncStatus({ status: false, message: dataNotSyncedMsg });
     }
     // 7 is the amount of data expected from homebase response, but this can be any check
     if (homebaseData.length === 7) {
-      setSyncStatus({ status: true, message: "all data cached, ready to launch!" });
+      setSyncStatus({ status: true, message: dataIsSyncedMsg });
     }
     setTimeout(() => {
       setSyncStatus({ status: null, message: "" });
