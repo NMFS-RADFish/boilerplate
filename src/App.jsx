@@ -11,6 +11,7 @@ import { ComplexForm } from "./pages/ComplexForm.example";
 import { MultiStepForm } from "./pages/MultiStepForm.example";
 import { SimpleTable } from "./pages/Table.example";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
+import { Form } from "./pages/Form.example";
 
 const ApiService = new RadfishAPIService("");
 
@@ -135,6 +136,14 @@ function App() {
                 <TableWrapper>
                   <SimpleTable />
                 </TableWrapper>
+              }
+            />
+            <Route
+              path="/form"
+              element={
+                <FormWrapper onSubmit={handleFormSubmit}>
+                  <Form />
+                </FormWrapper>
               }
             />
             <Route
