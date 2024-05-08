@@ -35,7 +35,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams] = useSearchParams();
-  const { updateOfflineData, createOfflineData } = useOfflineStorage();
+  const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
   /**
    * Handles the submission of multiple entries by updating the URL with query parameters.
@@ -54,8 +54,15 @@ export const FormWrapper = ({ children, onSubmit }) => {
    * @function
    */
   useEffect(() => {
-    const newFormData = {};
+    let newFormData = {};
     let hasNewData = false;
+
+    const getOfflineData = async () => {
+      if (params.id) {
+        const offlineData = await findOfflineData("formData", { uuid: params.id });
+        setFormData(offlineData[0]);
+      }
+    };
 
     for (let [key, value] of searchParams.entries()) {
       newFormData[key] = value;
@@ -65,7 +72,8 @@ export const FormWrapper = ({ children, onSubmit }) => {
     if (hasNewData) {
       setFormData((prev) => ({ ...prev, ...newFormData }));
     }
-  }, [searchParams]);
+    getOfflineData();
+  }, [searchParams, params.id]);
 
   /**
    * Validates the input value based on provided validators.
@@ -96,9 +104,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
       if (params.id) {
         await updateOfflineData(tableName, [{ uuid: params.id, ...data }]);
       }
-      // else {
-      //   await createOfflineData(tableName, data);
-      // }
     } catch (error) {
       return error;
     }
