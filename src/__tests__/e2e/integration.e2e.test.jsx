@@ -11,7 +11,7 @@ describe("Integration", () => {
 
   it("should be able to navigate through application", async () => {
     await page.goto("http://localhost:3000/multistep");
-    await page.waitForSelector("#step-forward");
+    await page.waitForSelector(".radfish-form");
     // await page.click("#step-forward");
 
     // await page.waitForSelector("#fullName");
