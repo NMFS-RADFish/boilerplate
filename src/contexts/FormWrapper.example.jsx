@@ -181,6 +181,11 @@ export const FormWrapper = ({ children, onSubmit }) => {
       <Form
         onSubmit={(event) => {
           event.preventDefault();
+          if (!navigator.onLine) {
+            formData.isDraft = true;
+          } else {
+            formData.isDraft = false;
+          }
           onSubmit?.(formData);
         }}
       >

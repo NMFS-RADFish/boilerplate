@@ -1,7 +1,7 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Toast, ToastStatus } from "./packages/react-components";
+import { Toast } from "./packages/react-components";
 import { FormWrapper } from "./contexts/FormWrapper.example";
 import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
@@ -11,54 +11,26 @@ import { ComplexForm } from "./pages/ComplexForm.example";
 import { MultiStepForm } from "./pages/MultiStepForm.example";
 import { SimpleTable } from "./pages/Table.example";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
+import { ServerSync } from "./components/ServerSync";
+import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
+import { useOfflineStatus } from "./hooks/useOfflineStatus";
 
 const ApiService = new RadfishAPIService("");
-
-// lifespan toast message should be visible in ms
-const TOAST_LIFESPAN = 2000;
 
 function App() {
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
-  const [toast, setToast] = useState(null);
-  const [isOffline, setIsOffline] = useState(false);
-
-  // Check if the app is offline
-  const checkConnectivity = async () => {
-    try {
-      const online = navigator.onLine;
-      if (online) {
-        handleOnline();
-      } else {
-        handleOffline();
-      }
-    } catch (error) {
-      handleOffline();
-    }
-  };
-
-  const handleOnline = () => {
-    setIsOffline(false);
-    setToast(true);
-  };
-
-  const handleOffline = () => {
-    setIsOffline(true);
-    const { status, message } = ToastStatus.OFFLINE;
-    setToast({ status, message });
-  };
+  const { toast, showToast, dismissToast } = useToast();
+  const { isOffline } = useOfflineStatus();
 
   useEffect(() => {
-    checkConnectivity();
-
-    window.addEventListener("online", checkConnectivity);
-    window.addEventListener("offline", checkConnectivity);
-
-    return () => {
-      window.removeEventListener("online", checkConnectivity);
-      window.removeEventListener("offline", checkConnectivity);
-    };
-  }, []);
+    if (isOffline) {
+      showToast(TOAST_CONFIG.OFFLINE);
+      setTimeout(() => {
+        dismissToast();
+      }, TOAST_LIFESPAN);
+    }
+  }, [isOffline]);
 
   // when application mounts, fetch data from endpoint and set the payload to component state
   // this data is then passed into `DemoForm` component and used to prepopulate form fields (eg dropdown) with default options fetched from server
@@ -98,14 +70,12 @@ function App() {
   const handleFormSubmit = async (submittedData) => {
     try {
       await ApiService.post(MSW_ENDPOINT.FORM, submittedData);
-      const { status, message } = ToastStatus.SUCCESS;
-      setToast({ status, message });
+      showToast(TOAST_CONFIG.SUCCESS);
     } catch (err) {
-      const { status, message } = ToastStatus.ERROR;
-      setToast({ status, message });
+      showToast(TOAST_CONFIG.ERROR);
     } finally {
       setTimeout(() => {
-        setToast(null);
+        dismissToast();
       }, TOAST_LIFESPAN);
     }
   };
@@ -117,6 +87,7 @@ function App() {
           <Toast toast={toast} />
         </div>
         <Layout>
+          <ServerSync />
           {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
           <Routes>
             {/* On root route "/", render the DemoForm component along with it's context for state management */}
