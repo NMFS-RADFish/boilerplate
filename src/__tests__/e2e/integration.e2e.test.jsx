@@ -11,15 +11,15 @@ describe("Integration", () => {
 
   it("should be able to navigate through application", async () => {
     await page.goto("http://localhost:3000/multistep");
-    await page.waitForSelector(".header-logo");
-    // await page.click("#step-forward");
+    await page.waitForSelector("#step-forward");
+    await page.click("#step-forward");
 
-    // await page.waitForSelector("#fullName");
-    // const value = await page.$eval("#fullName", (el) => el.outerHTML);
+    await page.waitForSelector("#fullName");
+    const value = await page.$eval("#fullName", (el) => el.outerHTML);
 
-    // expect(value).toBe(
-    //   `<input data-testid="textInput" class="usa-input radfish-input " id="fullName" name="fullName" type="text" placeholder="Full Name" aria-invalid="false" linkedinputids="nickname" value="">`,
-    // );
+    expect(value).toBe(
+      `<input data-testid="textInput" class="usa-input radfish-input " id="fullName" name="fullName" type="text" placeholder="Full Name" aria-invalid="false" linkedinputids="nickname" value="">`,
+    );
   });
 
   afterAll(() => browser.close());
