@@ -211,6 +211,7 @@ export const StepTwo = ({ asyncFormOptions }) => {
         implementation is using a mock server.
       </Alert>
       <Select
+        id={species}
         linkedinputids={[computedPrice, subSpecies]}
         name={species}
         value={formData[species] || ""}

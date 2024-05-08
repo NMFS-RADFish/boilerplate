@@ -14,11 +14,11 @@ describe("Integration", () => {
     await page.waitForSelector("#step-forward");
     await page.click("#step-forward");
 
-    await page.waitForSelector("#fullName");
-    const value = await page.$eval("#fullName", (el) => el.outerHTML);
+    await page.waitForSelector("#species");
+    const value = await page.$eval("#species", (el) => el.outerHTML);
 
     expect(value).toBe(
-      `<input data-testid="inputId" class="usa-input radfish-input " id="fullName" name="fullName" type="text" placeholder="Full Name" aria-invalid="false" value="">`,
+      `<select data-testid="Select" class="usa-select radfish-select " id="species" name="species" linkedinputids="computedPrice,subSpecies"><option value="">Select Species</option><option value="grouper">Grouper</option><option value="salmon">Salmon</option><option value="marlin">Marlin</option><option value="mahimahi">Mahimahi</option></select>`,
     );
   });
 
