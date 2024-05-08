@@ -10,7 +10,7 @@ describe("Integration", () => {
   });
 
   it("should be able to navigate through application", async () => {
-    await page.goto("http://localhost:3000/multistep");
+    await page.goto("http://localhost:3000/form");
     await page.waitForSelector("#step-forward");
     await page.click("#step-forward");
 
@@ -18,7 +18,7 @@ describe("Integration", () => {
     const value = await page.$eval("#fullName", (el) => el.outerHTML);
 
     expect(value).toBe(
-      `<input data-testid="textInput" class="usa-input radfish-input " id="fullName" name="fullName" type="text" placeholder="Full Name" aria-invalid="false" linkedinputids="nickname" value="">`,
+      `<input data-testid="inputId" class="usa-input radfish-input " id="fullName" name="fullName" type="text" placeholder="Full Name" aria-invalid="false" value="">`,
     );
   });
 

@@ -103,6 +103,7 @@ const Form = ({ asyncFormOptions }) => {
           className="margin-top-1"
           onClick={stepBackward}
           data-testid="step-backward"
+          id="step-backward"
         >
           Prev Step
         </Button>
@@ -166,6 +167,7 @@ export const StepOne = () => {
           className="margin-top-1 margin-right-0 order-last"
           onClick={id ? stepForward : handleInit}
           data-testid="step-forward"
+          id="step-forward"
         >
           Next Step
         </Button>
@@ -175,6 +177,7 @@ export const StepOne = () => {
           className="margin-top-1"
           onClick={stepBackward}
           data-testid="step-backward"
+          id="step-backward"
         >
           Prev Step
         </Button>
@@ -255,6 +258,7 @@ export const StepTwo = ({ asyncFormOptions }) => {
           className="margin-top-1 margin-right-0 order-last"
           onClick={stepForward}
           data-testid="step-forward"
+          id="step-forward"
         >
           Next Step
         </Button>
@@ -263,6 +267,7 @@ export const StepTwo = ({ asyncFormOptions }) => {
           className="margin-top-1"
           onClick={stepBackward}
           data-testid="step-backward"
+          id="step-backward"
         >
           Prev Step
         </Button>
