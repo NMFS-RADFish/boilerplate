@@ -3,7 +3,7 @@
  * @returns {React.ReactNode} - The demo table component.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTableState } from "../contexts/TableWrapper.example";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import RadfishAPIService from "../packages/services/APIService";
@@ -20,15 +20,12 @@ import {
   TablePaginationPageCount,
   TablePaginationGoToPage,
   TablePaginationSelectRowCount,
-  Toast,
-  ToastStatus,
 } from "../packages/react-components";
 import { useNavigate } from "react-router-dom";
-const TOAST_LIFESPAN = 3000;
 import useOfflineStorage from "../hooks/useOfflineStorage.example";
-import { Alert, Grid } from "@trussworks/react-uswds";
+import { Alert } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
-import { GridContainer } from "@trussworks/react-uswds";
+import { TOAST_CONFIG, useToast } from "../hooks/useToast";
 
 const ApiService = new RadfishAPIService("");
 
@@ -50,7 +47,7 @@ const SimpleTable = () => {
     setShowOfflineSubmit,
   } = useTableState();
   const navigate = useNavigate();
-  const [toast, setToast] = useState(null);
+  const { showToast, dismissToast } = useToast();
   const { findOfflineData, deleteOfflineData } = useOfflineStorage();
   // Check if the app is offline
   // const isOffline = !navigator.onLine;
@@ -124,21 +121,18 @@ const SimpleTable = () => {
       //delete submitted drafts from local storage
       const idsFromApiResponse = data.map((item) => item.id);
       deleteOfflineData("formData", idsFromApiResponse);
-      const { status, message } = ToastStatus.SUCCESS;
-      setToast({ status, message });
+      showToast(TOAST_CONFIG.SUCCESS);
     } catch (error) {
-      const { status, message } = ToastStatus.ERROR;
-      setToast({ status, message });
+      showToast(TOAST_CONFIG.ERROR);
     } finally {
       setTimeout(() => {
-        setToast(null);
+        dismissToast();
       }, TOAST_LIFESPAN);
     }
   };
 
   return (
     <>
-      <Toast toast={toast} />
       <TableInfoAnnotation />
       <br />
       <div className="margin-left-auto display-flex flex-column flex-align-end width-auto">
