@@ -91,16 +91,6 @@ function App() {
           <ServerSync />
           {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
           <Routes>
-            {/* On root route "/", render the DemoForm component along with it's context for state management */}
-            <Route
-              path="/"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <ComplexForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
-              }
-            />
-            {/* On "/table" route, render the DemoTable component along with it's context for state management */}
             <Route
               path="/table"
               element={
@@ -113,39 +103,15 @@ function App() {
               path="/form"
               element={
                 <FormWrapper onSubmit={handleFormSubmit}>
-                  <Form />
+                  <Form asyncFormOptions={asyncFormOptions} />
                 </FormWrapper>
               }
             />
             <Route
-              path="/multistep"
+              path="/form/:id"
               element={
                 <FormWrapper onSubmit={handleFormSubmit}>
-                  <MultiStepForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
-              }
-            />
-            <Route
-              path="/multistep/:id"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <MultiStepForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
-              }
-            />
-            <Route
-              path="/complexform"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <ComplexForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
-              }
-            />
-            <Route
-              path="/complexform/:id"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <ComplexForm asyncFormOptions={asyncFormOptions} />
+                  <Form asyncFormOptions={asyncFormOptions} />
                 </FormWrapper>
               }
             />

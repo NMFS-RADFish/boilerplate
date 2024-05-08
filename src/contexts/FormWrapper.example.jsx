@@ -37,13 +37,13 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const { findOfflineData } = useOfflineStorage();
   const { createOfflineData, updateOfflineData } = useOfflineStorage();
 
-  async function init() {
+  async function init({ initialStep }) {
     const uuid = await createOfflineData("formData", {
       ...formData,
-      currentStep: 1,
+      currentStep: initialStep,
       totalSteps: TOTAL_STEPS,
     });
-    setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
+    setFormData({ ...formData, currentStep: initialStep, totalSteps: TOTAL_STEPS });
     return uuid;
   }
 
@@ -51,7 +51,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
     if (formData.currentStep < TOTAL_STEPS) {
       const nextStep = formData.currentStep + 1;
       setFormData({ ...formData, currentStep: nextStep });
-      updateOfflineData("formData", [{ ...formData, uuid, currentStep: nextStep }]);
+      updateOfflineData("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
     }
   }
 
@@ -59,7 +59,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
     if (formData.currentStep > 1) {
       const prevStep = formData.currentStep - 1;
       setFormData({ ...formData, currentStep: prevStep });
-      updateOfflineData("formData", [{ ...formData, uuid, currentStep: prevStep }]);
+      updateOfflineData("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
     }
   }
 

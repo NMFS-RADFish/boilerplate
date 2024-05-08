@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import "../styles/theme.css";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Checkbox, FormGroup, Grid } from "@trussworks/react-uswds";
 import {
   TextInput,
@@ -7,18 +9,16 @@ import {
   Button,
   Label,
   ErrorMessage,
-  Toast,
-  ToastStatus,
 } from "../packages/react-components";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { CONSTANTS } from "../config/form";
-import "../styles/theme.css";
+import { useToast } from "../hooks/useToast";
 
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
-const id = null;
 
+const TOAST_LIFESPAN = 2000;
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
  *
@@ -28,11 +28,22 @@ const id = null;
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
 const Form = ({ asyncFormOptions }) => {
-  const { formData, handleMultiEntrySubmit } = useFormState();
-  const [toast, setToast] = useState(null);
-  const TOAST_LIFESPAN = 2000;
+  const { id } = useParams();
+  const { formData, setFormData, stepBackward } = useFormState();
+  const { showToast } = useToast();
 
-  const { createOfflineData } = useOfflineStorage();
+  const { findOfflineData, createOfflineData } = useOfflineStorage();
+
+  useEffect(() => {
+    if (id) {
+      findOfflineForm();
+    }
+  }, []);
+
+  const findOfflineForm = async () => {
+    const [offlineForm] = await findOfflineData("formData", { uuid: id });
+    setFormData(offlineForm);
+  };
 
   const onOfflineSubmit = async (e) => {
     e.preventDefault();
@@ -40,25 +51,25 @@ const Form = ({ asyncFormOptions }) => {
     try {
       await createOfflineData("formData", formData);
       const { status, message } = ToastStatus.SUCCESS;
-      setToast({ status, message });
+      showToast({ status, message });
     } catch (err) {
       const { status, message } = ToastStatus.ERROR;
-      setToast({ status, message });
+      showToast({ status, message });
     } finally {
       setTimeout(() => {
-        setToast(null);
+        showToast(null);
       }, TOAST_LIFESPAN);
     }
   };
 
   if (!formData.currentStep || formData.currentStep === 1) {
     // return step one
-    return <StepOne id={id} />;
+    return <StepOne />;
   }
 
   if (formData.currentStep === 2) {
     // return step two with data
-    return <StepTwo />;
+    return <StepTwo asyncFormOptions={asyncFormOptions} />;
   }
 
   return (
@@ -78,24 +89,36 @@ const Form = ({ asyncFormOptions }) => {
         Button Option 2: Below is an example of a multi-entry button, it sends data to a server. The
         current implementation is using a mock server.
       </Alert>
-      <Button
-        role="form-submit"
-        type="submit"
-        onClick={() => handleMultiEntrySubmit({ numberOfFish: Number(formData.numberOfFish) + 1 })}
-        className="margin-top-10px border-105"
-      >
-        Multi Entry Submit
-      </Button>
+      <Grid className="display-flex flex-justify">
+        {/* 
+          Buttons are ordered to produce the correct tab flow. The "order-last" class is added
+          to move the button to the right to give the correct placement on page while tabbing
+          in the correct order.
+        */}
+        <Button className="margin-top-1 margin-right-0 order-last" role="form-submit" type="submit">
+          Submit Form
+        </Button>
+        <Button
+          type="button"
+          className="margin-top-1"
+          onClick={stepBackward}
+          data-testid="step-backward"
+        >
+          Prev Step
+        </Button>
+      </Grid>
     </div>
   );
 };
 
-export const StepOne = ({ id }) => {
+export const StepOne = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { init, stepForward, stepBackward, formData, handleChange, handleBlur, validationErrors } =
     useFormState();
 
   const handleInit = async () => {
-    const formId = await init();
+    const formId = await init({ initialStep: 2 });
     navigate(`${formId}`);
   };
 
@@ -138,11 +161,6 @@ export const StepOne = ({ id }) => {
         onChange={handleChange}
       />
       <Grid className="display-flex flex-justify">
-        {/* 
-    Buttons are ordered to produce the correct tab flow. The "order-last" class is added
-    to move the button to the right to give the correct placement on page while tabbing
-    in the correct order.
-  */}
         <Button
           type="button"
           className="margin-top-1 margin-right-0 order-last"
@@ -165,8 +183,9 @@ export const StepOne = ({ id }) => {
   );
 };
 
-export const StepTwo = () => {
+export const StepTwo = ({ asyncFormOptions }) => {
   const { stepForward, stepBackward, formData, visibleInputs, handleChange } = useFormState();
+
   return (
     <FormGroup>
       <Label htmlFor={numberOfFish}>Number of Fish</Label>
@@ -189,7 +208,6 @@ export const StepTwo = () => {
         implementation is using a mock server.
       </Alert>
       <Select
-        // linkedinputids tells computedPrice to update onChange
         linkedinputids={[computedPrice, subSpecies]}
         name={species}
         value={formData[species] || ""}
@@ -232,11 +250,6 @@ export const StepTwo = () => {
         onChange={handleChange}
       />
       <Grid className="display-flex flex-justify">
-        {/* 
-    Buttons are ordered to produce the correct tab flow. The "order-last" class is added
-    to move the button to the right to give the correct placement on page while tabbing
-    in the correct order.
-  */}
         <Button
           type="button"
           className="margin-top-1 margin-right-0 order-last"
@@ -254,7 +267,6 @@ export const StepTwo = () => {
           Prev Step
         </Button>
       </Grid>
-      <hr />
     </FormGroup>
   );
 };
