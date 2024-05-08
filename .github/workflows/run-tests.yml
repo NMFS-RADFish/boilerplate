@@ -19,15 +19,19 @@ jobs:
 
       - name: Install build dependencies
         run: npm install
+        working-directory: examples/main
 
       - name: Install test dependencies
         run: npm install --no-save @rollup/rollup-linux-x64-gnu
+        working-directory: examples/main
 
       - name: Run tests
         run: npm test
+        working-directory: examples/main
 
-      - name: Run e2e tetss
+      - name: Run e2e tests
         run: npm run test:e2e
+        working-directory: examples/main
 
   lighthouse:
     name: Lighthouse CI
@@ -40,13 +44,16 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: examples/main
 
       - name: lighthouse mobile audit
         run: npm run lhci:mobile
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        working-directory: examples/main
 
       - name: lighthouse desktop audit
         run: npm run lhci:desktop
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        working-directory: examples/main
