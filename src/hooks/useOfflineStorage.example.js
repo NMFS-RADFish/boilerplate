@@ -38,6 +38,7 @@ function useOfflineStorage() {
       formData:
         "uuid, fullName, email, phoneNumber, numberOfFish, address1, address2, city, state, zipcode, occupation, department, species, computedPrice",
       species: "name, price",
+      homebaseData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
     },
   );
 
