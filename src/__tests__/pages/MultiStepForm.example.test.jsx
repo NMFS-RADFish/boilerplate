@@ -57,7 +57,7 @@ describe("MultiStepForm", () => {
     const mockedUseOfflineStorage = vi.fn(() => {
       return {
         updateOfflineData: vi.fn(),
-        findOfflineData: vi.fn(),
+        findOfflineData: vi.fn(() => [{ uuid: "12345" }]),
       };
     });
 
