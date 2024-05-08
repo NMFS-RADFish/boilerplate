@@ -29,8 +29,8 @@ async function enableMocking() {
 
 const offlineStorageConfig = {
   type: "indexedDB",
-  name: import.meta.env.VITE_INDEXED_DB_NAME,
-  version: import.meta.env.VITE_INDEXED_DB_VERSION,
+  name: import.meta.env.VITE_INDEXED_DB_NAME || "radfish_dev",
+  version: import.meta.env.VITE_INDEXED_DB_VERSION || 1,
   stores: {
     formData: "uuid, fullName, numberOfFish, species, computedPrice",
     species: "name, price",
