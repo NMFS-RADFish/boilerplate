@@ -16,8 +16,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+      
+      - name: Install workspace dependencies
+        run: npm install
+        working-directory: .
 
-      - name: Install build dependencies
+      - name: Install main example dependencies
         run: npm install
         working-directory: examples/main
 
