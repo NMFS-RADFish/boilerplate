@@ -83,6 +83,6 @@ export default defineConfig({
     globals: true,
     setupFiles: "./src/__tests__/setup.js",
     environment: "jsdom",
-    env: loadEnv("", path.resolve(__dirname, ".env.test"), ""),
+    env: loadEnv("development", path.resolve(__dirname, ".env.test"), ""),
   },
 });
