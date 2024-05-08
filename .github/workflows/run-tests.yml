@@ -29,6 +29,11 @@ jobs:
       - name: Run e2e tetss
         run: npm run test:e2e
 
+      - name: Kill e2e test server
+        if: always()
+        run: |
+          kill $(lsof -t -i:3000)  # Replace 3000 with your server's port
+
   lighthouse:
     name: Lighthouse CI
     runs-on: ubuntu-latest
