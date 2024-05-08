@@ -20,7 +20,7 @@ import {
   TablePaginationPageCount,
   TablePaginationGoToPage,
   TablePaginationSelectRowCount,
-} from "../packages/react-components";
+} from "radfish-react";
 import { useNavigate } from "react-router-dom";
 import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { Alert } from "@trussworks/react-uswds";
