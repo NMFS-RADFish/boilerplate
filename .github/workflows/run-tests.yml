@@ -46,7 +46,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Install dependencies
+      - name: Install workspace dependencies
+        run: npm install
+
+      - name: Install example dependencies
         run: npm install
         working-directory: examples/main
 
