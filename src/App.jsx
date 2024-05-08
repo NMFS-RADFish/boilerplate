@@ -7,8 +7,6 @@ import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
-import { ComplexForm } from "./pages/ComplexForm.example";
-import { MultiStepForm } from "./pages/MultiStepForm.example";
 import { SimpleTable } from "./pages/Table.example";
 import useOfflineStorage from "./hooks/useOfflineStorage.example";
 import { Form } from "./pages/Form.example";
@@ -91,6 +89,14 @@ function App() {
           <ServerSync />
           {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
           <Routes>
+            <Route
+              path="/"
+              element={
+                <TableWrapper>
+                  <SimpleTable />
+                </TableWrapper>
+              }
+            />
             <Route
               path="/table"
               element={
