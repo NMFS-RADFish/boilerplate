@@ -73,10 +73,6 @@ const SimpleTable = () => {
     navigate(`/form/${row.original.uuid}`);
   };
 
-  if (!table) {
-    return null;
-  }
-
   /**
    * This is a demo function that simulates the submission of offline data by removing the `isOffline` flag.
    * In a real application, you should make a POST request with the offline data to your server and then clear
