@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Checkbox, FormGroup } from "@trussworks/react-uswds";
 import {
   TextInput,
@@ -28,6 +28,7 @@ const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice 
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
 const ComplexForm = ({ asyncFormOptions }) => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { formData, setFormData, visibleInputs, handleChange, handleBlur, validationErrors } =
     useFormState();
@@ -44,6 +45,23 @@ const ComplexForm = ({ asyncFormOptions }) => {
       offlineForm();
     }
   }, [id]);
+
+  if (!formData) {
+    return (
+      <>
+        <p>Invalid Form</p>
+        <Button
+          type="button"
+          onClick={() => {
+            setFormData({});
+            navigate("/complexform");
+          }}
+        >
+          Navigate
+        </Button>
+      </>
+    );
+  }
 
   return (
     <>
