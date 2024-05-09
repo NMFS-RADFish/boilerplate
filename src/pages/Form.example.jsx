@@ -12,13 +12,11 @@ import {
 } from "../packages/react-components";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
-import useOfflineStorage from "../hooks/useOfflineStorage.example";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { CONSTANTS } from "../config/form";
-import { useToast } from "../hooks/useToast";
 
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
 
-const TOAST_LIFESPAN = 2000;
 /**
  * React functional component for a demo form. Demonstrates how to construct a form. This should be a child of `FormWrapper`
  *
@@ -28,10 +26,9 @@ const TOAST_LIFESPAN = 2000;
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
 const Form = ({ asyncFormOptions }) => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { formData, setFormData, stepBackward } = useFormState();
-  const { showToast } = useToast();
-
   const { findOfflineData, createOfflineData } = useOfflineStorage();
 
   useEffect(() => {
@@ -44,7 +41,7 @@ const Form = ({ asyncFormOptions }) => {
         if (found) {
           setFormData({ ...found, currentStep: 1, totalSteps: 3 });
         } else {
-          navigate("/complexform");
+          navigate("/form");
         }
       }
     };

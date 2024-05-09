@@ -13,7 +13,6 @@ import { useOfflineStatus } from "./hooks/useOfflineStatus";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 import { ServerSync } from "./components/ServerSync";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
-import { useOfflineStatus } from "./hooks/useOfflineStatus";
 
 const ApiService = new RadfishAPIService("");
 

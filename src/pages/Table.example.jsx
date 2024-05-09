@@ -70,7 +70,7 @@ const SimpleTable = () => {
    * This can be useful for re-routing to a detail page, or handling other data specific functionality
    */
   const handleRowClick = (row) => {
-    navigate(`/complexform/${row.original.uuid}`);
+    navigate(`/form/${row.original.uuid}`);
   };
 
   if (!table) {
