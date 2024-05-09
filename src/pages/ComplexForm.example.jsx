@@ -44,7 +44,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
         });
 
         if (found) {
-          setFormData({ ...found[0], currentStep: 1, totalSteps: 3 });
+          setFormData({ ...found, currentStep: 1, totalSteps: 3 });
         } else {
           navigate("/complexform");
         }
