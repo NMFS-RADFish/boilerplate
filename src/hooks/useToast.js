@@ -29,7 +29,6 @@ export const useToast = () => {
   const [toast, setToast] = useState(null);
 
   const showToast = (toastObj) => {
-    console.log("show toast");
     setToast({ status: toastObj.status, message: toastObj.message });
   };
 
