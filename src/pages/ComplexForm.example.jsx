@@ -34,7 +34,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
     useFormState();
   const { toast } = useToast();
 
-  const { findOfflineData } = useOfflineStorage();
+  const { findOfflineData, createOfflineData } = useOfflineStorage();
 
   useEffect(() => {
     const loadData = async () => {
@@ -53,8 +53,19 @@ const ComplexForm = ({ asyncFormOptions }) => {
     loadData();
   }, [id]);
 
-  if (!formData) {
-    return <p>Invalid Form</p>;
+  const handleInit = async () => {
+    const formId = await createOfflineData("formData", {});
+    navigate(`${formId}`);
+  };
+
+  if (!id) {
+    return (
+      <div>
+        <Button type="button" onClick={handleInit} data-testid="init-complex">
+          Begin Complex Form
+        </Button>
+      </div>
+    );
   }
 
   return (
