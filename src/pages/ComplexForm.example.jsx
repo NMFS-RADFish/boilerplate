@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Checkbox, FormGroup } from "@trussworks/react-uswds";
 import {
   TextInput,
@@ -7,12 +8,13 @@ import {
   Button,
   Label,
   ErrorMessage,
+  Toast,
 } from "../packages/react-components";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import { CONSTANTS } from "../config/form";
 import "../styles/theme.css";
-import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
+import { useToast } from "../hooks/useToast";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
@@ -26,35 +28,51 @@ const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice 
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
 const ComplexForm = ({ asyncFormOptions }) => {
-  const {
-    formData,
-    visibleInputs,
-    handleChange,
-    handleBlur,
-    validationErrors,
-    handleMultiEntrySubmit,
-  } = useFormState();
-  const { showToast, dismissToast } = useToast();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { formData, setFormData, visibleInputs, handleChange, handleBlur, validationErrors } =
+    useFormState();
+  const { toast } = useToast();
 
-  const { createOfflineData } = useOfflineStorage();
+  const { findOfflineData, createOfflineData } = useOfflineStorage();
 
-  const onOfflineSubmit = async (e) => {
-    e.preventDefault();
-    formData.isDraft = true;
-    try {
-      await createOfflineData("formData", formData);
-      showToast(TOAST_CONFIG.SUCCESS);
-    } catch (err) {
-      showToast(TOAST_CONFIG.ERROR);
-    } finally {
-      setTimeout(() => {
-        dismissToast();
-      }, TOAST_LIFESPAN);
-    }
+  useEffect(() => {
+    const loadData = async () => {
+      if (id) {
+        const [found] = await findOfflineData("formData", {
+          uuid: id,
+        });
+
+        if (found) {
+          setFormData({ ...found, currentStep: 1, totalSteps: 3 });
+        } else {
+          navigate("/complexform");
+        }
+      }
+    };
+    loadData();
+  }, [id]);
+
+  const handleInit = async () => {
+    const formId = await createOfflineData("formData", {});
+    navigate(`${formId}`);
   };
+
+  if (!id) {
+    return (
+      <div>
+        <Button type="button" onClick={handleInit} data-testid="init-complex">
+          Begin Complex Form
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <>
+      <div className="toast-container">
+        <Toast toast={toast} />
+      </div>
       <FormGroup error={validationErrors[fullName]}>
         <Label htmlFor={fullName}>Full Name</Label>
         {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
@@ -161,30 +179,12 @@ const ComplexForm = ({ asyncFormOptions }) => {
       />
 
       <div className="grid-row flex-column">
-        {!navigator.onLine && (
-          <>
-            <Alert type="info" slim={true}>
-              Button Option 1: Below is an example of a simple button, it will save data locally. It
-              does not make a server request.
-            </Alert>
-            <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
-              Send Data to IndexDB
-            </Button>
-          </>
-        )}
         <Alert type="info" slim={true}>
-          Button Option 2: Below is an example of a multi-entry button, it sends data to a server.
-          The current implementation is using a mock server.
+          Below is an example of a submit button, it sends data to a server if online, or saves a
+          draft locally if offline. The current implementation is using a mock server.
         </Alert>
-        <Button
-          role="form-submit"
-          type="submit"
-          onClick={() =>
-            handleMultiEntrySubmit({ numberOfFish: Number(formData.numberOfFish) + 1 })
-          }
-          className="margin-top-10px border-105"
-        >
-          Multi Entry Submit
+        <Button role="form-submit" type="submit" className="margin-top-10px border-105">
+          Submit
         </Button>
       </div>
     </>

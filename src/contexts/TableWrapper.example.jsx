@@ -55,7 +55,7 @@ export const TableWrapper = ({ children }) => {
         cell: (info) => (info.getValue() ? "Draft " : "Submitted"),
         header: () => <span>Status</span>,
       }),
-      columnHelper.accessor("id", {
+      columnHelper.accessor("uuid", {
         cell: (info) => info.getValue(),
         header: () => <span>Id</span>,
       }),

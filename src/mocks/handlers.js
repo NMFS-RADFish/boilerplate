@@ -10,24 +10,71 @@ export const MSW_ENDPOINT = {
 
 const data = [
   {
-    id: "507ff846-573d-40e9-9996-c458c34b4643",
+    uuid: "ca6365fe-4eb5-4c5c-a1d3-df3a7edbe69f",
+    fullName: "",
     species: "grouper",
-    numberOfFish: 10,
+    numberOfFish: 0,
+    email: "",
+    phoneNumber: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zipcode: "",
+    occupation: "",
+    department: "",
+    computedPrice: 0,
+    isDraft: true,
   },
   {
-    id: "967ec4e7-1e96-452d-a9bc-79f60f64a6fd",
+    uuid: "5f56f849-7aed-4d81-9eef-10db110ec95b",
+    fullName: "",
     species: "salmon",
-    numberOfFish: 5,
+    numberOfFish: 0,
+    email: "",
+    phoneNumber: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zipcode: "",
+    occupation: "",
+    department: "",
+    computedPrice: 0,
+    isDraft: false,
   },
   {
-    id: "7e96975b-e1a1-48ed-bad6-15cb780d99cb",
+    uuid: "ae16b984-5e01-407c-8c27-9e43f109328f",
+    fullName: "",
     species: "marlin",
-    numberOfFish: 1,
+    numberOfFish: 0,
+    email: "",
+    phoneNumber: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zipcode: "",
+    occupation: "",
+    department: "",
+    computedPrice: 0,
+    isDraft: true,
   },
   {
-    id: "3037d796-cf4d-4274-ab2d-f7c80d8c0fa3",
+    uuid: "15eac339-343d-4c09-a23d-7906f4cc0062",
+    fullName: "",
     species: "mahimahi",
-    numberOfFish: 15,
+    numberOfFish: 0,
+    email: "",
+    phoneNumber: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zipcode: "",
+    occupation: "",
+    computedPrice: 0,
+    isDraft: true,
   },
 ];
 
@@ -103,8 +150,10 @@ export const handlers = [
     return;
   }),
 
-  http.post(MSW_ENDPOINT.FORM, ({ request }) => {
-    return HttpResponse.json({ data: request.body }, { status: 201 });
+  http.post(MSW_ENDPOINT.FORM, async ({ request }) => {
+    let { formData } = await request.json();
+    Object.assign(formData, { isDraft: false });
+    return HttpResponse.json({ data: formData }, { status: 201 });
   }),
 
   // Returns an array of fish species. This is currently being used to demonstrate populating a dropdown form component with "data" from a server

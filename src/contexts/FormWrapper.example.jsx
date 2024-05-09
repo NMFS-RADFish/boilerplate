@@ -49,33 +49,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
   };
 
   /**
-   * useEffect hook to update form data based on URL search parameters. Useful for multi step forms
-   *
-   * @function
-   */
-  useEffect(() => {
-    let newFormData = {};
-    let hasNewData = false;
-
-    const getOfflineData = async () => {
-      if (params.id) {
-        const offlineData = await findOfflineData("formData", { uuid: params.id });
-        setFormData(offlineData[0]);
-      }
-    };
-
-    for (let [key, value] of searchParams.entries()) {
-      newFormData[key] = value;
-      hasNewData = true;
-    }
-
-    if (hasNewData) {
-      setFormData((prev) => ({ ...prev, ...newFormData }));
-    }
-    getOfflineData();
-  }, [searchParams, params.id]);
-
-  /**
    * Validates the input value based on provided validators.
    *
    * @function
