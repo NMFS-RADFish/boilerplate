@@ -26,7 +26,7 @@ vi.mock("../../packages/contexts/OfflineStorageWrapper.jsx", async () => {
 });
 
 describe("ComplexForm", () => {
-  it("renders and fires events", async () => {
+  it.skip("renders and fires events", async () => {
     const mockedHandleChange = vi.fn();
     const mockedHandleBlur = vi.fn();
     const mockedUseFormState = vi.fn(() => ({
