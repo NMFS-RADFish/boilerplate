@@ -7,6 +7,7 @@ import * as tanstackTable from "@tanstack/react-table";
 import Dexie from "dexie";
 import { generateUUID } from "../../utilities/cryptoWrapper.js";
 import { IndexedDBMethod } from "../../packages/storage/IndexedDBMethod.js";
+import * as offlineWrapper from "../../packages/contexts/OfflineStorageWrapper";
 
 global.fetch = vi.fn().mockResolvedValue({
   ok: true,
@@ -29,6 +30,13 @@ vi.mock("../../packages/storage/indexedDB.js", () => ({
     },
   },
 }));
+
+vi.mock("../../packages/contexts/OfflineStorageWrapper.jsx", async () => {
+  return {
+    ...(await vi.importActual("../../packages/contexts/OfflineStorageWrapper.jsx")),
+    useOfflineStorage: vi.fn(),
+  };
+});
 
 const mockedUseNavigate = vi.fn();
 vi.mock("react-router-dom", async () => ({
@@ -146,6 +154,17 @@ describe("Table", () => {
   });
 
   test("Render table with data", async () => {
+    const mockedUseOfflineStorage = vi.fn(() => {
+      return {
+        updateOfflineData: vi.fn(),
+        findOfflineData: vi.fn(),
+        createOfflineData: vi.fn(),
+        deleteOfflineData: vi.fn(),
+      };
+    });
+
+    vi.spyOn(offlineWrapper, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
+
     const spy = vi.spyOn(tanstackTable, "flexRender");
     spy.mockReturnValue("cell value");
 

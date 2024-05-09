@@ -11,6 +11,10 @@ export const TOAST_CONFIG = {
     status: "warning",
     message: "Application currently offline",
   },
+  OFFLINE_SUBMIT: {
+    status: "warning",
+    message: "Application offline, saving data locally",
+  },
   SUCCESS: {
     status: "success",
     message: "Successful form submission",

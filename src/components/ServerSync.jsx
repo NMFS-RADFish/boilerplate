@@ -3,7 +3,7 @@ import { Button } from "../packages/react-components";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
 import RadfishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
-import useOfflineStorage from "../hooks/useOfflineStorage.example";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const ApiService = new RadfishAPIService("");
 
@@ -27,9 +27,11 @@ export const ServerSync = () => {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
       const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
+      await updateOfflineData(HOME_BASE_DATA, homebaseData);
 
       await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
-      await updateOfflineData(HOME_BASE_DATA, homebaseData);
+      const { data: tableData } = await ApiService.get(MSW_ENDPOINT.TABLE);
+      await updateOfflineData("formData", tableData);
 
       localStorage.setItem(LAST_HOMEBASE_SYNC, Date.now());
 

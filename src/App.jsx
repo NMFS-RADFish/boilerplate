@@ -8,19 +8,20 @@ import Layout from "./components/Layout";
 import RadfishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { SimpleTable } from "./pages/Table.example";
-import useOfflineStorage from "./hooks/useOfflineStorage.example";
 import { Form } from "./pages/Form.example";
 import { useOfflineStatus } from "./hooks/useOfflineStatus";
+import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 import { ServerSync } from "./components/ServerSync";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
+import { useOfflineStatus } from "./hooks/useOfflineStatus";
 
 const ApiService = new RadfishAPIService("");
 
 function App() {
+  const { updateOfflineData, findOfflineData, createOfflineData } = useOfflineStorage();
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
   const { toast, showToast, dismissToast } = useToast();
   const { isOffline } = useOfflineStatus();
-  const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
   useEffect(() => {
     if (isOffline) {
@@ -67,10 +68,22 @@ function App() {
   }, [isOffline]);
 
   const handleFormSubmit = async (submittedData) => {
+    const existingForm =
+      submittedData.uuid && (await findOfflineData("formData", { uuid: submittedData.uuid }));
     try {
-      await ApiService.post(MSW_ENDPOINT.FORM, submittedData);
-      showToast(TOAST_CONFIG.SUCCESS);
-    } catch (err) {
+      if (!isOffline) {
+        const { data } = await ApiService.post(MSW_ENDPOINT.FORM, { formData: submittedData });
+        existingForm
+          ? await updateOfflineData("formData", [{ uuid: data.uuid, ...data }])
+          : await createOfflineData("formData", submittedData);
+        showToast(TOAST_CONFIG.SUCCESS);
+      } else {
+        existingForm
+          ? await updateOfflineData("formData", [{ uuid: submittedData.uuid, ...submittedData }])
+          : await createOfflineData("formData", submittedData);
+        showToast(TOAST_CONFIG.OFFLINE_SUBMIT);
+      }
+    } catch (error) {
       showToast(TOAST_CONFIG.ERROR);
     } finally {
       setTimeout(() => {

@@ -4,13 +4,13 @@
  * This context provider is meant to be extensible and modular. You can use this anywhere in your app to wrap a form to manage the specific form's state
  */
 
-import React, { createContext, useState, useCallback, useEffect } from "react";
+import React, { createContext, useState, useCallback } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Alert } from "@trussworks/react-uswds";
 import { Form, Button } from "../packages/react-components";
 import { FORM_CONFIG } from "../config/form";
-import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { COMMON_CONFIG } from "../config/common";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const FormContext = createContext();
 const TOTAL_STEPS = 3;
@@ -34,7 +34,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams] = useSearchParams();
-  const { findOfflineData } = useOfflineStorage();
   const { createOfflineData, updateOfflineData } = useOfflineStorage();
 
   async function init({ initialStep }) {
@@ -75,25 +74,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
   };
 
   /**
-   * useEffect hook to update form data based on URL search parameters. Useful for multi step forms
-   *
-   * @function
-   */
-  useEffect(() => {
-    const newFormData = {};
-    let hasNewData = false;
-
-    for (let [key, value] of searchParams.entries()) {
-      newFormData[key] = value;
-      hasNewData = true;
-    }
-
-    if (hasNewData) {
-      setFormData((prev) => ({ ...prev, ...newFormData }));
-    }
-  }, [searchParams]);
-
-  /**
    * Validates the input value based on provided validators.
    *
    * @function
@@ -116,6 +96,16 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const handleComputedValuesCallback = useCallback((inputIds, formData) => {
     handleComputedValuesLogic(inputIds, formData, FORM_CONFIG);
   }, []);
+
+  const saveOfflineData = async (tableName, data) => {
+    try {
+      if (params.id) {
+        await updateOfflineData(tableName, [{ uuid: params.id, ...data }]);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
 
   /**
    * Callback function for handling input visibility based on form data and configuration.
@@ -148,8 +138,10 @@ export const FormWrapper = ({ children, onSubmit }) => {
           const updatedComputedForm =
             handleComputedValuesCallback(linkedinputids, updatedForm) || updatedForm;
           handleInputVisibilityCallback(linkedinputids, updatedComputedForm);
+          saveOfflineData("formData", updatedComputedForm);
           return updatedComputedForm;
         } else {
+          saveOfflineData("formData", updatedForm);
           return updatedForm;
         }
       });

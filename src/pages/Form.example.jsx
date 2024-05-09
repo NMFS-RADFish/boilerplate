@@ -35,32 +35,36 @@ const Form = ({ asyncFormOptions }) => {
   const { findOfflineData, createOfflineData } = useOfflineStorage();
 
   useEffect(() => {
-    if (id) {
-      findOfflineForm();
-    }
-  }, []);
+    const loadData = async () => {
+      if (id) {
+        const [found] = await findOfflineData("formData", {
+          uuid: id,
+        });
 
-  const findOfflineForm = async () => {
-    const [offlineForm] = await findOfflineData("formData", { uuid: id });
-    setFormData(offlineForm);
+        if (found) {
+          setFormData({ ...found, currentStep: 1, totalSteps: 3 });
+        } else {
+          navigate("/complexform");
+        }
+      }
+    };
+    loadData();
+  }, [id]);
+
+  const handleInit = async () => {
+    const formId = await createOfflineData("formData", {});
+    navigate(`${formId}`);
   };
 
-  const onOfflineSubmit = async (e) => {
-    e.preventDefault();
-    formData.isDraft = true;
-    try {
-      await createOfflineData("formData", formData);
-      const { status, message } = ToastStatus.SUCCESS;
-      showToast({ status, message });
-    } catch (err) {
-      const { status, message } = ToastStatus.ERROR;
-      showToast({ status, message });
-    } finally {
-      setTimeout(() => {
-        showToast(null);
-      }, TOAST_LIFESPAN);
-    }
-  };
+  if (!id) {
+    return (
+      <div>
+        <Button type="button" onClick={handleInit} data-testid="init-complex">
+          Begin Form
+        </Button>
+      </div>
+    );
+  }
 
   if (!formData.currentStep || formData.currentStep === 1) {
     // return step one
