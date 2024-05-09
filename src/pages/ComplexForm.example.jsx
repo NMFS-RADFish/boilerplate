@@ -47,20 +47,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
   }, [id]);
 
   if (!formData) {
-    return (
-      <>
-        <p>Invalid Form</p>
-        <Button
-          type="button"
-          onClick={() => {
-            setFormData({});
-            navigate("/complexform");
-          }}
-        >
-          Navigate
-        </Button>
-      </>
-    );
+    return <p>Invalid Form</p>;
   }
 
   return (
