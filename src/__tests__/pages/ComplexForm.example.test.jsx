@@ -2,6 +2,7 @@ import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import * as formWrapper from "../../contexts/FormWrapper.example";
 import { ComplexForm } from "../../pages/ComplexForm.example";
+import * as offlineWrapper from "../../packages/contexts/OfflineStorageWrapper";
 
 // Mocking react-router-dom hooks
 vi.mock("react-router-dom", async () => ({
@@ -17,6 +18,13 @@ vi.mock("../../contexts/FormWrapper", async () => {
   };
 });
 
+vi.mock("../../packages/contexts/OfflineStorageWrapper.jsx", async () => {
+  return {
+    ...(await vi.importActual("../../packages/contexts/OfflineStorageWrapper.jsx")),
+    useOfflineStorage: vi.fn(),
+  };
+});
+
 describe("ComplexForm", () => {
   it("renders and fires events", async () => {
     const mockedHandleChange = vi.fn();
@@ -28,8 +36,14 @@ describe("ComplexForm", () => {
       handleBlur: mockedHandleBlur,
       visibleInputs: {},
     }));
+    const mockedUseOfflineStorage = vi.fn(() => {
+      return {
+        updateOfflineData: vi.fn(),
+      };
+    });
 
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
+    vi.spyOn(offlineWrapper, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
 
     const { getByTestId } = render(
       <formWrapper.FormWrapper>

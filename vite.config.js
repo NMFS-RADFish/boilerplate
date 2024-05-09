@@ -1,4 +1,5 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
+import path from "path";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -82,5 +83,6 @@ export default defineConfig({
     globals: true,
     setupFiles: "./src/__tests__/setup.js",
     environment: "jsdom",
+    env: loadEnv("development", path.resolve(__dirname, ".env.test"), ""),
   },
 });

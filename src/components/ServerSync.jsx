@@ -3,7 +3,7 @@ import { Button } from "../packages/react-components";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
 import RadfishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
-import useOfflineStorage from "../hooks/useOfflineStorage.example";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const ApiService = new RadfishAPIService("");
 

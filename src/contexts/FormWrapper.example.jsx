@@ -10,8 +10,8 @@ import { Alert } from "@trussworks/react-uswds";
 import { Form, Button } from "../packages/react-components";
 import { FORM_CONFIG } from "../config/form";
 import RadfishAPIService from "../packages/services/APIService";
-import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { COMMON_CONFIG } from "../config/common";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const FormContext = createContext();
 
@@ -35,7 +35,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams] = useSearchParams();
-  const { findOfflineData } = useOfflineStorage();
+  const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
   /**
    * Handles the submission of multiple entries by updating the URL with query parameters.
@@ -54,8 +54,15 @@ export const FormWrapper = ({ children, onSubmit }) => {
    * @function
    */
   useEffect(() => {
-    const newFormData = {};
+    let newFormData = {};
     let hasNewData = false;
+
+    const getOfflineData = async () => {
+      if (params.id) {
+        const offlineData = await findOfflineData("formData", { uuid: params.id });
+        setFormData(offlineData[0]);
+      }
+    };
 
     for (let [key, value] of searchParams.entries()) {
       newFormData[key] = value;
@@ -65,7 +72,8 @@ export const FormWrapper = ({ children, onSubmit }) => {
     if (hasNewData) {
       setFormData((prev) => ({ ...prev, ...newFormData }));
     }
-  }, [searchParams]);
+    getOfflineData();
+  }, [searchParams, params.id]);
 
   /**
    * Validates the input value based on provided validators.
@@ -90,6 +98,16 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const handleComputedValuesCallback = useCallback((inputIds, formData) => {
     handleComputedValuesLogic(inputIds, formData, FORM_CONFIG);
   }, []);
+
+  const saveOfflineData = async (tableName, data) => {
+    try {
+      if (params.id) {
+        await updateOfflineData(tableName, [{ uuid: params.id, ...data }]);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
 
   /**
    * Callback function for handling input visibility based on form data and configuration.
@@ -122,8 +140,10 @@ export const FormWrapper = ({ children, onSubmit }) => {
           const updatedComputedForm =
             handleComputedValuesCallback(linkedinputids, updatedForm) || updatedForm;
           handleInputVisibilityCallback(linkedinputids, updatedComputedForm);
+          saveOfflineData("formData", updatedComputedForm);
           return updatedComputedForm;
         } else {
+          saveOfflineData("formData", updatedForm);
           return updatedForm;
         }
       });

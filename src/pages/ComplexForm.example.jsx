@@ -10,10 +10,10 @@ import {
 } from "../packages/react-components";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
-import useOfflineStorage from "../hooks/useOfflineStorage.example";
 import { CONSTANTS } from "../config/form";
 import "../styles/theme.css";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
 

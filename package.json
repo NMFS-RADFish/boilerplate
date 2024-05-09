@@ -30,7 +30,7 @@
     "start": "vite",
     "build": "vite build",
     "prebuild": "rm -rf dist",
-    "test": "vitest --mode development --exclude './src/__tests__/e2e/**'",
+    "test": "vitest --exclude './src/__tests__/e2e/**'",
     "test:e2e": "concurrently --kill-others --success first \"npm start\" \"vitest './src/__tests__/e2e/integration.e2e.test.jsx'\"",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",

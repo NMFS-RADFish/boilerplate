@@ -10,18 +10,18 @@ import { MSW_ENDPOINT } from "./mocks/handlers";
 import { ComplexForm } from "./pages/ComplexForm.example";
 import { MultiStepForm } from "./pages/MultiStepForm.example";
 import { SimpleTable } from "./pages/Table.example";
-import useOfflineStorage from "./hooks/useOfflineStorage.example";
-import { useOfflineStatus } from "./hooks/useOfflineStatus";
+import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 import { ServerSync } from "./components/ServerSync";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
+import { useOfflineStatus } from "./hooks/useOfflineStatus";
 
 const ApiService = new RadfishAPIService("");
 
 function App() {
+  const { updateOfflineData, findOfflineData } = useOfflineStorage();
   const [asyncFormOptions, setAsyncFormOptions] = useState({});
   const { toast, showToast, dismissToast } = useToast();
   const { isOffline } = useOfflineStatus();
-  const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
   useEffect(() => {
     if (isOffline) {

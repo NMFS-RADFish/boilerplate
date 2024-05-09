@@ -22,7 +22,7 @@ import {
   TablePaginationSelectRowCount,
 } from "../packages/react-components";
 import { useNavigate } from "react-router-dom";
-import useOfflineStorage from "../hooks/useOfflineStorage.example";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { Alert } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
 import { TOAST_CONFIG, useToast } from "../hooks/useToast";
