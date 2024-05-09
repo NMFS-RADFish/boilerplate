@@ -14,7 +14,7 @@ import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import { CONSTANTS } from "../config/form";
 import "../styles/theme.css";
-import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
+import { useToast } from "../hooks/useToast";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
@@ -37,13 +37,20 @@ const ComplexForm = ({ asyncFormOptions }) => {
   const { findOfflineData } = useOfflineStorage();
 
   useEffect(() => {
-    if (id) {
-      const offlineForm = async () => {
-        const [offlineData] = await findOfflineData("formData", { uuid: id });
-        setFormData(offlineData);
-      };
-      offlineForm();
-    }
+    const loadData = async () => {
+      if (id) {
+        const [found] = await findOfflineData("formData", {
+          uuid: id,
+        });
+
+        if (found) {
+          setFormData({ ...found[0], currentStep: 1, totalSteps: 3 });
+        } else {
+          navigate("/complexform");
+        }
+      }
+    };
+    loadData();
   }, [id]);
 
   if (!formData) {
