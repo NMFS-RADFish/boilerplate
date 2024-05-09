@@ -11,6 +11,10 @@ export const TOAST_CONFIG = {
     status: "warning",
     message: "Application currently offline",
   },
+  OFFLINE_SUBMIT: {
+    status: "warning",
+    message: "Application offline, saving data locally",
+  },
   SUCCESS: {
     status: "success",
     message: "Successful form submission",
@@ -25,6 +29,7 @@ export const useToast = () => {
   const [toast, setToast] = useState(null);
 
   const showToast = (toastObj) => {
+    console.log("show toast");
     setToast({ status: toastObj.status, message: toastObj.message });
   };
 
