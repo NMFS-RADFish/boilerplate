@@ -10,6 +10,12 @@ describe("Integration", () => {
   });
 
   it("should be able to navigate through application", async () => {
+    console.log(
+      JSON.stringify({
+        name: import.meta.env.VITE_INDEXED_DB_NAME,
+        version: import.meta.env.VITE_INDEXED_DB_VERSION,
+      }),
+    );
     await page.goto("http://localhost:3000/multistep");
     await page.waitForSelector("#step-forward");
     await page.click("#step-forward");
