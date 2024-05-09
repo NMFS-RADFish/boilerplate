@@ -7,7 +7,7 @@ import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
-import { SimpleTable } from "./pages/Table.example";
+import { Table } from "./pages/Table.example";
 import { Form } from "./pages/Form.example";
 import { useOfflineStatus } from "./hooks/useOfflineStatus";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
@@ -105,7 +105,7 @@ function App() {
               path="/"
               element={
                 <TableWrapper>
-                  <SimpleTable />
+                  <Table />
                 </TableWrapper>
               }
             />
@@ -113,7 +113,7 @@ function App() {
               path="/table"
               element={
                 <TableWrapper>
-                  <SimpleTable />
+                  <Table />
                 </TableWrapper>
               }
             />

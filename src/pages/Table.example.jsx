@@ -248,4 +248,4 @@ function TableInfoAnnotation() {
   );
 }
 
-export { SimpleTable };
+export { SimpleTable as Table };
