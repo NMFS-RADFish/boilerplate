@@ -296,7 +296,7 @@ By following this method, you can leverage the underlying `uswds` component, mai
 
 RADFish app users (fishermen/fisherwomen) can be out at sea for an extended period of time and may not have internet access available. The offline storage functionality outlined below allows users to continue using the application to create and manage reports while offline.
 
-To use offline data storage, use the `useOfflineStorage` hook. This React hook provides methods for managing offline form data. There are two storage methods available `LocalStorageMethod` or `IndexedDBStorageMethod`.
+To use offline data storage, use the `useOfflineStorage` hook. This React hook provides methods for managing offline form data. There are two storage methods available `LocalStorageMethod` or `IndexedDBStorageMethod`.
 
 ### Configuration
 
@@ -342,7 +342,7 @@ Step-by-step instructions to configure offline storage:
 
 ### **`useOfflineStorage` Hooks API**
 
-The `useOfflineStorage` hook returns an object with the following methods:
+The `useOfflineStorage` hook returns an object with the following methods:
 
 - **`createOfflineData("formData", data)`** Creates a new data entry in the storage.
   - `data`: The data object to create.
@@ -370,7 +370,7 @@ function MyComponent() {
   const { createOfflineData, findOfflineData, updateOfflineData } = useOfflineStorage();
   const data = { species: "Grouper", numberOfFish: 100 };
 
-  // Create new offline data entry
+  // Create new offline data entry
   createOfflineData(data);
   // Find all offline data
   const allOfflineData = async () => await findOfflineData();
@@ -383,7 +383,7 @@ function MyComponent() {
   // Delete multiple offline data entries
   deleteOfflineData(["uuid-123", "uuid-321", "uuid-987"]);
 
-  // rest of code....
+  // rest of code....
 }
 
 export default MyComponent;
