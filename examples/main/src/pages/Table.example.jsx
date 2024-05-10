@@ -21,7 +21,7 @@ import {
   TablePaginationGoToPage,
   TablePaginationSelectRowCount,
   Toast,
-} from "../packages/react-components";
+} from "../../../../packages/radfish-react";
 import { useNavigate } from "react-router-dom";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { Alert } from "@trussworks/react-uswds";

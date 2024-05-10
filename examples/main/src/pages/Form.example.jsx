@@ -9,7 +9,7 @@ import {
   Button,
   Label,
   ErrorMessage,
-} from "../packages/react-components";
+} from "../../../../packages/radfish-react";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";

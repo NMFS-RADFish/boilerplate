@@ -17,17 +17,25 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Install build dependencies
+      - name: Install workspace dependencies
         run: npm install
+        working-directory: .
 
-      - name: Install test dependencies
+      - name: Install main example build dependencies
+        run: npm install
+        working-directory: examples/main
+
+      - name: Install main example test dependencies
         run: npm install --no-save @rollup/rollup-linux-x64-gnu
+        working-directory: examples/main
 
-      - name: Run tests
+      - name: Run main example tests
         run: npm test
+        working-directory: examples/main
 
-      # - name: Run e2e tests
+      # - name: Run main example e2e tests
       #   run: npm run test:e2e
+      #   working-directory: examples/main
 
   # lighthouse:
   #   name: Lighthouse CI
@@ -38,15 +46,18 @@ jobs:
   #       with:
   #         ref: ${{ github.event.pull_request.head.sha }}
 
-  #     - name: Install dependencies
+  #     - name: Install main example dependencies
   #       run: npm install
+  #       working-directory: examples/main
 
-  #     - name: lighthouse mobile audit
+  #     - name: lighthouse mobile audit main example
   #       run: npm run lhci:mobile
+  #       working-directory: examples/main
   #       env:
   #         LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
-  #     - name: lighthouse desktop audit
+  #     - name: lighthouse desktop audit main example
   #       run: npm run lhci:desktop
+  #       working-directory: examples/main
   #       env:
   #         LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

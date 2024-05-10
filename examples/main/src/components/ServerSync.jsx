@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "../packages/react-components";
+import { Button } from "radfish-react";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
 import RadfishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
