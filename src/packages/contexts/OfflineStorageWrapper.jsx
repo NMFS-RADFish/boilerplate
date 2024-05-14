@@ -20,6 +20,7 @@ export const OfflineStorageWrapper = ({ children, config }) => {
   }
 
   function updateOfflineData(tableName, data) {
+    console.log("table", tableName, data);
     return storageModel.update(tableName, data);
   }
 

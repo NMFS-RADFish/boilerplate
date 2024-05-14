@@ -8,7 +8,6 @@ import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 const ApiService = new RadfishAPIService("");
 
 const offlineErrorMsg = "No network conection, unable to sync with server";
-const lastSyncMsg = `Last sync at: ${localStorage.getItem("lastHomebaseSync")}`;
 const noSyncMsg = "Application has not yet been synced with homebase";
 const dataNotSyncedMsg = "Data not synced, try resyncing";
 const dataIsSyncedMsg = "All data cached, ready to launch!";
@@ -21,6 +20,7 @@ export const ServerSync = () => {
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
   const [isLoading, setIsLoading] = useState(false);
   const [syncStatus, setSyncStatus] = useState("");
+  const lastSyncMsg = `Last sync at: ${localStorage.getItem("lastHomebaseSync")}`;
 
   const syncToHomebase = async () => {
     if (!isOffline) {
@@ -32,14 +32,29 @@ export const ServerSync = () => {
       await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
       const { data: tableData } = await ApiService.get(MSW_ENDPOINT.TABLE);
       await updateOfflineData("formData", tableData);
+      await updateOfflineData(LAST_HOMEBASE_SYNC, [{ time: Date.now() }]);
 
-      localStorage.setItem(LAST_HOMEBASE_SYNC, Date.now());
+      const lastHomebaseSyncTime = await findOfflineData(HOME_BASE_DATA);
+      const time = lastHomebaseSyncTime;
+      const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
+      const milisecondsIn24Hours = 86400000;
+      const currentTimeStamp = Date.now();
+      const isDataSyncedOver24Hours = time + milisecondsIn24Hours > currentTimeStamp;
+
+      if (!time || isDataSyncedOver24Hours) {
+        const species = data.map((item) => ({ name: item }));
+        const updated = await updateOfflineData("species", species);
+        // if all data is updated, set the last updated timestamp
+        if (updated.length === data.length) {
+          await updateOfflineData(LAST_HOMEBASE_SYNC, [{ time: currentTimeStamp }]);
+        }
+      }
 
       initializeLaunchSequence();
       setIsLoading(false);
     } else {
       console.log(offlineErrorMsg);
-      console.log(`${localStorage.getItem(LAST_HOMEBASE_SYNC) ? lastSyncMsg : noSyncMsg}`);
+      console.log(`${findOfflineData(LAST_HOMEBASE_SYNC) ? lastSyncMsg : noSyncMsg}`);
       setIsLoading(false);
     }
   };
