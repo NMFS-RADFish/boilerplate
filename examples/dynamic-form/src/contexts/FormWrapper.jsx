@@ -26,7 +26,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
       // else just return updatedForm without needing to linked computedValues
       setFormData((prev) => {
         const updatedForm = { ...prev, [name]: value };
-        handleInputVisibilityCallback(linkedinputids, updatedForm);
+        linkedinputids && handleInputVisibilityCallback(linkedinputids, updatedForm);
         return updatedForm;
       });
     },
