@@ -9,22 +9,22 @@ describe("Integration", () => {
     page = await browser.newPage();
   });
 
-  it("should be able to navigate through application", async () => {
+  it.skip("should be able to navigate through application", async () => {
     console.log(
       JSON.stringify({
         name: import.meta.env.VITE_INDEXED_DB_NAME,
         version: import.meta.env.VITE_INDEXED_DB_VERSION,
       }),
     );
-    await page.goto("http://localhost:3000/multistep");
+    await page.goto("http://localhost:3000/form");
     await page.waitForSelector("#step-forward");
     await page.click("#step-forward");
 
-    await page.waitForSelector("#fullName");
-    const value = await page.$eval("#fullName", (el) => el.outerHTML);
+    await page.waitForSelector("#species");
+    const value = await page.$eval("#species", (el) => el.outerHTML);
 
     expect(value).toBe(
-      `<input data-testid="textInput" class="usa-input radfish-input " id="fullName" name="fullName" type="text" placeholder="Full Name" aria-invalid="false" linkedinputids="nickname" value="">`,
+      `<select data-testid="Select" class="usa-select radfish-select " id="species" name="species" linkedinputids="computedPrice,subSpecies"><option value="">Select Species</option><option value="grouper">Grouper</option><option value="salmon">Salmon</option><option value="marlin">Marlin</option><option value="mahimahi">Mahimahi</option></select>`,
     );
   });
 

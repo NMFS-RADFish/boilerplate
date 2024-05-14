@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { SimpleTable } from "../../pages/Table.example";
+import { Table } from "../../pages/Table.example";
 import * as tableWrapper from "../../contexts/TableWrapper.example";
 import * as tanstackTable from "@tanstack/react-table";
 import Dexie from "dexie";
@@ -170,7 +170,7 @@ describe("Table", () => {
 
     const { queryByText, container } = render(
       <tableWrapper.TableWrapper>
-        <SimpleTable />
+        <Table />
       </tableWrapper.TableWrapper>,
     );
 
