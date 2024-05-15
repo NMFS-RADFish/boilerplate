@@ -29,6 +29,7 @@ const App = () => {
       numberOfFish: 5,
       isDraft: true,
     };
+    // Takes a string for the store name and an object to create
     await createOfflineData("formData", newData);
     const allData = await findOfflineData("formData");
     setFormData(allData);
@@ -45,6 +46,7 @@ const App = () => {
         numberOfFish: (formData[0].numberOfFish += 1),
         isDraft: true,
       };
+      // Takes a string for the store name and an array of objects to update
       await updateOfflineData("formData", [updatedData]);
       setFormData((prevData) =>
         prevData.map((data) =>
@@ -57,6 +59,7 @@ const App = () => {
   const deleteData = async (e) => {
     e.preventDefault();
     if (formData.length > 0) {
+      // Takes a string for the store name and an array of uuids to delete
       await deleteOfflineData("formData", [formData[0].uuid]);
       setFormData((prevData) =>
         prevData.filter((data) => data.uuid !== formData[0].uuid)
