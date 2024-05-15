@@ -1,6 +1,7 @@
+import "../styles/theme.css";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alert, Checkbox, FormGroup } from "@trussworks/react-uswds";
+import { Alert, Checkbox, FormGroup, Grid } from "@trussworks/react-uswds";
 import {
   TextInput,
   Radio,
@@ -8,14 +9,11 @@ import {
   Button,
   Label,
   ErrorMessage,
-  Toast,
 } from "../packages/react-components";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
-import { CONSTANTS } from "../config/form";
-import "../styles/theme.css";
-import { useToast } from "../hooks/useToast";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
+import { CONSTANTS } from "../config/form";
 
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
 
@@ -27,13 +25,10 @@ const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice 
  * @param {Object} props.asyncFormOptions - Options for asynchronous form elements, helpful for providing default form options that are provided from centralized backend.
  * @returns {JSX.Element} The JSX element representing the demo form.
  */
-const ComplexForm = ({ asyncFormOptions }) => {
+const Form = ({ asyncFormOptions }) => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { formData, setFormData, visibleInputs, handleChange, handleBlur, validationErrors } =
-    useFormState();
-  const { toast } = useToast();
-
+  const { formData, setFormData, stepBackward } = useFormState();
   const { findOfflineData, createOfflineData } = useOfflineStorage();
 
   useEffect(() => {
@@ -46,7 +41,7 @@ const ComplexForm = ({ asyncFormOptions }) => {
         if (found) {
           setFormData({ ...found, currentStep: 1, totalSteps: 3 });
         } else {
-          navigate("/complexform");
+          navigate("/form");
         }
       }
     };
@@ -62,34 +57,89 @@ const ComplexForm = ({ asyncFormOptions }) => {
     return (
       <div>
         <Button type="button" onClick={handleInit} data-testid="init-complex">
-          Begin Complex Form
+          Begin Form
         </Button>
       </div>
     );
   }
 
-  return (
-    <>
-      <div className="toast-container">
-        <Toast toast={toast} />
-      </div>
-      <FormGroup error={validationErrors[fullName]}>
-        <Label htmlFor={fullName}>Full Name</Label>
-        {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
-        <TextInput
-          id={fullName}
-          name={fullName}
-          type="text"
-          placeholder="Full Name"
-          value={formData[fullName] || ""}
-          aria-invalid={validationErrors[fullName] ? "true" : "false"}
-          validationStatus={validationErrors[fullName] ? "error" : undefined}
-          onChange={handleChange}
-          onBlur={(e) => handleBlur(e, fullNameValidators)}
-          data-testid="inputId"
-        />
-      </FormGroup>
+  if (!formData.currentStep || formData.currentStep === 1) {
+    // return step one
+    return <StepOne />;
+  }
 
+  if (formData.currentStep === 2) {
+    // return step two with data
+    return <StepTwo asyncFormOptions={asyncFormOptions} />;
+  }
+
+  return (
+    <div className="grid-row flex-column">
+      {!navigator.onLine && (
+        <>
+          <Alert type="info" slim={true}>
+            Button Option 1: Below is an example of a simple button, it will save data locally. It
+            does not make a server request.
+          </Alert>
+          <Button role="form-submit" type="submit" onClick={onOfflineSubmit}>
+            Send Data to IndexDB
+          </Button>
+        </>
+      )}
+      <Alert type="info" slim={true}>
+        Button Option 2: Below is an example of a multi-entry button, it sends data to a server. The
+        current implementation is using a mock server.
+      </Alert>
+      <Grid className="display-flex flex-justify">
+        {/* 
+          Buttons are ordered to produce the correct tab flow. The "order-last" class is added
+          to move the button to the right to give the correct placement on page while tabbing
+          in the correct order.
+        */}
+        <Button className="margin-top-1 margin-right-0 order-last" role="form-submit" type="submit">
+          Submit Form
+        </Button>
+        <Button
+          type="button"
+          className="margin-top-1"
+          onClick={stepBackward}
+          data-testid="step-backward"
+          id="step-backward"
+        >
+          Prev Step
+        </Button>
+      </Grid>
+    </div>
+  );
+};
+
+export const StepOne = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { init, stepForward, stepBackward, formData, handleChange, handleBlur, validationErrors } =
+    useFormState();
+
+  const handleInit = async () => {
+    const formId = await init({ initialStep: 2 });
+    navigate(`${formId}`);
+  };
+
+  return (
+    <FormGroup error={validationErrors[fullName]}>
+      <Label htmlFor={fullName}>Full Name</Label>
+      {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
+      <TextInput
+        id={fullName}
+        name={fullName}
+        type="text"
+        placeholder="Full Name"
+        value={formData[fullName] || ""}
+        aria-invalid={validationErrors[fullName] ? "true" : "false"}
+        validationStatus={validationErrors[fullName] ? "error" : undefined}
+        onChange={handleChange}
+        onBlur={(e) => handleBlur(e, fullNameValidators)}
+        data-testid="inputId"
+      />
       <Label htmlFor="checkbox">Checkbox Example</Label>
       <Checkbox id="Oahu" name="islands" value="Oahu" label="Oahu" defaultChecked />
       <Checkbox id="Kauai" name="islands" value="Kauai" label="Kauai" />
@@ -112,7 +162,36 @@ const ComplexForm = ({ asyncFormOptions }) => {
         checked={formData[radioOption] === "option-catch-no"}
         onChange={handleChange}
       />
+      <Grid className="display-flex flex-justify">
+        <Button
+          type="button"
+          className="margin-top-1 margin-right-0 order-last"
+          onClick={id ? stepForward : handleInit}
+          data-testid="step-forward"
+          id="step-forward"
+        >
+          Next Step
+        </Button>
+        <Button
+          disabled
+          type="button"
+          className="margin-top-1"
+          onClick={stepBackward}
+          data-testid="step-backward"
+          id="step-backward"
+        >
+          Prev Step
+        </Button>
+      </Grid>
+    </FormGroup>
+  );
+};
 
+export const StepTwo = ({ asyncFormOptions }) => {
+  const { stepForward, stepBackward, formData, visibleInputs, handleChange } = useFormState();
+
+  return (
+    <FormGroup>
       <Label htmlFor={numberOfFish}>Number of Fish</Label>
       <Alert type="info" slim={true}>
         Example of a linked input. The value of this input is used to compute the price.
@@ -127,14 +206,13 @@ const ComplexForm = ({ asyncFormOptions }) => {
         value={formData[numberOfFish] || ""}
         onChange={handleChange}
       />
-
       <Label htmlFor={species}>Species</Label>
       <Alert type="info" slim={true}>
         The species select input is dependent on data coming from a server. The current
         implementation is using a mock server.
       </Alert>
       <Select
-        // linkedinputids tells computedPrice to update onChange
+        id={species}
         linkedinputids={[computedPrice, subSpecies]}
         name={species}
         value={formData[species] || ""}
@@ -163,7 +241,6 @@ const ComplexForm = ({ asyncFormOptions }) => {
           />
         </>
       )}
-
       <Label htmlFor={species}>Computed Price</Label>
       <Alert type="info" slim={true}>
         Readonly input. Its value is calculated based on the number of fish and species selected.
@@ -177,18 +254,28 @@ const ComplexForm = ({ asyncFormOptions }) => {
         value={formData[computedPrice] || ""}
         onChange={handleChange}
       />
-
-      <div className="grid-row flex-column">
-        <Alert type="info" slim={true}>
-          Below is an example of a submit button, it sends data to a server if online, or saves a
-          draft locally if offline. The current implementation is using a mock server.
-        </Alert>
-        <Button role="form-submit" type="submit" className="margin-top-10px border-105">
-          Submit
+      <Grid className="display-flex flex-justify">
+        <Button
+          type="button"
+          className="margin-top-1 margin-right-0 order-last"
+          onClick={stepForward}
+          data-testid="step-forward"
+          id="step-forward"
+        >
+          Next Step
         </Button>
-      </div>
-    </>
+        <Button
+          type="button"
+          className="margin-top-1"
+          onClick={stepBackward}
+          data-testid="step-backward"
+          id="step-backward"
+        >
+          Prev Step
+        </Button>
+      </Grid>
+    </FormGroup>
   );
 };
 
-export { ComplexForm };
+export { Form };

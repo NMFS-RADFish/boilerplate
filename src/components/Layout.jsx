@@ -24,8 +24,7 @@ const Layout = ({ children }) => {
     <>
       <HeaderNav>
         <Link to="/">Home</Link>
-        <Link to="/complexform">Complex Form</Link>
-        <Link to="/multistep">Multi-Step Form</Link>
+        <Link to="/form">Form</Link>
         <Link to="/table">Table</Link>
       </HeaderNav>
       <GridContainer>{children}</GridContainer>

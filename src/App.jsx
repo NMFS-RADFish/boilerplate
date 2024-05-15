@@ -7,13 +7,12 @@ import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
 import RadfishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
-import { ComplexForm } from "./pages/ComplexForm.example";
-import { MultiStepForm } from "./pages/MultiStepForm.example";
-import { SimpleTable } from "./pages/Table.example";
+import { Table } from "./pages/Table.example";
+import { Form } from "./pages/Form.example";
+import { useOfflineStatus } from "./hooks/useOfflineStatus";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 import { ServerSync } from "./components/ServerSync";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
-import { useOfflineStatus } from "./hooks/useOfflineStatus";
 
 const ApiService = new RadfishAPIService("");
 
@@ -79,53 +78,35 @@ function App() {
           <ServerSync />
           {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
           <Routes>
-            {/* On root route "/", render the DemoForm component along with it's context for state management */}
             <Route
               path="/"
               element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <ComplexForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
-              }
-            />
-            {/* On "/table" route, render the DemoTable component along with it's context for state management */}
-            <Route
-              path="/table"
-              element={
                 <TableWrapper>
-                  <SimpleTable />
+                  <Table />
                 </TableWrapper>
               }
             />
             <Route
-              path="/multistep"
+              path="/table"
+              element={
+                <TableWrapper>
+                  <Table />
+                </TableWrapper>
+              }
+            />
+            <Route
+              path="/form"
               element={
                 <FormWrapper onSubmit={handleFormSubmit}>
-                  <MultiStepForm asyncFormOptions={asyncFormOptions} />
+                  <Form asyncFormOptions={asyncFormOptions} />
                 </FormWrapper>
               }
             />
             <Route
-              path="/multistep/:id"
+              path="/form/:id"
               element={
                 <FormWrapper onSubmit={handleFormSubmit}>
-                  <MultiStepForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
-              }
-            />
-            <Route
-              path="/complexform"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <ComplexForm asyncFormOptions={asyncFormOptions} />
-                </FormWrapper>
-              }
-            />
-            <Route
-              path="/complexform/:id"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <ComplexForm asyncFormOptions={asyncFormOptions} />
+                  <Form asyncFormOptions={asyncFormOptions} />
                 </FormWrapper>
               }
             />

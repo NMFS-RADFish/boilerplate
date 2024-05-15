@@ -70,12 +70,8 @@ const SimpleTable = () => {
    * This can be useful for re-routing to a detail page, or handling other data specific functionality
    */
   const handleRowClick = (row) => {
-    navigate(`/complexform/${row.original.uuid}`);
+    navigate(`/form/${row.original.uuid}`);
   };
-
-  if (!table) {
-    return null;
-  }
 
   /**
    * This is a demo function that simulates the submission of offline data by removing the `isOffline` flag.
@@ -248,4 +244,4 @@ function TableInfoAnnotation() {
   );
 }
 
-export { SimpleTable };
+export { SimpleTable as Table };

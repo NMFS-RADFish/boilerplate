@@ -4,18 +4,17 @@
  * This context provider is meant to be extensible and modular. You can use this anywhere in your app to wrap a form to manage the specific form's state
  */
 
-import React, { createContext, useState, useCallback, useEffect } from "react";
+import React, { createContext, useState, useCallback } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Alert } from "@trussworks/react-uswds";
 import { Form, Button } from "../packages/react-components";
 import { FORM_CONFIG } from "../config/form";
-import RadfishAPIService from "../packages/services/APIService";
 import { COMMON_CONFIG } from "../config/common";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const FormContext = createContext();
+const TOTAL_STEPS = 3;
 
-const ApiService = new RadfishAPIService("");
 /**
  * Higher-order component providing form state and functionality.
  *
@@ -35,7 +34,33 @@ export const FormWrapper = ({ children, onSubmit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams] = useSearchParams();
-  const { updateOfflineData, findOfflineData } = useOfflineStorage();
+  const { createOfflineData, updateOfflineData } = useOfflineStorage();
+
+  async function init({ initialStep }) {
+    const uuid = await createOfflineData("formData", {
+      ...formData,
+      currentStep: initialStep,
+      totalSteps: TOTAL_STEPS,
+    });
+    setFormData({ ...formData, currentStep: initialStep, totalSteps: TOTAL_STEPS });
+    return uuid;
+  }
+
+  function stepForward() {
+    if (formData.currentStep < TOTAL_STEPS) {
+      const nextStep = formData.currentStep + 1;
+      setFormData({ ...formData, currentStep: nextStep });
+      updateOfflineData("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
+    }
+  }
+
+  function stepBackward() {
+    if (formData.currentStep > 1) {
+      const prevStep = formData.currentStep - 1;
+      setFormData({ ...formData, currentStep: prevStep });
+      updateOfflineData("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
+    }
+  }
 
   /**
    * Handles the submission of multiple entries by updating the URL with query parameters.
@@ -151,6 +176,9 @@ export const FormWrapper = ({ children, onSubmit }) => {
     validationErrors,
     handleMultiEntrySubmit,
     searchParams,
+    init,
+    stepForward,
+    stepBackward,
   };
 
   return (
