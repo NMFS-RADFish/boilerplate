@@ -5,14 +5,14 @@
  */
 
 import React, { createContext, useState, useCallback } from "react";
-import { useNavigate, useSearchParams, useParams } from "react-router-dom";
+import { useSearchParams, useParams } from "react-router-dom";
 import { Alert } from "@trussworks/react-uswds";
 import { Form, Button } from "../../../../packages/radfish-react";
 import { COMMON_CONFIG } from "../config/common";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const FormContext = createContext();
-const TOTAL_STEPS = 2;
+export const TOTAL_STEPS = 2;
 
 /**
  * Higher-order component providing form state and functionality.
@@ -66,8 +66,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
 
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
-    // if field being updated has a linked field that needs to be computed, update state after computing linked fields
-    // else just return updatedForm without needing to linked computedValues
     setFormData((prev) => {
       const updatedForm = { ...prev, [name]: value };
       saveOfflineData("formData", updatedForm);

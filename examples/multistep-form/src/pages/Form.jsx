@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormGroup, Grid } from "@trussworks/react-uswds";
 import { TextInput, Button, Label } from "../../../../packages/radfish-react";
-import { useFormState } from "../contexts/FormWrapper";
+import { TOTAL_STEPS, useFormState } from "../contexts/FormWrapper";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { CONSTANTS } from "../config/form";
 
@@ -20,7 +20,7 @@ const { fullName, email, city, state, zipcode } = CONSTANTS;
 const Form = ({ asyncFormOptions }) => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { formData, setFormData, stepBackward, stepForward, handleChange } = useFormState();
+  const { formData, setFormData, stepBackward, stepForward, handleChange, init } = useFormState();
   const { findOfflineData, createOfflineData } = useOfflineStorage();
 
   useEffect(() => {
@@ -31,9 +31,9 @@ const Form = ({ asyncFormOptions }) => {
         });
 
         if (found) {
-          setFormData({ ...found, totalSteps: 3 });
+          setFormData({ ...found, totalSteps: TOTAL_STEPS });
         } else {
-          navigate("/form");
+          navigate("/");
         }
       }
     };
@@ -41,7 +41,7 @@ const Form = ({ asyncFormOptions }) => {
   }, [id]);
 
   const handleInit = async () => {
-    const formId = await createOfflineData("formData", {});
+    const formId = await init({ initialStep: 1 });
     navigate(`${formId}`);
   };
 

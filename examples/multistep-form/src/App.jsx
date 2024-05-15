@@ -25,21 +25,11 @@ function App() {
   }, [isOffline]);
 
   const handleFormSubmit = async (submittedData) => {
-    const existingForm =
-      submittedData.uuid && (await findOfflineData("formData", { uuid: submittedData.uuid }));
     try {
-      if (!isOffline) {
-        const { data } = await ApiService.post(MSW_ENDPOINT.FORM, { formData: submittedData });
-        existingForm
-          ? await updateOfflineData("formData", [{ uuid: data.uuid, ...data }])
-          : await createOfflineData("formData", submittedData);
-        showToast(TOAST_CONFIG.SUCCESS);
-      } else {
-        existingForm
-          ? await updateOfflineData("formData", [{ uuid: submittedData.uuid, ...submittedData }])
-          : await createOfflineData("formData", submittedData);
-        showToast(TOAST_CONFIG.OFFLINE_SUBMIT);
-      }
+      await updateOfflineData("formData", [
+        { uuid: submittedData.uuid, ...submittedData, submitted: true },
+      ]);
+      showToast(TOAST_CONFIG.SUCCESS);
     } catch (error) {
       showToast(TOAST_CONFIG.ERROR);
     } finally {
