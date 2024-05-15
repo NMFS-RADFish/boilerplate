@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
-import { Button } from "@trussworks/react-uswds";
+import { Button, FormGroup, Label, TextInput } from "@trussworks/react-uswds";
 
 const App = () => {
   const [formData, setFormData] = useState([]);
@@ -29,70 +29,110 @@ const App = () => {
       numberOfFish: 5,
       isDraft: true,
     };
+
+    // Create the data in indexedDB
     // Takes a string for the store name and an object to create
     await createOfflineData("formData", newData);
+
+    // Find all the data in indexedDB
     const allData = await findOfflineData("formData");
     setFormData(allData);
   };
 
-  const updateData = async (e) => {
+  const updateData = async (e, uuid) => {
     e.preventDefault();
-    if (formData.length > 0) {
-      const updatedData = {
-        uuid: formData[0].uuid,
-        fullName: formData[0].fullName,
-        species: formData[0].species,
-        computedPrice: (formData[0].computedPrice += 1),
-        numberOfFish: (formData[0].numberOfFish += 1),
-        isDraft: true,
-      };
-      // Takes a string for the store name and an array of objects to update
-      await updateOfflineData("formData", [updatedData]);
-      setFormData((prevData) =>
-        prevData.map((data) =>
-          data.uuid === updatedData.uuid ? updatedData : data
-        )
-      );
-    }
+    const { name, value } = e.target;
+
+    const dataToUpdate = formData.find((data) => data.uuid === uuid);
+    const updatedData = { ...dataToUpdate, [name]: value };
+
+    // Update the data in indexedDB
+    // Takes a string for the store name and an array of objects to update
+    await updateOfflineData("formData", [updatedData]);
+
+    // Update the state
+    setFormData((prevData) =>
+      prevData.map((data) => (data.uuid === uuid ? updatedData : data))
+    );
   };
 
-  const deleteData = async (e) => {
+  const deleteData = async (e, uuid) => {
     e.preventDefault();
-    if (formData.length > 0) {
+    if (uuid) {
+      // Delete the data from indexedDB
       // Takes a string for the store name and an array of uuids to delete
-      await deleteOfflineData("formData", [formData[0].uuid]);
-      setFormData((prevData) =>
-        prevData.filter((data) => data.uuid !== formData[0].uuid)
-      );
+      await deleteOfflineData("formData", [uuid]);
+      setFormData((prevData) => prevData.filter((data) => data.uuid !== uuid));
     }
   };
 
   return (
-    <div>
+    <div className="grid-container">
       <h1>On Device Storage</h1>
       <Button type="submit" onClick={(e) => createData(e)}>
         Create Data
-      </Button>
-      <Button type="submit" onClick={(e) => updateData(e)}>
-        Update Data
-      </Button>
-      <Button type="submit" onClick={(e) => deleteData(e)}>
-        Delete Data
       </Button>
 
       <h2>Saved Data</h2>
       {formData &&
         formData.map((data, i) => {
           return (
-            <ul key={i}>
-              <li>UUID: {data.uuid}</li>
-              <li>Full Name: {data.fullName}</li>
-              <li>Species: {data.species}</li>
-              <li>Number of Fish: {data.numberOfFish}</li>
-              <li>Price: {data.computedPrice}</li>
-              <li>Status: {data.isDraft ? "Draft" : "Submitted"}</li>
+            <div key={i}>
+              <div className="grid-row">
+                <FormGroup>
+                  <Label htmlFor="uuid">UUID</Label>
+                  <TextInput
+                    id="uuid"
+                    name="uuid"
+                    type="text"
+                    value={data.uuid}
+                    onChange={(e) => updateData(e, data.uuid)}
+                  />
+                  <Label htmlFor="fullName">Name</Label>
+                  <TextInput
+                    id="fullName"
+                    name="fullName"
+                    type="text"
+                    value={data.fullName}
+                    onChange={(e) => updateData(e, data.uuid)}
+                  />
+                  <Label htmlFor="numberOfFish">Number of Fish</Label>
+                  <TextInput
+                    id="numberOfFish"
+                    name="numberOfFish"
+                    type="number"
+                    value={data.numberOfFish}
+                    onChange={(e) => updateData(e, data.uuid)}
+                  />
+                  <Label htmlFor="species">Species</Label>
+                  <TextInput
+                    id="species"
+                    name="species"
+                    type="text"
+                    value={data.species}
+                    onChange={(e) => updateData(e, data.uuid)}
+                  />
+                  <Label htmlFor="computedPrice">Price</Label>
+                  <TextInput
+                    id="computedPrice"
+                    name="computedPrice"
+                    type="number"
+                    value={data.computedPrice}
+                    onChange={(e) => updateData(e, data.uuid)}
+                  />
+                </FormGroup>
+                <div className="margin-left-2">
+                  <Button
+                    type="submit"
+                    secondary={true}
+                    onClick={(e) => deleteData(e, data.uuid)}
+                  >
+                    x
+                  </Button>
+                </div>
+              </div>
               <hr />
-            </ul>
+            </div>
           );
         })}
     </div>
