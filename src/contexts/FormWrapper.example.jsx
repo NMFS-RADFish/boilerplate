@@ -48,7 +48,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
   }
 
   function stepForward() {
-    console.log("step forward", formData);
     if (formData.currentStep < TOTAL_STEPS) {
       const nextStep = formData.currentStep + 1;
       setFormData({ ...formData, currentStep: nextStep });
