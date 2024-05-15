@@ -1,6 +1,6 @@
 # On-Device Storage Example
 
-This example includes how to setup and use the on-device storage using IndexedDB.
+This example includes how to setup and use the on-device storage using IndexedDB and [Dexie.js](https://dexie.org/docs/Tutorial/Getting-started).
 
 ## Steps
 
