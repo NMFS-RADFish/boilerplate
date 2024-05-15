@@ -55,8 +55,6 @@ const Form = ({ asyncFormOptions }) => {
     );
   }
 
-  console.log("FORM DATA: ", formData);
-
   if (!formData.currentStep || formData.currentStep === 1) {
     return (
       <FormGroup>
