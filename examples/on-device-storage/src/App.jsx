@@ -113,6 +113,8 @@ const App = () => {
                 <FormGroup>
                   <Label htmlFor="uuid">UUID</Label>
                   <TextInput
+                    readOnly
+                    disabled
                     id="uuid"
                     name="uuid"
                     type="text"
