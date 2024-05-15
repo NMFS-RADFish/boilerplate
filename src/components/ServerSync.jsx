@@ -38,7 +38,7 @@ export const ServerSync = () => {
       const { data: species } = await ApiService.get(MSW_ENDPOINT.SPECIES);
       await updateOfflineData("species", species);
 
-      await updateOfflineData(LAST_HOMEBASE_SYNC, [{ time: Date.now() }]);
+      await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
       initializeLaunchSequence();
       setIsLoading(false);
     } else {

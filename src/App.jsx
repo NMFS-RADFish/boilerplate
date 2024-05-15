@@ -37,18 +37,12 @@ function App() {
   useEffect(() => {
     // this function fetches any data needed for the business requirements in DemoForm
     const fetchFormData = async () => {
-      if (!navigator.onLine) {
-        const species = await findOfflineData("species");
-        const speciesList = species?.map((item) => item?.name);
-        setAsyncFormOptions((prev) => ({ ...prev, species: speciesList }));
-      } else {
-        // add any other async requests here
-        const newData = { species: data };
-        setAsyncFormOptions((prev) => ({ ...prev, ...newData }));
-      }
+      const species = await findOfflineData("species");
+      const speciesList = species?.map((item) => item?.name);
+      setAsyncFormOptions((prev) => ({ ...prev, species: speciesList }));
     };
     fetchFormData();
-  }, [isOffline]);
+  }, []);
 
   const handleFormSubmit = async (submittedData) => {
     const existingForm =

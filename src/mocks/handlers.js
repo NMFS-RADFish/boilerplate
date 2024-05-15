@@ -144,6 +144,13 @@ const homebase = [
   },
 ];
 
+export const species = [
+  { name: "grouper", price: 25.0 },
+  { name: "salmon", price: 58.0 },
+  { name: "marlin", price: 100.0 },
+  { name: "mahimahi", price: 44.0 },
+];
+
 export const handlers = [
   // This handler is used to mock the response of a GET request for an SVG or WOFF2 file
   http.get(/\.(svg|woff2)$/, async () => {
@@ -160,7 +167,9 @@ export const handlers = [
   // Note that this implementation can/should change depending on your needs
   http.get(MSW_ENDPOINT.SPECIES, () => {
     return HttpResponse.json(
-      { data: ["grouper", "salmon", "marlin", "mahimahi"] },
+      {
+        data: species,
+      },
       { status: 200 },
     );
   }),
