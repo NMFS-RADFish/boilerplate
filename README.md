@@ -6,6 +6,7 @@
 
 - [RADFish Boilerplate Application Code](#radfish-boilerplate-application-code)
   - [Getting Started](#getting-started)
+  - [Directory Structure](#directory-structure)
   - [React RADFish Components](#react-radfish-components)
     - [Building your first page and form](#building-your-first-page-and-form)
     - [Setting the layout of the application](#setting-the-layout-of-the-application)
@@ -27,6 +28,7 @@
       - [`PUT` Request](#put-request)
       - [`DELETE` Request](#delete-request)
     - [Handling Responses and Errors](#handling-responses-and-errors)
+    - [Mock API](#mock-api)
   - [State Management](#state-management)
   - [Building Complex Forms](#building-complex-forms)
     - [What is a complex form?](#what-is-a-complex-form)
@@ -49,12 +51,23 @@
   - [Testing](#testing)
     - [Running Tests](#running-tests)
     - [Unit Tests](#unit-tests)
-      - [Basic Unit Test](#basic-unit-test)
+  - [Pattern 1 Functional Unit Tests - utilities and internal modules](#pattern-1-functional-unit-tests---utilities-and-internal-modules)
+  - [Pattern 2 Functional Unit Tests - components and interactions](#pattern-2-functional-unit-tests---components-and-interactions)
+      - [Basic Unit Test (component)](#basic-unit-test-component)
       - [Testing User Interactions](#testing-user-interactions)
-    - [Snapshot Tests](#snapshot-tests)
-    - [Writing Browser Tests](#writing-browser-tests)
+    - [Testing mocks](#testing-mocks)
+  - [Pattern 3 Browser integration testing (In progress)](#pattern-3-browser-integration-testing-in-progress)
+  - [Pattern 4 Accessibility Testing (In progress)](#pattern-4-accessibility-testing-in-progress)
     - [Additional Jest Configuration](#additional-jest-configuration)
     - [508 Compliance](#508-compliance)
+- [Guide to Testing Section 508 Compliance in a React Project](#guide-to-testing-section-508-compliance-in-a-react-project)
+  - [1. Introduction to Section 508 Compliance](#1-introduction-to-section-508-compliance)
+  - [2. Set Up Your React Project](#2-set-up-your-react-project)
+  - [3. Automated Testing with Lighthouse](#3-automated-testing-with-lighthouse)
+  - [4. Implement Recommendations](#4-implement-recommendations)
+  - [5. Rerun the Audit](#5-rerun-the-audit)
+  - [6. Continuous Integration](#6-continuous-integration)
+  - [7. Manual Checks (Optional)](#7-manual-checks-optional)
 
 ## Getting Started
 
@@ -283,13 +296,13 @@ By following this method, you can leverage the underlying `uswds` component, mai
 
 RADFish app users (fishermen/fisherwomen) can be out at sea for an extended period of time and may not have internet access available. The offline storage functionality outlined below allows users to continue using the application to create and manage reports while offline.
 
-To use offline data storage, use the `useOfflineStorage` hook. This React hook provides methods for managing offline form data. There are two storage methods available `LocalStorageMethod` or `IndexedDBStorageMethod`.
+To use offline data storage, use the `useOfflineStorage` hook. This React hook provides methods for managing offline form data. There are two storage methods available `LocalStorageMethod` or `IndexedDBStorageMethod`.
 
 ### Configuration
 
 Step-by-step instructions to configure offline storage:
 
-1. **Set the environment variables in the `.env` files. Based on which offline storage method you select, the following env variables are required:**
+1. **Set the environment variables in the `.env.development` file. Based on which offline storage method you select, the following env variables are required:**
    1. **Local Storage:**
       1. `VITE_LOCAL_STORAGE_KEY`
    2. **Indexed DB:**
@@ -329,7 +342,7 @@ Step-by-step instructions to configure offline storage:
 
 ### **`useOfflineStorage` Hooks API**
 
-The `useOfflineStorage` hook returns an object with the following methods:
+The `useOfflineStorage` hook returns an object with the following methods:
 
 - **`createOfflineData("formData", data)`** Creates a new data entry in the storage.
   - `data`: The data object to create.
@@ -357,7 +370,7 @@ function MyComponent() {
   const { createOfflineData, findOfflineData, updateOfflineData } = useOfflineStorage();
   const data = { species: "Grouper", numberOfFish: 100 };
 
-  // Create new offline data entry
+  // Create new offline data entry
   createOfflineData(data);
   // Find all offline data
   const allOfflineData = async () => await findOfflineData();
@@ -370,7 +383,7 @@ function MyComponent() {
   // Delete multiple offline data entries
   deleteOfflineData(["uuid-123", "uuid-321", "uuid-987"]);
 
-  // rest of code....
+  // rest of code....
 }
 
 export default MyComponent;

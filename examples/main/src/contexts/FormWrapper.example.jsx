@@ -41,6 +41,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
       ...formData,
       currentStep: initialStep,
       totalSteps: TOTAL_STEPS,
+      isDraft: true,
     });
     setFormData({ ...formData, currentStep: initialStep, totalSteps: TOTAL_STEPS });
     return uuid;

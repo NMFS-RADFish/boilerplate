@@ -33,19 +33,25 @@ jobs:
         run: npm test
         working-directory: examples/main
 
+<<<<<<< HEAD
       # - name: Run main example e2e tests
       #   run: npm run test:e2e
       #   working-directory: examples/main
+=======
+      - name: Run e2e tests
+        run: npm run test:e2e
+>>>>>>> main
 
-  # lighthouse:
-  #   name: Lighthouse CI
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ github.event.pull_request.head.sha }}
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
+<<<<<<< HEAD
   #     - name: Install main example dependencies
   #       run: npm install
   #       working-directory: examples/main
@@ -61,3 +67,17 @@ jobs:
   #       working-directory: examples/main
   #       env:
   #         LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+=======
+      - name: Install dependencies
+        run: npm install
+
+      - name: lighthouse mobile audit
+        run: npm run lhci:mobile
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: lighthouse desktop audit
+        run: npm run lhci:desktop
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+>>>>>>> main
