@@ -36,35 +36,12 @@ function App() {
   useEffect(() => {
     // this function fetches any data needed for the business requirements in DemoForm
     const fetchFormData = async () => {
-      const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
-      const milisecondsIn24Hours = 86400000;
-      const currentTimeStamp = Date.now();
-      const speciesLastUpdated = localStorage.getItem("speciesLastUpdated");
-      const isSpeciesLastUpdateOver24Hours =
-        speciesLastUpdated + milisecondsIn24Hours > currentTimeStamp;
-
-      // if offline, fetch species data from indexedDB
-      if (!navigator.onLine) {
-        const species = await findOfflineData("species");
-        const speciesList = species?.map((item) => item?.name);
-        setAsyncFormOptions((prev) => ({ ...prev, species: speciesList }));
-      } else {
-        // add any other async requests here
-        const newData = { species: data };
-        setAsyncFormOptions((prev) => ({ ...prev, ...newData }));
-      }
-
-      if (!speciesLastUpdated || isSpeciesLastUpdateOver24Hours) {
-        const species = data.map((item) => ({ name: item }));
-        const updated = await updateOfflineData("species", species);
-        // if all data is updated, set the last updated timestamp
-        if (updated.length === data.length) {
-          localStorage.setItem("speciesLastUpdated", currentTimeStamp);
-        }
-      }
+      const species = await findOfflineData("species");
+      const speciesList = species?.map((item) => item?.name);
+      setAsyncFormOptions((prev) => ({ ...prev, species: speciesList }));
     };
     fetchFormData();
-  }, [isOffline]);
+  }, []);
 
   const handleFormSubmit = async (submittedData) => {
     const existingForm =

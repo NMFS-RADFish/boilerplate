@@ -15,6 +15,7 @@ vi.mock("react-router-dom", async () => {
 });
 
 function setupMocks() {
+  const mockedInit = vi.fn();
   const mockedHandleChange = vi.fn();
   const mockedHandleBlur = vi.fn();
   const mockedUseFormState = vi.fn(() => ({
@@ -23,6 +24,7 @@ function setupMocks() {
     handleChange: mockedHandleChange,
     handleBlur: mockedHandleBlur,
     visibleInputs: {},
+    init: mockedInit,
   }));
   const mockedCreateOfflineData = vi.fn();
   const mockedUseOfflineStorage = vi.fn(() => ({
@@ -32,6 +34,7 @@ function setupMocks() {
   }));
 
   return {
+    mockedInit,
     mockedHandleChange,
     mockedHandleBlur,
     mockedUseFormState,
@@ -67,7 +70,7 @@ describe("Form", () => {
   });
 
   it("renders and fires events without id", async () => {
-    const { mockedUseFormState, mockedCreateOfflineData, mockedUseOfflineStorage } = setupMocks();
+    const { mockedUseFormState, mockedUseOfflineStorage, mockedInit } = setupMocks();
     const mockedkUseParams = () => ({});
 
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
@@ -82,6 +85,6 @@ describe("Form", () => {
 
     const inputElement = getByTestId("init-complex");
     fireEvent.click(inputElement);
-    expect(mockedCreateOfflineData).toHaveBeenCalled();
+    expect(mockedInit).toHaveBeenCalled();
   });
 });
