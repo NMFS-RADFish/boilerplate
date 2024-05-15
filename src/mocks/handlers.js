@@ -25,6 +25,7 @@ const data = [
     department: "",
     computedPrice: 0,
     isDraft: true,
+    currentStep: 1,
   },
   {
     uuid: "5f56f849-7aed-4d81-9eef-10db110ec95b",
@@ -42,6 +43,7 @@ const data = [
     department: "",
     computedPrice: 0,
     isDraft: false,
+    currentStep: 1,
   },
   {
     uuid: "ae16b984-5e01-407c-8c27-9e43f109328f",
@@ -59,6 +61,7 @@ const data = [
     department: "",
     computedPrice: 0,
     isDraft: true,
+    currentStep: 1,
   },
   {
     uuid: "15eac339-343d-4c09-a23d-7906f4cc0062",
@@ -75,6 +78,7 @@ const data = [
     occupation: "",
     computedPrice: 0,
     isDraft: true,
+    currentStep: 1,
   },
 ];
 
