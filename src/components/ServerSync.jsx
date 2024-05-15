@@ -20,9 +20,11 @@ export const ServerSync = () => {
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
   const [isLoading, setIsLoading] = useState(false);
   const [syncStatus, setSyncStatus] = useState("");
-  const lastSyncMsg = `Last sync at: ${localStorage.getItem("lastHomebaseSync")}`;
 
   const syncToHomebase = async () => {
+    const lastSync = await findOfflineData(HOME_BASE_DATA);
+    const lastSyncMsg = `Last sync at: ${findOfflineData("lastHomebaseSync")}`;
+
     if (!isOffline) {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
@@ -32,29 +34,16 @@ export const ServerSync = () => {
       await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
       const { data: tableData } = await ApiService.get(MSW_ENDPOINT.TABLE);
       await updateOfflineData("formData", tableData);
+
+      const { data: species } = await ApiService.get(MSW_ENDPOINT.SPECIES);
+      await updateOfflineData("species", species);
+
       await updateOfflineData(LAST_HOMEBASE_SYNC, [{ time: Date.now() }]);
-
-      const lastHomebaseSyncTime = await findOfflineData(HOME_BASE_DATA);
-      const time = lastHomebaseSyncTime;
-      const { data } = await ApiService.get(MSW_ENDPOINT.SPECIES);
-      const milisecondsIn24Hours = 86400000;
-      const currentTimeStamp = Date.now();
-      const isDataSyncedOver24Hours = time + milisecondsIn24Hours > currentTimeStamp;
-
-      if (!time || isDataSyncedOver24Hours) {
-        const species = data.map((item) => ({ name: item }));
-        const updated = await updateOfflineData("species", species);
-        // if all data is updated, set the last updated timestamp
-        if (updated.length === data.length) {
-          await updateOfflineData(LAST_HOMEBASE_SYNC, [{ time: currentTimeStamp }]);
-        }
-      }
-
       initializeLaunchSequence();
       setIsLoading(false);
     } else {
       console.log(offlineErrorMsg);
-      console.log(`${findOfflineData(LAST_HOMEBASE_SYNC) ? lastSyncMsg : noSyncMsg}`);
+      console.log(`${lastSync ? lastSyncMsg : noSyncMsg}`);
       setIsLoading(false);
     }
   };

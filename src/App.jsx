@@ -37,9 +37,6 @@ function App() {
   useEffect(() => {
     // this function fetches any data needed for the business requirements in DemoForm
     const fetchFormData = async () => {
-      // if offline, fetch species data from indexedDB
-
-      // QUESTION do we keep this network req or remove the else case?
       if (!navigator.onLine) {
         const species = await findOfflineData("species");
         const speciesList = species?.map((item) => item?.name);
