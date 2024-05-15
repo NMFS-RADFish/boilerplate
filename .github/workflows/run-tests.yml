@@ -33,14 +33,9 @@ jobs:
         run: npm test
         working-directory: examples/main
 
-<<<<<<< HEAD
-      # - name: Run main example e2e tests
-      #   run: npm run test:e2e
-      #   working-directory: examples/main
-=======
       - name: Run e2e tests
         run: npm run test:e2e
->>>>>>> main
+        working-directory: examples/main
 
   lighthouse:
     name: Lighthouse CI
@@ -51,33 +46,18 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-<<<<<<< HEAD
-  #     - name: Install main example dependencies
-  #       run: npm install
-  #       working-directory: examples/main
-
-  #     - name: lighthouse mobile audit main example
-  #       run: npm run lhci:mobile
-  #       working-directory: examples/main
-  #       env:
-  #         LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-
-  #     - name: lighthouse desktop audit main example
-  #       run: npm run lhci:desktop
-  #       working-directory: examples/main
-  #       env:
-  #         LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-=======
       - name: Install dependencies
         run: npm install
+        working-directory: examples/main
 
       - name: lighthouse mobile audit
         run: npm run lhci:mobile
+        working-directory: examples/main
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
       - name: lighthouse desktop audit
         run: npm run lhci:desktop
+        working-directory: examples/main
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
->>>>>>> main
