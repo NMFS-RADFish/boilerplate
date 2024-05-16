@@ -85,7 +85,7 @@ export const handleInputVisibilityLogic = (inputIds, formData, FORM_CONFIG) => {
 
 function FormInfoAnnotation() {
   return (
-    <Alert type="info" headingLevel={"h1"} heading="Example Form">
+    <Alert type="info" headingLevel={"h1"} heading="Dynamic Form">
       This is an example of a form with form inputs that control the visibility of other form
       inputs.
       <br />
