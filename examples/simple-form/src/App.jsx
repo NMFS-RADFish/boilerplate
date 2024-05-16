@@ -1,7 +1,8 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
-import { FormGroup, Label, TextInput, Button, Alert } from "@trussworks/react-uswds";
+import { FormGroup, Alert } from "@trussworks/react-uswds";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
+import { TextInput, Label, Button } from "radfish-react";
 
 function App() {
   const [formData, setFormData] = useState({
@@ -51,12 +52,11 @@ function App() {
 
   return (
     <div className="grid-container">
-      <h1>Simple Form Example</h1>
+      <h1>Simple Form Examples</h1>
 
       <div className="margin-bottom-2">
-        <Alert type="info" heading="New/Blank Form Example" headingLevel="h1">
-          This is a simple form example. The form data is stored in the browser's IndexedDB using
-          methods from the `useOfflineStorage` hook, which uses Dexie.js behind the scenes.
+        <Alert type="info" heading="Unpersisted Form Example" headingLevel="h1">
+          This is a simple form example. The form data is stored with the React state.
           <br />
           <br />
           <a
@@ -92,7 +92,7 @@ function App() {
       </div>
       <hr />
       <div>
-        <Alert type="info" heading="Existing Form Example" headingLevel="h1">
+        <Alert type="info" heading="Persisted Form Example" headingLevel="h1">
           This is an example of a form with details coming from IndexedDB. The form data is stored
           in the browser's IndexedDB using methods from the `useOfflineStorage` hook, which uses
           Dexie.js behind the scenes.
