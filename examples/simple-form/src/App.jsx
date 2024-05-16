@@ -74,7 +74,7 @@ function App() {
             <Button type="button">Dexie Docs</Button>
           </a>
         </Alert>
-        <form onSubmit={handleOnSubmit} onChange={handleOnChange}>
+        <form onSubmit={handleOnSubmit}>
           <FormGroup>
             <Label htmlFor="fullName">Name</Label>
             <TextInput id="fullName" name="fullName" type="text" />
