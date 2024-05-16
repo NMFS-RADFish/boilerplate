@@ -8,7 +8,6 @@ import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 const ApiService = new RadfishAPIService("");
 
 const offlineErrorMsg = "No network conection, unable to sync with server";
-const lastSyncMsg = `Last sync at: ${localStorage.getItem("lastHomebaseSync")}`;
 const noSyncMsg = "Application has not yet been synced with homebase";
 const dataNotSyncedMsg = "Data not synced, try resyncing";
 const dataIsSyncedMsg = "All data cached, ready to launch!";
@@ -23,6 +22,9 @@ export const ServerSync = () => {
   const [syncStatus, setSyncStatus] = useState("");
 
   const syncToHomebase = async () => {
+    const lastSync = await findOfflineData(HOME_BASE_DATA);
+    const lastSyncMsg = `Last sync at: ${findOfflineData("lastHomebaseSync")}`;
+
     if (!isOffline) {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
@@ -33,13 +35,15 @@ export const ServerSync = () => {
       const { data: tableData } = await ApiService.get(MSW_ENDPOINT.TABLE);
       await updateOfflineData("formData", tableData);
 
-      localStorage.setItem(LAST_HOMEBASE_SYNC, Date.now());
+      const { data: species } = await ApiService.get(MSW_ENDPOINT.SPECIES);
+      await updateOfflineData("species", species);
 
+      await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
       initializeLaunchSequence();
       setIsLoading(false);
     } else {
       console.log(offlineErrorMsg);
-      console.log(`${localStorage.getItem(LAST_HOMEBASE_SYNC) ? lastSyncMsg : noSyncMsg}`);
+      console.log(`${lastSync ? lastSyncMsg : noSyncMsg}`);
       setIsLoading(false);
     }
   };
