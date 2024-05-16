@@ -1,8 +1,9 @@
 import "./index.css";
 import React, { useEffect } from "react";
-import { Toast } from "radfish-react";
+import { Toast, Button } from "radfish-react";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
 import { useOfflineStatus } from "./hooks/useOfflineStatus";
+import { Alert } from "@trussworks/react-uswds";
 
 function App() {
   const { toast, showToast, dismissToast } = useToast();
@@ -28,10 +29,10 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
+          <br />
           <Button type="button">Go To Documentation</Button>
         </a>
       </Alert>
-      <h1>Network Status Example</h1>
       <h3>Network Status: {isOffline ? "Offline" : "Online"}</h3>
     </div>
   );
