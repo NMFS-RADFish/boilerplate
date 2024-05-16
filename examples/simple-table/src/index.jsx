@@ -10,9 +10,7 @@ const offlineStorageConfig = {
   name: import.meta.env.VITE_INDEXED_DB_NAME,
   version: import.meta.env.VITE_INDEXED_DB_VERSION,
   stores: {
-    formData: "uuid, fullName, email, phoneNumber, numberOfFish, species, computedPrice, isDraft",
-    species: "name, price",
-    homebaseData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
+    formData: "uuid, fullName, numberOfFish, species, computedPrice, isDraft",
   },
 };
 
