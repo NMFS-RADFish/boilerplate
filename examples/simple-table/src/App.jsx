@@ -22,7 +22,7 @@ import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 const mockData = [
   {
     uuid: "uuid-123",
-    isDraft: false,
+    isDraft: true,
     fullName: "Samwise Gamgee",
     species: "Marlin",
     computedPrice: 50,
