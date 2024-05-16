@@ -18,6 +18,34 @@ import {
 import { useTableState } from "./contexts/TableWrapper";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 
+// mockData is used to populate the table with data, usually this would come from an API call.
+const mockData = [
+  {
+    uuid: "uuid-123",
+    isDraft: false,
+    fullName: "Samwise Gamgee",
+    species: "Marlin",
+    computedPrice: 50,
+    numberOfFish: 5,
+  },
+  {
+    uuid: "uuid-456",
+    isDraft: false,
+    fullName: "Galadriel",
+    species: "Mahimahi",
+    computedPrice: 1000,
+    numberOfFish: 20,
+  },
+  {
+    uuid: "uuid-789",
+    isDraft: false,
+    fullName: "Frodo Baggins",
+    species: "Grouper",
+    computedPrice: 80,
+    numberOfFish: 8,
+  },
+];
+
 function App() {
   const { tableCaption, table, headerNames, rowModel, setData } = useTableState();
   const { findOfflineData } = useOfflineStorage();
@@ -25,7 +53,7 @@ function App() {
   useEffect(() => {
     const fetchTableData = async () => {
       const data = await findOfflineData("formData");
-      setData(data);
+      setData([...mockData, ...data]);
     };
     fetchTableData();
   }, []);
