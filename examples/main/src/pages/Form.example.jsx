@@ -2,14 +2,7 @@ import "../styles/theme.css";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Checkbox, FormGroup, Grid } from "@trussworks/react-uswds";
-import {
-  TextInput,
-  Radio,
-  Select,
-  Button,
-  Label,
-  ErrorMessage,
-} from "../../../../packages/radfish-react";
+import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "radfish-react";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";

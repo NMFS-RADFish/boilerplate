@@ -2,7 +2,7 @@ import "../styles/theme.css";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Button, Label } from "../../../../packages/radfish-react";
+import { TextInput, Button, Label } from "radfish-react";
 import { TOTAL_STEPS, useFormState } from "../contexts/FormWrapper";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { CONSTANTS } from "../config/form";
@@ -21,7 +21,7 @@ const Form = ({ asyncFormOptions }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { formData, setFormData, stepBackward, stepForward, handleChange, init } = useFormState();
-  const { findOfflineData, createOfflineData } = useOfflineStorage();
+  const { findOfflineData } = useOfflineStorage();
 
   useEffect(() => {
     const loadData = async () => {
@@ -55,7 +55,15 @@ const Form = ({ asyncFormOptions }) => {
     );
   }
 
-  if (!formData.currentStep || formData.currentStep === 1) {
+  if (!formData.currentStep) {
+    return (
+      <div>
+        <p>Invlid Step</p>
+      </div>
+    );
+  }
+
+  if (formData.currentStep === 1) {
     return (
       <FormGroup>
         <Label htmlFor={fullName}>Full Name</Label>

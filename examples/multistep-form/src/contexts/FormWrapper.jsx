@@ -7,7 +7,7 @@
 import React, { createContext, useState, useCallback } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
 import { Alert } from "@trussworks/react-uswds";
-import { Form, Button } from "../../../../packages/radfish-react";
+import { Form, Button } from "radfish-react";
 import { COMMON_CONFIG } from "../config/common";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
@@ -133,9 +133,10 @@ export const handleComputedValuesLogic = (inputIds, formData, FORM_CONFIG) => {
 
 function FormInfoAnnotation() {
   return (
-    <Alert type="info" headingLevel={"h1"} heading="Example Form">
-      This is an example of a form with various input types. The form is designed to be used with
-      the `FormWrapper` component.
+    <Alert type="info" headingLevel={"h1"} heading="Multistep Form">
+      This is an example of a multistep form. This form will automatically save it's state into
+      offline storage. This includes the "currentStep" which allows the form to remain on the last
+      active form step.
       <br />
       <br />
       <strong>Note:</strong> Annotations are for informational purposes only. In production, you
