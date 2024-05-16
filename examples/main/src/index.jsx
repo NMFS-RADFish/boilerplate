@@ -36,6 +36,7 @@ const offlineStorageConfig = {
       "uuid, fullName, email, phoneNumber, numberOfFish, address1, address2, city, state, zipcode, occupation, department, species, computedPrice, isDraft",
     species: "name, price",
     homebaseData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
+    lastHomebaseSync: "uuid, time",
   },
 };
 

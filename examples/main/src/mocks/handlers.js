@@ -25,6 +25,7 @@ const data = [
     department: "",
     computedPrice: 0,
     isDraft: true,
+    currentStep: 1,
   },
   {
     uuid: "5f56f849-7aed-4d81-9eef-10db110ec95b",
@@ -42,6 +43,7 @@ const data = [
     department: "",
     computedPrice: 0,
     isDraft: false,
+    currentStep: 1,
   },
   {
     uuid: "ae16b984-5e01-407c-8c27-9e43f109328f",
@@ -59,6 +61,7 @@ const data = [
     department: "",
     computedPrice: 0,
     isDraft: true,
+    currentStep: 1,
   },
   {
     uuid: "15eac339-343d-4c09-a23d-7906f4cc0062",
@@ -75,6 +78,7 @@ const data = [
     occupation: "",
     computedPrice: 0,
     isDraft: true,
+    currentStep: 1,
   },
 ];
 
@@ -144,6 +148,13 @@ const homebase = [
   },
 ];
 
+export const species = [
+  { name: "grouper", price: 25.0 },
+  { name: "salmon", price: 58.0 },
+  { name: "marlin", price: 100.0 },
+  { name: "mahimahi", price: 44.0 },
+];
+
 export const handlers = [
   // This handler is used to mock the response of a GET request for an SVG or WOFF2 file
   http.get(/\.(svg|woff2)$/, async () => {
@@ -160,7 +171,9 @@ export const handlers = [
   // Note that this implementation can/should change depending on your needs
   http.get(MSW_ENDPOINT.SPECIES, () => {
     return HttpResponse.json(
-      { data: ["grouper", "salmon", "marlin", "mahimahi"] },
+      {
+        data: species,
+      },
       { status: 200 },
     );
   }),

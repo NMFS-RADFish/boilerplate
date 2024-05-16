@@ -2,14 +2,7 @@ import "../styles/theme.css";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Checkbox, FormGroup, Grid } from "@trussworks/react-uswds";
-import {
-  TextInput,
-  Radio,
-  Select,
-  Button,
-  Label,
-  ErrorMessage,
-} from "../../../../packages/radfish-react";
+import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "radfish-react";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
@@ -28,8 +21,8 @@ const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice 
 const Form = ({ asyncFormOptions }) => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { formData, setFormData, stepBackward } = useFormState();
-  const { findOfflineData, createOfflineData } = useOfflineStorage();
+  const { formData, setFormData, stepBackward, init } = useFormState();
+  const { findOfflineData } = useOfflineStorage();
 
   useEffect(() => {
     const loadData = async () => {
@@ -39,7 +32,7 @@ const Form = ({ asyncFormOptions }) => {
         });
 
         if (found) {
-          setFormData({ ...found, currentStep: 1, totalSteps: 3 });
+          setFormData({ ...found });
         } else {
           navigate("/form");
         }
@@ -49,7 +42,7 @@ const Form = ({ asyncFormOptions }) => {
   }, [id]);
 
   const handleInit = async () => {
-    const formId = await createOfflineData("formData", {});
+    const formId = await init({ initialStep: 1 });
     navigate(`${formId}`);
   };
 
@@ -166,7 +159,7 @@ export const StepOne = () => {
         <Button
           type="button"
           className="margin-top-1 margin-right-0 order-last"
-          onClick={id ? stepForward : handleInit}
+          onClick={stepForward}
           data-testid="step-forward"
           id="step-forward"
         >
