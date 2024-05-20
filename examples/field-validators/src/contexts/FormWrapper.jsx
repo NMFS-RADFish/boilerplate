@@ -77,7 +77,8 @@ export const handleInputValidationLogic = (name, value, validators) => {
 function FormInfoAnnotation() {
   return (
     <Alert type="info" headingLevel={"h1"} heading="Example Form">
-      This is an example of a form with form inputs that compute the values of other form inputs.
+      This is an example of a form with form inputs that handle input validation. If a fullName
+      input includes a number, the validator will return false and display the error
       <br />
       <br />
       <strong>Note:</strong> Annotations are for informational purposes only. In production, you
