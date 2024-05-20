@@ -27,9 +27,6 @@ export const ServerSync = () => {
 
     if (!isOffline) {
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
-      const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
-      await updateOfflineData(HOME_BASE_DATA, homebaseData);
 
       await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
       initializeLaunchSequence();
@@ -42,18 +39,14 @@ export const ServerSync = () => {
   };
 
   const initializeLaunchSequence = async () => {
-    const homebaseData = await findOfflineData(HOME_BASE_DATA);
+    const lastHomebaseSyncData = await findOfflineData(LAST_HOMEBASE_SYNC);
+    const time = lastHomebaseSyncData[lastHomebaseSyncData.length - 1].time;
+    const date = new Date(time).toLocaleString();
 
-    if (!homebaseData.length) {
-      setSyncStatus({ status: false, message: dataNotSyncedMsg });
-    }
-    // 7 is the amount of data expected from homebase response, but this can be any check
-    if (homebaseData.length === 7) {
-      setSyncStatus({ status: true, message: dataIsSyncedMsg });
-    }
+    setSyncStatus({ status: true, message: `Last home base sync set to: ${date}` });
     setTimeout(() => {
       setSyncStatus({ status: null, message: "" });
-    }, 1200);
+    }, 4000);
   };
 
   if (isLoading) {
@@ -61,11 +54,13 @@ export const ServerSync = () => {
   }
 
   return (
-    <>
+    <div className="server-sync">
       <Button onClick={syncToHomebase}>Sync to Server</Button>
-      <span className={`${syncStatus.status ? "text-green" : "text-red"} margin-left-2`}>
+      <span
+        className={`${syncStatus.status ? "text-green" : "text-red"} margin-left-2 margin-top-2`}
+      >
         {syncStatus.message}
       </span>
-    </>
+    </div>
   );
 };

@@ -76,7 +76,6 @@ function App() {
         </div>
         <Layout>
           <ServerSync />
-         
         </Layout>
       </div>
     </Router>

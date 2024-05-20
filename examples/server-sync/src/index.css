@@ -21,3 +21,12 @@ html,
 body {
   width: 100%;
 }
+
+.server-sync {
+  display: flex;
+  flex-direction: column; /* Adjust this if you want items to be in a row */
+  justify-content: center;
+  align-items: center;
+  text-align: center; /* Ensure text is centered */
+  height: 100vh; /* Adjust as necessary */
+}
