@@ -1,0 +1,16 @@
+{
+  "name": "@nmfs-radfish/react-radfish",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@tanstack/react-table": "^8.16.0",
+    "@trussworks/react-uswds": "^9.0.0"
+  }
+}
