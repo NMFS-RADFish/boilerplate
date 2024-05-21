@@ -1,7 +1,7 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Toast } from "radfish-react";
+import { Toast } from "@nmfs-radfish/react-radfish";
 import { FormWrapper } from "./contexts/FormWrapper";
 import Layout from "./components/Layout";
 import { Form } from "./pages/Form";
