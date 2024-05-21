@@ -7,7 +7,7 @@
 import React, { createContext, useState, useCallback } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
 import { Alert } from "@trussworks/react-uswds";
-import { Form, Button } from "radfish-react";
+import { Form, Button } from "@nmfs-radfish/react-radfish";
 import { COMMON_CONFIG } from "../config/common";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 

@@ -2,7 +2,7 @@ import "./index.css";
 import React, { useState, useEffect } from "react";
 import { FormGroup, Alert } from "@trussworks/react-uswds";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
-import { TextInput, Label, Button } from "radfish-react";
+import { TextInput, Label, Button } from "@nmfs-radfish/react-radfish";
 
 function App() {
   const [formData, setFormData] = useState({

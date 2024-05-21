@@ -1,7 +1,7 @@
 import "../styles/theme.css";
 import React from "react";
 import { FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Button, Label, ErrorMessage } from "radfish-react";
+import { TextInput, Button, Label, ErrorMessage } from "@nmfs-radfish/react-radfish";
 import { useFormState } from "../contexts/FormWrapper";
 import { CONSTANTS } from "../config/form";
 import { fullNameValidators } from "../utilities/fieldValidators";

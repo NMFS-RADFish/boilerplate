@@ -2,7 +2,7 @@ import "../styles/theme.css";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Button, Label } from "radfish-react";
+import { TextInput, Button, Label } from "@nmfs-radfish/react-radfish";
 import { TOTAL_STEPS, useFormState } from "../contexts/FormWrapper";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { CONSTANTS } from "../config/form";

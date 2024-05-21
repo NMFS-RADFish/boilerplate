@@ -5,7 +5,7 @@ import { FormWrapper } from "./contexts/FormWrapper";
 import Layout from "./components/Layout";
 import { Form } from "./pages/Form";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
-import { Toast } from "radfish-react";
+import { Toast } from "@nmfs-radfish/react-radfish";
 
 function App() {
   const { toast, showToast, dismissToast } = useToast();

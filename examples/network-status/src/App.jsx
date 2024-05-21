@@ -1,6 +1,6 @@
 import "./index.css";
 import React, { useEffect } from "react";
-import { Toast, Button } from "radfish-react";
+import { Toast, Button } from "@nmfs-radfish/react-radfish";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
 import { useOfflineStatus } from "./hooks/useOfflineStatus";
 import { Alert } from "@trussworks/react-uswds";
