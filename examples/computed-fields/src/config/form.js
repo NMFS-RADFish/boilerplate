@@ -5,7 +5,6 @@ const CONSTANTS = {
 };
 
 const computePriceFromQuantitySpecies = (numberOfFish, species) => {
-  console.log(numberOfFish, species);
   const speciesPriceMap = {
     grouper: 25.0,
     salmon: 58.0,
