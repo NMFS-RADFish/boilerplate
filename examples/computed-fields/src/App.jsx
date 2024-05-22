@@ -1,43 +1,38 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { FormWrapper } from "./contexts/FormWrapper";
 import Layout from "./components/Layout";
-import { Form } from "./pages/Form";
+import { ComputedForm } from "./pages/Form";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
 import { Toast } from "@nmfs-radfish/react-radfish";
+import { Alert } from "@trussworks/react-uswds";
 
 function App() {
-  const { toast, showToast, dismissToast } = useToast();
-
-  const handleFormSubmit = async () => {
-    showToast(TOAST_CONFIG.SUCCESS);
-    setTimeout(() => {
-      dismissToast();
-    }, TOAST_LIFESPAN);
-  };
-
   return (
     <Router>
       <div className="App">
-        <div className="toast-container">
-          <Toast toast={toast} />
-        </div>
         <Layout>
+          <FormInfoAnnotation />
           <Routes>
-            <Route
-              path="/"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <Form />
-                </FormWrapper>
-              }
-            />
+            <Route path="/" element={<ComputedForm />} />
           </Routes>
         </Layout>
       </div>
     </Router>
   );
 }
+
+const FormInfoAnnotation = () => {
+  return (
+    <Alert type="info" headingLevel={"h1"} heading="Example Form">
+      This is an example of a form with form inputs that compute the values of other form inputs.
+      <br />
+      <br />
+      <strong>Note:</strong> Annotations are for informational purposes only. In production, you
+      would remove the annotations. Components with annotations above them are optional. You can
+      choose whether or not to use them in your application.
+    </Alert>
+  );
+};
 
 export default App;

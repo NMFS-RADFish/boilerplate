@@ -4,7 +4,8 @@ const CONSTANTS = {
   computedPrice: "computedPrice",
 };
 
-const computePriceFromQuantitySpecies = (values) => {
+const computePriceFromQuantitySpecies = (numberOfFish, species) => {
+  console.log(numberOfFish, species);
   const speciesPriceMap = {
     grouper: 25.0,
     salmon: 58.0,
@@ -12,7 +13,7 @@ const computePriceFromQuantitySpecies = (values) => {
     mahimahi: 44.0,
   };
 
-  let computedPrice = parseInt(values[0] || 0) * parseInt(speciesPriceMap[values[1]] || 0);
+  let computedPrice = parseInt(numberOfFish || 0) * parseInt(speciesPriceMap[species] || 0);
   return computedPrice.toString();
 };
 
