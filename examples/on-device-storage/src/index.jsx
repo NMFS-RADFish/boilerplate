@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "../../main/src/index.css";
+import "./styles/theme.css";
 import App from "./App";
 import { OfflineStorageWrapper } from "./packages/contexts/OfflineStorageWrapper";
 
