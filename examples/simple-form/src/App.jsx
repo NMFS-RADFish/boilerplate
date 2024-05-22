@@ -1,7 +1,7 @@
 import "./index.css";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 import { FormWrapper } from "./contexts/FormWrapper";
-import SimpleForm from "./pages/Form";
+import SimpleForm, { SimpleFormDetails } from "./pages/Form";
 
 function App() {
   const { createOfflineData } = useOfflineStorage();
@@ -27,6 +27,9 @@ function App() {
       <h1>Simple Form Examples</h1>
       <FormWrapper onSubmit={handleOnSubmit}>
         <SimpleForm />
+      </FormWrapper>
+      <FormWrapper onSubmit={handleOnSubmit}>
+        <SimpleFormDetails />
       </FormWrapper>
     </div>
   );
