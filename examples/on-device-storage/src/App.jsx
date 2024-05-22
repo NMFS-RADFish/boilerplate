@@ -1,12 +1,7 @@
+import "./index.css";
 import React, { useState, useEffect } from "react";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
-import {
-  Button,
-  FormGroup,
-  Label,
-  TextInput,
-  Alert,
-} from "@trussworks/react-uswds";
+import { Button, Alert } from "@trussworks/react-uswds";
 
 const App = () => {
   const [formData, setFormData] = useState([]);
@@ -45,30 +40,35 @@ const App = () => {
     setFormData(allData);
   };
 
-  const updateData = async (e, uuid) => {
+  const updateData = async (e, data) => {
     e.preventDefault();
-    const { name, value } = e.target;
 
-    const dataToUpdate = formData.find((data) => data.uuid === uuid);
-    const updatedData = { ...dataToUpdate, [name]: value };
+    // const dataToUpdate = formData.find((data) => data.uuid === uuid);
+    const updatedData = {
+      ...data,
+      numberOfFish: Number((data.numberOfFish += 1)),
+      computedPrice: Number((data.computedPrice += 10)),
+    };
 
-    // Update the data in indexedDB
-    // Takes a string for the store name and an array of objects to update
+    // // Update the data in indexedDB
+    // // Takes a string for the store name and an array of objects to update
     await updateOfflineData("formData", [updatedData]);
 
-    // Update the state
+    // // Update the state
     setFormData((prevData) =>
-      prevData.map((data) => (data.uuid === uuid ? updatedData : data))
+      prevData.map((item) => (item.uuid === data.uuid ? updatedData : item))
     );
   };
 
-  const deleteData = async (e, uuid) => {
+  const deleteData = async (e, data) => {
     e.preventDefault();
-    if (uuid) {
+    if (data.uuid) {
       // Delete the data from indexedDB
       // Takes a string for the store name and an array of uuids to delete
-      await deleteOfflineData("formData", [uuid]);
-      setFormData((prevData) => prevData.filter((data) => data.uuid !== uuid));
+      await deleteOfflineData("formData", [data.uuid]);
+      setFormData((prevData) =>
+        prevData.filter((item) => item.uuid !== data.uuid)
+      );
     }
   };
 
@@ -105,65 +105,25 @@ const App = () => {
       </Button>
 
       <h2>Saved Data</h2>
+
       {formData &&
         formData.map((data, i) => {
           return (
             <div key={i}>
-              <div className="grid-row">
-                <FormGroup>
-                  <Label htmlFor="uuid">UUID</Label>
-                  <TextInput
-                    readOnly
-                    disabled
-                    id="uuid"
-                    name="uuid"
-                    type="text"
-                    value={data.uuid}
-                    onChange={(e) => updateData(e, data.uuid)}
-                  />
-                  <Label htmlFor="fullName">Name</Label>
-                  <TextInput
-                    id="fullName"
-                    name="fullName"
-                    type="text"
-                    value={data.fullName}
-                    onChange={(e) => updateData(e, data.uuid)}
-                  />
-                  <Label htmlFor="numberOfFish">Number of Fish</Label>
-                  <TextInput
-                    id="numberOfFish"
-                    name="numberOfFish"
-                    type="number"
-                    value={data.numberOfFish}
-                    onChange={(e) => updateData(e, data.uuid)}
-                  />
-                  <Label htmlFor="species">Species</Label>
-                  <TextInput
-                    id="species"
-                    name="species"
-                    type="text"
-                    value={data.species}
-                    onChange={(e) => updateData(e, data.uuid)}
-                  />
-                  <Label htmlFor="computedPrice">Price</Label>
-                  <TextInput
-                    id="computedPrice"
-                    name="computedPrice"
-                    type="number"
-                    value={data.computedPrice}
-                    onChange={(e) => updateData(e, data.uuid)}
-                  />
-                </FormGroup>
-                <div className="margin-left-2">
-                  <Button
-                    type="submit"
-                    secondary={true}
-                    onClick={(e) => deleteData(e, data.uuid)}
-                  >
-                    x
-                  </Button>
-                </div>
-              </div>
+              Name: {data?.fullName}
+              <br />
+              Species: {data?.species}
+              <br />
+              Number of Fish: {data?.numberOfFish}
+              <br />
+              Price: {data?.computedPrice}
+              <br />
+              <Button type="submit" onClick={(e) => updateData(e, data)}>
+                Update Data
+              </Button>
+              <Button type="submit" onClick={(e) => deleteData(e, data)}>
+                Delete Data
+              </Button>
               <hr />
             </div>
           );
