@@ -15,7 +15,6 @@ function App() {
       values[key] = value;
     }
 
-    // setFormData(values);
     createOfflineData("formData", values);
     // Handle form submission, usually by sending a POST request to a server
     // Example: fetch.post("/api/form", values)
