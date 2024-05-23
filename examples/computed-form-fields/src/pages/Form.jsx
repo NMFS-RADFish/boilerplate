@@ -13,7 +13,6 @@ const ComputedForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
     // TODO: Integrate toast component
   };
 
