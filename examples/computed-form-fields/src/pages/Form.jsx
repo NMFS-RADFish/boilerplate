@@ -14,9 +14,7 @@ const ComputedForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formData);
-    // how should we pop the toast here?
-    // should we include a toast component in this form? previously we were leveraging context for this
-    // is it worth it to create a ToastContext wrapper at App level?
+    // TODO: Integrate toast component
   };
 
   return (
@@ -37,7 +35,7 @@ const ComputedForm = () => {
             setFormData({
               ...formData,
               [numberOfFish]: value,
-              [computedPrice]: computePriceFromQuantitySpecies(value, formData?.species || ""),
+              [computedPrice]: computeFieldValue(value, formData?.species || ""),
             });
           }}
         />
@@ -55,7 +53,7 @@ const ComputedForm = () => {
             setFormData({
               ...formData,
               [species]: value,
-              [computedPrice]: computePriceFromQuantitySpecies(formData?.numberOfFish || 0, value),
+              [computedPrice]: computeFieldValue(formData?.numberOfFish || 0, value),
             });
           }}
         >
@@ -88,7 +86,7 @@ const ComputedForm = () => {
   );
 };
 
-const computePriceFromQuantitySpecies = (numberOfFish, species) => {
+const computeFieldValue = (numberOfFish, species) => {
   const speciesPriceMap = {
     grouper: 25.0,
     salmon: 58.0,
