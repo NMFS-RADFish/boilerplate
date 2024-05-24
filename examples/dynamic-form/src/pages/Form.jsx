@@ -1,5 +1,5 @@
 import "../styles/theme.css";
-import React from "react";
+import React, { useState } from "react";
 import { FormGroup, Grid } from "@trussworks/react-uswds";
 import { TextInput, Button, Label, Form } from "@nmfs-radfish/react-radfish";
 
@@ -12,52 +12,51 @@ const ConditionalForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // TODO: Integrate toast component
-  }
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
-    <FormGroup>
-      <Label htmlFor={fullName}>Full Name</Label>
-      <TextInput
-        id={fullName}
-        name={fullName}
-        type="text"
-        placeholder="Full Name"
-        value={formData[fullName] || ""}
-        onChange={(event) => {
-          const { value } = event.target;
-          setFormData({
-            ...formData,
-            [fullName]: value,
-            [nickname]: value === "" ? "" : formData[nickname],
-          });
-        }}
-      />
-      {formData[fullName] && (
-        <>
-          <Label htmlFor={nickname}>Nickname</Label>
-          <TextInput
-            id={nickname}
-            name={nickname}
-            type="text"
-            placeholder="Nickname"
-            onChange={(event) => {
-              const { value } = event.target;
-              setFormData({
-                ...formData,
-                [nickname]: value,
-              });
-            }}
-          />
-        </>
-      )}
-      <Grid className="display-flex flex-justify">
-        <Button type="submit" className="margin-top-1 margin-right-0 order-last">
-          Submit
-        </Button>
-      </Grid>
-    </FormGroup>
-
+      <FormGroup>
+        <Label htmlFor={fullName}>Full Name</Label>
+        <TextInput
+          id={fullName}
+          name={fullName}
+          type="text"
+          placeholder="Full Name"
+          value={formData[fullName] || ""}
+          onChange={(event) => {
+            const { value } = event.target;
+            setFormData({
+              ...formData,
+              [fullName]: value,
+              [nickname]: value === "" ? "" : formData[nickname],
+            });
+          }}
+        />
+        {formData[fullName] && (
+          <>
+            <Label htmlFor={nickname}>Nickname</Label>
+            <TextInput
+              id={nickname}
+              name={nickname}
+              type="text"
+              placeholder="Nickname"
+              onChange={(event) => {
+                const { value } = event.target;
+                setFormData({
+                  ...formData,
+                  [nickname]: value,
+                });
+              }}
+            />
+          </>
+        )}
+        <Grid className="display-flex flex-justify">
+          <Button type="submit" className="margin-top-1 margin-right-0 order-last">
+            Submit
+          </Button>
+        </Grid>
+      </FormGroup>
     </Form>
   );
 };
