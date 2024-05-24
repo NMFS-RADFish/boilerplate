@@ -1,4 +1,4 @@
-# Computed Form Fields Example
+# Conditional Form Fields Example
 
 This example includes an example on how to build a form where the values of certain input fields control the visibility of other fields within that form. In this case, filling out `fullName` with make the `nickname` field visible. Removing `fullName` will make `nickname` disappear, as well as remove `nickname` from `formState`
 
