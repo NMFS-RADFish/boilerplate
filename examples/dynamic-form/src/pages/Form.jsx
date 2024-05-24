@@ -1,16 +1,21 @@
 import "../styles/theme.css";
 import React from "react";
 import { FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Button, Label } from "@nmfs-radfish/react-radfish";
-import { useFormState } from "../contexts/FormWrapper";
-import { CONSTANTS } from "../config/form";
+import { TextInput, Button, Label, Form } from "@nmfs-radfish/react-radfish";
 
-const { fullName, nickname } = CONSTANTS;
+const fullName = "fullName";
+const nickname = "nickname";
 
-const Form = () => {
-  const { formData, handleChange, visibleInputs } = useFormState();
+const ConditionalForm = () => {
+  const [formData, setFormData] = useState({});
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // TODO: Integrate toast component
+  }
 
   return (
+    <Form onSubmit={handleSubmit}>
     <FormGroup>
       <Label htmlFor={fullName}>Full Name</Label>
       <TextInput
@@ -19,10 +24,16 @@ const Form = () => {
         type="text"
         placeholder="Full Name"
         value={formData[fullName] || ""}
-        onChange={handleChange}
-        linkedinputids={[nickname]}
+        onChange={(event) => {
+          const { value } = event.target;
+          setFormData({
+            ...formData,
+            [fullName]: value,
+            [nickname]: value === "" ? "" : formData[nickname],
+          });
+        }}
       />
-      {visibleInputs[nickname] && (
+      {formData[fullName] && (
         <>
           <Label htmlFor={nickname}>Nickname</Label>
           <TextInput
@@ -30,7 +41,13 @@ const Form = () => {
             name={nickname}
             type="text"
             placeholder="Nickname"
-            onChange={handleChange}
+            onChange={(event) => {
+              const { value } = event.target;
+              setFormData({
+                ...formData,
+                [nickname]: value,
+              });
+            }}
           />
         </>
       )}
@@ -40,7 +57,9 @@ const Form = () => {
         </Button>
       </Grid>
     </FormGroup>
+
+    </Form>
   );
 };
 
-export { Form };
+export { ConditionalForm };
