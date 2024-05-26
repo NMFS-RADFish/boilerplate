@@ -1,4 +1,6 @@
 import { useState } from "react";
+
+// Delete unused variables
 import { Button } from "radfish-react";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
 import RadfishAPIService from "../packages/services/APIService";
@@ -13,7 +15,6 @@ const dataNotSyncedMsg = "Data not synced, try resyncing";
 const dataIsSyncedMsg = "All data cached, ready to launch!";
 
 const HOME_BASE_DATA = "homebaseData";
-const LAST_HOMEBASE_SYNC = "lastHomebaseSync";
 
 export const ServerSync = () => {
   const { isOffline } = useOfflineStatus();
@@ -24,6 +25,12 @@ export const ServerSync = () => {
   const syncToHomebase = async () => {
     const lastSync = await findOfflineData(HOME_BASE_DATA);
     const lastSyncMsg = `Last sync at: ${findOfflineData("lastHomebaseSync")}`;
+    // Try put loading logic in API client then dataNotSyncedMsg and dataIsSyncedMsg will be used
+    // Use api client in example, fetch data and stash it in index db
+    const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
+    await updateOfflineData(HOME_BASE_DATA, homebaseData);
+
+    await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
 
     if (!isOffline) {
       setIsLoading(true);
@@ -39,14 +46,18 @@ export const ServerSync = () => {
   };
 
   const initializeLaunchSequence = async () => {
-    const lastHomebaseSyncData = await findOfflineData(LAST_HOMEBASE_SYNC);
-    const time = lastHomebaseSyncData[lastHomebaseSyncData.length - 1].time;
-    const date = new Date(time).toLocaleString();
+    const homebaseData = await findOfflineData(HOME_BASE_DATA);
 
-    setSyncStatus({ status: true, message: `Last home base sync set to: ${date}` });
+    if (!homebaseData.length) {
+      setSyncStatus({ status: false, message: dataNotSyncedMsg });
+    }
+    // 7 is the amount of data expected from homebase response, but this can be any check
+    if (homebaseData.length === 7) {
+      setSyncStatus({ status: true, message: dataIsSyncedMsg });
+    }
     setTimeout(() => {
       setSyncStatus({ status: null, message: "" });
-    }, 4000);
+    }, 1200);
   };
 
   if (isLoading) {

@@ -1,0 +1,44 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    },
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "no-debugger": "off",
+    "no-extra-semi": "off",
+    "no-undef": "off",
+    "no-redeclare": "off",
+    "no-dupe-keys": "off",
+    "no-func-assign": "off",
+    "no-duplicate-case": "off",
+    "no-empty": "off",
+    "no-ex-assign": "off",
+    "no-invalid-regexp": "off",
+    "no-irregular-whitespace": "off",
+    "no-obj-calls": "off",
+    "no-prototype-builtins": "off",
+    "no-regex-spaces": "off",
+    "no-sparse-arrays": "off",
+    "no-unexpected-multiline": "off",
+    "no-unreachable": "off",
+    "use-isnan": "off",
+    "valid-typeof": "off",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
+  }
+}

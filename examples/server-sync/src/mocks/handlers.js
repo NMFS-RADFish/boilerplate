@@ -248,7 +248,7 @@ export const handlers = [
     );
   }),
 
-  http.get("/homebase", ({ params }) => {
+  http.get("/homebase", () => {
     return HttpResponse.json(
       {
         data: homebase,

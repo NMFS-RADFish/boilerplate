@@ -9,7 +9,7 @@ export class StorageMethod {
    * @param {Object} _data - The data to create.
    * @throws {Error} If the method is not implemented.
    */
-  create(_tableNameOrKeyName, _data) {
+  create() {
     throw new Error("Method not implemented.");
   }
 
@@ -20,7 +20,7 @@ export class StorageMethod {
    * @param {Object} _criteria - The criteria to use for finding data.
    * @throws {Error} If the method is not implemented.
    */
-  find(_tableNameOrKeyName, _criteria) {
+  find() {
     throw new Error("Method not implemented.");
   }
 
@@ -32,7 +32,7 @@ export class StorageMethod {
    * @param {Object} _criteria - The criteria to use for updating data (required for localStorage only).
    * @throws {Error} If the method is not implemented.
    */
-  update(_tableNameOrKeyName, _data, _criteria) {
+  update() {
     throw new Error("Method not implemented.");
   }
 
@@ -43,7 +43,7 @@ export class StorageMethod {
    * @param {Array} _uuids - Array of UUIDs to use for deleting data.
    * @throws {Error} If the method is not implemented.
    */
-  delete(_tableNameOrKeyName, _uuids) {
+  delete() {
     throw new Error("Method not implemented.");
   }
 }

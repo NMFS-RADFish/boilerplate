@@ -3,7 +3,7 @@
  * @param {Object} queryOptions - The query parameters to be processed and validated.
  * @returns {string} - The processed query parameters as a string.
  */
-const processQueryParameters = (queryOptions) => {
+const processQueryParameters = () => {
   return "";
 };
 
