@@ -51,15 +51,17 @@ export default App;
 
 ## Adding Network Requests and Updating Offline Storage
 
-To add network requests and update the offline storage in the `syncToHomebase` function, follow the steps below:
+To add network requests and update the offline storage in the syncToHomebase function, follow the steps below:
 
-1. **Add Network Request Logic**:
-   Use the `RadfishAPIService` instance (`ApiService`) to make network requests. For example, you might fetch data from a specific endpoint.
+#### Add Network Request Logic:
 
-2. **Update Offline Storage**:
-   Once the data is fetched, store it in the offline storage using the `updateOfflineData` function.
+Use the RadfishAPIService instance (ApiService) to make network requests. For example, you might fetch data from a specific endpoint.
 
-Here's an example of how to integrate these steps into the `syncToHomebase` function:
+#### Update Offline Storage:
+
+Once the data is fetched, store it in the offline storage using the updateOfflineData function.
+
+Here is an example of how to integrate these steps into the syncToHomebase function:
 
 ```javascript
 import { useState } from "react";
@@ -93,10 +95,10 @@ export const ServerSync = () => {
 
       try {
         // Fetch data from the server
-        const data = await ApiService.getData("/endpoint");
+        const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
 
         // Update offline storage with the fetched data
-        await updateOfflineData(HOME_BASE_DATA, data);
+        await updateOfflineData(HOME_BASE_DATA, homebaseData);
         await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
 
         initializeLaunchSequence();
@@ -113,14 +115,18 @@ export const ServerSync = () => {
   };
 
   const initializeLaunchSequence = async () => {
-    const lastHomebaseSyncData = await findOfflineData(LAST_HOMEBASE_SYNC);
-    const time = lastHomebaseSyncData[lastHomebaseSyncData.length - 1].time;
-    const date = new Date(time).toLocaleString();
+    const homebaseData = await findOfflineData(HOME_BASE_DATA);
 
-    setSyncStatus({ status: true, message: `Last home base sync set to: ${date}` });
+    if (!homebaseData.length) {
+      setSyncStatus({ status: false, message: dataNotSyncedMsg });
+    }
+    // 7 is the amount of data expected from homebase response, but this can be any check
+    if (homebaseData.length === 7) {
+      setSyncStatus({ status: true, message: dataIsSyncedMsg });
+    }
     setTimeout(() => {
       setSyncStatus({ status: null, message: "" });
-    }, 4000);
+    }, 1200);
   };
 
   if (isLoading) {
