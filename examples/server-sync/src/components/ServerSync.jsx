@@ -25,8 +25,7 @@ export const ServerSync = () => {
   const syncToHomebase = async () => {
     const lastSync = await findOfflineData(HOME_BASE_DATA);
     const lastSyncMsg = `Last sync at: ${findOfflineData("lastHomebaseSync")}`;
-    // Try put loading logic in API client then dataNotSyncedMsg and dataIsSyncedMsg will be used
-    // Use api client in example, fetch data and stash it in index db
+
     const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
     await updateOfflineData(HOME_BASE_DATA, homebaseData);
 
@@ -34,7 +33,6 @@ export const ServerSync = () => {
 
     if (!isOffline) {
       setIsLoading(true);
-
       await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
       initializeLaunchSequence();
       setIsLoading(false);
