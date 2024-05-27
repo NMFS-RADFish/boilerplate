@@ -1,7 +1,7 @@
 {
   "description": "![test and build workflow](https://github.com/NMFS-RADFish/boilerplate/actions/workflows/run-tests.yml/badge.svg)",
   "workspaces": [
-    "./packages/radfish-react"
+    "./packages/react-radfish"
   ],
   "keywords": [],
   "author": "",

@@ -14,7 +14,7 @@ import {
   TablePaginationPageCount,
   TablePaginationGoToPage,
   TablePaginationSelectRowCount,
-} from "radfish-react";
+} from "@nmfs-radfish/react-radfish";
 import { useTableState } from "./contexts/TableWrapper";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 
@@ -101,7 +101,7 @@ function App() {
       </Table>
       <Alert type="info" slim={true}>
         Below are examples of the different pagination components available. Each component is
-        optional and can be used as needed. Components can be found in the `radfish-react`
+        optional and can be used as needed. Components can be found in the `react-radfish`
         directory.
       </Alert>
       <div className="grid-container margin-bottom-3">

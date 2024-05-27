@@ -108,7 +108,6 @@ Once you bootstrap a new radfish app, you will be given the following file struc
 ├── pages
 │   ├── Form.example.jsx
 │   └── Table.example.jsx
-├── react-radfish
 ├── services
 │   └── APIService.js
 ├── storage
@@ -170,7 +169,7 @@ This folder will contain files that represent services used in interface with 3r
 
 ### Building your first page and form
 
-When building applications with React, there is an existing component library, [react-uswds](https://trussworks.github.io/react-uswds/?path=/story/welcome--welcome) that our project extends for the purposes of building any Radfish application. These components maintain all functionality of `react-uswds` components, but are branded with NOAA themes and styles. These components live in `react-radfish` directory, and allow for development in a modern React environment with NOAA look and feel.
+When building applications with React, there is an existing component library, [react-uswds](https://trussworks.github.io/react-uswds/?path=/story/welcome--welcome) that our project extends for the purposes of building any Radfish application. These components maintain all functionality of `react-uswds` components, but are branded with NOAA themes and styles. These components live in `react-radfish` package, and allow for development in a modern React environment with NOAA look and feel.
 
 For reference on the full `react-uswds` library, you can reference the deployed storybook:
 
@@ -186,7 +185,7 @@ However, this component should be imported from `react-radfish`. Since `react-ra
 
 ```jsx
 
-import { TextInput, Label } from "../react-radfish";
+import { TextInput, Label } from "@nmfs-radfish/react-radfish";
 
 <Label htmlFor="fullName">Full Name</Label>
 <TextInput
@@ -283,7 +282,7 @@ You will notice, that the components above do not have any `className` assigned,
 If you need to add additional styles to a particular component, you can do so by adding another `className` **after** the component has been imported from `react-radfish`
 
 ```jsx
-import { Label } from "../react-radfish";
+import { Label } from "@nmfs-radfish/react-radfish";
 
 <Label htmlFor="fullName" className="your-custom-class">
   Full Name
@@ -952,7 +951,7 @@ When testing a React component, you will need to render out the component someho
 
 ```jsx
 import { render, screen } from "@testing-library/react";
-import { Toast } from "../../react-radfish";
+import { Toast } from "@nmfs-radfish/react-radfish";
 
 it("renders Success Alert when toast status is 'success'", () => {
   const toast = { status: "offline", message: "Application currently offline" };

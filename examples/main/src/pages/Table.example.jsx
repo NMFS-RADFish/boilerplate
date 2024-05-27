@@ -21,7 +21,7 @@ import {
   TablePaginationGoToPage,
   TablePaginationSelectRowCount,
   Toast,
-} from "radfish-react";
+} from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { Alert } from "@trussworks/react-uswds";
@@ -176,8 +176,7 @@ const SimpleTable = () => {
       </div>
       <Alert type="info" slim={true}>
         Below are examples of the different pagination components available. Each component is
-        optional and can be used as needed. Components can be found in the `react-radfish`
-        directory.
+        optional and can be used as needed. Components can be found in the `react-radfish` package.
       </Alert>
       <div className="grid-container margin-bottom-3">
         <div className="grid-row display-flex tablet:flex-justify flex-align-center mobile-lg:display-flex flex-justify-center">
