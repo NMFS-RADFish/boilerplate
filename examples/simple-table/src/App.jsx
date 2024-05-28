@@ -15,7 +15,7 @@ import {
   TablePaginationGoToPage,
   TablePaginationSelectRowCount,
 } from "@nmfs-radfish/react-radfish";
-import { useTableState } from "./contexts/TableWrapper";
+import { useTableState } from "./packages/contexts/TableWrapper";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 
 // mockData is used to populate the table with data, usually this would come from an API call.
@@ -47,7 +47,7 @@ const mockData = [
 ];
 
 function App() {
-  const { tableCaption, table, headerNames, rowModel, setData } = useTableState();
+  const { table, headerNames, rowModel, setData } = useTableState();
   const { findOfflineData } = useOfflineStorage();
 
   useEffect(() => {
@@ -61,7 +61,7 @@ function App() {
   return (
     <div className="grid-container">
       <InfoAnnotation />
-      <Table bordered caption={tableCaption || ""} fullWidth fixed>
+      <Table bordered fullWidth fixed>
         <TableHeader table={table}>
           <TableHeaderRow table={table}>
             {headerNames.map((header) => {
