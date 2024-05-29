@@ -40,12 +40,14 @@ const columnMap = [
   }),
 ];
 
+const pageSize = 10;
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
     <OfflineStorageWrapper config={offlineStorageConfig}>
-      <TableWrapper columnMap={columnMap} pageSize={10}>
+      <TableWrapper columnMap={columnMap} pageSize={pageSize}>
         <App />
       </TableWrapper>
     </OfflineStorageWrapper>

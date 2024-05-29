@@ -12,9 +12,10 @@ export const TableWrapper = ({ children, columnMap, pageSize }) => {
   const [data, setData] = React.useState([]);
   const [sorting, setSorting] = React.useState([]);
   const [showOfflineSubmit, setShowOfflineSubmit] = React.useState(false);
+  const defaultPageSize = 10;
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: pageSize || 10,
+    pageSize: pageSize || defaultPageSize,
   });
 
   const columns = React.useMemo(() => columnMap, []);
