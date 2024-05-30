@@ -84,7 +84,7 @@ root.render(
 );
 ```
 
-1. Use the provided `FormWrapper` context provider in this example, located in the `/src/contexts/FormWrapper.jsx` directory, to wrap child form components in a parent component. In this example `App.jsx` is the parent component.
+3. Use the provided `FormWrapper` context provider in this example, located in the `/src/contexts/FormWrapper.jsx` directory, to wrap child form components in a parent component. In this example `App.jsx` is the parent component.
    1. Create a `handleOnSubmit` handler and pass it to the wrapper:
 
 ```jsx
@@ -112,4 +112,4 @@ return (
 );
 ```
 
-2. Construct your form using the `react-radfish` components. See the `/src/pages/Form.jsx` file to see how to construct the form and use the methods available from `FormWrapper`.
+4. Construct your form using the `react-radfish` components. See the `/src/pages/Form.jsx` file to see how to construct the form and use the methods available from `FormWrapper`.
