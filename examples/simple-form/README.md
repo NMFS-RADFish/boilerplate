@@ -84,10 +84,32 @@ root.render(
 );
 ```
 
-1. Use the provided `FormWrapper` context provider in this example, located in the `/src/contexts/FormWrapper.jsx` directory, to wrap child form components in a parent component, in this example `App.jsx` is the parent component:
-   ```jsx
-   <FormWrapper onSubmit={handleOnSubmit}>
-     <SimpleForm />
-   </FormWrapper>
-   ```
-2. Construct your form using the `react-radfish` components. See the `/src/pages/Form.jsx` file to see how to construct the form and use the methods available from `FormWrapper`.
+1. Use the provided `FormWrapper` context provider in this example, located in the `/src/contexts/FormWrapper.jsx` directory, to wrap child form components in a parent component. In this example `App.jsx` is the parent component.
+   1. Create a `handleOnSubmit` handler and pass it to the wrapper:
+
+```jsx
+const { createOfflineData } = useOfflineStorage();
+
+const handleOnSubmit = (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const values = {};
+
+  for (let [key, value] of formData.entries()) {
+    values[key] = value;
+  }
+
+  createOfflineData("formData", values);
+  // Handle form submission, usually by sending a POST request to a server
+  // Example: fetch.post("/api/form", values)
+  console.log("Form submitted");
+};
+
+return (
+  <FormWrapper onSubmit={handleOnSubmit}>
+    <SimpleForm />
+  </FormWrapper>
+);
+```
+
+1. Construct your form using the `react-radfish` components. See the `/src/pages/Form.jsx` file to see how to construct the form and use the methods available from `FormWrapper`.
