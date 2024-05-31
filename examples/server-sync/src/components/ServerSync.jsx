@@ -1,7 +1,5 @@
 import { useState } from "react";
-
-// Delete unused variables
-import { Button } from "radfish-react";
+import { Button } from "@nmfs-radfish/react-radfish";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
 import RadfishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
