@@ -1,6 +1,6 @@
 import "../index.css";
 import React, { useEffect } from "react";
-import { FormGroup, Alert } from "@trussworks/react-uswds";
+import { FormGroup, Alert, Link } from "@trussworks/react-uswds";
 import { TextInput, Label, Button } from "@nmfs-radfish/react-radfish";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { useFormState } from "../contexts/FormWrapper";
@@ -12,20 +12,20 @@ function SimpleForm() {
         This is a simple form example. The form data is stored with the React state.
         <br />
         <br />
-        <a
+        <Link
           href="https://nmfs-radfish.github.io/documentation"
           target="_blank"
           rel="noopener noreferrer"
         >
           <Button type="button">Go To Documentation</Button>
-        </a>
-        <a
+        </Link>
+        <Link
           href="https://dexie.org/docs/Tutorial/Getting-started"
           target="_blank"
           rel="noopener noreferrer"
         >
           <Button type="button">Dexie Docs</Button>
-        </a>
+        </Link>
       </Alert>
       <div className="margin-bottom-2">
         <FormGroup>
@@ -73,20 +73,20 @@ export function SimpleFormDetails() {
         Please note that the form below will only populate when you have data saved in IndexedDB.
         <br />
         <br />
-        <a
+        <Link
           href="https://nmfs-radfish.github.io/documentation"
           target="_blank"
           rel="noopener noreferrer"
         >
           <Button type="button">Go To Documentation</Button>
-        </a>
-        <a
+        </Link>
+        <Link
           href="https://dexie.org/docs/Tutorial/Getting-started"
           target="_blank"
           rel="noopener noreferrer"
         >
           <Button type="button">Dexie Docs</Button>
-        </a>
+        </Link>
       </Alert>
 
       <FormGroup>
