@@ -1,42 +1,36 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Toast } from "@nmfs-radfish/react-radfish";
-import { FormWrapper } from "./contexts/FormWrapper";
 import Layout from "./components/Layout";
-import { Form } from "./pages/Form";
-import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
+import { Alert } from "@trussworks/react-uswds";
+import { FieldValidatorForm } from "./pages/Form";
 
 function App() {
-  const { toast, showToast, dismissToast } = useToast();
-
-  const handleFormSubmit = async () => {
-    showToast(TOAST_CONFIG.SUCCESS);
-    setTimeout(() => {
-      dismissToast();
-    }, TOAST_LIFESPAN);
-  };
-
   return (
-    <Router>
-      <div className="App">
-        <div className="toast-container">
-          <Toast toast={toast} />
-        </div>
+    <div className="App">
+      <FormInfoAnnotation />
+      <Router>
         <Layout>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <FormWrapper onSubmit={handleFormSubmit}>
-                  <Form />
-                </FormWrapper>
-              }
-            />
+            <Route path="/" element={<FieldValidatorForm />} />
           </Routes>
         </Layout>
-      </div>
-    </Router>
+      </Router>
+    </div>
+  );
+}
+
+function FormInfoAnnotation() {
+  return (
+    <Alert type="info" headingLevel={"h1"} heading="Example Form">
+      This is an example of a form with form inputs that handle input validation. If a fullName
+      input includes a number, the validator will return false and display the error
+      <br />
+      <br />
+      <strong>Note:</strong> Annotations are for informational purposes only. In production, you
+      would remove the annotations. Components with annotations above them are optional. You can
+      choose whether or not to use them in your application.
+    </Alert>
   );
 }
 

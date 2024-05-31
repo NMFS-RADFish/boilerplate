@@ -1,15 +1,42 @@
 import "../styles/theme.css";
-import React from "react";
+import React, { useState } from "react";
 import { FormGroup, Grid } from "@trussworks/react-uswds";
 import { TextInput, Button, Label, ErrorMessage } from "@nmfs-radfish/react-radfish";
-import { useFormState } from "../contexts/FormWrapper";
 import { CONSTANTS } from "../config/form";
 import { fullNameValidators } from "../utilities/fieldValidators";
 
 const { fullName } = CONSTANTS;
 
-const Form = () => {
-  const { formData, handleChange, handleBlur, validationErrors } = useFormState();
+const FieldValidatorForm = () => {
+  const [formData, setFormData] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => {
+      const updatedForm = { ...prev, [name]: value };
+      return updatedForm;
+    });
+  };
+
+  const handleBlur = (event, validators) => {
+    const { name, value } = event.target;
+    setValidationErrors((prev) => ({
+      ...prev,
+      ...handleInputValidationLogic(name, value, validators),
+    }));
+  };
+
+  const handleInputValidationLogic = (name, value, validators) => {
+    if (validators && validators.length > 0) {
+      for (let validator of validators) {
+        if (!validator.test(value)) {
+          return { [name]: validator.message };
+        }
+      }
+    }
+    return { [name]: null };
+  };
 
   return (
     <FormGroup>
@@ -24,7 +51,6 @@ const Form = () => {
         validationStatus={validationErrors[fullName] ? "error" : undefined}
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, fullNameValidators)}
-        data-testid="inputId"
       />
       {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
       <Grid className="display-flex flex-justify">
@@ -40,4 +66,4 @@ const Form = () => {
   );
 };
 
-export { Form };
+export { FieldValidatorForm };
