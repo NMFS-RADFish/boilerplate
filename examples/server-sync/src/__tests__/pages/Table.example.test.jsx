@@ -127,9 +127,6 @@ Dexie.mockImplementation(() => ({
 }));
 
 describe("Table", () => {
-  let indexedDBMethod;
-  let mockData;
-
   beforeEach(() => {
     // Mock Dexie
     Dexie.mockImplementation(() => ({

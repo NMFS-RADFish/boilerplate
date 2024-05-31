@@ -171,22 +171,6 @@ describe("handleInputVisibility", () => {
     vi.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
 
-    // Mock form configuration data
-    const FORM_CONFIG = {
-      input1: {
-        visibility: {
-          callback: (args, formData) => formData.condition1 === "sample input text 1",
-          args: [],
-        },
-      },
-      input2: {
-        visibility: {
-          callback: (args, formData) => formData.condition2 === "sample input text 2",
-          args: [],
-        },
-      },
-    };
-
     const TestComponent = () => {
       const { formData, visibleInputs } = formWrapper.useFormState();
       return (

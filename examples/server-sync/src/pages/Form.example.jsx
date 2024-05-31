@@ -107,15 +107,8 @@ const Form = ({ asyncFormOptions }) => {
 };
 
 export const StepOne = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { init, stepForward, stepBackward, formData, handleChange, handleBlur, validationErrors } =
+  const { stepForward, stepBackward, formData, handleChange, handleBlur, validationErrors } =
     useFormState();
-
-  const handleInit = async () => {
-    const formId = await init({ initialStep: 2 });
-    navigate(`${formId}`);
-  };
 
   return (
     <FormGroup error={validationErrors[fullName]}>

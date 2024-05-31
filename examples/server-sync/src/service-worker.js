@@ -14,8 +14,6 @@ import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate } from "workbox-strategies";
 
-const url = new URL(location.href);
-
 self.importScripts("/mockServiceWorker.js");
 
 clientsClaim();

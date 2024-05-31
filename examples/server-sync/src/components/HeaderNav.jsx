@@ -4,7 +4,6 @@ import { Title, Tag } from "@trussworks/react-uswds";
 import { Header, Navigation } from "radfish-react";
 import { version } from "../../package.json";
 import Logo from "../assets/noaa-logo-circle.svg";
-import { ServerSync } from "./ServerSync";
 
 /**
  * HeaderNav Component

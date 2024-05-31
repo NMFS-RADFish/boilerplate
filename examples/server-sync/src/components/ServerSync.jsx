@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "radfish-react";
+import { Button } from "@nmfs-radfish/react-radfish";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
 import RadfishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
@@ -13,7 +13,6 @@ const dataNotSyncedMsg = "Data not synced, try resyncing";
 const dataIsSyncedMsg = "All data cached, ready to launch!";
 
 const HOME_BASE_DATA = "homebaseData";
-const LAST_HOMEBASE_SYNC = "lastHomebaseSync";
 
 export const ServerSync = () => {
   const { isOffline } = useOfflineStatus();
@@ -25,9 +24,13 @@ export const ServerSync = () => {
     const lastSync = await findOfflineData(HOME_BASE_DATA);
     const lastSyncMsg = `Last sync at: ${findOfflineData("lastHomebaseSync")}`;
 
+    const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
+    await updateOfflineData(HOME_BASE_DATA, homebaseData);
+
+    await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
+
     if (!isOffline) {
       setIsLoading(true);
-
       await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
       initializeLaunchSequence();
       setIsLoading(false);
@@ -39,14 +42,18 @@ export const ServerSync = () => {
   };
 
   const initializeLaunchSequence = async () => {
-    const lastHomebaseSyncData = await findOfflineData(LAST_HOMEBASE_SYNC);
-    const time = lastHomebaseSyncData[lastHomebaseSyncData.length - 1].time;
-    const date = new Date(time).toLocaleString();
+    const homebaseData = await findOfflineData(HOME_BASE_DATA);
 
-    setSyncStatus({ status: true, message: `Last home base sync set to: ${date}` });
+    if (!homebaseData.length) {
+      setSyncStatus({ status: false, message: dataNotSyncedMsg });
+    }
+    // 7 is the amount of data expected from homebase response, but this can be any check
+    if (homebaseData.length === 7) {
+      setSyncStatus({ status: true, message: dataIsSyncedMsg });
+    }
     setTimeout(() => {
       setSyncStatus({ status: null, message: "" });
-    }, 4000);
+    }, 1200);
   };
 
   if (isLoading) {

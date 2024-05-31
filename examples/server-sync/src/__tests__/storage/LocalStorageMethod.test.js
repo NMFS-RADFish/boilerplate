@@ -12,7 +12,7 @@ describe("LocalStorageMethod", () => {
     mockData = { key: "value" };
 
     // Mock localStorage
-    Storage.prototype.getItem = vi.fn((key) => {
+    Storage.prototype.getItem = vi.fn(() => {
       return JSON.stringify([["mock-uuid", mockData]]);
     });
     Storage.prototype.setItem = vi.fn();
