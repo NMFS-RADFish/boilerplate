@@ -5,7 +5,7 @@ import { Table } from "../../pages/Table.example";
 import * as tableWrapper from "../../contexts/TableWrapper.example";
 import * as tanstackTable from "@tanstack/react-table";
 import Dexie from "dexie";
-import { generateUUID } from "../../packages/storage";
+import { generateUUID } from "../../packages/storage/cryptoWrapper.js";
 import { IndexedDBMethod } from "../../packages/storage/IndexedDBMethod.js";
 import * as offlineWrapper from "../../packages/contexts/OfflineStorageWrapper";
 

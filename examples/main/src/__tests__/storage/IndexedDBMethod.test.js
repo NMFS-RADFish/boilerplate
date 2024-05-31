@@ -4,7 +4,7 @@ import { generateUUID } from "../../packages/storage/cryptoWrapper.js";
 
 vi.mock("dexie");
 
-vi.mock("../../utilities/cryptoWrapper.js");
+vi.mock("../../packages/storage/cryptoWrapper.js");
 
 vi.mock("../../storage/indexedDB.js", () => ({
   db: {
