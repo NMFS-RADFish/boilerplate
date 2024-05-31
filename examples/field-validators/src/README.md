@@ -14,6 +14,17 @@ const handleBlur = (event, validators) => {
     ...handleInputValidationLogic(name, value, validators),
   }));
 };
+
+const handleInputValidationLogic = (name, value, validators) => {
+  if (validators && validators.length > 0) {
+    for (let validator of validators) {
+      if (!validator.test(value)) {
+        return { [name]: validator.message };
+      }
+    }
+  }
+  return { [name]: null };
+};
 ```
 
 2. Additionally, we need to include the validator needed to check the contents of the field input. In this case `fullNameValidators` has a single test that checks if the input contains a number. This array can include several tests for more complex validation logic. They are each included as separate objects within each validator array.

@@ -2,7 +2,6 @@ import "../styles/theme.css";
 import React, { useState } from "react";
 import { FormGroup, Grid } from "@trussworks/react-uswds";
 import { TextInput, Button, Label, ErrorMessage } from "@nmfs-radfish/react-radfish";
-import { handleInputValidationLogic } from "../contexts/FormWrapper";
 import { CONSTANTS } from "../config/form";
 import { fullNameValidators } from "../utilities/fieldValidators";
 
@@ -21,12 +20,22 @@ const FieldValidatorForm = () => {
   };
 
   const handleBlur = (event, validators) => {
-    console.log("blur");
     const { name, value } = event.target;
     setValidationErrors((prev) => ({
       ...prev,
       ...handleInputValidationLogic(name, value, validators),
     }));
+  };
+
+  const handleInputValidationLogic = (name, value, validators) => {
+    if (validators && validators.length > 0) {
+      for (let validator of validators) {
+        if (!validator.test(value)) {
+          return { [name]: validator.message };
+        }
+      }
+    }
+    return { [name]: null };
   };
 
   return (
