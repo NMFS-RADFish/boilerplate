@@ -17,7 +17,7 @@ global.fetch = vi.fn().mockResolvedValue({
 });
 
 vi.mock("dexie");
-vi.mock("../../utilities/cryptoWrapper.js");
+vi.mock("../../packages/storage/cryptoWrapper.js");
 
 vi.mock("../../packages/storage/indexedDB.js", () => ({
   db: {

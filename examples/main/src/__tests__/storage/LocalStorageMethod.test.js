@@ -1,6 +1,6 @@
 import { LocalStorageMethod } from "../../packages/storage/LocalStorageMethod";
 
-vi.mock("../../utilities/cryptoWrapper.js", () => ({
+vi.mock("../../packages/storage/cryptoWrapper.js", () => ({
   generateUUID: vi.fn(() => "mock-uuid"),
 }));
 
