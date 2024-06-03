@@ -16,8 +16,10 @@ const app = new Application({
   },
 });
 
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+app.on("ready", () => {
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  );
+});
