@@ -1,6 +1,5 @@
-/* include trussworks css early on in app
-/*  this could eventually live within our component library, and bundled as a dependency
-*/
+/* trussworks component styles */
+@import "@trussworks/react-uswds/lib/uswds.css";
 @import "@trussworks/react-uswds/lib/index.css";
 
 /* normalize css */

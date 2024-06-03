@@ -14,6 +14,7 @@ import {
   Header,
 } from "@trussworks/react-uswds";
 import { useState } from "react";
+
 import HomePage from "./pages/Home";
 
 function App() {
@@ -28,10 +29,10 @@ function App() {
       <main id="main-content">
         <GridContainer>
           <BrowserRouter>
-            <Header basic showMobileOverlay={isExpanded}>
+            <Header basic={true} showMobileOverlay={isExpanded}>
               <div className="usa-nav-container">
                 <div className="usa-navbar">
-                  <Title>My Application</Title>
+                  <Title>RADFish Application</Title>
                   <NavMenuButton
                     onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
                     label="Menu"

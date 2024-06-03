@@ -14,15 +14,17 @@ function HomePage() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div>
-      <h1>Welcome</h1>
-      <p>Built with RADFish 🐟</p>
+    <div className="display-flex flex-column flex-align-center">
+      <img src="/icons/radfish.png" alt="RADFish logo" height="200" />
+      <p>
+        Edit <code>src/App.js</code> and save to reload.
+      </p>
       <p>
         <Link
           to="https://nmfs-radfish.github.io/documentation/docs/getting-started"
           target="_blank"
         >
-          <Button>Get started</Button>
+          <Button>Documentation</Button>
         </Link>
       </p>
     </div>
