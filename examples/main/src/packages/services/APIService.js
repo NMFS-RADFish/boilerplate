@@ -20,15 +20,15 @@ const setHeaders = (token) => {
 };
 
 /**
- * Class for interacting with the Radfish API
+ * Class for interacting with the RADFish API
  */
-class RadfishAPIService {
+class RADFishAPIService {
   static data = null;
   static error = null;
   static token = null;
 
   /**
-   * Constructor for RadfishAPIService
+   * Constructor for RADFishAPIService
    * @param {string} token - The access token used for API authentication.
    */
   constructor(token) {
@@ -147,4 +147,4 @@ class RadfishAPIService {
   }
 }
 
-export default RadfishAPIService;
+export default RADFishAPIService;

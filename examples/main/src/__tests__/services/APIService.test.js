@@ -1,9 +1,9 @@
-import RadfishAPIService from "../../packages/services/APIService";
+import RADFishAPIService from "../../packages/services/APIService";
 
-describe("RadfishAPIService", () => {
+describe("RADFishAPIService", () => {
   beforeEach(() => {
-    RadfishAPIService.data = null;
-    RadfishAPIService.error = null;
+    RADFishAPIService.data = null;
+    RADFishAPIService.error = null;
   });
 
   describe("get", () => {
@@ -14,7 +14,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(responseData),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const data = await apiService.get("some-endpoint");
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -33,7 +33,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(responseData),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const data = await apiService.get("some-endpoint");
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -52,7 +52,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(errorResponse),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const error = await apiService.get("some-endpoint");
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -74,7 +74,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(responseData),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const data = await apiService.post("some-endpoint", requestData);
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -96,7 +96,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(responseData),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const data = await apiService.post("some-endpoint", requestData);
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -118,7 +118,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(errorResponse),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const error = await apiService.post("some-endpoint", requestData);
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -142,7 +142,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(responseData),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const data = await apiService.put("some-endpoint", requestData);
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -164,7 +164,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(responseData),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const data = await apiService.put("some-endpoint", requestData);
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -186,7 +186,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(errorResponse),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const error = await apiService.put("some-endpoint", requestData);
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -210,7 +210,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(responseData),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const data = await apiService.delete("some-endpoint", requestData);
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -232,7 +232,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(responseData),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const data = await apiService.delete("some-endpoint", requestData);
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {
@@ -254,7 +254,7 @@ describe("RadfishAPIService", () => {
         json: vi.fn().mockResolvedValue(errorResponse),
       });
 
-      const apiService = new RadfishAPIService("your-token");
+      const apiService = new RADFishAPIService("your-token");
       const error = await apiService.delete("some-endpoint", requestData);
 
       expect(global.fetch).toHaveBeenCalledWith("some-endpoint", {

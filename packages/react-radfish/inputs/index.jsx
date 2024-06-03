@@ -7,30 +7,44 @@ import {
   ErrorMessage as TwErrorMessage,
 } from "@trussworks/react-uswds";
 
-const RadfishInput = (props) => {
-  return <TwTextInput {...props} className={`radfish-input ${props.className || ""}`} />;
+const RADFishInput = (props) => {
+  return (
+    <TwTextInput
+      {...props}
+      className={`radfish-input ${props.className || ""}`}
+    />
+  );
 };
 
-const RadfishRadio = (props) => {
-  return <TwRadio {...props} className={`radfish-radio ${props.className || ""}`} />;
+const RADFishRadio = (props) => {
+  return (
+    <TwRadio {...props} className={`radfish-radio ${props.className || ""}`} />
+  );
 };
 
-const RadfishSelect = (props) => {
-  return <TwSelect {...props} className={`radfish-select ${props.className || ""}`} />;
+const RADFishSelect = (props) => {
+  return (
+    <TwSelect
+      {...props}
+      className={`radfish-select ${props.className || ""}`}
+    />
+  );
 };
 
-const RadfishInputLabel = (props) => {
-  return <TwLabel {...props} className={`radfish-label ${props.className || ""}`} />;
+const RADFishInputLabel = (props) => {
+  return (
+    <TwLabel {...props} className={`radfish-label ${props.className || ""}`} />
+  );
 };
 
-const RadfishErrorMessage = (props) => {
+const RADFishErrorMessage = (props) => {
   return <TwErrorMessage {...props} className={`${props.className || ""}`} />;
 };
 
 export {
-  RadfishInput as TextInput,
-  RadfishRadio as Radio,
-  RadfishSelect as Select,
-  RadfishInputLabel as Label,
-  RadfishErrorMessage as ErrorMessage,
+  RADFishInput as TextInput,
+  RADFishRadio as Radio,
+  RADFishSelect as Select,
+  RADFishInputLabel as Label,
+  RADFishErrorMessage as ErrorMessage,
 };

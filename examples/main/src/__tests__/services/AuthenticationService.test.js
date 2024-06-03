@@ -1,9 +1,9 @@
 import { vi } from "vitest";
-import RadfishAuthenticationService from "../../packages/services/AuthenticationService";
+import RADFishAuthenticationService from "../../packages/services/AuthenticationService";
 
-describe("RadfishAuthenticationService", () => {
+describe("RADFishAuthenticationService", () => {
   beforeEach(() => {
-    RadfishAuthenticationService.error = null;
+    RADFishAuthenticationService.error = null;
     localStorage.clear();
   });
 
@@ -19,7 +19,7 @@ describe("RadfishAuthenticationService", () => {
         json: vi.fn().mockResolvedValue(responseJson),
       });
 
-      await RadfishAuthenticationService.signIn(loginId, password, endpoint);
+      await RADFishAuthenticationService.signIn(loginId, password, endpoint);
 
       expect(global.fetch).toHaveBeenCalledWith(endpoint, {
         method: "POST",
@@ -45,7 +45,7 @@ describe("RadfishAuthenticationService", () => {
         json: vi.fn().mockResolvedValue({ error: "Sign-in error" }),
       });
 
-      await RadfishAuthenticationService.signIn(loginId, password, endpoint);
+      await RADFishAuthenticationService.signIn(loginId, password, endpoint);
 
       expect(global.fetch).toHaveBeenCalledWith(endpoint, {
         method: "POST",
@@ -74,7 +74,7 @@ describe("RadfishAuthenticationService", () => {
 
       localStorage.setItem("token", token); // emulate logged in state
 
-      await RadfishAuthenticationService.signOut(token, endpoint);
+      await RADFishAuthenticationService.signOut(token, endpoint);
 
       expect(global.fetch).toHaveBeenCalledWith(endpoint, {
         method: "POST",
@@ -100,7 +100,7 @@ describe("RadfishAuthenticationService", () => {
 
       localStorage.setItem("token", token); // emulate logged in state
 
-      await RadfishAuthenticationService.signOut(token, endpoint);
+      await RADFishAuthenticationService.signOut(token, endpoint);
 
       expect(global.fetch).toHaveBeenCalledWith(endpoint, {
         method: "POST",

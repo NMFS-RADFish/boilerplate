@@ -53,8 +53,8 @@
     - [Unit Tests](#unit-tests)
   - [Pattern 1 Functional Unit Tests - utilities and internal modules](#pattern-1-functional-unit-tests---utilities-and-internal-modules)
   - [Pattern 2 Functional Unit Tests - components and interactions](#pattern-2-functional-unit-tests---components-and-interactions)
-      - [Basic Unit Test (component)](#basic-unit-test-component)
-      - [Testing User Interactions](#testing-user-interactions)
+    - [Basic Unit Test (component)](#basic-unit-test-component)
+    - [Testing User Interactions](#testing-user-interactions)
     - [Testing mocks](#testing-mocks)
   - [Pattern 3 Browser integration testing (In progress)](#pattern-3-browser-integration-testing-in-progress)
   - [Pattern 4 Accessibility Testing (In progress)](#pattern-4-accessibility-testing-in-progress)
@@ -125,7 +125,7 @@ Once you bootstrap a new radfish app, you will be given the following file struc
 
 The files within pages are collections of components that can be built leveraging a combination of the application specific components in the `components` directory, along with any components from the `react-radfish` package.
 
-You will notice that the files shipped in this directory have an `.example` file extension. This is by design, to make it clear that these are examples of how to build pages with radfish design patterns as described in this guide.
+You will notice that the files shipped in this directory have an `.example` file extension. This is by design, to make it clear that these are examples of how to build pages with RADFish design patterns as described in this guide.
 
 Feel free to copy/paste/refactor these pages to suit your application's needs.
 
@@ -169,7 +169,7 @@ This folder will contain files that represent services used in interface with 3r
 
 ### Building your first page and form
 
-When building applications with React, there is an existing component library, [react-uswds](https://trussworks.github.io/react-uswds/?path=/story/welcome--welcome) that our project extends for the purposes of building any Radfish application. These components maintain all functionality of `react-uswds` components, but are branded with NOAA themes and styles. These components live in `react-radfish` package, and allow for development in a modern React environment with NOAA look and feel.
+When building applications with React, there is an existing component library, [react-uswds](https://trussworks.github.io/react-uswds/?path=/story/welcome--welcome) that our project extends for the purposes of building any RADFish application. These components maintain all functionality of `react-uswds` components, but are branded with NOAA themes and styles. These components live in `react-radfish` package, and allow for development in a modern React environment with NOAA look and feel.
 
 For reference on the full `react-uswds` library, you can reference the deployed storybook:
 
@@ -263,7 +263,7 @@ Branding refers to the process of creating a distinct identity for a product or 
 You will notice, that the components above do not have any `className` assigned, and you may be wondering how to style that component. To do this, there are a couple of things to keep in mind:
 
 1. Each component in `react-radfish` has it's own scoped css file, that modifies the existing `@trussworks` css in order to inject NOAA styles. This file should not be touched. If you notice a bug or issue, please see `CONTRIBUTING`
-2. You can modify the general theme of these components in the `styles/theme.css` file. You can change things like color variables, font-family, and line-height here, and they will be propagated throughout the application, as well as throughout `react-radfish` . Radfish utilizes css variables, and can be used like so:
+2. You can modify the general theme of these components in the `styles/theme.css` file. You can change things like color variables, font-family, and line-height here, and they will be propagated throughout the application, as well as throughout `react-radfish` . RADFish utilizes css variables, and can be used like so:
 
 ```css
 // styles/theme.js
@@ -312,7 +312,9 @@ Step-by-step instructions to configure offline storage:
    1. **`LocalStorageMethod`** — Requires one parameter, the key name for localStorage.
 
       ```jsx
-      const storageMethod = new LocalStorageMethod(import.meta.env.VITE_LOCAL_STORAGE_KEY);
+      const storageMethod = new LocalStorageMethod(
+        import.meta.env.VITE_LOCAL_STORAGE_KEY
+      );
       ```
 
    2. **`IndexedDBStorageMethod`** — Requires three parameters, the db name, db version, and table configuration.
@@ -321,7 +323,7 @@ Step-by-step instructions to configure offline storage:
       const storageMethod = new IndexedDBStorageMethod(
         import.meta.env.VITE_INDEXED_DB_NAME,
         import.meta.env.VITE_INDEXED_DB_VERSION,
-        { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" },
+        { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" }
       );
       ```
 
@@ -332,9 +334,11 @@ Step-by-step instructions to configure offline storage:
    const storageMethod = new IndexedDBStorageMethod(
      import.meta.env.VITE_INDEXED_DB_NAME,
      import.meta.env.VITE_INDEXED_DB_VERSION,
-     { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" },
+     { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" }
    );
-   const storageMethod = new LocalStorageMethod(import.meta.env.VITE_LOCAL_STORAGE_KEY);
+   const storageMethod = new LocalStorageMethod(
+     import.meta.env.VITE_LOCAL_STORAGE_KEY
+   );
    // 2. Create Storage Method
    const storageModel = StorageModelFactory.createModel(storageMethod);
    ```
@@ -366,7 +370,8 @@ Example usage when using IndexedDB
 import useOfflineStorage from "./useOfflineStorage";
 
 function MyComponent() {
-  const { createOfflineData, findOfflineData, updateOfflineData } = useOfflineStorage();
+  const { createOfflineData, findOfflineData, updateOfflineData } =
+    useOfflineStorage();
   const data = { species: "Grouper", numberOfFish: 100 };
 
   // Create new offline data entry
@@ -390,16 +395,16 @@ export default MyComponent;
 
 ## Interfacing with backend services
 
-The **`RadfishAPIService`** is a class designed to facilitate interactions with a backend API. It simplifies making HTTP requests (GET, POST, PUT, DELETE) by encapsulating them into easy-to-use class methods. This service handles the construction of requests, including headers and query parameters, and processes responses.
+The **`RADFishAPIService`** is a class designed to facilitate interactions with a backend API. It simplifies making HTTP requests (GET, POST, PUT, DELETE) by encapsulating them into easy-to-use class methods. This service handles the construction of requests, including headers and query parameters, and processes responses.
 
 ### Initializing the Service
 
-To use **`RadfishAPIService`**, you should use the included `APIService.js` module that is provided in the radfish application.
+To use **`RADFishAPIService`**, you should use the included `APIService.js` module that is provided in the radfish application.
 
 ```jsx
-import RadfishAPIService from "./RadfishAPIService";
+import RADFishAPIService from "./RADFishAPIService";
 
-const ApiService = new RadfishAPIService("your_access_token_here");
+const ApiService = new RADFishAPIService("your_access_token_here");
 ```
 
 ### Making API Requests
@@ -494,9 +499,9 @@ Responses and errors from the API are returned as promises.
 
 ### Mock API
 
-As a frontend developer, it can sometimes be a blocker when you are developing a feature that has a dependency on an external API. Often times, you can be waiting for a backend developer to finish building our their API endpoints before you can continue building your feature. RadfishApp ships with a built-in mock server that allows the frontend developer to “stub out” and mock API requests/responses without this hard dependency during development.
+As a frontend developer, it can sometimes be a blocker when you are developing a feature that has a dependency on an external API. Often times, you can be waiting for a backend developer to finish building our their API endpoints before you can continue building your feature. RADFishApp ships with a built-in mock server that allows the frontend developer to “stub out” and mock API requests/responses without this hard dependency during development.
 
-More specifically, RadfishApp ships with [mock service worker](https://mswjs.io/) and is preconfigured in the boilerplate application.
+More specifically, RADFishApp ships with [mock service worker](https://mswjs.io/) and is preconfigured in the boilerplate application.
 
 At the entrypoint of the React application, we enable API mocking with the `enableMocking` function:
 
@@ -515,7 +520,7 @@ enableMocking().then(() => {
   root.render(
     <React.StrictMode>
       <App />
-    </React.StrictMode>,
+    </React.StrictMode>
   );
 });
 ```
@@ -673,21 +678,29 @@ export const FormWrapper = ({ children, onSubmit }) => {
   // here, we are using the `visibleOnMount` configuration property, to correctly show/hide each input when mounted to DOM
   const [visibleInputs, setVisibleInputs] = useState(() =>
     Object.fromEntries(
-      Object.entries(FORM_CONFIG).map(([key, config]) => [key, config.visibility?.visibleOnMount]),
-    ),
+      Object.entries(FORM_CONFIG).map(([key, config]) => [
+        key,
+        config.visibility?.visibleOnMount,
+      ])
+    )
   );
 
   // triggered whenever an input value is changed in form. This is the main state handler, and is responsible, in turn, to execute any complex callbacks
   const handleChange = useCallback(
     (event) => {
       const { name, value } = event.target; // name corresponds to the input name property, and should refer to CONTSTANTS
-      const linkedinputids = event.target.getAttribute("linkedinputids")?.split(","); // linkedinput ids propertry, should also correspond to CONSTANTS. See Markup section below for more details
+      const linkedinputids = event.target
+        .getAttribute("linkedinputids")
+        ?.split(","); // linkedinput ids propertry, should also correspond to CONSTANTS. See Markup section below for more details
 
       setFormData((prev) => {
         const updatedForm = { ...prev, [name]: value };
         if (linkedinputids) {
           // if there are linkedinputids, handle the complex behavior handler as needed.
-          const updatedComplexForm = handleInputVisibility(linkedinputids, updatedForm);
+          const updatedComplexForm = handleInputVisibility(
+            linkedinputids,
+            updatedForm
+          );
           // ...add other handlers as needed (for instance, handleComputedValues)
           return updatedComplexForm;
         } else {
@@ -695,7 +708,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
         }
       });
     },
-    [handleInputVisibility], // include callbacks into dependency array
+    [handleInputVisibility] // include callbacks into dependency array
   );
 
   const handleInputVisibility = useCallback((inputIds, formData) => {
@@ -794,7 +807,7 @@ The behavior should now be working as expected:
 
 https://github.com/NMFS-RADFish/boilerplate/assets/35090461/879f212e-8dcf-43dd-8958-97a63db603d8
 
-This pattern can be followed and extended to suit any complex behaviors you may encounter as a developer building out a Radfish form.
+This pattern can be followed and extended to suit any complex behaviors you may encounter as a developer building out a RADFish form.
 
 ## Multi-Entry Form Submit
 
@@ -874,7 +887,7 @@ const submitMultipleEntries = () => {
 
 There are cases where you may want to create a form that is handled in several different "steps". This means that there will be different inputs on differet pages (or steps) that should all eventually be submitted when the form's last page/step is complete.
 
-Radfish supports this type of form with the following built-in features:
+RADFish supports this type of form with the following built-in features:
 
 - Data within a multi-step form will be cached while the form is being filled. This means, that if a user leaves a multi-step form before that form is submitted, the data already inputted in the form will pre-populate the correct field when the user returns to the form.
 
@@ -984,7 +997,7 @@ it("should display the homepage", () => {
   const { queryByText, container } = render(
     <tableWrapper.TableWrapper>
       <SimpleTable />
-    </tableWrapper.TableWrapper>,
+    </tableWrapper.TableWrapper>
   );
 
   const tableRow = screen.queryByTestId("table-body-row");

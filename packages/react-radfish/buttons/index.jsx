@@ -1,7 +1,10 @@
 import "./style.css";
-import { Button as TwButton, NavMenuButton as TwNavMenuButton } from "@trussworks/react-uswds";
+import {
+  Button as TwButton,
+  NavMenuButton as TwNavMenuButton,
+} from "@trussworks/react-uswds";
 
-const RadfishButton = (props) => {
+const RADFishButton = (props) => {
   return (
     <TwButton {...props} className={`radfish-button ${props.className || ""}`}>
       {props.children}
@@ -9,8 +12,13 @@ const RadfishButton = (props) => {
   );
 };
 
-const RadfishNavMenuButton = (props) => {
-  return <TwNavMenuButton {...props} className={`radfish-menu-btn ${props.className || ""}`} />;
+const RADFishNavMenuButton = (props) => {
+  return (
+    <TwNavMenuButton
+      {...props}
+      className={`radfish-menu-btn ${props.className || ""}`}
+    />
+  );
 };
 
-export { RadfishButton as Button, RadfishNavMenuButton as NavMenuButton };
+export { RADFishButton as Button, RADFishNavMenuButton as NavMenuButton };

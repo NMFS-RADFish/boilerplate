@@ -1,4 +1,4 @@
-class RadfishAuthenticationService {
+class RADFishAuthenticationService {
   static loading = false;
   static error = null;
 
@@ -62,4 +62,4 @@ class RadfishAuthenticationService {
   }
 }
 
-export default new RadfishAuthenticationService();
+export default new RADFishAuthenticationService();

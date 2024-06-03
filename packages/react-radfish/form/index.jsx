@@ -1,6 +1,6 @@
 import "./style.css";
 import { Search as TwSearch } from "@trussworks/react-uswds";
-const RadfishForm = (props) => {
+const RADFishForm = (props) => {
   return (
     <form {...props} className={`radfish-form ${props.className || ""}`}>
       {props.children}
@@ -8,8 +8,13 @@ const RadfishForm = (props) => {
   );
 };
 
-const RadfishSearchForm = (props) => {
-  return <TwSearch {...props} className={`radfish-search ${props.className || ""}`} />;
+const RADFishSearchForm = (props) => {
+  return (
+    <TwSearch
+      {...props}
+      className={`radfish-search ${props.className || ""}`}
+    />
+  );
 };
 
-export { RadfishForm as Form, RadfishSearchForm as Search };
+export { RADFishForm as Form, RADFishSearchForm as Search };
