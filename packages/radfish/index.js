@@ -33,7 +33,7 @@ export class Application {
       console.debug("Application initialized");
       const worker = await this._installServiceWorker(
         this._options?.mocks?.handlers,
-        this._options?.mocks?.url
+        this._options?.serviceWorker?.url
       );
       this._dispatch("ready", { worker });
     });
@@ -51,7 +51,9 @@ export class Application {
     window.addEventListener("offline", handleOffline, true);
   }
 
-  async _installServiceWorker(handlers, url = "/service-worker.js") {
+  async _installServiceWorker(handlers, url) {
+    if (!url) return null;
+    console.info("Installing service worker");
     const worker = setupWorker(...((await handlers)?.default || []));
     const onUnhandledRequest = "bypass";
 

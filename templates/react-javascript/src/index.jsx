@@ -7,11 +7,13 @@ import { Application } from "@nmfs-radfish/radfish";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const app = new Application({
-  mocks: {
+  serviceWorker: {
     url:
       import.meta.env.MODE === "development"
         ? "/mockServiceWorker.js"
         : "/service-worker.js",
+  },
+  mocks: {
     handlers: import("../mocks/handlers"),
   },
 });
