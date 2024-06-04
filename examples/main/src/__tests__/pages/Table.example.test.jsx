@@ -5,7 +5,7 @@ import { Table } from "../../pages/Table.example";
 import * as tableWrapper from "../../contexts/TableWrapper.example";
 import * as tanstackTable from "@tanstack/react-table";
 import Dexie from "dexie";
-import { generateUUID } from "../../utilities/cryptoWrapper.js";
+import { generateUUID } from "../../packages/storage/cryptoWrapper.js";
 import { IndexedDBMethod } from "../../packages/storage/IndexedDBMethod.js";
 import * as offlineWrapper from "../../packages/contexts/OfflineStorageWrapper";
 
@@ -17,7 +17,7 @@ global.fetch = vi.fn().mockResolvedValue({
 });
 
 vi.mock("dexie");
-vi.mock("../../utilities/cryptoWrapper.js");
+vi.mock("../../packages/storage/cryptoWrapper.js");
 
 vi.mock("../../packages/storage/indexedDB.js", () => ({
   db: {
