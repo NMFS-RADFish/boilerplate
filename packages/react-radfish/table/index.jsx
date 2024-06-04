@@ -5,29 +5,32 @@ import { Icon } from "@trussworks/react-uswds";
 import { TextInput, Select } from "../inputs";
 import { Button } from "../buttons";
 
-const RadfishTable = (props) => {
+const RADFishTable = (props) => {
   return <TwTable {...props}>{props.children}</TwTable>;
 };
 
 // HEADERS
 
-const RadfishTableHeader = (props) => {
+const RADFishTableHeader = (props) => {
   return <thead>{props.children}</thead>;
 };
 
-const RadfishTableHeaderRow = (props) => {
+const RADFishTableHeaderRow = (props) => {
   return <tr>{props.children}</tr>;
 };
 
-const RadfishTableHeaderCell = (props) => {
+const RADFishTableHeaderCell = (props) => {
   const isSortable = props.header.column.getCanSort();
   const handleSort = props.header.column.getToggleSortingHandler();
   if (isSortable) {
     return (
       <th colSpan={props.header.colSpan}>
         <div className="radfish-table-header-cell" onClick={handleSort}>
-          {flexRender(props.header.column.columnDef.header, props.header.getContext())}
-          <RadfishSortDirectionIcon header={props.header} />
+          {flexRender(
+            props.header.column.columnDef.header,
+            props.header.getContext()
+          )}
+          <RADFishSortDirectionIcon header={props.header} />
         </div>
       </th>
     );
@@ -41,19 +44,23 @@ const RadfishTableHeaderCell = (props) => {
 
 // BODY
 
-const RadfishTableBody = (props) => {
+const RADFishTableBody = (props) => {
   return <tbody>{props.children}</tbody>;
 };
 
-const RadfishTableBodyRow = (props) => {
+const RADFishTableBodyRow = (props) => {
   return (
-    <tr {...props} className={`radfish-table-row ${props.className || ""}`} onClick={props.onClick}>
+    <tr
+      {...props}
+      className={`radfish-table-row ${props.className || ""}`}
+      onClick={props.onClick}
+    >
       {props.children}
     </tr>
   );
 };
 
-const RadfishTableBodyCell = (props) => {
+const RADFishTableBodyCell = (props) => {
   return (
     <td {...props} style={{ background: "transparent" }}>
       {flexRender(props.cell.column.columnDef.cell, props.cell.getContext())}
@@ -62,7 +69,7 @@ const RadfishTableBodyCell = (props) => {
   );
 };
 
-const RadfishSortDirectionIcon = ({ header }) => {
+const RADFishSortDirectionIcon = ({ header }) => {
   const isSorted = header.column.getIsSorted();
   switch (isSorted) {
     case "asc":
@@ -76,7 +83,7 @@ const RadfishSortDirectionIcon = ({ header }) => {
 
 // Pagination
 
-const RadfishTablePaginationNav = ({
+const RADFishTablePaginationNav = ({
   getPageCount,
   setPageIndex,
   getCanPreviousPage,
@@ -96,14 +103,17 @@ const RadfishTablePaginationNav = ({
       <Button onClick={() => nextPage()} disabled={!getCanNextPage()}>
         <Icon.ArrowForward />
       </Button>
-      <Button onClick={() => setPageIndex(pageCount)} disabled={!getCanNextPage()}>
+      <Button
+        onClick={() => setPageIndex(pageCount)}
+        disabled={!getCanNextPage()}
+      >
         <Icon.LastPage />
       </Button>
     </>
   );
 };
 
-const RadfishTablePaginationPageCount = ({ pageIndex, getPageCount }) => {
+const RADFishTablePaginationPageCount = ({ pageIndex, getPageCount }) => {
   return (
     <>
       Page{" "}
@@ -114,7 +124,11 @@ const RadfishTablePaginationPageCount = ({ pageIndex, getPageCount }) => {
   );
 };
 
-const RadfishTablePaginationGoToPage = ({ pageIndex, setPageIndex, getPageCount }) => {
+const RADFishTablePaginationGoToPage = ({
+  pageIndex,
+  setPageIndex,
+  getPageCount,
+}) => {
   const pageCount = getPageCount();
   return (
     <>
@@ -135,7 +149,7 @@ const RadfishTablePaginationGoToPage = ({ pageIndex, setPageIndex, getPageCount 
   );
 };
 
-const RadfishTablePaginationSelectRowCount = ({
+const RADFishTablePaginationSelectRowCount = ({
   setPageSize,
   pageSize,
   paginations = [10, 20, 30, 40, 50],
@@ -158,15 +172,15 @@ const RadfishTablePaginationSelectRowCount = ({
 };
 
 export {
-  RadfishTable as Table,
-  RadfishTableHeader as TableHeader,
-  RadfishTableHeaderRow as TableHeaderRow,
-  RadfishTableHeaderCell as TableHeaderCell,
-  RadfishTableBody as TableBody,
-  RadfishTableBodyRow as TableBodyRow,
-  RadfishTableBodyCell as TableBodyCell,
-  RadfishTablePaginationNav as TablePaginationNav,
-  RadfishTablePaginationPageCount as TablePaginationPageCount,
-  RadfishTablePaginationGoToPage as TablePaginationGoToPage,
-  RadfishTablePaginationSelectRowCount as TablePaginationSelectRowCount,
+  RADFishTable as Table,
+  RADFishTableHeader as TableHeader,
+  RADFishTableHeaderRow as TableHeaderRow,
+  RADFishTableHeaderCell as TableHeaderCell,
+  RADFishTableBody as TableBody,
+  RADFishTableBodyRow as TableBodyRow,
+  RADFishTableBodyCell as TableBodyCell,
+  RADFishTablePaginationNav as TablePaginationNav,
+  RADFishTablePaginationPageCount as TablePaginationPageCount,
+  RADFishTablePaginationGoToPage as TablePaginationGoToPage,
+  RADFishTablePaginationSelectRowCount as TablePaginationSelectRowCount,
 };

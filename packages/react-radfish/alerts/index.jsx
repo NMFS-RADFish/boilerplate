@@ -10,7 +10,7 @@ import { Alert } from "@trussworks/react-uswds";
  * @param {Object} props.toast - The toast object containing status and message information.
  * @returns {JSX.Element | undefined} The JSX element representing the toast notification.
  */
-const RadfishToast = ({ toast }) => {
+const RADFishToast = ({ toast }) => {
   switch (toast?.status) {
     case "success":
       return (
@@ -41,4 +41,4 @@ const RadfishToast = ({ toast }) => {
   }
 };
 
-export { RadfishToast as Toast };
+export { RADFishToast as Toast };

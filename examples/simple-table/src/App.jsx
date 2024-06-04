@@ -1,5 +1,5 @@
 import "./index.css";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Alert } from "@trussworks/react-uswds";
 import {
   Table,

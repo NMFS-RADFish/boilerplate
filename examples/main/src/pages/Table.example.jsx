@@ -6,7 +6,7 @@
 import { useEffect } from "react";
 import { useTableState } from "../contexts/TableWrapper.example";
 import { MSW_ENDPOINT } from "../mocks/handlers";
-import RadfishAPIService from "../packages/services/APIService";
+import RADFishAPIService from "../packages/services/APIService";
 import {
   Table,
   TableBody,
@@ -29,7 +29,7 @@ import { COMMON_CONFIG } from "../config/common";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
 
-const ApiService = new RadfishAPIService("");
+const ApiService = new RADFishAPIService("");
 
 const SimpleTable = () => {
   /**

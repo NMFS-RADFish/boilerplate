@@ -1,6 +1,6 @@
 /**
- * Manages state for any child Radfish table.
- * This context should wrap the RadfishTable component and will manage it's state related to column headers, data cells, and sorting/filtering
+ * Manages state for any child RADFish table.
+ * This context should wrap the RADFishTable component and will manage it's state related to column headers, data cells, and sorting/filtering
  * This context provider is meant to be extensible and modular. You can use this anywhere in your app by wrapping a table to manage that table's state
  */
 
@@ -27,7 +27,7 @@ const TableContext = createContext();
 
 /**
  * Wrapper component for a table.
- * @param {children} - The child component that needs it's state managed, this should be the RadfishTable component.
+ * @param {children} - The child component that needs it's state managed, this should be the RADFishTable component.
  */
 export const TableWrapper = ({ children }) => {
   const [data, setData] = React.useState([]);

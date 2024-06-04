@@ -17,7 +17,7 @@ The `ServerSync` component is responsible for synchronizing data between a clien
 - `react` for managing component state and lifecycle.
 - `radfish-react` for UI components like `Button`.
 - Custom hooks: `useOfflineStatus` and `useOfflineStorage`.
-- `RadfishAPIService` for API interactions.
+- `RADFishAPIService` for API interactions.
 
 ## Installation
 
@@ -55,7 +55,7 @@ To add network requests and update the offline storage in the syncToHomebase fun
 
 #### Add Network Request Logic:
 
-Use the RadfishAPIService instance (ApiService) to make network requests. For example, you might fetch data from a specific endpoint.
+Use the RADFishAPIService instance (ApiService) to make network requests. For example, you might fetch data from a specific endpoint.
 
 #### Update Offline Storage:
 
@@ -67,10 +67,10 @@ Here is an example of how to integrate these steps into the syncToHomebase funct
 import { useState } from "react";
 import { Button } from "radfish-react";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
-import RadfishAPIService from "../packages/services/APIService";
+import RADFishAPIService from "../packages/services/APIService";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
-const ApiService = new RadfishAPIService("");
+const ApiService = new RADFishAPIService("");
 
 const offlineErrorMsg = "No network connection, unable to sync with server";
 const noSyncMsg = "Application has not yet been synced with homebase";

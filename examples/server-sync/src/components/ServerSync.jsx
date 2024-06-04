@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Button } from "@nmfs-radfish/react-radfish";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
-import RadfishAPIService from "../packages/services/APIService";
+import RADFishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
-const ApiService = new RadfishAPIService("");
+const ApiService = new RADFishAPIService("");
 
 const offlineErrorMsg = "No network conection, unable to sync with server";
 const noSyncMsg = "Application has not yet been synced with homebase";

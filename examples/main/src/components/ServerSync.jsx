@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Button } from "@nmfs-radfish/react-radfish";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
-import RadfishAPIService from "../packages/services/APIService";
+import RADFishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
-const ApiService = new RadfishAPIService("");
+const ApiService = new RADFishAPIService("");
 
 const offlineErrorMsg = "No network conection, unable to sync with server";
 const noSyncMsg = "Application has not yet been synced with homebase";
@@ -14,6 +14,8 @@ const dataIsSyncedMsg = "All data cached, ready to launch!";
 
 const HOME_BASE_DATA = "homebaseData";
 const LAST_HOMEBASE_SYNC = "lastHomebaseSync";
+const SPECIES = "species";
+const FORM_DATA = "formData";
 
 export const ServerSync = () => {
   const { isOffline } = useOfflineStatus();
@@ -33,12 +35,12 @@ export const ServerSync = () => {
 
       await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
       const { data: tableData } = await ApiService.get(MSW_ENDPOINT.TABLE);
-      await updateOfflineData("formData", tableData);
+      await updateOfflineData(FORM_DATA, tableData);
 
       const { data: species } = await ApiService.get(MSW_ENDPOINT.SPECIES);
-      await updateOfflineData("species", species);
+      await updateOfflineData(SPECIES, species);
 
-      await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
+      await updateOfflineData(LAST_HOMEBASE_SYNC, [{ uuid: "lastSynced", time: Date.now() }]);
       initializeLaunchSequence();
       setIsLoading(false);
     } else {

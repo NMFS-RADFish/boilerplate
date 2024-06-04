@@ -197,7 +197,7 @@ export const handlers = [
       return HttpResponse.json({ data: modifiedResponses }, { status: 201 });
     }
   }),
-  // this endpoint is meant to return data to populate a RadfishForm state.
+  // this endpoint is meant to return data to populate a RADFishForm state.
   // ReactTable expects an array of objects, where the key of each object represent a column header value
   // Each object also represent a row in the table.
   // The values of each object represents the cell value of the corresponding column in the row

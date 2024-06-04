@@ -5,7 +5,7 @@ import { Toast } from "@nmfs-radfish/react-radfish";
 import { FormWrapper } from "./contexts/FormWrapper.example";
 import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
-import RadfishAPIService from "./packages/services/APIService";
+import RADFishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { Table } from "./pages/Table.example";
 import { Form } from "./pages/Form.example";
@@ -14,7 +14,7 @@ import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 import { ServerSync } from "./components/ServerSync";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
 
-const ApiService = new RadfishAPIService("");
+const ApiService = new RADFishAPIService("");
 
 function App() {
   const { updateOfflineData, findOfflineData, createOfflineData } = useOfflineStorage();
