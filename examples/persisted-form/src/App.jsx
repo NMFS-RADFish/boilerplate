@@ -1,5 +1,5 @@
 import "./index.css";
-import SimpleForm from "./pages/Form";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Alert, Link, Button } from "@trussworks/react-uswds";
 
 function App() {
@@ -9,8 +9,8 @@ function App() {
         <FormInfoAnnotation />
         <Router>
           <Routes>
-            <Route path="/" element={<SimpleForm />} />
-            <Route path="/:id" element={<SimpleForm />} />
+            <Route path="/" element={<PersistedForm />} />
+            <Route path="/:id" element={<PersistedForm />} />
           </Routes>
         </Router>
       </div>
@@ -26,7 +26,9 @@ const FormInfoAnnotation = () => {
       behind the scenes.
       <br />
       <br />
-      Please note that the form below will only populate when you have data saved in IndexedDB.
+      Please note that in order to see the form data persist, you must navigate to that form's
+      correct uuid. This happens when you submit a form from the root `/` url. This uuid in the form
+      url enables the component to query the correct data needed to populate the form from IndexedDB
       <br />
       <br />
       <Link

@@ -1,21 +1,18 @@
 import "../index.css";
 import React, { useEffect, useState } from "react";
-import { FormGroup, Alert, Link, TextInput, Label, Button, Form } from "@trussworks/react-uswds";
+import { useParams, useNavigate } from "react-router-dom";
+import { FormGroup, TextInput, Label, Button, Form } from "@trussworks/react-uswds";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
-export function SimpleForm() {
+export const PersistedForm = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
   const [formData, setFormData] = useState({});
-  const { findOfflineData, createOfflineData } = useOfflineStorage();
+  const { findOfflineData, createOfflineData, updateOfflineData } = useOfflineStorage();
 
   useEffect(() => {
-    const formData = async () => {
-      const data = await findOfflineData("formData");
-      if (data) {
-        setFormData(data[0]);
-      }
-    };
-    formData();
-  }, []);
+    findExistingForm();
+  }, [id]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -26,15 +23,7 @@ export function SimpleForm() {
     });
   };
 
-  const saveOfflineData = async (tableName, data) => {
-    try {
-      await updateOfflineData(tableName, [{ uuid: params.id, ...data }]);
-    } catch (error) {
-      return error;
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const values = {};
@@ -43,10 +32,35 @@ export function SimpleForm() {
       values[key] = value;
     }
 
-    createOfflineData("formData", values);
+    if (!id) {
+      const formId = await createOfflineData("formData", values);
+      navigate(`${formId}`);
+    } else {
+      await saveOfflineData("formData", [{ uuid: params.id, ...data }]);
+      // after updating the data in IndexedDB, we can execute any other logic here
+      // eg. execute a POST request to an API
+    }
   };
 
-  if (!formData) return null;
+  // helper functions to save and find data in IndexedDB asyncrounously
+  // useEffect is syncronous, so this abstraction is necessary
+  const saveOfflineData = async (tableName, data) => {
+    await updateOfflineData(tableName, [{ uuid: id, ...data }]);
+  };
+
+  const findExistingForm = async () => {
+    if (id) {
+      const [found] = await findOfflineData("formData", {
+        uuid: id,
+      });
+
+      if (found) {
+        setFormData({ ...found });
+      } else {
+        navigate("/");
+      }
+    }
+  };
 
   return (
     <Form
@@ -100,6 +114,4 @@ export function SimpleForm() {
       </FormGroup>
     </Form>
   );
-}
-
-export default SimpleForm;
+};
