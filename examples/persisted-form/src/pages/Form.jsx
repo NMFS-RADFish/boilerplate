@@ -44,8 +44,11 @@ export const PersistedForm = () => {
 
   // helper functions to save and find data in IndexedDB asyncrounously
   // useEffect is syncronous, so this abstraction is necessary
+  // we only want to update this data on existing forms, else Dexie will throw a "weakMap" error due to uuid not existing in the table
   const saveOfflineData = async (tableName, data) => {
-    await updateOfflineData(tableName, [{ uuid: id, ...data }]);
+    if (id) {
+      await updateOfflineData(tableName, [{ uuid: id, ...data }]);
+    }
   };
 
   const findExistingForm = async () => {
