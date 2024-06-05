@@ -2,7 +2,6 @@ import "./index.css";
 import React, { useEffect } from "react";
 import { Alert } from "@trussworks/react-uswds";
 import {
-  Table,
   TableBody,
   TableBodyRow,
   TableHeaderCell,
@@ -15,6 +14,7 @@ import {
   TablePaginationGoToPage,
   TablePaginationSelectRowCount,
 } from "@nmfs-radfish/react-radfish";
+import { Table } from "@nmfs-radfish/react-radfish";
 import { useTableState } from "./packages/contexts/TableWrapper";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 

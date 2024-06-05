@@ -1,7 +1,15 @@
 import "../styles/theme.css";
 import React, { useState } from "react";
-import { Alert, FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Select, Button, Label, Form } from "@nmfs-radfish/react-radfish";
+import {
+  Alert,
+  FormGroup,
+  Grid,
+  Form,
+  TextInput,
+  Select,
+  Button,
+  Label,
+} from "@trussworks/react-uswds";
 
 const species = "species";
 const numberOfFish = "numberOfFish";
@@ -17,13 +25,19 @@ const ComputedForm = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form
+      onSubmit={handleSubmit}
+      className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
+    >
       <FormGroup>
-        <Label htmlFor={numberOfFish}>Number of Fish</Label>
+        <Label className="text-bold" htmlFor={numberOfFish}>
+          Number of Fish
+        </Label>
         <Alert type="info" slim={true}>
           Example of a linked input. The value of this input is used to compute the price.
         </Alert>
         <TextInput
+          className="text-bold"
           id={numberOfFish}
           name={numberOfFish}
           type="number"
@@ -38,7 +52,9 @@ const ComputedForm = () => {
             });
           }}
         />
-        <Label htmlFor={species}>Species</Label>
+        <Label className="text-bold" htmlFor={species}>
+          Species
+        </Label>
         <Alert type="info" slim={true}>
           The species select input is dependent on data coming from a server. The current
           implementation is using a mock server.
@@ -63,7 +79,9 @@ const ComputedForm = () => {
             </option>
           ))}
         </Select>
-        <Label htmlFor={species}>Computed Price</Label>
+        <Label className="text-bold" htmlFor={species}>
+          Computed Price
+        </Label>
         <Alert type="info" slim={true}>
           Readonly input. Its value is calculated based on the number of fish and species selected.
         </Alert>

@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useTableState } from "../contexts/TableWrapper.example";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import RADFishAPIService from "../packages/services/APIService";
+import { Button } from "@trussworks/react-uswds";
 import {
   Table,
   TableBody,
@@ -15,7 +16,6 @@ import {
   TableHeader,
   TableHeaderRow,
   TableBodyCell,
-  Button,
   TablePaginationNav,
   TablePaginationPageCount,
   TablePaginationGoToPage,

@@ -1,7 +1,5 @@
 import React from "react";
 import { GridContainer } from "@trussworks/react-uswds";
-import HeaderNav from "./HeaderNav";
-import { Link } from "react-router-dom";
 
 /**
  * Layout Component
@@ -20,16 +18,7 @@ import { Link } from "react-router-dom";
  */
 
 const Layout = ({ children }) => {
-  return (
-    <>
-      <HeaderNav>
-        <Link to="/">Home</Link>
-        <Link to="/form">Form</Link>
-        <Link to="/table">Table</Link>
-      </HeaderNav>
-      <GridContainer>{children}</GridContainer>
-    </>
-  );
+  return <GridContainer>{children}</GridContainer>;
 };
 
 export default Layout;

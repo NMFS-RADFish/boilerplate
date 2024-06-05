@@ -1,6 +1,6 @@
 import React, { createContext, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { Form } from "@nmfs-radfish/react-radfish";
+import { Form } from "@trussworks/react-uswds";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 
 const FormContext = createContext();
@@ -36,7 +36,12 @@ export const FormWrapper = ({ children, onSubmit }) => {
 
   return (
     <FormContext.Provider value={contextValue}>
-      <Form onSubmit={onSubmit}>{children}</Form>
+      <Form
+        className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
+        onSubmit={onSubmit}
+      >
+        {children}
+      </Form>
     </FormContext.Provider>
   );
 };
