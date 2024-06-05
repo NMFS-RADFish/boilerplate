@@ -108,11 +108,16 @@ const MultiStepForm = () => {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form
+      className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
+      onSubmit={handleSubmit}
+    >
       {/* step one */}
       {formData.currentStep === 1 && (
         <FormGroup>
-          <Label htmlFor={fullName}>Full Name</Label>
+          <Label className="text-bold" htmlFor={fullName}>
+            Full Name
+          </Label>
           <TextInput
             id={fullName}
             name={fullName}
@@ -121,7 +126,9 @@ const MultiStepForm = () => {
             value={formData[fullName] || ""}
             onChange={handleChange}
           />
-          <Label htmlFor={fullName}>Email</Label>
+          <Label className="text-bold" htmlFor={fullName}>
+            Email
+          </Label>
           <TextInput
             id={email}
             name={email}
@@ -155,7 +162,9 @@ const MultiStepForm = () => {
       {/* step two */}
       {formData.currentStep === 2 && (
         <FormGroup>
-          <Label htmlFor={city}>City</Label>
+          <Label className="text-bold" htmlFor={city}>
+            City
+          </Label>
           <TextInput
             id={city}
             name={city}
@@ -164,7 +173,9 @@ const MultiStepForm = () => {
             value={formData[city] || ""}
             onChange={handleChange}
           />
-          <Label htmlFor={state}>State</Label>
+          <Label className="text-bold" htmlFor={state}>
+            State
+          </Label>
           <TextInput
             id={state}
             name={state}
@@ -173,7 +184,9 @@ const MultiStepForm = () => {
             value={formData[state] || ""}
             onChange={handleChange}
           />
-          <Label htmlFor={zipcode}>Zipcode</Label>
+          <Label className="text-bold" htmlFor={zipcode}>
+            Zipcode
+          </Label>
           <TextInput
             id={zipcode}
             name={zipcode}

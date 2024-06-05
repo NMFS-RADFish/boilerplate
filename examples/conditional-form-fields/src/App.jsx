@@ -8,21 +8,21 @@ import { Alert } from "@trussworks/react-uswds";
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Layout>
-          <FormInfoAnnotation />
+      <Layout>
+        <FormInfoAnnotation />
+        <Router>
           <Routes>
             <Route path="/" element={<ConditionalForm />} />
           </Routes>
-        </Layout>
-      </Router>
+        </Router>
+      </Layout>
     </div>
   );
 }
 
 const FormInfoAnnotation = () => {
   return (
-    <Alert type="info" headingLevel={"h1"} heading="Example Form">
+    <Alert type="info" headingLevel={"h1"} heading="Conditional Form Fields">
       This is an example of a form with form inputs that control the visibility of other fields.
     </Alert>
   );

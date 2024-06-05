@@ -1,7 +1,14 @@
 import "../styles/theme.css";
 import React, { useState } from "react";
-import { FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Button, Label, ErrorMessage } from "@trussworks/react-uswds";
+import {
+  FormGroup,
+  Grid,
+  TextInput,
+  Button,
+  Label,
+  ErrorMessage,
+  Form,
+} from "@trussworks/react-uswds";
 import { CONSTANTS } from "../config/form";
 import { fullNameValidators } from "../utilities/fieldValidators";
 
@@ -39,30 +46,34 @@ const FieldValidatorForm = () => {
   };
 
   return (
-    <FormGroup>
-      <Label htmlFor={fullName}>Full Name</Label>
-      <TextInput
-        id={fullName}
-        name={fullName}
-        type="text"
-        placeholder="Full Name"
-        value={formData[fullName] || ""}
-        aria-invalid={validationErrors[fullName] ? "true" : "false"}
-        validationStatus={validationErrors[fullName] ? "error" : undefined}
-        onChange={handleChange}
-        onBlur={(e) => handleBlur(e, fullNameValidators)}
-      />
-      {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
-      <Grid className="display-flex flex-justify">
-        <Button
-          disabled={validationErrors[fullName]}
-          type="submit"
-          className="margin-top-1 margin-right-0 order-last"
-        >
-          Submit
-        </Button>
-      </Grid>
-    </FormGroup>
+    <Form className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2">
+      <FormGroup>
+        <Label className="text-bold" htmlFor={fullName}>
+          Full Name
+        </Label>
+        <TextInput
+          id={fullName}
+          name={fullName}
+          type="text"
+          placeholder="Full Name"
+          value={formData[fullName] || ""}
+          aria-invalid={validationErrors[fullName] ? "true" : "false"}
+          validationStatus={validationErrors[fullName] ? "error" : undefined}
+          onChange={handleChange}
+          onBlur={(e) => handleBlur(e, fullNameValidators)}
+        />
+        {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
+        <Grid className="display-flex flex-justify">
+          <Button
+            disabled={validationErrors[fullName]}
+            type="submit"
+            className="margin-top-1 margin-right-0 order-last"
+          >
+            Submit
+          </Button>
+        </Grid>
+      </FormGroup>
+    </Form>
   );
 };
 

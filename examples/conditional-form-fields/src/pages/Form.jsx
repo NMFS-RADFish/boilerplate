@@ -15,9 +15,14 @@ const ConditionalForm = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form
+      onSubmit={handleSubmit}
+      className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
+    >
       <FormGroup>
-        <Label htmlFor={fullName}>Full Name</Label>
+        <Label className="text-bold" htmlFor={fullName}>
+          Full Name
+        </Label>
         <TextInput
           id={fullName}
           name={fullName}
@@ -35,7 +40,9 @@ const ConditionalForm = () => {
         />
         {formData[fullName] && (
           <>
-            <Label htmlFor={nickname}>Nickname</Label>
+            <Label className="text-bold" htmlFor={nickname}>
+              Nickname
+            </Label>
             <TextInput
               id={nickname}
               name={nickname}

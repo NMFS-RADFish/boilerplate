@@ -1,7 +1,6 @@
 import "../index.css";
 import React, { useEffect } from "react";
-import { FormGroup, Alert, Link } from "@trussworks/react-uswds";
-import { TextInput, Label, Button } from "@trussworks/react-uswds";
+import { FormGroup, Alert, Link, TextInput, Label, Button } from "@trussworks/react-uswds";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { useFormState } from "../contexts/FormWrapper";
 
@@ -29,13 +28,21 @@ function SimpleForm() {
       </Alert>
       <div className="margin-bottom-2">
         <FormGroup>
-          <Label htmlFor="fullName">Name</Label>
+          <Label className="text-bold" htmlFor="fullName">
+            Name
+          </Label>
           <TextInput id="fullName" name="fullName" type="text" />
-          <Label htmlFor="numberOfFish">Number of Fish</Label>
+          <Label className="text-bold" htmlFor="numberOfFish">
+            Number of Fish
+          </Label>
           <TextInput id="numberOfFish" name="numberOfFish" type="number" />
-          <Label htmlFor="species">Species</Label>
+          <Label className="text-bold" htmlFor="species">
+            Species
+          </Label>
           <TextInput id="species" name="species" type="text" />
-          <Label htmlFor="computedPrice">Price</Label>
+          <Label className="text-bold" htmlFor="computedPrice">
+            Price
+          </Label>
           <TextInput id="computedPrice" name="computedPrice" type="number" />
           <Button type="submit" className="margin-top-2">
             Submit
@@ -90,7 +97,9 @@ export function SimpleFormDetails() {
       </Alert>
 
       <FormGroup>
-        <Label htmlFor="fullName">Name</Label>
+        <Label className="text-bold" htmlFor="fullName">
+          Name
+        </Label>
         <TextInput
           id="fullName"
           name="fullName"
@@ -98,7 +107,9 @@ export function SimpleFormDetails() {
           value={formData?.fullName || ""}
           onChange={handleChange}
         />
-        <Label htmlFor="numberOfFish">Number of Fish</Label>
+        <Label className="text-bold" htmlFor="numberOfFish">
+          Number of Fish
+        </Label>
         <TextInput
           id="numberOfFish"
           name="numberOfFish"
@@ -106,7 +117,9 @@ export function SimpleFormDetails() {
           value={formData?.numberOfFish || ""}
           onChange={handleChange}
         />
-        <Label htmlFor="species">Species</Label>
+        <Label className="text-bold" htmlFor="species">
+          Species
+        </Label>
         <TextInput
           id="species"
           name="species"
@@ -114,7 +127,9 @@ export function SimpleFormDetails() {
           value={formData?.species || ""}
           onChange={handleChange}
         />
-        <Label htmlFor="computedPrice">Price</Label>
+        <Label className="text-bold" htmlFor="computedPrice">
+          Price
+        </Label>
         <TextInput
           id="computedPrice"
           name="computedPrice"

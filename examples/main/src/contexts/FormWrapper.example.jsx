@@ -185,6 +185,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
     <FormContext.Provider value={contextValue}>
       <FormInfoAnnotation />
       <Form
+        className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
         onSubmit={(event) => {
           event.preventDefault();
           if (!navigator.onLine) {
