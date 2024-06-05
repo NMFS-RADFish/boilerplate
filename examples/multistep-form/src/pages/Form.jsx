@@ -1,8 +1,7 @@
 import "../styles/theme.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Button, Label, Form } from "@nmfs-radfish/react-radfish";
+import { FormGroup, Grid, TextInput, Button, Label, Form } from "@trussworks/react-uswds";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { CONSTANTS } from "../config/form";
 

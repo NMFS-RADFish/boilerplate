@@ -1,5 +1,3 @@
-// import { handleCountryVisibility, handleNicknameVisibility } from "../utilities";
-
 const CONSTANTS = {
   fullName: "fullName",
   nickname: "nickname",

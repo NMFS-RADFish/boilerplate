@@ -1,7 +1,7 @@
 import "../styles/theme.css";
 import React, { useState } from "react";
 import { FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Button, Label, Form } from "@nmfs-radfish/react-radfish";
+import { TextInput, Button, Label, Form } from "@trussworks/react-uswds";
 
 const fullName = "fullName";
 const nickname = "nickname";

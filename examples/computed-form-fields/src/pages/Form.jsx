@@ -1,7 +1,7 @@
 import "../styles/theme.css";
 import React, { useState } from "react";
 import { Alert, FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Select, Button, Label, Form } from "@nmfs-radfish/react-radfish";
+import { TextInput, Select, Button, Label, Form } from "@trussworks/react-uswds";
 
 const species = "species";
 const numberOfFish = "numberOfFish";
