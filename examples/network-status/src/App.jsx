@@ -1,9 +1,9 @@
 import "./index.css";
 import React, { useEffect } from "react";
-import { Toast, Button } from "@nmfs-radfish/react-radfish";
+import { Toast } from "@nmfs-radfish/react-radfish";
+import { Alert, Button } from "@trussworks/react-uswds";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
 import { useOfflineStatus } from "./hooks/useOfflineStatus";
-import { Alert } from "@trussworks/react-uswds";
 
 function App() {
   const { toast, showToast, dismissToast } = useToast();

@@ -1,0 +1,15 @@
+{
+  "name": "@nmfs-radfish/radfish",
+  "version": "0.1.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "msw": "^2.3.1"
+  }
+}

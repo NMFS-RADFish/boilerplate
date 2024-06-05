@@ -1,10 +1,13 @@
+import { setupWorker } from "msw/browser";
+
 class EventEmitter extends EventTarget {}
 
 export class Application {
-  constructor() {
+  constructor(options = {}) {
     this.emitter = new EventEmitter();
     this.serviceWorker = null;
     this.isOnline = navigator.onLine;
+    this._options = options;
 
     this._registerEventListeners();
 
@@ -16,14 +19,22 @@ export class Application {
   }
 
   _dispatch(event, detail) {
-    this.emitter.dispatchEvent(new CustomEvent(event, { bubbles: false, detail: detail }));
+    this.emitter.dispatchEvent(
+      new CustomEvent(event, { bubbles: false, detail: detail })
+    );
   }
 
   _registerEventListeners() {
-    console.log(`%c[RAD] Registering event listeners`, "color:#3984C5;font-weight:bold;");
+    console.log(
+      `%c[RAD] Registering event listeners`,
+      "color:#3984C5;font-weight:bold;"
+    );
     this.on("init", async () => {
       console.debug("Application initialized");
-      const worker = await this._installServiceWorker();
+      const worker = await this._installServiceWorker(
+        this._options?.mocks?.handlers,
+        this._options?.serviceWorker?.url
+      );
       this._dispatch("ready", { worker });
     });
 
@@ -40,13 +51,13 @@ export class Application {
     window.addEventListener("offline", handleOffline, true);
   }
 
-  async _installServiceWorker(path = "/service-worker.js") {
-    const { worker } = await import("../../mocks/browser");
+  async _installServiceWorker(handlers, url) {
+    if (!url) return null;
+    console.info("Installing service worker");
+    const worker = setupWorker(...((await handlers)?.default || []));
     const onUnhandledRequest = "bypass";
 
     this.serviceWorker = worker;
-
-    const url = import.meta.env.MODE === "development" ? "/mockServiceWorker.js" : path;
 
     worker
       .start({
