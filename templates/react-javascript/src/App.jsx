@@ -7,7 +7,6 @@ import {
   PrimaryNav,
   Header,
 } from "@trussworks/react-uswds";
-import { useState } from "react";
 
 import HomePage from "./pages/Home";
 
