@@ -3,11 +3,22 @@ import React, { useEffect } from "react";
 import { FormGroup, Alert, Link } from "@trussworks/react-uswds";
 import { TextInput, Label, Button } from "@nmfs-radfish/react-radfish";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
-import { useFormState } from "../contexts/FormWrapper";
 
 function SimpleForm() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const values = {};
+
+    for (let [key, value] of formData.entries()) {
+      values[key] = value;
+    }
+    // Handle form submission, usually by sending a POST request to a server
+    // Example: fetch.post("/api/form", values)
+    console.log("Form submitted");
+  };
   return (
-    <div className="grid-container">
+    <Form onSubmit={handleSubmit}>
       <Alert type="info" heading="Unpersisted Form Example" headingLevel="h1">
         This is a simple form example. The form data is stored with the React state.
         <br />
@@ -42,13 +53,13 @@ function SimpleForm() {
           </Button>
         </FormGroup>
       </div>
-    </div>
+    </Form>
   );
 }
 
 export function SimpleFormDetails() {
-  const { findOfflineData } = useOfflineStorage();
-  const { handleChange, formData, setFormData } = useFormState();
+  const [formData, setFormData] = useState({});
+  const { findOfflineData, createOfflineData } = useOfflineStorage();
 
   useEffect(() => {
     const formData = async () => {
@@ -60,10 +71,31 @@ export function SimpleFormDetails() {
     formData();
   }, []);
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => {
+      const updatedForm = { ...prev, [name]: value };
+      saveOfflineData("formData", updatedForm);
+      return updatedForm;
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const values = {};
+
+    for (let [key, value] of formData.entries()) {
+      values[key] = value;
+    }
+
+    createOfflineData("formData", values);
+  };
+
   if (!formData) return null;
 
   return (
-    <>
+    <Form onSubmit={handleSubmit}>
       <Alert type="info" heading="Persisted Form Example" headingLevel="h1">
         This is an example of a form with details coming from IndexedDB. The form data is stored in
         the browser's IndexedDB using methods from the `useOfflineStorage` hook, which uses Dexie.js
@@ -126,7 +158,7 @@ export function SimpleFormDetails() {
           Submit
         </Button>
       </FormGroup>
-    </>
+    </Form>
   );
 }
 
