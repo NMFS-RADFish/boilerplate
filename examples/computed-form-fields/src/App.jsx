@@ -22,7 +22,7 @@ function App() {
 
 const FormInfoAnnotation = () => {
   return (
-    <Alert type="info" headingLevel={"h1"} heading="Example Form">
+    <Alert type="info" headingLevel={"h1"} heading="Computed Form Fields">
       This is an example of a form with form inputs that compute the values of other form inputs.
     </Alert>
   );

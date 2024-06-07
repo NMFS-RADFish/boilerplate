@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Title, Tag } from "@trussworks/react-uswds";
-import { Header, Navigation } from "@nmfs-radfish/react-radfish";
-import { version } from "../../package.json";
-import Logo from "../assets/noaa-logo-circle.svg";
+import { Title, Header, PrimaryNav, NavMenuButton } from "@trussworks/react-uswds";
 
 /**
  * HeaderNav Component
@@ -22,27 +19,35 @@ import Logo from "../assets/noaa-logo-circle.svg";
 
 const HeaderNav = ({ children }) => {
   let location = useLocation();
-  const [expanded, setExpanded] = useState(false);
-  const onExpandNavMenuClick = () => setExpanded((prvExpanded) => !prvExpanded);
+  const [isExpanded, setExpanded] = useState(false);
 
   useEffect(() => {
     setExpanded(false);
   }, [location]);
 
   return (
-    <>
+    <div>
       <div
-        className={`usa-overlay ${expanded ? "is-visible" : ""}`}
-        onClick={() => (expanded ? setExpanded(false) : null)}
+        className={`usa-overlay ${isExpanded ? "is-visible" : ""}`}
+        onClick={() => (isExpanded ? setExpanded(false) : null)}
       ></div>
-      <Header basic={true}>
-        <Title>
-          <img src={Logo} alt="logo" className="header-logo" />
-          <Tag>{`v${version}`}</Tag>
-        </Title>
-        <Navigation items={children} expanded={expanded} onClick={onExpandNavMenuClick} />
+      <Header basic={true} showMobileOverlay={isExpanded}>
+        <div className="usa-nav-container">
+          <div className="usa-navbar">
+            <Title>RADFish Application</Title>
+            <NavMenuButton
+              onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
+              label="Menu"
+            />
+          </div>
+          <PrimaryNav
+            items={children}
+            mobileExpanded={isExpanded}
+            onToggleMobileNav={() => setExpanded((prvExpanded) => !prvExpanded)}
+          ></PrimaryNav>
+        </div>
       </Header>
-    </>
+    </div>
   );
 };
 

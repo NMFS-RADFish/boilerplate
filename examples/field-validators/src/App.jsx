@@ -8,14 +8,14 @@ import { FieldValidatorForm } from "./pages/Form";
 function App() {
   return (
     <div className="App">
-      <FormInfoAnnotation />
-      <Router>
-        <Layout>
+      <Layout>
+        <FormInfoAnnotation />
+        <Router>
           <Routes>
             <Route path="/" element={<FieldValidatorForm />} />
           </Routes>
-        </Layout>
-      </Router>
+        </Router>
+      </Layout>
     </div>
   );
 }

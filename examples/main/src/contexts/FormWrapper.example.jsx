@@ -6,8 +6,7 @@
 
 import React, { createContext, useState, useCallback } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
-import { Alert } from "@trussworks/react-uswds";
-import { Form, Button } from "@nmfs-radfish/react-radfish";
+import { Alert, Form, Button } from "@trussworks/react-uswds";
 import { FORM_CONFIG } from "../config/form";
 import { COMMON_CONFIG } from "../config/common";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
@@ -186,6 +185,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
     <FormContext.Provider value={contextValue}>
       <FormInfoAnnotation />
       <Form
+        className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
         onSubmit={(event) => {
           event.preventDefault();
           if (!navigator.onLine) {
