@@ -1,9 +1,12 @@
 import "./style.css";
 import { flexRender } from "@tanstack/react-table";
-import { Table as TwTable } from "@trussworks/react-uswds";
-import { Icon } from "@trussworks/react-uswds";
-import { TextInput, Select } from "../inputs";
-import { Button } from "../buttons";
+import {
+  Table as TwTable,
+  TextInput,
+  Select,
+  Button,
+  Icon,
+} from "@trussworks/react-uswds";
 
 const RADFishTable = (props) => {
   return <TwTable {...props}>{props.children}</TwTable>;
@@ -77,7 +80,7 @@ const RADFishSortDirectionIcon = ({ header }) => {
     case "desc":
       return <Icon.ArrowDownward />;
     default:
-      return null;
+      return <Icon.UnfoldMore />;
   }
 };
 
