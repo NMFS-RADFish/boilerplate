@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@trussworks/react-uswds";
+import { Spinner } from "@nmfs-radfish/react-radfish";
 import { useOfflineStatus } from "../hooks/useOfflineStatus";
 import RADFishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
@@ -31,9 +32,11 @@ export const ServerSync = () => {
 
     if (!isOffline) {
       setIsLoading(true);
-      await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
-      initializeLaunchSequence();
-      setIsLoading(false);
+      setTimeout(async () => {
+        await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
+        initializeLaunchSequence();
+        setIsLoading(false);
+      }, 2000);
     } else {
       console.log(offlineErrorMsg);
       console.log(`${lastSync ? lastSyncMsg : noSyncMsg}`);
@@ -56,13 +59,13 @@ export const ServerSync = () => {
     }, 1200);
   };
 
-  if (isLoading) {
-    return <Button onClick={syncToHomebase}>Syncing to Server...</Button>;
-  }
-
   return (
     <div className="server-sync">
-      <Button onClick={syncToHomebase}>Sync to Server</Button>
+      {isLoading ? (
+        <Spinner color="#0093d0" width={50} height={50} stroke={8} />
+      ) : (
+        <Button onClick={syncToHomebase}>Sync to Server</Button>
+      )}
       <span
         className={`${syncStatus.status ? "text-green" : "text-red"} margin-left-2 margin-top-2`}
       >
