@@ -1,6 +1,6 @@
 import "./index.css";
 import React, { useEffect } from "react";
-import { Alert } from "@trussworks/react-uswds";
+import { Alert, Button } from "@trussworks/react-uswds";
 import {
   TableBody,
   TableBodyRow,
@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableHeaderRow,
   TableBodyCell,
-  Button,
   TablePaginationNav,
   TablePaginationPageCount,
   TablePaginationGoToPage,
