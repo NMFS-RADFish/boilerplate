@@ -1,5 +1,5 @@
 {
-  "name": "main-example",
+  "name": "persisted-form-example",
   "version": "0.9.0",
   "private": true,
   "dependencies": {
