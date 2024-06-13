@@ -1,78 +1,129 @@
-# On-Device Storage Example
+# Mock API Example
 
 [Official Documentation](https://nmfs-radfish.github.io/documentation/)
 
-This example includes how to setup and use the on-device storage using IndexedDB and [Dexie.js](https://dexie.org/docs/Tutorial/Getting-started). Example use-cases for on-device storage:
+This example includes how to setup and use mock service worker and the RADFishAPIClient to build out a mock API on the frontend to consume without needing to rely on a backend system. The idea is that this can be used during development while backend APIs are worked on, allowing for mock endpoints to be easily swapped out for production endpoints as needed.
 
-- Offline on-device data storage (most cases)
-- Local non-relational database (online or offline use)
+This example does _not_ include any backend persistence via IndexedDB, as this is out of scope for this example. Instead, this example provides two simplified endpoints to call:
+
+`[GET] /species` returns a list of 4 species
+`[POST] /species` returns the original list, with an additional species added (this is hard coded for simplicity)
 
 ## Steps
 
-1. In the `index.jsx` file, import the `OfflineStorageWrapper`, then create a configuration object:
+1. In the `index.jsx` file, be sure to enable mocking from the mock service worker. This will ensure that your mock API is being called while in development.
 
 ```jsx
-import { OfflineStorageWrapper } from "./packages/contexts/OfflineStorageWrapper";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./styles/theme.css";
+import App from "./App";
 
-const offlineStorageConfig = {
-  // Type is either `indexedDB` or `localStorage`
-  type: "indexedDB",
-  // Database name
-  name: import.meta.env.VITE_INDEXED_DB_NAME,
-  // Database version number
-  version: import.meta.env.VITE_INDEXED_DB_VERSION,
-  // Table schema object must include the table name as the object key and a comma-separated string as the value. Please note `uuid` must be the first value in `formData` table.
-  stores: {
-    formData:
-      "uuid, fullName, email, phoneNumber, numberOfFish, species, computedPrice, isDraft",
-    species: "name, price",
-    homebaseData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
-  },
-};
-```
+async function enableMocking() {
+  const { worker } = await import("./mocks/browser");
+  const onUnhandledRequest = "bypass";
 
-2. In the `index.jsx` file, wrap the `App` component with `OfflineStorageWrapper` and pass the config object:
+  if (import.meta.env.MODE === "development") {
+    return worker.start({
+      onUnhandledRequest,
+      serviceWorker: {
+        url: `/mockServiceWorker.js`,
+      },
+    });
+  }
 
-```jsx
+  // `worker.start()` returns a Promise that resolves
+  // once the Service Worker is up and ready to intercept requests.
+  return worker.start({
+    onUnhandledRequest,
+    serviceWorker: {
+      url: `/service-worker.js`,
+    },
+  });
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(
-  <React.StrictMode>
-    <OfflineStorageWrapper config={offlineStorageConfig}>
+enableMocking().then(() => {
+  root.render(
+    <React.StrictMode>
       <App />
-    </OfflineStorageWrapper>
-  </React.StrictMode>
-);
+    </React.StrictMode>
+  );
+});
 ```
 
-## `useOfflineStorage` Hook API
+2. Be sure to include the `service-worker.js` file in the application `src` directory. This can be safely copy/pasted for simplicity
 
-1. Use the `useOfflineStorage` context hook in any child components. See the `App.jsx` file for examples of how to use the provided hooks.
+## Setting up Mock API
 
-The `useOfflineStorage` hook returns an object with the following methods:
+1. Create a `mocks` directory in `src`
+2. Create `browser.js` and `handlers.js` files
+3. `browser.js` will import the endpoints configured in the `handlers.js` file, and wrap them in a higher order function from the `msw/browser` library to set up these mock endpoints and intercept them when getting called from the client:
 
-- `createOfflineDataEntry(tableName, data)` — Creates a new data entry in the storage.
+```js
+// src/mocks/browser.js
+import { setupWorker } from "msw/browser";
+import { handlers } from "./handlers";
 
-  - `tableName`: Name of the IndexedDB name
-  - `data`: The data object to create.
-  - Returns a promise that resolves when the data is created.
+export const worker = setupWorker(...handlers);
+```
 
-- `findOfflineData(tableName, criteria)` — Finds data in the storage based on the given criteria, returns all data if not criteria parameter is passed.
+4. Lastly, you can setup any endpoints that you want to mock within `handlers.js`. Be sure to export these handlers so that they can be imported into `browser.js` appropriately:
 
-  - `tableName`: Name of the IndexedDB name
-  - `criteria`: The criteria object to use for finding data, eg {uuid: 123}.
-  - Returns a promise that resolves to an array of tuples:
-    `[ [ uuid, { key: value } ], [ uuid2, { key: value } ] ]`
+```js
+import { http, HttpResponse } from "msw";
 
-- `updateOfflineDataEntry(tableName, data)` — Updates data in the storage
+export const MSW_ENDPOINT = {
+  SPECIES: "/species",
+};
 
-  - `tableName`: Name of the IndexedDB name
-  - `data`: The updated data object.
-  - Returns a promise that resolves to the updated data as an object:
-    `{ numberOfFish: 10, species: salmon }`
+export const species = [
+  { name: "grouper", price: 25.0, src: "https://picsum.photos/200/300" },
+  { name: "salmon", price: 58.0, src: "https://picsum.photos/200/300" },
+  { name: "marlin", price: 100.0, src: "https://picsum.photos/200/300" },
+  { name: "mahimahi", price: 44.0, src: "https://picsum.photos/200/300" },
+];
 
-- `deleteOfflineDataEntry(tableName, uuids)` — Deletes data by UUID
-  - `tableName`: Name of the IndexedDB name
-  - `uuids`: An array of UUIDs to delete
-  - Returns a promise that resolves to the updated data as an object:
-    `{ numberOfFish: 10, species: salmon }`
+export const handlers = [
+  // Returns an array of fish species. This is currently being used to demonstrate populating a dropdown form component with "data" from a server
+  // Note that this implementation can/should change depending on your needs
+  http.get(MSW_ENDPOINT.SPECIES, () => {
+    return HttpResponse.json(
+      {
+        data: species,
+      },
+      { status: 200 }
+    );
+  }),
+  // This endpoint simply returns the data that is submitted to from a form
+  // In a full stack implementation, there will likely be some logic on the server to handle/store persistent data
+  http.post(MSW_ENDPOINT.SPECIES, async ({ request }) => {
+    const requestData = await request.json();
+    const response = [requestData.data, ...species];
+
+    return HttpResponse.json({ data: response }, { status: 201 });
+  }),
+];
+```
+
+Now, within your application code, you can access these endpoints, and query them via `RADFishAPIClient`
+
+```jsx
+import RADFishAPIService from "./packages/services/APIService";
+import { MSW_ENDPOINT } from "./mocks/handlers";
+
+const APIService = new RADFishAPIService();
+
+// [GET] /species
+const { data } = await APIService.get(MSW_ENDPOINT.SPECIES);
+
+// [POST] /species
+const { data } = await APIService.post(MSW_ENDPOINT.SPECIES, {
+  data: {
+    name: "tuna",
+    price: 75,
+    src: "https://picsum.photos/200/300",
+  },
+});
+```
