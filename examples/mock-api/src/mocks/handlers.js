@@ -25,10 +25,8 @@ export const handlers = [
   // This endpoint simply returns the data that is submitted to from a form
   // In a full stack implementation, there will likely be some logic on the server to handle/store persistent data
   http.post(MSW_ENDPOINT.SPECIES, async ({ request }) => {
-    const request = await request.json();
-
-    const requestData = request.body;
-    const response = [...species, requestData];
+    const requestData = await request.json();
+    const response = [requestData.data, ...species];
 
     return HttpResponse.json({ data: response }, { status: 201 });
   }),
