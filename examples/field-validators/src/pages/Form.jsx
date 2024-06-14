@@ -41,6 +41,7 @@ const FieldValidatorForm = () => {
   return (
     <FormGroup>
       <Label htmlFor={fullName}>Full Name</Label>
+      {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
       <TextInput
         id={fullName}
         name={fullName}
@@ -52,7 +53,6 @@ const FieldValidatorForm = () => {
         onChange={handleChange}
         onBlur={(e) => handleBlur(e, fullNameValidators)}
       />
-      {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
       <Grid className="display-flex flex-justify">
         <Button
           disabled={validationErrors[fullName]}
