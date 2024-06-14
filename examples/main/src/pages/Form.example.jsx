@@ -1,8 +1,17 @@
 import "../styles/theme.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Checkbox, FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "@trussworks/react-uswds";
+import {
+  TextInput,
+  Radio,
+  Select,
+  Button,
+  Label,
+  ErrorMessage,
+  DatePicker,
+} from "@trussworks/react-uswds";
+
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
@@ -111,7 +120,10 @@ export const StepOne = () => {
   const navigate = useNavigate();
   const { init, stepForward, stepBackward, formData, handleChange, handleBlur, validationErrors } =
     useFormState();
-
+  const [selectedDate, setSelectedDate] = useState(null);
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
   const handleInit = async () => {
     const formId = await init({ initialStep: 2 });
     navigate(`${formId}`);
@@ -160,6 +172,13 @@ export const StepOne = () => {
         value="option-catch-no"
         checked={formData[radioOption] === "option-catch-no"}
         onChange={handleChange}
+      />
+      <DatePicker
+        id="datepicker"
+        name="date"
+        onChange={handleDateChange}
+        value={selectedDate}
+        placeholder="MM/DD/YYYY"
       />
       <Grid className="display-flex flex-justify">
         <Button
