@@ -59,6 +59,7 @@ function App() {
 
   return (
     <div className="grid-container">
+      <h1>Simple Table Example</h1>
       <InfoAnnotation />
       <Table bordered fullWidth fixed>
         <TableHeader table={table}>

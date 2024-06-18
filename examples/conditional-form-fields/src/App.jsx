@@ -9,6 +9,7 @@ function App() {
   return (
     <div className="App">
       <Layout>
+        <h1>Conditional Form Fields Example</h1>
         <FormInfoAnnotation />
         <Router>
           <Routes>
@@ -22,8 +23,17 @@ function App() {
 
 const FormInfoAnnotation = () => {
   return (
-    <Alert type="info" headingLevel={"h1"} heading="Conditional Form Fields">
+    <Alert type="info" headingLevel={"h2"} heading="Information">
       This is an example of a form with form inputs that control the visibility of other fields.
+      <br />
+      <br />
+      <a
+        href="https://nmfs-radfish.github.io/documentation"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button type="button">Go To Documentation</Button>
+      </a>
     </Alert>
   );
 };

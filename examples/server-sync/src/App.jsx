@@ -13,11 +13,36 @@ function App() {
     <div className="App">
       <Router>
         <Layout>
+          <h1>Server Sync Example</h1>
+          <ExampleInfoAnnotation />
           <ServerSync />
         </Layout>
       </Router>
     </div>
   );
 }
+
+const ExampleInfoAnnotation = () => {
+  return (
+    <Alert type="info" heading="Information" headingLevel="h2">
+      This is an example that demonstrates a design pattern for syncing data from an API endpoint
+      into IndexedDB. The idea is that the application with fetch from the API, and store the
+      persistent data in IndexedDB for offline storage.
+      <br />
+      <br />
+      Please note that this is utilizing Mock Service Worker to intercept these API requests. In
+      production this would integrate with an external API.
+      <br />
+      <br />
+      <Link
+        href="https://nmfs-radfish.github.io/documentation"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button type="button">Go To Documentation</Button>
+      </Link>
+    </Alert>
+  );
+};
 
 export default App;

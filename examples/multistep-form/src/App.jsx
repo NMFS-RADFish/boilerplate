@@ -9,6 +9,7 @@ function App() {
   return (
     <div className="App">
       <Layout>
+        <h1>Multistep Form Example</h1>
         <FormInfoAnnotation />
         <Router>
           <Routes>
@@ -23,10 +24,24 @@ function App() {
 
 const FormInfoAnnotation = () => {
   return (
-    <Alert type="info" headingLevel={"h1"} heading="Multistep Form">
+    <Alert type="info" headingLevel={"h2"} heading="Information">
       This is an example of a multistep form, where the form needs to keep track of the currentStep
       the user is on. This current step should persist through refresh, along with the data for that
       specific form, on the correct step.
+      <br />
+      <br />
+      <strong>Note:</strong> Annotations are for informational purposes only. In production, you
+      would remove the annotations. Components with annotations above them are optional. You can
+      choose whether or not to use them in your application.
+      <br />
+      <br />
+      <a
+        href="https://nmfs-radfish.github.io/documentation"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button type="button">Go To Documentation</Button>
+      </a>
     </Alert>
   );
 };

@@ -21,7 +21,8 @@ function App() {
   return (
     <div className="grid-container">
       <Toast toast={toast} />
-      <Alert type="info" headingLevel={"h1"} heading="Network Status Example">
+      <h1>Network Status Example</h1>
+      <Alert type="info" headingLevel={"h2"} heading="Information">
         This is an example of a network status indicator. The application will display a toast
         notification for 5 seconds when network is offline.
         <a
