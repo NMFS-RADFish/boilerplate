@@ -1,6 +1,6 @@
 {
-  "name": "main-example",
-  "version": "0.9.0",
+  "name": "multi-step-form-example",
+  "version": "0.11s.0",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",

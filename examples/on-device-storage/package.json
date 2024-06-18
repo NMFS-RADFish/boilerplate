@@ -1,5 +1,5 @@
 {
-  "name": "main-example",
+  "name": "on-device-storage-example",
   "version": "0.8.0",
   "private": true,
   "dependencies": {
