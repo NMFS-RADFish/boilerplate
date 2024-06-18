@@ -14,7 +14,7 @@ function App() {
       <Router>
         <Layout>
           <h1>Server Sync Example</h1>
-          <ExampleInfoAnnotation />
+          <InfoAnnotation />
           <ServerSync />
         </Layout>
       </Router>
@@ -22,7 +22,7 @@ function App() {
   );
 }
 
-const ExampleInfoAnnotation = () => {
+const InfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
       This is an example that demonstrates a design pattern for syncing data from an API endpoint
