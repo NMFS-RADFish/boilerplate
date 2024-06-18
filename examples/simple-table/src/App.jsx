@@ -139,7 +139,7 @@ function App() {
 
 function InfoAnnotation() {
   return (
-    <Alert type="info" headingLevel={"h1"} heading="Table Components">
+    <Alert type="info" headingLevel={"h2"} heading="Information">
       Below is an example of a table that's populated by server and locally stored data
       (localStorage or indexedDB). The table is designed to be used with the `TableWrapper`
       component, it's built with{" "}
