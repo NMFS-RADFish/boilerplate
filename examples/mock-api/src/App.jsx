@@ -36,15 +36,7 @@ const App = () => {
   return (
     <div className="grid-container">
       <h1>Mock API Example</h1>
-      <Alert type="info" heading="Information" headingLevel="h2">
-        This is an example of how to use the `RADFishApiClient` along with `mock
-        service worker` in order to create a mock API to serve data to your
-        client. Requests to this mock API will be intercepted by mock service
-        worker API methods and respond with expected data, which simulates a
-        REST API to consume.
-      </Alert>
-      <br />
-      <br />
+      <InfoAnnotation />
       <Button type="submit" onClick={(e) => getData(e)}>
         Get Data
       </Button>
@@ -75,6 +67,27 @@ const App = () => {
         );
       })}
     </div>
+  );
+};
+
+const InfoAnnotation = () => {
+  return (
+    <Alert type="info" heading="Information" headingLevel="h2">
+      This is an example of how to use the `RADFishApiClient` along with `mock
+      service worker` in order to create a mock API to serve data to your
+      client. Requests to this mock API will be intercepted by mock service
+      worker API methods and respond with expected data, which simulates a REST
+      API to consume.
+      <br />
+      <br />
+      <Link
+        href="https://nmfs-radfish.github.io/documentation"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button type="button">Go To Documentation</Button>
+      </Link>
+    </Alert>
   );
 };
 
