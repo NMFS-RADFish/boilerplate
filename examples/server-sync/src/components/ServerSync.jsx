@@ -62,7 +62,7 @@ export const ServerSync = () => {
   return (
     <div className="server-sync">
       {isLoading ? (
-        <Spinner color="red" width={50} height={50} stroke={8} />
+        <Spinner width={50} height={50} stroke={8} />
       ) : (
         <Button onClick={syncToHomebase}>Sync to Server</Button>
       )}
