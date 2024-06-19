@@ -1,6 +1,6 @@
 import "./index.css";
 import React, { useEffect } from "react";
-import { Alert, Button } from "@trussworks/react-uswds";
+import { Alert, Button, Link } from "@trussworks/react-uswds";
 import {
   TableBody,
   TableBodyRow,
@@ -163,20 +163,20 @@ function InfoAnnotation() {
       choose whether or not to use them in your application.
       <br />
       <br />
-      <a
+      <Link
         href="https://nmfs-radfish.github.io/documentation/"
         target="_blank"
         rel="noopener noreferrer"
       >
         <Button type="button">Go To Documentation</Button>
-      </a>
-      <a
+      </Link>
+      <Link
         href="https://tanstack.com/table/latest/docs/introduction"
         target="_blank"
         rel="noopener noreferrer"
       >
         <Button type="button">React Table</Button>
-      </a>
+      </Link>
     </Alert>
   );
 }

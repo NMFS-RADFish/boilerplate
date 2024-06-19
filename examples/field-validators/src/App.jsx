@@ -2,7 +2,7 @@ import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Layout from "./components/Layout";
-import { Alert } from "@trussworks/react-uswds";
+import { Alert, Button, Link } from "@trussworks/react-uswds";
 import { FieldValidatorForm } from "./pages/Form";
 
 function App() {
@@ -33,13 +33,13 @@ function FormInfoAnnotation() {
       choose whether or not to use them in your application.
       <br />
       <br />
-      <a
+      <Link
         href="https://nmfs-radfish.github.io/documentation"
         target="_blank"
         rel="noopener noreferrer"
       >
         <Button type="button">Go To Documentation</Button>
-      </a>
+      </Link>
     </Alert>
   );
 }

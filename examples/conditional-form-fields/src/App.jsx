@@ -3,7 +3,7 @@ import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Layout from "./components/Layout";
 import { ConditionalForm } from "./pages/Form";
-import { Alert } from "@trussworks/react-uswds";
+import { Alert, Button, Link } from "@trussworks/react-uswds";
 
 function App() {
   return (
@@ -27,13 +27,13 @@ const FormInfoAnnotation = () => {
       This is an example of a form with form inputs that control the visibility of other fields.
       <br />
       <br />
-      <a
+      <Link
         href="https://nmfs-radfish.github.io/documentation"
         target="_blank"
         rel="noopener noreferrer"
       >
         <Button type="button">Go To Documentation</Button>
-      </a>
+      </Link>
     </Alert>
   );
 };

@@ -3,7 +3,7 @@ import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Layout from "./components/Layout";
 import { MultiStepForm } from "./pages/Form";
-import { Alert } from "@trussworks/react-uswds";
+import { Alert, Button, Link } from "@trussworks/react-uswds";
 
 function App() {
   return (
@@ -11,6 +11,7 @@ function App() {
       <Layout>
         <h1>Multistep Form Example</h1>
         <FormInfoAnnotation />
+        <br />
         <Router>
           <Routes>
             <Route path="/" element={<MultiStepForm />} />
@@ -35,13 +36,13 @@ const FormInfoAnnotation = () => {
       choose whether or not to use them in your application.
       <br />
       <br />
-      <a
+      <Link
         href="https://nmfs-radfish.github.io/documentation"
         target="_blank"
         rel="noopener noreferrer"
       >
         <Button type="button">Go To Documentation</Button>
-      </a>
+      </Link>
     </Alert>
   );
 };
