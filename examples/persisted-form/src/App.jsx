@@ -7,6 +7,7 @@ function App() {
   return (
     <div className="App">
       <div className="grid-container">
+        <h1>Persisted Form Example</h1>
         <FormInfoAnnotation />
         <Router>
           <Routes>
@@ -21,7 +22,7 @@ function App() {
 
 const FormInfoAnnotation = () => {
   return (
-    <Alert type="info" heading="Persisted Form Example" headingLevel="h1">
+    <Alert type="info" heading="Information" headingLevel="h2">
       This is an example of a form with details coming from IndexedDB. The form data is stored in
       the browser's IndexedDB using methods from the `useOfflineStorage` hook, which uses Dexie.js
       behind the scenes.

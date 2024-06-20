@@ -1,7 +1,7 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
-import { Button, Alert } from "@trussworks/react-uswds";
+import { Button, Alert, Link } from "@trussworks/react-uswds";
 
 const App = () => {
   const [formData, setFormData] = useState([]);
@@ -83,22 +83,21 @@ const App = () => {
         under the hood.
         <br />
         <br />
-        <a
+        <Link
           href="https://nmfs-radfish.github.io/documentation"
           target="_blank"
           rel="noopener noreferrer"
         >
           <Button type="button">Go To Documentation</Button>
-        </a>
-        <a
+        </Link>
+        <Link
           href="https://dexie.org/docs/Tutorial/Getting-started"
           target="_blank"
           rel="noopener noreferrer"
         >
           <Button type="button">Dexie Docs</Button>
-        </a>
+        </Link>
       </Alert>
-      <br />
       <br />
       <Button type="submit" onClick={(e) => createData(e)}>
         Create Data
