@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@trussworks/react-uswds";
-import { useOfflineStatus } from "../hooks/useOfflineStatus";
+import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import RADFishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";

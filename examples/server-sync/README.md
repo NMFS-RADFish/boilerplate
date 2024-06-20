@@ -65,8 +65,7 @@ Here is an example of how to integrate these steps into the syncToHomebase funct
 
 ```javascript
 import { useState } from "react";
-import { Button } from "radfish-react";
-import { useOfflineStatus } from "../hooks/useOfflineStatus";
+import { Button, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import RADFishAPIService from "../packages/services/APIService";
 import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 

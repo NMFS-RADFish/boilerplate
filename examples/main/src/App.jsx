@@ -1,7 +1,7 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Toast } from "@nmfs-radfish/react-radfish";
+import { Toast, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { FormWrapper } from "./contexts/FormWrapper.example";
 import { TableWrapper } from "./contexts/TableWrapper.example";
 import Layout from "./components/Layout";
@@ -9,7 +9,6 @@ import RADFishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { Table } from "./pages/Table.example";
 import { Form } from "./pages/Form.example";
-import { useOfflineStatus } from "./hooks/useOfflineStatus";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 import { ServerSync } from "./components/ServerSync";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";

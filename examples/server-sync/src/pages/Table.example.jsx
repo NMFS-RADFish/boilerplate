@@ -27,7 +27,7 @@ import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { Alert } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
-import { useOfflineStatus } from "../hooks/useOfflineStatus";
+import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 
 const ApiService = new RadfishAPIService("");
 
