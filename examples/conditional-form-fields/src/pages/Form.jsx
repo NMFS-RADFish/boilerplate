@@ -6,12 +6,12 @@ import { TextInput, Button, Label, Form } from "@trussworks/react-uswds";
 const fullName = "fullName";
 const nickname = "nickname";
 
-const ConditionalForm = () => {
+const ConditionalForm = ({ handleToastMessage }) => {
   const [formData, setFormData] = useState({});
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // TODO: Integrate toast component
+    handleToastMessage();
   };
 
   return (
