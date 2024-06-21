@@ -12,7 +12,7 @@ The `useOfflineStatus` hook provides a `isOffline` utility that detects whether 
    ```jsx
    import React, { useEffect } from "react";
    import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
-   import { useOfflineStatus } from "./hooks/useOfflineStatus";
+   import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
    import { Alert } from "@trussworks/react-uswds";
    ```
 2. Within the `App` component create a `useEffect` to handle displaying the toast:
