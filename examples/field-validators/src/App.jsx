@@ -4,16 +4,31 @@ import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Layout from "./components/Layout";
 import { Alert, Button, Link } from "@trussworks/react-uswds";
 import { FieldValidatorForm } from "./pages/Form";
+import { Toast } from "@nmfs-radfish/react-radfish";
+import { useToast, TOAST_CONFIG, TOAST_LIFESPAN } from "./hooks/useToast";
 
 function App() {
+  const { toast, showToast, dismissToast } = useToast();
+
+  const handleToastMessage = () => {
+    showToast(TOAST_CONFIG.SUCCESS);
+    setTimeout(() => {
+      dismissToast();
+    }, TOAST_LIFESPAN);
+  };
+
   return (
     <div className="App">
+      <Toast toast={toast} />
       <Layout>
         <h1>Field Validators</h1>
         <FormInfoAnnotation />
         <Router>
           <Routes>
-            <Route path="/" element={<FieldValidatorForm />} />
+            <Route
+              path="/"
+              element={<FieldValidatorForm handleToastMessage={handleToastMessage} />}
+            />
           </Routes>
         </Router>
       </Layout>

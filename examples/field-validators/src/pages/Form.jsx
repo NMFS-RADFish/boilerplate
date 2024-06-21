@@ -14,7 +14,7 @@ import { fullNameValidators } from "../utilities/fieldValidators";
 
 const { fullName } = CONSTANTS;
 
-const FieldValidatorForm = () => {
+const FieldValidatorForm = ({ handleToastMessage }) => {
   const [formData, setFormData] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
 
@@ -45,8 +45,16 @@ const FieldValidatorForm = () => {
     return { [name]: null };
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    handleToastMessage();
+  };
+
   return (
-    <Form className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2">
+    <Form
+      onSubmit={handleSubmit}
+      className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
+    >
       <FormGroup>
         <Label className="text-bold" htmlFor={fullName}>
           Full Name
