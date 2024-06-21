@@ -22,9 +22,9 @@ import {
   TablePaginationSelectRowCount,
   Toast,
   useOfflineStatus,
-  useOfflineStorage,
 } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
+import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
 import { Alert } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
