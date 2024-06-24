@@ -24,7 +24,12 @@ function App() {
 const FormInfoAnnotation = () => {
   return (
     <Alert type="info" headingLevel={"h2"} heading="Information">
-      This is an example of a form with form inputs that control the visibility of other fields.
+      This is an example of a form with form inputs that control the visibility of other fields. In
+      this example, the "Nickname" field appears whenever "Full Name" contains a value.
+      <br />
+      <br />
+      Note, that this does not check if the name is valid or not (only that it exists). For form
+      field validators, please see the `field-validators` example.
       <br />
       <br />
       <Link
