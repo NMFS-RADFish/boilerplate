@@ -1,9 +1,10 @@
 {
   "name": "@nmfs-radfish/react-radfish",
   "version": "0.2.1",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +13,9 @@
   "dependencies": {
     "@tanstack/react-table": "^8.16.0",
     "@trussworks/react-uswds": "^9.0.0"
+  },
+  "devDependencies": {
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0"
   }
 }
