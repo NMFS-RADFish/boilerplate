@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <Layout>
-        <h1>Form Field Validators Example</h1>
+        <h1>Field Validators</h1>
         <FormInfoAnnotation />
         <Router>
           <Routes>
@@ -24,13 +24,12 @@ function App() {
 function FormInfoAnnotation() {
   return (
     <Alert type="info" headingLevel={"h2"} heading="Information">
-      This is an example of a form with form inputs that handle input validation. If a fullName
+      This is an example of a form with form inputs that handle input validation. If the Full Name
       input includes a number, the validator will return false and display the error
       <br />
       <br />
-      <strong>Note:</strong> Annotations are for informational purposes only. In production, you
-      would remove the annotations. Components with annotations above them are optional. You can
-      choose whether or not to use them in your application.
+      To see where the validators are defined, you can visit `/utilities/fieldValidators.js`. Note
+      that you can handle several different validation test cases within each validation array.
       <br />
       <br />
       <Link

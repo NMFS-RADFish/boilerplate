@@ -11,6 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 import { CONSTANTS } from "../config/form";
 import { fullNameValidators } from "../utilities/fieldValidators";
+import { dispatchToast } from "@nmfs-radfish/react-radfish";
 
 const { fullName } = CONSTANTS;
 
@@ -45,8 +46,16 @@ const FieldValidatorForm = () => {
     return { [name]: null };
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatchToast({ status: "success", message: "Successful form submission!" });
+  };
+
   return (
-    <Form className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2">
+    <Form
+      onSubmit={handleSubmit}
+      className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
+    >
       <FormGroup>
         <Label className="text-bold" htmlFor={fullName}>
           Full Name
