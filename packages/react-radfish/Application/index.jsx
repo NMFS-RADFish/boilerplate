@@ -17,6 +17,17 @@ export function Application(props) {
   }, [isOffline]);
 
   useEffect(() => {
+    const clear = setInterval(() => {
+      const nextToasts = toasts.filter((toast) => toast.expires_at > Date.now());
+      setToasts(nextToasts);
+    }, 1000);
+
+    return () => {
+      clearInterval(clear);
+    };
+  }, [toasts]);
+
+  useEffect(() => {
     function handleToast(event) {
       const nextToasts = [...toasts];
       nextToasts.unshift({ message: event.detail.message, status: event.detail.status, expires_at: event.detail.expires_at });
