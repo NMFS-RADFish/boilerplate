@@ -1,37 +1,21 @@
 import { useState, useEffect } from "react";
 
 export const useOfflineStatus = () => {
-  const [isOffline, setIsOffline] = useState(false);
+  const [isOffline, setIsOffline] = useState(navigator.onLine === false);
 
-  const checkConnectivity = () => {
-    const online = navigator.onLine;
-    if (online) {
-      handleOnline();
-    } else {
-      handleOffline();
-    }
-  };
-
-  const handleOnline = () => {
-    setIsOffline(false);
-  };
-
-  const handleOffline = () => {
-    setIsOffline(true);
+  const updateOnlineStatus = () => {
+    setIsOffline(!navigator.onLine);
   };
 
   useEffect(() => {
-    checkConnectivity();
+    updateOnlineStatus();
 
-    const onlineListener = () => checkConnectivity();
-    const offlineListener = () => checkConnectivity();
-
-    window.addEventListener("online", onlineListener);
-    window.addEventListener("offline", offlineListener);
+    window.addEventListener("online", updateOnlineStatus);
+    window.addEventListener("offline", updateOnlineStatus);
 
     return () => {
-      window.removeEventListener("online", onlineListener);
-      window.removeEventListener("offline", offlineListener);
+      window.removeEventListener("online", updateOnlineStatus);
+      window.removeEventListener("offline", updateOnlineStatus);
     };
   }, []);
 
