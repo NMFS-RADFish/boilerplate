@@ -11,10 +11,11 @@ import {
 } from "@trussworks/react-uswds";
 import { CONSTANTS } from "../config/form";
 import { fullNameValidators } from "../utilities/fieldValidators";
+import { dispatchToast } from "@nmfs-radfish/react-radfish";
 
 const { fullName } = CONSTANTS;
 
-const FieldValidatorForm = ({ handleToastMessage }) => {
+const FieldValidatorForm = () => {
   const [formData, setFormData] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
 
@@ -47,7 +48,7 @@ const FieldValidatorForm = ({ handleToastMessage }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    handleToastMessage();
+    dispatchToast({ status: "success", message: "Successful form submission!" });
   };
 
   return (
