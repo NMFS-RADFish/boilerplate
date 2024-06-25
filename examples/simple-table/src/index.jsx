@@ -11,7 +11,7 @@ const offlineStorageConfig = {
   name: import.meta.env.VITE_INDEXED_DB_NAME,
   version: import.meta.env.VITE_INDEXED_DB_VERSION,
   stores: {
-    formData: "uuid, fullName, numberOfFish, species, computedPrice, isDraft",
+    formData: "uuid, fullName, image, species, computedPrice, isDraft",
   },
 };
 
@@ -30,9 +30,9 @@ const columnMap = [
     cell: (info) => info.getValue(),
     header: () => <span>Species</span>,
   }),
-  columnHelper.accessor("numberOfFish", {
+  columnHelper.accessor("image", {
     cell: (info) => info.getValue(),
-    header: () => <span>Amount Caught</span>,
+    header: () => <span>Image</span>,
   }),
   columnHelper.accessor("computedPrice", {
     cell: (info) => info.getValue(),

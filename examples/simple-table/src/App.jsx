@@ -25,7 +25,7 @@ const mockData = [
     fullName: "Samwise Gamgee",
     species: "Marlin",
     computedPrice: 50,
-    numberOfFish: 5,
+    image: <img src="https://picsum.photos/200/300" />,
   },
   {
     uuid: "uuid-456",
@@ -33,7 +33,7 @@ const mockData = [
     fullName: "Galadriel",
     species: "Mahimahi",
     computedPrice: 1000,
-    numberOfFish: 20,
+    image: <img src="https://picsum.photos/200/300" />,
   },
   {
     uuid: "uuid-789",
@@ -41,7 +41,7 @@ const mockData = [
     fullName: "Frodo Baggins",
     species: "Grouper",
     computedPrice: 80,
-    numberOfFish: 8,
+    image: <img src="https://picsum.photos/200/300" />,
   },
 ];
 
