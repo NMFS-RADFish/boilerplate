@@ -1,24 +1,27 @@
 import { Toast } from "../alerts";
+import ErrorBoundary from "../errors";
 import { createContext, useState, useEffect } from "react";
 import { useOfflineStatus, dispatchToast } from "../hooks";
 
 const OfflineContext = createContext(!navigator.onLine);
 
 export function Application(props) {
-  const [ toasts, setToasts ] = useState([]);
+  const [toasts, setToasts] = useState([]);
   const { isOffline } = useOfflineStatus();
 
   useEffect(() => {
     if (isOffline) {
-      dispatchToast({ message: "Application is offline", status: "warning" })
+      dispatchToast({ message: "Application is offline", status: "warning" });
     } else {
-      dispatchToast({ message: "Application is online", status: "info" })
+      dispatchToast({ message: "Application is online", status: "info" });
     }
   }, [isOffline]);
 
   useEffect(() => {
     const clear = setInterval(() => {
-      const nextToasts = toasts.filter((toast) => toast.expires_at > Date.now());
+      const nextToasts = toasts.filter(
+        (toast) => toast.expires_at > Date.now()
+      );
       setToasts(nextToasts);
     }, 1000);
 
@@ -30,7 +33,11 @@ export function Application(props) {
   useEffect(() => {
     function handleToast(event) {
       const nextToasts = [...toasts];
-      nextToasts.unshift({ message: event.detail.message, status: event.detail.status, expires_at: event.detail.expires_at });
+      nextToasts.unshift({
+        message: event.detail.message,
+        status: event.detail.status,
+        expires_at: event.detail.expires_at,
+      });
       setToasts(nextToasts);
     }
 
@@ -41,10 +48,17 @@ export function Application(props) {
     };
   }, []);
 
-  return (<div className="radfish__application">
-    {toasts.map((toast, i) => <Toast toast={toast} key={i}/>) }
-    <OfflineContext.Provider value={isOffline}>
-      {props.children}
-    </OfflineContext.Provider>
-  </div>)
+  return (
+    <div className="radfish__application">
+      {toasts.map((toast, i) => (
+        <Toast toast={toast} key={i} />
+      ))}
+
+      <ErrorBoundary>
+        <OfflineContext.Provider value={isOffline}>
+          {props.children}
+        </OfflineContext.Provider>
+      </ErrorBoundary>
+    </div>
+  );
 }
