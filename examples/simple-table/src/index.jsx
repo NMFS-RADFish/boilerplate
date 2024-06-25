@@ -45,11 +45,13 @@ const pageSize = 10;
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
-    <OfflineStorageWrapper config={offlineStorageConfig}>
-      <TableWrapper columnMap={columnMap} pageSize={pageSize}>
-        <App />
-      </TableWrapper>
-    </OfflineStorageWrapper>
-  </React.StrictMode>,
+  <ErrorBoundary>
+    <React.StrictMode>
+      <OfflineStorageWrapper config={offlineStorageConfig}>
+        <TableWrapper columnMap={columnMap} pageSize={pageSize}>
+          <App />
+        </TableWrapper>
+      </OfflineStorageWrapper>
+    </React.StrictMode>
+  </ErrorBoundary>
 );
