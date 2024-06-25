@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
 import { OfflineStorageWrapper } from "./packages/contexts/OfflineStorageWrapper";
-import ErrorBoundary from "@nmfs-radfish/react-radfish";
+import { ErrorBoundary } from "@nmfs-radfish/react-radfish";
 
 const offlineStorageConfig = {
   type: "indexedDB",
