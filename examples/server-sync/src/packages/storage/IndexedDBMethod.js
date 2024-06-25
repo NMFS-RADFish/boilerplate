@@ -1,5 +1,4 @@
 import Dexie from "dexie";
-import { generateUUID } from "../../utilities";
 import { StorageMethod } from "./StorageMethod";
 
 /**
