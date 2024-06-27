@@ -83,6 +83,13 @@ const App = () => {
         under the hood.
         <br />
         <br />
+        Please note that if you choose to test this example with the network
+        connection offline, you won’t be able to refresh the page. To do this,
+        you must ensure that Service Worker is registered, which requires the
+        example to be served as a production build using `npm run build` and
+        serving that output using a basic HTTP server such as `serve build/`
+        <br />
+        <br />
         <Link
           href="https://nmfs-radfish.github.io/documentation"
           target="_blank"
