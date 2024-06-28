@@ -188,8 +188,7 @@ function InfoAnnotation() {
     <Alert type="info" headingLevel={"h2"} heading="Information">
       Below is an example of a table that's populated by server and locally stored data
       (localStorage or indexedDB). The table is designed to be used with the{" "}
-      <code>TableWrapper</code>
-      component, it's built with{" "}
+      <code>TableWrapper</code> component, it's built with{" "}
       <a
         href="https://tanstack.com/table/latest/docs/introduction"
         target="_blank"
