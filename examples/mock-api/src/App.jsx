@@ -74,11 +74,11 @@ const App = () => {
 const InfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
-      This is an example of how to use the `RADFishApiClient` along with `mock
-      service worker` in order to create a mock API to serve data to your
-      client. Requests to this mock API will be intercepted by mock service
-      worker API methods and respond with expected data, which simulates a REST
-      API to consume.
+      This is an example of how to use the <code>RADFishApiClient</code> along
+      with <code>mock service worker</code> in order to create a mock API to
+      serve data to your client. Requests to this mock API will be intercepted
+      by mock service worker API methods and respond with expected data, which
+      simulates a REST API to consume.
       <br />
       <br />
       <Link
