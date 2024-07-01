@@ -15,13 +15,15 @@ const species = "species";
 const numberOfFish = "numberOfFish";
 const computedPrice = "computedPrice";
 const speciesData = ["grouper", "salmon", "marlin", "mahimahi"];
+import { dispatchToast } from "@nmfs-radfish/react-radfish";
 
 const ComputedForm = () => {
   const [formData, setFormData] = useState({});
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // TODO: Integrate toast component
+    console.log("handling submit");
+    dispatchToast({ status: "success", message: "Successful form submission" });
   };
 
   return (
