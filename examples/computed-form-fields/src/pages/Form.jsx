@@ -61,7 +61,10 @@ const ComputedForm = () => {
         <Alert type="info" slim={true}>
           The species select input is dependent on data coming from a server. The current
           implementation is using our mock server which can be found at /directory. Documentation
-          for the mock service worker can be found at this link
+          for the mock service worker can be found at{" "}
+          <a href="https://nmfs-radfish.github.io/documentation/docs/front-end-developlement-guide/mock-api">
+            this link
+          </a>
         </Alert>
         <Select
           id={species}
