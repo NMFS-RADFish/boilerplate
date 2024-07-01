@@ -134,7 +134,7 @@ export const ServerSync = () => {
 
   return (
     <div className="server-sync">
-      <Button onClick={syncToHomebase}>Sync to Server</Button>
+      <Button onClick={syncToHomebase}>Sync from Server</Button>
       <span
         className={`${syncStatus.status ? "text-green" : "text-red"} margin-left-2 margin-top-2`}
       >

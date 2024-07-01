@@ -18,12 +18,12 @@ export const ServerSync = () => {
   const { isOffline } = useOfflineStatus();
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
   const [isLoading, setIsLoading] = useState(false);
-  const [syncStatus, setSyncStatus] = useState("");
+  const [syncStatus, setSyncStatus] = useState({ message: "" });
+  const [lastSynced, setLastSynced] = useState("");
 
   const syncToHomebase = async () => {
     const lastSync = await findOfflineData(HOME_BASE_DATA);
     const lastSyncMsg = `Last sync at: ${findOfflineData("lastHomebaseSync")}`;
-
     const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
     await updateOfflineData(HOME_BASE_DATA, homebaseData);
 
@@ -45,17 +45,19 @@ export const ServerSync = () => {
 
   const initializeLaunchSequence = async () => {
     const homebaseData = await findOfflineData(HOME_BASE_DATA);
-
+    const lastSynced = await findOfflineData("lastHomebaseSync");
     if (!homebaseData.length) {
       setSyncStatus({ status: false, message: dataNotSyncedMsg });
     }
     // 7 is the amount of data expected from homebase response, but this can be any check
     if (homebaseData.length === 7) {
       setSyncStatus({ status: true, message: dataIsSyncedMsg });
+      setLastSynced(new Date(lastSynced[0].time).toLocaleString());
     }
     setTimeout(() => {
       setSyncStatus({ status: null, message: "" });
-    }, 1200);
+      setLastSynced("");
+    }, 2200);
   };
 
   return (
@@ -63,12 +65,12 @@ export const ServerSync = () => {
       {isLoading ? (
         <Spinner width={50} height={50} stroke={8} />
       ) : (
-        <Button onClick={syncToHomebase}>Sync to Server</Button>
+        <Button onClick={syncToHomebase}>Sync from Server</Button>
       )}
       <span
         className={`${syncStatus.status ? "text-green" : "text-red"} margin-left-2 margin-top-2`}
       >
-        {syncStatus.message}
+        {syncStatus.message + " " + lastSynced}
       </span>
     </div>
   );
