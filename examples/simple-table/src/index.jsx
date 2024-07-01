@@ -6,13 +6,14 @@ import { OfflineStorageWrapper } from "./packages/contexts/OfflineStorageWrapper
 import { TableWrapper } from "./packages/contexts/TableWrapper";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ErrorBoundary } from "@nmfs-radfish/react-radfish";
+import { Application } from "@nmfs-radfish/react-radfish";
 
 const offlineStorageConfig = {
   type: "indexedDB",
   name: import.meta.env.VITE_INDEXED_DB_NAME,
   version: import.meta.env.VITE_INDEXED_DB_VERSION,
   stores: {
-    formData: "uuid, fullName, numberOfFish, species, computedPrice, isDraft",
+    formData: "uuid, fullName, image, species, computedPrice, isDraft",
   },
 };
 
@@ -31,9 +32,9 @@ const columnMap = [
     cell: (info) => info.getValue(),
     header: () => <span>Species</span>,
   }),
-  columnHelper.accessor("numberOfFish", {
+  columnHelper.accessor("image", {
     cell: (info) => info.getValue(),
-    header: () => <span>Amount Caught</span>,
+    header: () => <span>Image</span>,
   }),
   columnHelper.accessor("computedPrice", {
     cell: (info) => info.getValue(),
@@ -48,11 +49,13 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ErrorBoundary>
     <React.StrictMode>
+    <Application>
       <OfflineStorageWrapper config={offlineStorageConfig}>
         <TableWrapper columnMap={columnMap} pageSize={pageSize}>
           <App />
         </TableWrapper>
       </OfflineStorageWrapper>
+      </Application>
     </React.StrictMode>
   </ErrorBoundary>
 );
