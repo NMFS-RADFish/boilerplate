@@ -12,8 +12,9 @@ import {
   TablePaginationPageCount,
   TablePaginationGoToPage,
   TablePaginationSelectRowCount,
+  dispatchToast,
 } from "@nmfs-radfish/react-radfish";
-import { Table } from "@nmfs-radfish/react-radfish";
+import { Table, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { useTableState } from "./packages/contexts/TableWrapper";
 import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
 
@@ -25,7 +26,7 @@ const mockData = [
     fullName: "Samwise Gamgee",
     species: "Marlin",
     computedPrice: 50,
-    numberOfFish: 5,
+    image: "https://picsum.photos/200/300",
   },
   {
     uuid: "uuid-456",
@@ -33,7 +34,7 @@ const mockData = [
     fullName: "Galadriel",
     species: "Mahimahi",
     computedPrice: 1000,
-    numberOfFish: 20,
+    image: "https://picsum.photos/200/300",
   },
   {
     uuid: "uuid-789",
@@ -41,26 +42,53 @@ const mockData = [
     fullName: "Frodo Baggins",
     species: "Grouper",
     computedPrice: 80,
-    numberOfFish: 8,
+    image: "https://picsum.photos/200/300",
   },
 ];
 
 function App() {
   const { table, headerNames, rowModel, setData } = useTableState();
-  const { findOfflineData } = useOfflineStorage();
+  const { findOfflineData, updateOfflineData } = useOfflineStorage();
+  const { isOffline } = useOfflineStatus();
 
-  useEffect(() => {
-    const fetchTableData = async () => {
+  const seedTableData = async () => {
+    await updateOfflineData("formData", mockData);
+    const data = await findOfflineData("formData");
+    setData(data);
+  };
+
+  const handleSubmit = async (e, draftData) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    try {
+      if (!isOffline) {
+        await updateOfflineData("formData", [
+          { ...draftData, uuid: draftData.uuid, isDraft: false },
+        ]);
+        dispatchToast({ message: "Online Form Submission", status: "success" });
+      } else {
+        await updateOfflineData("formData", [
+          { uuid: draftData.uuid, isDraft: true, ...draftData },
+        ]);
+        dispatchToast({ message: "Offline Form Submission", status: "warning" });
+      }
+    } catch (error) {
+      dispatchToast({ message: "Form Submission Error", status: "error" });
+    } finally {
       const data = await findOfflineData("formData");
-      setData([...mockData, ...data]);
-    };
-    fetchTableData();
-  }, []);
+      setData(data);
+    }
+  };
 
   return (
     <div className="grid-container">
       <h1>Simple Table Example</h1>
       <InfoAnnotation />
+      <br />
+      <Button type="button" onClick={seedTableData}>
+        Seed Table Data
+      </Button>
       <Table bordered fullWidth fixed>
         <TableHeader table={table}>
           <TableHeaderRow table={table}>
@@ -81,16 +109,34 @@ function App() {
               >
                 {row.getVisibleCells().map((cell) => {
                   const isStatusColumn = cell.column.id === "isDraft";
+                  const isImgColumn = cell.column.id === "image";
+                  if (isImgColumn) {
+                    const src = cell.getValue();
+                    return (
+                      <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
+                        <img src={src} />
+                      </TableBodyCell>
+                    );
+                  }
+                  if (isStatusColumn) {
+                    const val = cell.getValue();
+                    return (
+                      <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
+                        {val ? "Draft" : "Submitted"}
+                        {val && (
+                          <Button
+                            onClick={(e) => handleSubmit(e, row.original)}
+                            className="font-ui-3xs padding-3px margin-left-205"
+                          >
+                            Submit
+                          </Button>
+                        )}
+                      </TableBodyCell>
+                    );
+                  }
                   return (
                     <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
-                      {isStatusColumn && isOfflineData && (
-                        <Button
-                          onClick={() => console.log("send to server")}
-                          className="font-ui-3xs padding-3px margin-left-205"
-                        >
-                          Submit
-                        </Button>
-                      )}
+                      {cell.getValue()}
                     </TableBodyCell>
                   );
                 })}
@@ -141,8 +187,8 @@ function InfoAnnotation() {
   return (
     <Alert type="info" headingLevel={"h2"} heading="Information">
       Below is an example of a table that's populated by server and locally stored data
-      (localStorage or indexedDB). The table is designed to be used with the `TableWrapper`
-      component, it's built with{" "}
+      (localStorage or indexedDB). The table is designed to be used with the{" "}
+      <code>TableWrapper</code> component, it's built with{" "}
       <a
         href="https://tanstack.com/table/latest/docs/introduction"
         target="_blank"

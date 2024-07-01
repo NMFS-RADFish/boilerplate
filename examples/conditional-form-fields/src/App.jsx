@@ -29,7 +29,7 @@ const FormInfoAnnotation = () => {
       <br />
       <br />
       Note, that this does not check if the name is valid or not (only that it exists). For form
-      field validators, please see the `field-validators` example.
+      field validators, please see the <code>field-validators</code> example.
       <br />
       <br />
       <Link
