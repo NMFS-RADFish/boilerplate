@@ -3,8 +3,6 @@ import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Button, Alert, Link } from "@trussworks/react-uswds";
 
-import Layout from "./components/Layout";
-
 import { ServerSync } from "./components/ServerSync";
 
 function App() {
@@ -13,11 +11,9 @@ function App() {
     // Remove header
     <div className="App">
       <Router>
-        <Layout>
-          <h1>Server Sync Example</h1>
-          <InfoAnnotation />
-          <ServerSync />
-        </Layout>
+        <h1>Server Sync Example</h1>
+        <InfoAnnotation />
+        <ServerSync />
       </Router>
     </div>
   );
