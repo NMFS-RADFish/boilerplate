@@ -5,6 +5,7 @@ import App from "./App";
 import { OfflineStorageWrapper } from "./packages/contexts/OfflineStorageWrapper";
 import { TableWrapper } from "./packages/contexts/TableWrapper";
 import { createColumnHelper } from "@tanstack/react-table";
+import { ErrorBoundary } from "@nmfs-radfish/react-radfish";
 import { Application } from "@nmfs-radfish/react-radfish";
 
 const offlineStorageConfig = {
@@ -46,13 +47,15 @@ const pageSize = 10;
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
+  <ErrorBoundary>
+    <React.StrictMode>
     <Application>
       <OfflineStorageWrapper config={offlineStorageConfig}>
         <TableWrapper columnMap={columnMap} pageSize={pageSize}>
           <App />
         </TableWrapper>
       </OfflineStorageWrapper>
-    </Application>
-  </React.StrictMode>,
+      </Application>
+    </React.StrictMode>
+  </ErrorBoundary>
 );
