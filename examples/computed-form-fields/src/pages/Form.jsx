@@ -36,7 +36,8 @@ const ComputedForm = () => {
           Number of Fish
         </Label>
         <Alert type="info" slim={true}>
-          Example of a linked input. The value of this input is used to compute the price.
+          Example of a linked input. The value of this input is used to calculate “Computed Price”
+          below.
         </Alert>
         <TextInput
           className="text-bold"
@@ -59,7 +60,8 @@ const ComputedForm = () => {
         </Label>
         <Alert type="info" slim={true}>
           The species select input is dependent on data coming from a server. The current
-          implementation is using a mock server.
+          implementation is using our mock server which can be found at /directory. Documentation
+          for the mock service worker can be found at this link
         </Alert>
         <Select
           id={species}
