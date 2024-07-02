@@ -1,50 +1,44 @@
 import { Toast } from "../alerts";
-import { createContext, useState, useEffect } from "react";
-import { useOfflineStatus, dispatchToast } from "../hooks";
+import { createContext, useState, useEffect, useContext } from "react";
+import { useOfflineStatus, useToast } from "../hooks";
 
-const OfflineContext = createContext(!navigator.onLine);
+const ApplicationContext = createContext();
 
-export function Application(props) {
-  const [ toasts, setToasts ] = useState([]);
+function ApplicationComponent(props) {
+  const { toasts, setToasts, dispatchToast } = useToast();
   const { isOffline } = useOfflineStatus();
 
   useEffect(() => {
-    if (isOffline) {
-      dispatchToast({ message: "Application is offline", status: "warning" })
-    } else {
-      dispatchToast({ message: "Application is online", status: "info" })
+    if (!isOffline) {
+      dispatchToast({ message: "Application is online", status: "info", duration: 2000 });
     }
   }, [isOffline]);
 
-  useEffect(() => {
-    const clear = setInterval(() => {
-      const nextToasts = toasts.filter((toast) => toast.expires_at > Date.now());
-      setToasts(nextToasts);
-    }, 1000);
-
-    return () => {
-      clearInterval(clear);
-    };
-  }, [toasts]);
-
-  useEffect(() => {
-    function handleToast(event) {
-      const nextToasts = [...toasts];
-      nextToasts.unshift({ message: event.detail.message, status: event.detail.status, expires_at: event.detail.expires_at });
-      setToasts(nextToasts);
-    }
-
-    document.addEventListener("radfish:dispatchToast", handleToast);
-
-    return () => {
-      document.removeEventListener("radfish:dispatchToast", handleToast);
-    };
-  }, []);
-
-  return (<div className="radfish__application">
-    {toasts.map((toast, i) => <Toast toast={toast} key={i}/>) }
-    <OfflineContext.Provider value={isOffline}>
+  return (
+    <div className="radfish__application">
+      <div style={{ position: "sticky", width: "100%", top: 0, zIndex: 999 }}>
+        {isOffline && <Toast toast={{ message: "Application is offline", status: "warning" }} />}
+        {toasts.map((toast, i) => (
+          <Toast toast={toast} key={i} />
+        ))}
+      </div>
       {props.children}
-    </OfflineContext.Provider>
-  </div>)
+    </div>
+  );
 }
+
+export function Application({ application, children }) {
+  return (
+    <ApplicationContext.Provider value={application}>
+      <ApplicationComponent>{children}</ApplicationComponent>
+    </ApplicationContext.Provider>
+  );
+}
+
+export const useApplication = () => {
+  const application = useContext(ApplicationContext);
+  if (!application) {
+    throw new Error("useApplication must be used within an Application component");
+  }
+  return application;
+};
