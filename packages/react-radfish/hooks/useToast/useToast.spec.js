@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { useToast } from "./useToast";
+import { useToast, dispatchToast } from "./useToast";
 
 describe("useToast", () => {
   it("should dispatch a toast event", () => {
@@ -7,7 +7,7 @@ describe("useToast", () => {
 
     const {
       result: {
-        current: { toasts, dispatchToast },
+        current: { toasts },
       },
     } = renderHook(() => useToast());
 
