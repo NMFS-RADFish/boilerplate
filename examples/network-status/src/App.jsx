@@ -15,15 +15,17 @@ function App() {
           notification for 5 seconds when network is offline.
           <br />
           <Link
-            href="https://nmfs-radfish.github.io/documentation/"
+            href="https://nmfs-radfish.github.io/documentation/docs/front-end-developlement-guide/offlineusage"
             target="_blank"
             rel="noopener noreferrer"
           >
             <br />
-            <Button type="button">Go To Documentation</Button>
+            <Button type="button" className="padding-4">
+              Go To Documentation
+            </Button>
           </Link>
         </Alert>
-        <h3>Network Status: {isOffline ? "Offline" : "Online"}</h3>
+        <h3 className="header-body">Network Status: {isOffline ? "Offline ❌" : "Online ✅"}</h3>
       </div>
     </Application>
   );
