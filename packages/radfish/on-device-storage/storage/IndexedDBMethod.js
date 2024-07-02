@@ -1,5 +1,5 @@
 import Dexie from "dexie";
-import { generateUUID } from "./cryptoWrapper";
+import { generateUUID } from "../utilities/cryptoWrapper";
 import { StorageMethod } from "./StorageMethod";
 
 /**

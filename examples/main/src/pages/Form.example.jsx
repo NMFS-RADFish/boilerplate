@@ -14,7 +14,7 @@ import {
 
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
-import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { CONSTANTS } from "../config/form";
 
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;

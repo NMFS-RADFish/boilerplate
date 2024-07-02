@@ -2,7 +2,7 @@ import "../styles/theme.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormGroup, Grid, TextInput, Button, Label, Form } from "@trussworks/react-uswds";
-import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { CONSTANTS } from "../config/form";
 
 const TOTAL_STEPS = 2;

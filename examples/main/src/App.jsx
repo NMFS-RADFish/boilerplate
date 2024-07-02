@@ -9,7 +9,7 @@ import RADFishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { Table } from "./pages/Table.example";
 import { Form } from "./pages/Form.example";
-import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { ServerSync } from "./components/ServerSync";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
 

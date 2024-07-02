@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { IndexedDBMethod, LocalStorageMethod, StorageModelFactory } from "../storage";
+import { IndexedDBMethod, LocalStorageMethod, StorageModelFactory } from "@nmfs-radfish/radfish";
 
 export const OfflineStorageContext = createContext();
 
