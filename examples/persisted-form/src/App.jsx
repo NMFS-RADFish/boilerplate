@@ -23,15 +23,18 @@ function App() {
 const FormInfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
-      This is an example of a form with details coming from IndexedDB. The form data is stored in
+      This is an example of a live form with data populated from IndexDB. The form data is stored in
       the browser's IndexedDB using methods from the <code>useOfflineStorage</code> hook, which uses
       Dexie.js behind the scenes.
       <br />
       <br />
-      Please note that in order to see the form data persist, you must navigate to that form's
-      correct uuid. This happens when you submit a form from the root <code>/</code> url. This uuid
-      in the form url enables the component to query the correct data needed to populate the form
-      from IndexedDB
+      Please note that in order to see the form data persist, you must include the form record's
+      UUID in the browser URL. This will happen automatically when you submit the form from the
+      initial example
+      <br />
+      <br />
+      This example can be helpful when you want to hydrate page state using data from a persistent
+      store like IndexDB or a remote API” Copy Update: “Price (Dollars)” for input label
       <br />
       <br />
       <Link
