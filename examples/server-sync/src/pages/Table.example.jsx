@@ -6,8 +6,7 @@
 import { useEffect } from "react";
 import { useTableState } from "../contexts/TableWrapper.example";
 import { MSW_ENDPOINT } from "../mocks/handlers";
-import RADFishAPIService from "../packages/services/APIService";
-import { Button } from "@trussworks/react-uswds";
+import RadfishAPIService from "../packages/services/APIService";
 import {
   Table,
   TableBody,
@@ -16,20 +15,21 @@ import {
   TableHeader,
   TableHeaderRow,
   TableBodyCell,
+  Button,
   TablePaginationNav,
   TablePaginationPageCount,
   TablePaginationGoToPage,
   TablePaginationSelectRowCount,
   Toast,
-  useOfflineStatus,
-} from "@nmfs-radfish/react-radfish";
+} from "radfish-react";
 import { useNavigate } from "react-router-dom";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { Alert } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
+import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 
-const ApiService = new RADFishAPIService("");
+const ApiService = new RadfishAPIService("");
 
 const SimpleTable = () => {
   /**
@@ -154,37 +154,19 @@ const SimpleTable = () => {
                   data-testid="table-body-row"
                 >
                   {row.getVisibleCells().map((cell) => {
-                    const isStatusColumn = cell.column.id === "isDraft";
-                    if (isStatusColumn) {
-                      const statusValue = cell.getValue() ? "Draft " : "Submitted";
-                      return (
-                        <TableBodyCell
-                          className="radfish-table-body-cell"
-                          key={cell.id}
-                          cell={cell}
-                        >
-                          {statusValue}
-                          {isStatusColumn && isOfflineData && (
-                            <Button
-                              onClick={(e) => handleSubmitDraft(e, row.original)}
-                              className="font-ui-3xs padding-3px margin-left-205"
-                            >
-                              Submit
-                            </Button>
-                          )}
-                        </TableBodyCell>
-                      );
-                    } else {
-                      return (
-                        <TableBodyCell
-                          className="radfish-table-body-cell"
-                          key={cell.id}
-                          cell={cell}
-                        >
-                          {cell.getValue()}
-                        </TableBodyCell>
-                      );
-                    }
+                    const isStatusColumn = cell.column.id === "isOffline";
+                    return (
+                      <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
+                        {isStatusColumn && isOfflineData && (
+                          <Button
+                            onClick={(e) => handleSubmitDraft(e, row.original)}
+                            className="font-ui-3xs padding-3px margin-left-205"
+                          >
+                            Submit
+                          </Button>
+                        )}
+                      </TableBodyCell>
+                    );
                   })}
                 </TableBodyRow>
               );
@@ -194,7 +176,8 @@ const SimpleTable = () => {
       </div>
       <Alert type="info" slim={true}>
         Below are examples of the different pagination components available. Each component is
-        optional and can be used as needed. Components can be found in the `react-radfish` package.
+        optional and can be used as needed. Components can be found in the `react-radfish`
+        directory.
       </Alert>
       <div className="grid-container margin-bottom-3">
         <div className="grid-row display-flex tablet:flex-justify flex-align-center mobile-lg:display-flex flex-justify-center">

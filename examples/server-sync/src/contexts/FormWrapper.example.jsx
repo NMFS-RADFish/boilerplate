@@ -1,12 +1,13 @@
 /**
- * Manages state for any child Radfish form.
+ * Manages state for any child RADFish form.
  * This context should wrap the RadfisForm component and will manage it's state related to input fields, input validations, and form submissions
  * This context provider is meant to be extensible and modular. You can use this anywhere in your app to wrap a form to manage the specific form's state
  */
 
 import React, { createContext, useState, useCallback } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
-import { Alert, Form, Button } from "@trussworks/react-uswds";
+import { Alert } from "@trussworks/react-uswds";
+import { Form, Button } from "radfish-react";
 import { FORM_CONFIG } from "../config/form";
 import { COMMON_CONFIG } from "../config/common";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
@@ -185,7 +186,6 @@ export const FormWrapper = ({ children, onSubmit }) => {
     <FormContext.Provider value={contextValue}>
       <FormInfoAnnotation />
       <Form
-        className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
         onSubmit={(event) => {
           event.preventDefault();
           if (!navigator.onLine) {

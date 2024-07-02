@@ -1,17 +1,8 @@
 import "../styles/theme.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Checkbox, FormGroup, Grid } from "@trussworks/react-uswds";
-import {
-  TextInput,
-  Radio,
-  Select,
-  Button,
-  Label,
-  ErrorMessage,
-  DatePicker,
-} from "@trussworks/react-uswds";
-
+import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "radfish-react";
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
@@ -116,24 +107,12 @@ const Form = ({ asyncFormOptions }) => {
 };
 
 export const StepOne = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { init, stepForward, stepBackward, formData, handleChange, handleBlur, validationErrors } =
+  const { stepForward, stepBackward, formData, handleChange, handleBlur, validationErrors } =
     useFormState();
-  const [selectedDate, setSelectedDate] = useState(null);
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-  const handleInit = async () => {
-    const formId = await init({ initialStep: 2 });
-    navigate(`${formId}`);
-  };
 
   return (
     <FormGroup error={validationErrors[fullName]}>
-      <Label className="text-bold" htmlFor={fullName}>
-        Full Name
-      </Label>
+      <Label htmlFor={fullName}>Full Name</Label>
       {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
       <TextInput
         id={fullName}
@@ -147,16 +126,12 @@ export const StepOne = () => {
         onBlur={(e) => handleBlur(e, fullNameValidators)}
         data-testid="inputId"
       />
-      <Label className="text-bold" htmlFor="checkbox">
-        Checkbox Example
-      </Label>
+      <Label htmlFor="checkbox">Checkbox Example</Label>
       <Checkbox id="Oahu" name="islands" value="Oahu" label="Oahu" defaultChecked />
       <Checkbox id="Kauai" name="islands" value="Kauai" label="Kauai" />
       <Checkbox id="Mauai" name="islands" value="Mauai" label="Mauai" />
 
-      <Label className="text-bold" htmlFor={radioOption}>
-        Have you caught fish today?
-      </Label>
+      <Label htmlFor={radioOption}>Have you caught fish today?</Label>
       <Radio
         id="option-catch-yes"
         name={radioOption}
@@ -172,13 +147,6 @@ export const StepOne = () => {
         value="option-catch-no"
         checked={formData[radioOption] === "option-catch-no"}
         onChange={handleChange}
-      />
-      <DatePicker
-        id="datepicker"
-        name="date"
-        onChange={handleDateChange}
-        value={selectedDate}
-        placeholder="MM/DD/YYYY"
       />
       <Grid className="display-flex flex-justify">
         <Button
@@ -210,9 +178,7 @@ export const StepTwo = ({ asyncFormOptions }) => {
 
   return (
     <FormGroup>
-      <Label className="text-bold" htmlFor={numberOfFish}>
-        Number of Fish
-      </Label>
+      <Label htmlFor={numberOfFish}>Number of Fish</Label>
       <Alert type="info" slim={true}>
         Example of a linked input. The value of this input is used to compute the price.
       </Alert>
@@ -226,9 +192,7 @@ export const StepTwo = ({ asyncFormOptions }) => {
         value={formData[numberOfFish] || ""}
         onChange={handleChange}
       />
-      <Label className="text-bold" htmlFor={species}>
-        Species
-      </Label>
+      <Label htmlFor={species}>Species</Label>
       <Alert type="info" slim={true}>
         The species select input is dependent on data coming from a server. The current
         implementation is using a mock server.
@@ -249,9 +213,7 @@ export const StepTwo = ({ asyncFormOptions }) => {
       </Select>
       {visibleInputs[subSpecies] && (
         <>
-          <Label className="text-bold" htmlFor={subSpecies}>
-            Sub species
-          </Label>
+          <Label htmlFor={subSpecies}>Sub species</Label>
           <Alert type="info" slim={true}>
             Only visible when a species is selected.
           </Alert>
@@ -265,9 +227,7 @@ export const StepTwo = ({ asyncFormOptions }) => {
           />
         </>
       )}
-      <Label className="text-bold" htmlFor={species}>
-        Computed Price
-      </Label>
+      <Label htmlFor={species}>Computed Price</Label>
       <Alert type="info" slim={true}>
         Readonly input. Its value is calculated based on the number of fish and species selected.
       </Alert>

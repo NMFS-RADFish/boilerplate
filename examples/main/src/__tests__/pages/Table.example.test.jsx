@@ -76,6 +76,7 @@ const rowModelMock = {
         {
           id: "",
           getContext: vi.fn(() => ""),
+          getValue: vi.fn(() => "cell value"),
           column: {
             id: "",
             columnDef: {},
@@ -164,9 +165,6 @@ describe("Table", () => {
     });
 
     vi.spyOn(offlineWrapper, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
-
-    const spy = vi.spyOn(tanstackTable, "flexRender");
-    spy.mockReturnValue("cell value");
 
     const { queryByText, container } = render(
       <tableWrapper.TableWrapper>

@@ -12,7 +12,7 @@ This example includes how to setup and use the on-device storage using IndexedDB
 1. In the `index.jsx` file, import the `OfflineStorageWrapper`, then create a configuration object:
 
 ```jsx
-import { OfflineStorageWrapper } from "./packages/contexts/OfflineStorageWrapper";
+import { OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
 
 const offlineStorageConfig = {
   // Type is either `indexedDB` or `localStorage`

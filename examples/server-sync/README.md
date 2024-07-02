@@ -67,7 +67,7 @@ Here is an example of how to integrate these steps into the syncToHomebase funct
 import { useState } from "react";
 import { Button, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import RADFishAPIService from "../packages/services/APIService";
-import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
 const ApiService = new RADFishAPIService("");
 

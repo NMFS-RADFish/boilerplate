@@ -2,10 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
-import { OfflineStorageWrapper } from "./packages/contexts/OfflineStorageWrapper";
 import { TableWrapper } from "./packages/contexts/TableWrapper";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Application } from "@nmfs-radfish/react-radfish";
+import { Application, ErrorBoundary, OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
 
 const offlineStorageConfig = {
   type: "indexedDB",
@@ -46,13 +45,15 @@ const pageSize = 10;
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
-    <Application>
-      <OfflineStorageWrapper config={offlineStorageConfig}>
-        <TableWrapper columnMap={columnMap} pageSize={pageSize}>
-          <App />
-        </TableWrapper>
-      </OfflineStorageWrapper>
-    </Application>
-  </React.StrictMode>,
+  <ErrorBoundary>
+    <React.StrictMode>
+      <Application>
+        <OfflineStorageWrapper config={offlineStorageConfig}>
+          <TableWrapper columnMap={columnMap} pageSize={pageSize}>
+            <App />
+          </TableWrapper>
+        </OfflineStorageWrapper>
+      </Application>
+    </React.StrictMode>
+  </ErrorBoundary>,
 );

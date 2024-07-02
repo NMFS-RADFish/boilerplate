@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
-import { OfflineStorageWrapper } from "./packages/contexts/OfflineStorageWrapper";
+import { ErrorBoundary, OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
 
 async function enableMocking() {
   const { worker } = await import("./mocks/browser");
@@ -41,10 +41,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 enableMocking().then(() => {
   root.render(
-    <React.StrictMode>
-      <OfflineStorageWrapper config={offlineStorageConfig}>
-        <App />
-      </OfflineStorageWrapper>
-    </React.StrictMode>,
+    <ErrorBoundary>
+      <React.StrictMode>
+        <OfflineStorageWrapper config={offlineStorageConfig}>
+          <App />
+        </OfflineStorageWrapper>
+      </React.StrictMode>
+    </ErrorBoundary>,
   );
 });
