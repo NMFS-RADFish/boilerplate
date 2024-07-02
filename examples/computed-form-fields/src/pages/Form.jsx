@@ -22,7 +22,6 @@ const ComputedForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("handling submit");
     dispatchToast({ status: "success", message: "Successful form submission" });
   };
 
