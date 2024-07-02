@@ -2,7 +2,7 @@ import "../index.css";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FormGroup, TextInput, Label, Button, Form } from "@trussworks/react-uswds";
-import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
 export const PersistedForm = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export const PersistedForm = () => {
       const formId = await createOfflineData("formData", values);
       navigate(`${formId}`);
     } else {
-      await saveOfflineData("formData", [{ uuid: params.id, ...data }]);
+      await saveOfflineData("formData", [formData]);
       // after updating the data in IndexedDB, we can execute any other logic here
       // eg. execute a POST request to an API
     }
