@@ -1,6 +1,6 @@
 # Multistep Form Example
 
-This example includes an example on how to build a form that includes multiple "steps", where each step is it's own `FormGroup`, and where the form needs to keep track of which step the form is on. For example, when a form is on step 2, whenever a user returns to that form, they should return to step 2, rather than starting the form from it's initial step. In order for this to work, we need to incorporate the `useOfflineStorage` hook to keep track of this in IndexedDB.
+This example includes an example on how to build a form that includes multiple "steps", where each step is it's own `FormGroup`, and where the form needs to keep track of the current step that the user is on. For example, when a form is on step 2, whenever a user returns to that form, they should return to step 2, rather than starting the form from it's initial step. In order for this to work, we need to incorporate the `useOfflineStorage` hook to keep track of this in IndexedDB.
 
 Additionally, the data within the form should cache into IndexedDB as the user types. This means, that the form will save the data inputted into the form into IndexedDB. So, when the user returns to the form, on their current step, the data within that form should persist, along with the current step of the form.
 
