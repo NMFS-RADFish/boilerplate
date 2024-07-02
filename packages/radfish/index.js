@@ -71,3 +71,5 @@ export class Application {
       });
   }
 }
+
+export * from "./on-device-storage/storage";
