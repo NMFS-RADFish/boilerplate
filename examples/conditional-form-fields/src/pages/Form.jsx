@@ -2,6 +2,7 @@ import "../styles/theme.css";
 import React, { useState } from "react";
 import { FormGroup, Grid } from "@trussworks/react-uswds";
 import { TextInput, Button, Label, Form } from "@trussworks/react-uswds";
+import { dispatchToast } from "@nmfs-radfish/react-radfish";
 
 const fullName = "fullName";
 const nickname = "nickname";
@@ -11,7 +12,7 @@ const ConditionalForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // TODO: Integrate toast component
+    dispatchToast({ status: "success", message: "Successful form submission" });
   };
 
   return (

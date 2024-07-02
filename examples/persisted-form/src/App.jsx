@@ -24,13 +24,14 @@ const FormInfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
       This is an example of a form with details coming from IndexedDB. The form data is stored in
-      the browser's IndexedDB using methods from the `useOfflineStorage` hook, which uses Dexie.js
-      behind the scenes.
+      the browser's IndexedDB using methods from the <code>useOfflineStorage</code> hook, which uses
+      Dexie.js behind the scenes.
       <br />
       <br />
       Please note that in order to see the form data persist, you must navigate to that form's
-      correct uuid. This happens when you submit a form from the root `/` url. This uuid in the form
-      url enables the component to query the correct data needed to populate the form from IndexedDB
+      correct uuid. This happens when you submit a form from the root <code>/</code> url. This uuid
+      in the form url enables the component to query the correct data needed to populate the form
+      from IndexedDB
       <br />
       <br />
       <Link
