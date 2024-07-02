@@ -154,19 +154,37 @@ const SimpleTable = () => {
                   data-testid="table-body-row"
                 >
                   {row.getVisibleCells().map((cell) => {
-                    const isStatusColumn = cell.column.id === "isOffline";
-                    return (
-                      <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
-                        {isStatusColumn && isOfflineData && (
-                          <Button
-                            onClick={(e) => handleSubmitDraft(e, row.original)}
-                            className="font-ui-3xs padding-3px margin-left-205"
-                          >
-                            Submit
-                          </Button>
-                        )}
-                      </TableBodyCell>
-                    );
+                    const isStatusColumn = cell.column.id === "isDraft";
+                    if (isStatusColumn) {
+                      const statusValue = cell.getValue() ? "Draft " : "Submitted";
+                      return (
+                        <TableBodyCell
+                          className="radfish-table-body-cell"
+                          key={cell.id}
+                          cell={cell}
+                        >
+                          {statusValue}
+                          {isStatusColumn && isOfflineData && (
+                            <Button
+                              onClick={(e) => handleSubmitDraft(e, row.original)}
+                              className="font-ui-3xs padding-3px margin-left-205"
+                            >
+                              Submit
+                            </Button>
+                          )}
+                        </TableBodyCell>
+                      );
+                    } else {
+                      return (
+                        <TableBodyCell
+                          className="radfish-table-body-cell"
+                          key={cell.id}
+                          cell={cell}
+                        >
+                          {cell.getValue()}
+                        </TableBodyCell>
+                      );
+                    }
                   })}
                 </TableBodyRow>
               );

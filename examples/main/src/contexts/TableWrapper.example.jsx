@@ -51,8 +51,8 @@ export const TableWrapper = ({ children }) => {
    */
   const columns = React.useMemo(
     () => [
-      columnHelper.accessor("isOffline", {
-        cell: (info) => (info.getValue() ? "Draft " : "Submitted"),
+      columnHelper.accessor("isDraft", {
+        cell: (info) => info.getValue(),
         header: () => <span>Status</span>,
       }),
       columnHelper.accessor("uuid", {
