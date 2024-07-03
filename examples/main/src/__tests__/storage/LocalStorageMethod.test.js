@@ -1,6 +1,6 @@
-import { LocalStorageMethod } from "../../packages/storage/LocalStorageMethod";
+import { LocalStorageMethod } from "@nmfs-radfish/radfish";
 
-vi.mock("../../packages/storage/cryptoWrapper.js", () => ({
+vi.mock("@nmfs-radfish/react-radfish", () => ({
   generateUUID: vi.fn(() => "mock-uuid"),
 }));
 

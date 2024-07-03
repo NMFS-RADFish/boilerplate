@@ -2,7 +2,6 @@ import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import * as formWrapper from "../../contexts/FormWrapper.example";
 import * as reactRouter from "react-router-dom";
-import * as offlineWrapper from "../../packages/contexts/OfflineStorageWrapper";
 
 // Mocking react-router-dom hooks
 vi.mock("react-router-dom", async () => ({
@@ -53,7 +52,6 @@ describe("FormWrapper", () => {
 
     vi.spyOn(reactRouter, "useSearchParams").mockImplementation(mockedUseSearchParams);
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
-    vi.spyOn(offlineWrapper, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
 
     const TestComponent = () => {
       const { handleChange, handleBlur, validationErrors, handleMultiEntrySubmit } =

@@ -5,9 +5,8 @@ import { Table } from "../../pages/Table.example";
 import * as tableWrapper from "../../contexts/TableWrapper.example";
 import * as tanstackTable from "@tanstack/react-table";
 import Dexie from "dexie";
-import { generateUUID } from "../../packages/storage/cryptoWrapper.js";
-import { IndexedDBMethod } from "../../packages/storage/IndexedDBMethod.js";
-import * as offlineWrapper from "../../packages/contexts/OfflineStorageWrapper";
+import { generateUUID } from "@nmfs-radfish/radfish";
+import { IndexedDBMethod } from "@nmfs-radfish/radfish";
 
 global.fetch = vi.fn().mockResolvedValue({
   ok: true,
@@ -163,8 +162,6 @@ describe("Table", () => {
         deleteOfflineData: vi.fn(),
       };
     });
-
-    vi.spyOn(offlineWrapper, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
 
     const { queryByText, container } = render(
       <tableWrapper.TableWrapper>

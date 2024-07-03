@@ -1,6 +1,6 @@
 import Dexie from "dexie";
-import { IndexedDBMethod } from "../../packages/storage/IndexedDBMethod.js";
-import { generateUUID } from "../../packages/storage/cryptoWrapper.js";
+import { IndexedDBMethod } from "@nmfs-radfish/radfish";
+import { generateUUID } from "@nmfs-radfish/radfish";
 
 vi.mock("dexie");
 
