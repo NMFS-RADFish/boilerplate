@@ -24,11 +24,13 @@ function App() {
 const FormInfoAnnotation = () => {
   return (
     <Alert type="info" headingLevel={"h2"} heading="Information">
-      This is an example of a form with form inputs that compute the values of other form inputs.
+      In this example, the “Computed Price” is calculated by taking “Number of Fish” and multiplying
+      it by the price for the selected “Species”. The price for each species is a mapping defined in
+      the mock server response
       <br />
       <br />
       <Link
-        href="https://nmfs-radfish.github.io/documentation"
+        href="https://nmfs-radfish.github.io/documentation/docs/front-end-developlement-guide/frontend-development-guide"
         target="_blank"
         rel="noopener noreferrer"
       >

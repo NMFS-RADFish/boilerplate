@@ -15,13 +15,14 @@ const species = "species";
 const numberOfFish = "numberOfFish";
 const computedPrice = "computedPrice";
 const speciesData = ["grouper", "salmon", "marlin", "mahimahi"];
+import { dispatchToast } from "@nmfs-radfish/react-radfish";
 
 const ComputedForm = () => {
   const [formData, setFormData] = useState({});
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // TODO: Integrate toast component
+    dispatchToast({ status: "success", message: "Successful form submission" });
   };
 
   return (
@@ -34,7 +35,8 @@ const ComputedForm = () => {
           Number of Fish
         </Label>
         <Alert type="info" slim={true}>
-          Example of a linked input. The value of this input is used to compute the price.
+          Example of a linked input. The value of this input is used to calculate “Computed Price”
+          below.
         </Alert>
         <TextInput
           className="text-bold"
@@ -56,8 +58,11 @@ const ComputedForm = () => {
           Species
         </Label>
         <Alert type="info" slim={true}>
-          The species select input is dependent on data coming from a server. The current
-          implementation is using a mock server.
+          The current implementation is using our mock server which can be found at /directory.
+          Documentation for the mock service worker can be found at{" "}
+          <a href="https://nmfs-radfish.github.io/documentation/docs/front-end-developlement-guide/mock-api">
+            this link
+          </a>
         </Alert>
         <Select
           id={species}
