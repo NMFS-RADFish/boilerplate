@@ -14,7 +14,7 @@ export const dispatchToast = ({ message, status, duration = 2000 }) => {
   document.dispatchEvent(toast);
 };
 
-export const useToast = () => {
+export const useToasts = () => {
   const [toasts, setToasts] = useState([]);
 
   useEffect(() => {

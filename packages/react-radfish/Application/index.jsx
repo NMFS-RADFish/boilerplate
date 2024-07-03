@@ -1,16 +1,16 @@
 import { Toast } from "../alerts";
-import { createContext, useState, useEffect, useContext } from "react";
-import { useOfflineStatus, useToast } from "../hooks";
+import { createContext, useEffect, useContext } from "react";
+import { useOfflineStatus, useToasts, dispatchToast } from "../hooks";
 
 const ApplicationContext = createContext();
 
 function ApplicationComponent(props) {
-  const { toasts, setToasts, dispatchToast } = useToast();
+  const { toasts } = useToasts();
   const { isOffline } = useOfflineStatus();
 
   useEffect(() => {
     if (!isOffline) {
-      dispatchToast({ message: "Application is online", status: "info", duration: 2000 });
+      dispatchToast({ message: "Application is online", status: "info", duration: 3000 });
     }
   }, [isOffline]);
 
