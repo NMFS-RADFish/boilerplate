@@ -1,10 +1,64 @@
 import "../styles/theme.css";
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { FormGroup, Grid, TextInput, Button, Label, Form } from "@trussworks/react-uswds";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { FormGroup, Grid, TextInput, Button, Label, Form, Select } from "@trussworks/react-uswds";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
-import { CONSTANTS } from "../config/form";
 
+import { CONSTANTS } from "../config/form";
+import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
+import { Toast } from "@nmfs-radfish/react-radfish";
+const states = [
+  "Alabama",
+  "Alaska",
+  "Arizona",
+  "Arkansas",
+  "California",
+  "Colorado",
+  "Connecticut",
+  "Delaware",
+  "Florida",
+  "Georgia",
+  "Hawaii",
+  "Idaho",
+  "Illinois",
+  "Indiana",
+  "Iowa",
+  "Kansas",
+  "Kentucky",
+  "Louisiana",
+  "Maine",
+  "Maryland",
+  "Massachusetts",
+  "Michigan",
+  "Minnesota",
+  "Mississippi",
+  "Missouri",
+  "Montana",
+  "Nebraska",
+  "Nevada",
+  "New Hampshire",
+  "New Jersey",
+  "New Mexico",
+  "New York",
+  "North Carolina",
+  "North Dakota",
+  "Ohio",
+  "Oklahoma",
+  "Oregon",
+  "Pennsylvania",
+  "Rhode Island",
+  "South Carolina",
+  "South Dakota",
+  "Tennessee",
+  "Texas",
+  "Utah",
+  "Vermont",
+  "Virginia",
+  "Washington",
+  "West Virginia",
+  "Wisconsin",
+  "Wyoming",
+];
 const TOTAL_STEPS = 2;
 const { fullName, email, city, state, zipcode } = CONSTANTS;
 
@@ -12,8 +66,29 @@ const MultiStepForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({});
+  const { toast, showToast, dismissToast } = useToast();
+  const location = useLocation();
+  const [errors, setErrors] = useState({
+    email: "",
+    fullName: "",
+    city: "",
+    state: "",
+    zipcode: "",
+  });
   const { createOfflineData, findOfflineData, updateOfflineData } = useOfflineStorage();
-
+  const validateForm = () => {
+    const newErrors = { email: "", fullName: "", city: "", state: "", zipcode: "" };
+    // Check each field for content, add errors for empty required fields
+    if (!formData[fullName]) newErrors[fullName] = "Full name is required";
+    if (!formData[email]) newErrors[email] = "Email is required";
+    if (formData.currentStep === 2) {
+      if (!formData[city]) newErrors[city] = "City is required";
+      if (!formData[state]) newErrors[state] = "State is required";
+      if (!formData[zipcode]) newErrors[zipcode] = "Zipcode is required";
+    }
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
+  };
   // checks if uuid exists in IndexedDB. If it does, load that formData, else start new multistep form
   useEffect(() => {
     const loadData = async () => {
@@ -32,11 +107,39 @@ const MultiStepForm = () => {
     loadData();
   }, [id]);
 
+  useEffect(() => {
+    if (location.state?.showToast) {
+      showToast(TOAST_CONFIG.SUCCESS);
+      setTimeout(() => {
+        dismissToast();
+        navigate(location.pathname, {
+          state: { ...location.state, showToast: false },
+          replace: true,
+        });
+        setFormData({});
+      }, TOAST_LIFESPAN);
+    }
+  }, [location.state]);
+
   // submits form data, and includes a submitted flag to identify that it has been submitted
   // this is useful for tracking which forms have been submitted, and which are still in progress
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await updateOfflineData("formData", [{ uuid: formData.uuid, ...formData, submitted: true }]);
+    try {
+      if (validateForm()) {
+        await updateOfflineData("formData", [
+          { uuid: formData.uuid, ...formData, submitted: true },
+        ]);
+        navigate("/", { replace: true, state: { showToast: true } });
+        showToast(TOAST_CONFIG.SUCCESS);
+      }
+    } catch {
+      showToast(TOAST_CONFIG.ERROR);
+    } finally {
+      setTimeout(() => {
+        dismissToast();
+      }, TOAST_LIFESPAN);
+    }
   };
 
   // whenever an input field changes, update the formData state in IndexedDB so that is is cached as the user types
@@ -91,7 +194,10 @@ const MultiStepForm = () => {
 
   if (!id) {
     return (
-      <div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <div className="toast-container">
+          <Toast toast={toast} />
+        </div>
         <Button type="button" onClick={handleInit}>
           Begin Form
         </Button>
@@ -102,16 +208,32 @@ const MultiStepForm = () => {
   if (!formData.currentStep) {
     return (
       <div>
-        <p>Invlid Step</p>
+        <p>Invalid Step</p>
       </div>
     );
   }
-
+  const errorMessages = [
+    errors[fullName],
+    errors[email],
+    errors[city],
+    errors[state],
+    errors[zipcode],
+  ]
+    .filter(Boolean) // Filters out empty or undefined error messages
+    .join(", ");
   return (
     <Form
       className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
       onSubmit={handleSubmit}
     >
+      {errorMessages && (
+        <div className="text-error">
+          <strong>Please correct the following:</strong> {errorMessages}
+        </div>
+      )}
+      <Label className="text-bold" style={{ textAlign: "right" }}>
+        Step {formData.currentStep}
+      </Label>
       {/* step one */}
       {formData.currentStep === 1 && (
         <FormGroup>
@@ -137,7 +259,6 @@ const MultiStepForm = () => {
             value={formData[email] || ""}
             onChange={handleChange}
           />
-
           <Grid className="display-flex flex-justify">
             <Button
               type="button"
@@ -176,16 +297,22 @@ const MultiStepForm = () => {
           <Label className="text-bold" htmlFor={state}>
             State
           </Label>
-          <TextInput
+          <Select
             id={state}
             name={state}
-            type="text"
-            placeholder="State"
             value={formData[state] || ""}
             onChange={handleChange}
-          />
+            aria-label="Select a state"
+          >
+            <option value="">Select a state</option>
+            {states.map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </Select>
           <Label className="text-bold" htmlFor={zipcode}>
-            Zipcode
+            Zip Code
           </Label>
           <TextInput
             id={zipcode}

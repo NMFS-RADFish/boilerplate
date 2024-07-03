@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <Layout>
-        <h1>Multistep Form Example</h1>
+        <h1>Multi-Step</h1>
         <FormInfoAnnotation />
         <br />
         <Router>
@@ -26,9 +26,9 @@ function App() {
 const FormInfoAnnotation = () => {
   return (
     <Alert type="info" headingLevel={"h2"} heading="Information">
-      This is an example of a multistep form, where the form needs to keep track of the currentStep
-      the user is on. This current step should persist through refresh, along with the data for that
-      specific form, on the correct step.
+      This is an example of a multistep form, where the form needs to keep track of the current step
+      that the user is on. This current step should persist through refresh, along with the data for
+      that specific form, on the correct step.
       <br />
       <br />
       <strong>Note:</strong> Annotations are for informational purposes only. In production, you
