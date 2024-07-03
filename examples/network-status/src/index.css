@@ -21,3 +21,11 @@ html,
 body {
   width: 100%;
 }
+
+.header-body {
+  text-align: center;
+}
+
+.padding-4 {
+  padding: 16px;
+}
