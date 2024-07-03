@@ -28,5 +28,5 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center; /* Ensure text is centered */
-  height: 100vh; /* Adjust as necessary */
+  margin-top: 200px;
 }
