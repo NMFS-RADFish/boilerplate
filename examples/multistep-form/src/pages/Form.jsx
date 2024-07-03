@@ -2,7 +2,8 @@ import "../styles/theme.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FormGroup, Grid, TextInput, Button, Label, Form, Select } from "@trussworks/react-uswds";
-import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+
 import { CONSTANTS } from "../config/form";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
 import { Toast } from "@nmfs-radfish/react-radfish";

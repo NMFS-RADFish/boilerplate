@@ -1,13 +1,51 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const TOAST_STATUS = {
-  SUCCESS: 0,
-  ERROR: 1,
-  WARNING: 2,
-  INFO: 3,
+  SUCCESS: "success",
+  ERROR: "error",
+  WARNING: "warn",
+  INFO: "info",
 };
 
-export function dispatchToast({ message, status}) {
-  let event = new CustomEvent("radfish:dispatchToast", { detail: { message, status, expires_at: Date.now() + 2000} });
-  return document.dispatchEvent(event);
-}
+export const dispatchToast = ({ message, status, duration = 2000 }) => {
+  const toast = new CustomEvent("@nmfs-radfish/react-radfish:dispatchToast", {
+    detail: { message, status, duration, expires_at: Date.now() + duration },
+  });
+  document.dispatchEvent(toast);
+};
+
+export const useToast = () => {
+  const [toasts, setToasts] = useState([]);
+
+  useEffect(() => {
+    function handleToast(event) {
+      const nextToasts = [...toasts];
+      const now = Date.now();
+      const duration = event.detail.duration;
+
+      const toast = {
+        message: event.detail.message,
+        status: event.detail.status,
+        duration: now + duration,
+      };
+      nextToasts.unshift(toast);
+
+      setTimeout(() => {
+        setToasts((toasts) => toasts.filter((t) => t.expires_at < now));
+      }, duration);
+
+      setToasts(nextToasts);
+    }
+
+    document.addEventListener("@nmfs-radfish/react-radfish:dispatchToast", handleToast);
+
+    return () => {
+      document.removeEventListener("@nmfs-radfish/react-radfish:dispatchToast", handleToast);
+    };
+  }, []);
+
+  return {
+    toasts,
+    setToasts,
+  };
+};

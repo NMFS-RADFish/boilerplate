@@ -24,7 +24,7 @@ import {
   useOfflineStatus,
 } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
-import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { Alert } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
@@ -154,19 +154,37 @@ const SimpleTable = () => {
                   data-testid="table-body-row"
                 >
                   {row.getVisibleCells().map((cell) => {
-                    const isStatusColumn = cell.column.id === "isOffline";
-                    return (
-                      <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
-                        {isStatusColumn && isOfflineData && (
-                          <Button
-                            onClick={(e) => handleSubmitDraft(e, row.original)}
-                            className="font-ui-3xs padding-3px margin-left-205"
-                          >
-                            Submit
-                          </Button>
-                        )}
-                      </TableBodyCell>
-                    );
+                    const isStatusColumn = cell.column.id === "isDraft";
+                    if (isStatusColumn) {
+                      const statusValue = cell.getValue() ? "Draft " : "Submitted";
+                      return (
+                        <TableBodyCell
+                          className="radfish-table-body-cell"
+                          key={cell.id}
+                          cell={cell}
+                        >
+                          {statusValue}
+                          {isStatusColumn && isOfflineData && (
+                            <Button
+                              onClick={(e) => handleSubmitDraft(e, row.original)}
+                              className="font-ui-3xs padding-3px margin-left-205"
+                            >
+                              Submit
+                            </Button>
+                          )}
+                        </TableBodyCell>
+                      );
+                    } else {
+                      return (
+                        <TableBodyCell
+                          className="radfish-table-body-cell"
+                          key={cell.id}
+                          cell={cell}
+                        >
+                          {cell.getValue()}
+                        </TableBodyCell>
+                      );
+                    }
                   })}
                 </TableBodyRow>
               );

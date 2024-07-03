@@ -28,8 +28,9 @@ function FormInfoAnnotation() {
       input includes a number, the validator will return false and display the error
       <br />
       <br />
-      To see where the validators are defined, you can visit `/utilities/fieldValidators.js`. Note
-      that you can handle several different validation test cases within each validation array.
+      To see where the validators are defined, you can visit{" "}
+      <code>/utilities/fieldValidators.js</code>. Note that you can handle several different
+      validation test cases within each validation array.
       <br />
       <br />
       <Link

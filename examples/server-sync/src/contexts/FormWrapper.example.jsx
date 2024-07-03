@@ -10,7 +10,7 @@ import { Alert } from "@trussworks/react-uswds";
 import { Form, Button } from "radfish-react";
 import { FORM_CONFIG } from "../config/form";
 import { COMMON_CONFIG } from "../config/common";
-import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
 const FormContext = createContext();
 const TOTAL_STEPS = 3;

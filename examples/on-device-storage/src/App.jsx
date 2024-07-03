@@ -1,6 +1,6 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
-import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { Button, Alert, Link } from "@trussworks/react-uswds";
 
 const App = () => {
@@ -76,11 +76,19 @@ const App = () => {
     <div className="grid-container">
       <h1>On Device Storage Example</h1>
       <Alert type="info" heading="Information" headingLevel="h2">
-        This is an example of how to use the `OfflineStorageWrapper` context and
-        the provided `useOfflineStorage` hook to interact with on-device
-        storage. This example demonstrates how to create, read, update, and
-        delete data from IndexedDB. The `useOfflineStorage` hooks uses Dexie.js
-        under the hood.
+        This is an example of how to use the <code>OfflineStorageWrapper</code>{" "}
+        context and the provided <code>useOfflineStorage</code> hook to interact
+        with on-device storage. This example demonstrates how to create, read,
+        update, and delete data from IndexedDB. The{" "}
+        <code>useOfflineStorage</code> hooks uses Dexie.js under the hood.
+        <br />
+        <br />
+        Please note that if you choose to test this example with the network
+        connection offline, you won’t be able to refresh the page. To do this,
+        you must ensure that Service Worker is registered, which requires the
+        example to be served as a production build using{" "}
+        <code>npm run build</code> and serving that output using a basic HTTP
+        server such as <code>serve build</code>
         <br />
         <br />
         <Link
