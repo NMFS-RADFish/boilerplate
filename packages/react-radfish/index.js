@@ -1,10 +1,10 @@
 // components
-export * from "./alerts";
-export * from "./spinner";
-export * from "./table";
-export * from "./Application";
-export * from "./ErrorBoundary";
-export * from "./OfflineStorage";
+export * from "./alerts/index.jsx";
+export * from "./spinner/index.jsx";
+export * from "./table/index.jsx";
+export * from "./Application/index.jsx";
+export * from "./ErrorBoundary/index.jsx";
+export * from "./OfflineStorage/index.jsx";
 
 // hooks
-export * from "./hooks";
+export * from "./hooks/index.js";
