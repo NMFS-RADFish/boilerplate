@@ -1,4 +1,4 @@
-import { generateUUID } from "../../utilities";
+import { generateUUID } from "../utilities/cryptoWrapper";
 import { StorageMethod } from "./StorageMethod";
 
 /**
@@ -14,7 +14,8 @@ export class LocalStorageMethod extends StorageMethod {
     super();
     this.key = key;
     this.store =
-      localStorage.getItem(this.key) || localStorage.setItem(this.key, JSON.stringify([]));
+      localStorage.getItem(this.key) ||
+      localStorage.setItem(this.key, JSON.stringify([]));
   }
 
   /**
@@ -52,8 +53,8 @@ export class LocalStorageMethod extends StorageMethod {
           ?.map((item) => [item[0], item[1]])
           .filter(([uuid, entry]) =>
             Object.keys(criteria).every(
-              (key) => criteria[key] === entry[key] || uuid === criteria[key],
-            ),
+              (key) => criteria[key] === entry[key] || uuid === criteria[key]
+            )
           );
         return result;
       }
@@ -77,7 +78,8 @@ export class LocalStorageMethod extends StorageMethod {
 
         if (
           Object.keys(criteria).every(
-            (key) => entryData[key] === criteria[key] || criteria[key] === entry[0],
+            (key) =>
+              entryData[key] === criteria[key] || criteria[key] === entry[0]
           )
         ) {
           return [entry[0], { ...entryData, ...data }];

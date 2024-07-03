@@ -7,6 +7,13 @@ export const TOAST_STATUS = {
   INFO: "info",
 };
 
+export const dispatchToast = ({ message, status, duration = 2000 }) => {
+  const toast = new CustomEvent("@nmfs-radfish/react-radfish:dispatchToast", {
+    detail: { message, status, duration, expires_at: Date.now() + duration },
+  });
+  document.dispatchEvent(toast);
+};
+
 export const useToast = () => {
   const [toasts, setToasts] = useState([]);
 
@@ -40,11 +47,5 @@ export const useToast = () => {
   return {
     toasts,
     setToasts,
-    dispatchToast: ({ message, status, duration = 2000 }) => {
-      const toast = new CustomEvent("@nmfs-radfish/react-radfish:dispatchToast", {
-        detail: { message, status, duration, expires_at: Date.now() + duration },
-      });
-      document.dispatchEvent(toast);
-    },
   };
 };

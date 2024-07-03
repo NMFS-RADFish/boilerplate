@@ -1,6 +1,6 @@
 {
   "name": "@nmfs-radfish/radfish",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +10,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "msw": "^2.3.1"
+    "dexie": "^4.0.7",
+    "msw": "^2.3.1",
+    "react": "^18.3.1"
   }
 }
