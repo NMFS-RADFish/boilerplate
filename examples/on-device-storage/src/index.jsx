@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
-import { OfflineStorageWrapper } from "./packages/contexts/OfflineStorageWrapper";
+import { OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
 import { ErrorBoundary } from "@nmfs-radfish/react-radfish";
 
 const offlineStorageConfig = {

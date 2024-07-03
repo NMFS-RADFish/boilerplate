@@ -3,7 +3,7 @@ import { Button } from "@trussworks/react-uswds";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import RADFishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
-import { useOfflineStorage } from "../packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
 const ApiService = new RADFishAPIService("");
 

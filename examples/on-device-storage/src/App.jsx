@@ -1,6 +1,6 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
-import { useOfflineStorage } from "./packages/contexts/OfflineStorageWrapper";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { Button, Alert, Link } from "@trussworks/react-uswds";
 
 const App = () => {
