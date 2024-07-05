@@ -2,7 +2,6 @@ import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import * as formWrapper from "../../contexts/FormWrapper.example";
 import { Form } from "../../pages/Form.example";
-import * as offlineWrapper from "../../packages/contexts/OfflineStorageWrapper";
 import * as reactRouter from "react-router-dom";
 
 vi.mock("react-router-dom", async () => {
@@ -54,7 +53,6 @@ describe("Form", () => {
     const mockedkUseParams = () => ({ id: "123" });
 
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
-    vi.spyOn(offlineWrapper, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
     vi.spyOn(reactRouter, "useParams").mockImplementation(mockedkUseParams);
 
     const { getByTestId } = render(
@@ -74,7 +72,6 @@ describe("Form", () => {
     const mockedkUseParams = () => ({});
 
     vi.spyOn(formWrapper, "useFormState").mockImplementation(mockedUseFormState);
-    vi.spyOn(offlineWrapper, "useOfflineStorage").mockImplementation(mockedUseOfflineStorage);
     vi.spyOn(reactRouter, "useParams").mockImplementation(mockedkUseParams);
 
     const { getByTestId } = render(
