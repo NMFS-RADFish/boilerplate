@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@nmfs-radfish/radfish": "^0.1.1",
-    "@nmfs-radfish/react-radfish": "^0",
+    "@nmfs-radfish/radfish": "^0.2.2",
+    "@nmfs-radfish/react-radfish": "^0.4.9",
     "@tanstack/react-table": "^8.11.7",
     "@testing-library/user-event": "^13.5.0",
     "@trussworks/react-uswds": "^6.1.0",
