@@ -14,7 +14,7 @@ const app = new Application({
         : "/service-worker.js",
   },
   mocks: {
-    handlers: import("../mocks/handlers"),
+    handlers: import("../mocks/browser.js"),
   },
 });
 

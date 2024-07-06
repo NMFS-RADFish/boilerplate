@@ -1,6 +1,7 @@
 import "./index.css";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useState } from "react";
+import { Application } from "@nmfs-radfish/react-radfish";
 import {
   GridContainer,
   Title,
@@ -14,7 +15,7 @@ import HomePage from "./pages/Home";
 function App() {
   const [isExpanded, setExpanded] = useState(false);
   return (
-    <>
+    <Application>
       <a className="usa-skipnav" href="#main-content">
         Skip to main content
       </a>
@@ -45,7 +46,7 @@ function App() {
           </BrowserRouter>
         </GridContainer>
       </main>
-    </>
+    </Application>
   );
 }
 
