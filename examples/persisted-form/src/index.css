@@ -37,7 +37,7 @@ body {
 }
 
 .dollar-input {
-  padding-left: 20px; /* Adjust this value as needed to ensure the text doesn't overlap the dollar sign */
+  padding-left: 20px;
   display: flex;
   align-items: center;
 }
