@@ -102,7 +102,7 @@ export const PersistedForm = () => {
           onChange={handleChange}
         />
         <Label className="text-bold" htmlFor="computedPrice">
-          Price
+          Price (Dollars)
         </Label>
         <TextInput
           id="computedPrice"

@@ -34,7 +34,7 @@ const FormInfoAnnotation = () => {
       <br />
       <br />
       This example can be helpful when you want to hydrate page state using data from a persistent
-      store like IndexDB or a remote API” Copy Update: “Price (Dollars)” for input label
+      store like IndexDB or a remote API
       <br />
       <br />
       <Link
