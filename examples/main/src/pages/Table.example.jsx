@@ -5,7 +5,6 @@
 
 import { useEffect } from "react";
 import { useTableState } from "../contexts/TableWrapper.example";
-import { MSW_ENDPOINT } from "../mocks/handlers";
 import RADFishAPIService from "../packages/services/APIService";
 import { Button } from "@trussworks/react-uswds";
 import {
@@ -85,7 +84,7 @@ const SimpleTable = () => {
 
     try {
       if (!isOffline) {
-        const { data } = await ApiService.post(MSW_ENDPOINT.FORM, { formData: draftData });
+        const { data } = await ApiService.post("/form", { formData: draftData });
         await updateOfflineData("formData", [{ uuid: data.uuid, ...data }]);
         showToast(TOAST_CONFIG.SUCCESS);
       } else {
