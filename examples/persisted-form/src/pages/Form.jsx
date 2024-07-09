@@ -102,15 +102,19 @@ export const PersistedForm = () => {
           onChange={handleChange}
         />
         <Label className="text-bold" htmlFor="computedPrice">
-          Price
+          Price (Dollars)
         </Label>
-        <TextInput
-          id="computedPrice"
-          name="computedPrice"
-          type="number"
-          value={formData?.computedPrice || ""}
-          onChange={handleChange}
-        />
+        <div className="input-wrapper">
+          <span className="dollar-sign">$</span>
+          <TextInput
+            id="computedPrice"
+            name="computedPrice"
+            type="number"
+            value={formData?.computedPrice || ""}
+            onChange={handleChange}
+            className="dollar-input"
+          />
+        </div>
         <Button type="submit" className="margin-top-2">
           Submit
         </Button>

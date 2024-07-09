@@ -21,3 +21,23 @@ html,
 body {
   width: 100%;
 }
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dollar-sign {
+  position: absolute;
+  left: 12px;
+  bottom: 9px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.dollar-input {
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+}
