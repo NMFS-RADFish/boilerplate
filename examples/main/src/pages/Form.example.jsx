@@ -1,22 +1,14 @@
 import "../styles/theme.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Checkbox, FormGroup, Grid } from "@trussworks/react-uswds";
-import {
-  TextInput,
-  Radio,
-  Select,
-  Button,
-  Label,
-  ErrorMessage,
-  DatePicker,
-} from "@trussworks/react-uswds";
+import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "@trussworks/react-uswds";
 
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { CONSTANTS } from "../config/form";
-
+import DatePicker from "../components/DatePicker";
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
 
 /**
@@ -120,89 +112,14 @@ export const StepOne = () => {
   const navigate = useNavigate();
   const { init, stepForward, stepBackward, formData, handleChange, handleBlur, validationErrors } =
     useFormState();
-  const [selectedDate, setSelectedDate] = useState(null);
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+  const [key, setKey] = useState(0);
+
   const handleInit = async () => {
     const formId = await init({ initialStep: 2 });
     navigate(`${formId}`);
   };
 
-  return (
-    <FormGroup error={validationErrors[fullName]}>
-      <Label className="text-bold" htmlFor={fullName}>
-        Full Name
-      </Label>
-      {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
-      <TextInput
-        id={fullName}
-        name={fullName}
-        type="text"
-        placeholder="Full Name"
-        value={formData[fullName] || ""}
-        aria-invalid={validationErrors[fullName] ? "true" : "false"}
-        validationStatus={validationErrors[fullName] ? "error" : undefined}
-        onChange={handleChange}
-        onBlur={(e) => handleBlur(e, fullNameValidators)}
-        data-testid="inputId"
-      />
-      <Label className="text-bold" htmlFor="checkbox">
-        Checkbox Example
-      </Label>
-      <Checkbox id="Oahu" name="islands" value="Oahu" label="Oahu" defaultChecked />
-      <Checkbox id="Kauai" name="islands" value="Kauai" label="Kauai" />
-      <Checkbox id="Mauai" name="islands" value="Mauai" label="Mauai" />
-
-      <Label className="text-bold" htmlFor={radioOption}>
-        Have you caught fish today?
-      </Label>
-      <Radio
-        id="option-catch-yes"
-        name={radioOption}
-        label="Yes"
-        value="option-catch-yes"
-        checked={formData[radioOption] === "option-catch-yes"}
-        onChange={handleChange}
-      />
-      <Radio
-        id="option-catch-no"
-        name={radioOption}
-        label="No"
-        value="option-catch-no"
-        checked={formData[radioOption] === "option-catch-no"}
-        onChange={handleChange}
-      />
-      <DatePicker
-        id="datepicker"
-        name="date"
-        onChange={handleDateChange}
-        value={selectedDate}
-        placeholder="MM/DD/YYYY"
-      />
-      <Grid className="display-flex flex-justify">
-        <Button
-          type="button"
-          className="margin-top-1 margin-right-0 order-last"
-          onClick={stepForward}
-          data-testid="step-forward"
-          id="step-forward"
-        >
-          Next Step
-        </Button>
-        <Button
-          disabled
-          type="button"
-          className="margin-top-1"
-          onClick={stepBackward}
-          data-testid="step-backward"
-          id="step-backward"
-        >
-          Prev Step
-        </Button>
-      </Grid>
-    </FormGroup>
-  );
+  return <DatePicker />;
 };
 
 export const StepTwo = ({ asyncFormOptions }) => {
