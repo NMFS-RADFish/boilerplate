@@ -26,6 +26,12 @@ export class IndexedDBMethod extends StorageMethod {
    * @throws {Error} If an error occurs while adding the data to IndexedDB.
    */
   async create(tableName, data) {
+    if (typeof criteria !== "object" || Array.isArray(data)) {
+      throw new Error(
+        "The `data` parameter must be an Object: { bar: 'foo' }."
+      );
+    }
+
     try {
       return await this.db[tableName].add({
         ...data,
@@ -44,6 +50,17 @@ export class IndexedDBMethod extends StorageMethod {
    * @throws {Error} If an error occurs while retrieving the data from IndexedDB.
    */
   async find(tableName, criteria) {
+    if ((criteria && typeof criteria !== "object") || Array.isArray(criteria)) {
+      throw new Error(
+        "IndexedDB find: The `criteria` parameter must be an Object: { bar: 'foo' }."
+      );
+    }
+    if (criteria && !criteria.uuid) {
+      throw new Error(
+        "The `uuid` key must be included in the `criteria` object, e.g. { uuid: '1234' }."
+      );
+    }
+
     try {
       if (!criteria) {
         return await this.db[tableName].toArray();
@@ -63,6 +80,18 @@ export class IndexedDBMethod extends StorageMethod {
    * @throws {Error} If an error occurs while updating the data in IndexedDB.
    */
   async update(tableName, data) {
+    if (!Array.isArray(data)) {
+      throw new Error(
+        "The `data` parameter must be an Array of objects, e.g. [ { uuid: 1234, bar: 'foo' } ]"
+      );
+    }
+
+    if (!data.every((item) => typeof item === "object" && "uuid" in item)) {
+      throw new Error(
+        "Every object in the `data` array must have a 'uuid' property."
+      );
+    }
+
     try {
       return await this.db[tableName].bulkPut(data, { allKeys: true });
     } catch (error) {
@@ -78,6 +107,11 @@ export class IndexedDBMethod extends StorageMethod {
    * @throws {Error} If an error occurs while deleting the data in IndexedDB.
    */
   async delete(tableName, uuids) {
+    if (!Array.isArray(uuids)) {
+      throw new Error(
+        "The `uuids` parameter must be an Array of UUIDs, e.g. [ 123, 567 ]"
+      );
+    }
     try {
       await this.db[tableName].bulkDelete(uuids);
       return true;

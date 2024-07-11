@@ -32,6 +32,7 @@ export const OfflineStorageWrapper = ({ children, config }) => {
     findOfflineData,
     updateOfflineData,
     deleteOfflineData,
+    storageMethod,
   };
 
   return (
