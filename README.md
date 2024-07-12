@@ -9,8 +9,6 @@
   - [Directory Structure](#directory-structure)
   - [React RADFish Components](#react-radfish-components)
     - [Building your first page and form](#building-your-first-page-and-form)
-    - [Setting the layout of the application](#setting-the-layout-of-the-application)
-      - [Layout Component (Layout.js)](#layout-component-layoutjs)
       - [HeaderNav Component (HeaderNav.js)](#headernav-component-headernavjs)
   - [Styling](#styling)
     - [NOAA Branding and Style Guide](#noaa-branding-and-style-guide)
@@ -94,7 +92,6 @@ Once you bootstrap a new radfish app, you will be given the following file struc
 ├── assets
 ├── components
 │   ├── HeaderNav.jsx
-│   └── Layout.jsx
 ├── config
 │   └── form.js
 ├── contexts
@@ -201,47 +198,23 @@ import { TextInput, Label } from "@nmfs-radfish/react-radfish";
 />
 ```
 
-### Setting the layout of the application
-
-#### Layout Component ([Layout.js](src/components/Layout.js))
-
-The **`Layout`** component is a wrapper component used to structure the main layout of a React application. It leverages components from the **`@trussworks/react-uswds`** package, specifically [GridContainer](https://trussworks.github.io/react-uswds/?path=/docs/components-grid--default-container), to provide a grid-based layout. The component also includes a **`HeaderNav`** component for navigation purposes.
-
-**Usage**
-
-To use the **`Layout`** component, wrap it around the main content of your application. The children of the **`Layout`** component are placed inside a **`GridContainer`**, which provides a responsive grid layout.
-
-```jsx
-import Layout from "./components/Layout";
-
-const App = () => {
-  return (
-    <Layout>
-      <main>{/* Your main content goes here */}</main>
-    </Layout>
-  );
-};
-
-export default App;
-```
-
 #### HeaderNav Component ([HeaderNav.js](src/components/HeaderNav.js))
 
 The **`HeaderNav`** component is a customizable navigation header. It uses the **`Header`**, **`NavMenuButton`**, **`PrimaryNav`**, and **`Search`** components from [`@trussworks/react-uswds`](https://trussworks.github.io/react-uswds/?path=/docs/components-header--basic-header). The component is designed to be responsive and includes a toggle-able navigation menu for smaller screens.
 
-The **`HeaderNav`** component is integrated into the **`Layout`** component. It accepts navigation links as the children elements, which are rendered as part of the primary navigation. Below is an example of how it is used within the `Layout` component.
+It accepts navigation links as the children elements, which are rendered as part of the primary navigation.
 
 **Usage**
 
 ```jsx
 import HeaderNav from "./HeaderNav";
 
-const Layout = () => {
+const MyComponent = () => {
   return (
     <>
       <HeaderNav>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
+        <Link href="/">Home</Link>
+        <Link href="/about">About</Link>
         {/* Additional navigation links */}
       </HeaderNav>
       <GridContainer>{children}</GridContainer>;
@@ -249,7 +222,7 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default MyComponent;
 ```
 
 ## Styling

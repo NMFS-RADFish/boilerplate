@@ -4,7 +4,6 @@ import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { Toast, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { FormWrapper } from "./contexts/FormWrapper.example";
 import { TableWrapper } from "./contexts/TableWrapper.example";
-import Layout from "./components/Layout";
 import RADFishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { Table } from "./pages/Table.example";
@@ -12,6 +11,8 @@ import { Form } from "./pages/Form.example";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { ServerSync } from "./components/ServerSync";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
+import HeaderNav from "./components/HeaderNav";
+import { Link, GridContainer } from "@trussworks/react-uswds";
 
 const ApiService = new RADFishAPIService("");
 
@@ -73,7 +74,12 @@ function App() {
         <div className="toast-container">
           <Toast toast={toast} />
         </div>
-        <Layout>
+        <GridContainer>
+          <HeaderNav>
+            <Link to="/">Home</Link>
+            <Link to="/form">Form</Link>
+            <Link to="/table">Table</Link>
+          </HeaderNav>
           <ServerSync />
           {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
           <Routes>
@@ -110,7 +116,7 @@ function App() {
               }
             />
           </Routes>
-        </Layout>
+        </GridContainer>
       </div>
     </Router>
   );

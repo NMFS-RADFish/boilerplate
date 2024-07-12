@@ -1,21 +1,18 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import Layout from "./components/Layout";
 import { ComputedForm } from "./pages/Form";
-import { Alert, Button, Link } from "@trussworks/react-uswds";
+import { Alert, Button, GridContainer, Link } from "@trussworks/react-uswds";
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <Layout>
           <h1>Computed Form Fields Example</h1>
           <FormInfoAnnotation />
           <Routes>
             <Route path="/" element={<ComputedForm />} />
           </Routes>
-        </Layout>
       </div>
     </Router>
   );

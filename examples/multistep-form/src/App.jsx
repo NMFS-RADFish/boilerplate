@@ -1,24 +1,21 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import Layout from "./components/Layout";
 import { MultiStepForm } from "./pages/Form";
 import { Alert, Button, Link } from "@trussworks/react-uswds";
 
 function App() {
   return (
-    <div className="App">
-      <Layout>
-        <h1>Multi-Step</h1>
-        <FormInfoAnnotation />
-        <br />
-        <Router>
-          <Routes>
-            <Route path="/" element={<MultiStepForm />} />
-            <Route path="/:id" element={<MultiStepForm />} />
-          </Routes>
-        </Router>
-      </Layout>
+    <div className="App grid-container">
+      <h1>Multi-Step</h1>
+      <FormInfoAnnotation />
+      <br />
+      <Router>
+        <Routes>
+          <Route path="/" element={<MultiStepForm />} />
+          <Route path="/:id" element={<MultiStepForm />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

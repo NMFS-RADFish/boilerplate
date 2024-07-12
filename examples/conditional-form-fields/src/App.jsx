@@ -1,22 +1,19 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import Layout from "./components/Layout";
 import { ConditionalForm } from "./pages/Form";
-import { Alert, Button, Link } from "@trussworks/react-uswds";
+import { Alert, Button, GridContainer, Link } from "@trussworks/react-uswds";
 
 function App() {
   return (
-    <div className="App">
-      <Layout>
-        <h1>Conditional Form Fields Example</h1>
-        <FormInfoAnnotation />
-        <Router>
-          <Routes>
-            <Route path="/" element={<ConditionalForm />} />
-          </Routes>
-        </Router>
-      </Layout>
+    <div className="App grid-container">
+      <h1>Conditional Form Fields Example</h1>
+      <FormInfoAnnotation />
+      <Router>
+        <Routes>
+          <Route path="/" element={<ConditionalForm />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

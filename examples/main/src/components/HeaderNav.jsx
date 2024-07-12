@@ -7,7 +7,7 @@ import { Title, Header, PrimaryNav, NavMenuButton } from "@trussworks/react-uswd
  * @param children HTML `<a>` tag links, i.e. `<a href="/">Home</a>`
  * @returns Array of `<a>` tags [`<a href="#">linke one</a>`, `<a href="#">linke one</a>`]
  *
- * The `HeaderNav` component can be used to display a navigation header. By default, this component is used within the `Layout` component. It is mobile responsive, and will convert to an expandable navigation menu with a hamburger icon on smaller screens.
+ * The `HeaderNav` component can be used to display a navigation header. It is mobile responsive, and will convert to an expandable navigation menu with a hamburger icon on smaller screens.
  *
  * Example usage:
     ```<HeaderNav>

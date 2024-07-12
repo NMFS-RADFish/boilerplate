@@ -1,22 +1,19 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import Layout from "./components/Layout";
 import { Alert, Button, Link } from "@trussworks/react-uswds";
 import { FieldValidatorForm } from "./pages/Form";
 
 function App() {
   return (
-    <div className="App">
-      <Layout>
-        <h1>Field Validators</h1>
-        <FormInfoAnnotation />
-        <Router>
-          <Routes>
-            <Route path="/" element={<FieldValidatorForm />} />
-          </Routes>
-        </Router>
-      </Layout>
+    <div className="App grid-container">
+      <h1>Field Validators</h1>
+      <FormInfoAnnotation />
+      <Router>
+        <Routes>
+          <Route path="/" element={<FieldValidatorForm />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
