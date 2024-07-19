@@ -6,6 +6,8 @@ This example shows you how to configure a simple form that saves the data locall
 
 The `FormWrapper` component is a context provider for form data. It provides a context that contains the current form data, a function to update the form data, and a function to handle form input changes.
 
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/examples/templates_examples)
+
 ### Imports
 
 - `React`, `createContext`, `useState`, `useCallback`: React library and hooks.
@@ -55,7 +57,6 @@ The `useFormState` hook is a custom hook for accessing the `FormContext`.
 
 ```jsx
 import { OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
-
 
 const offlineStorageConfig = {
   // Type is either `indexedDB` or `localStorage`

@@ -1,8 +1,10 @@
 # ServerSync Component Example
 
-## Overview
+[Official Documentation](https://nmfs-radfish.github.io/documentation/)
 
 The `ServerSync` component is responsible for synchronizing data between a client application and a remote server. It handles offline status, provides feedback on the synchronization process, and manages local offline storage.
+
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/examples/templates_examples)
 
 ## Features
 
