@@ -5,10 +5,10 @@ export const MSW_ENDPOINT = {
 };
 
 export const species = [
-  { name: "grouper", price: 25.0, src: "https://picsum.photos/200/300" },
-  { name: "salmon", price: 58.0, src: "https://picsum.photos/200/300" },
-  { name: "marlin", price: 100.0, src: "https://picsum.photos/200/300" },
-  { name: "mahimahi", price: 44.0, src: "https://picsum.photos/200/300" },
+  { name: "Grouper", price: 25.0 },
+  { name: "Mahimahi", price: 44.0 },
+  { name: "Salmon", price: 58.0 },
+  { name: "Marlin", price: 100.0 },
 ];
 
 export const handlers = [
@@ -19,7 +19,7 @@ export const handlers = [
       {
         data: species,
       },
-      { status: 200 }
+      { status: 200 },
     );
   }),
   // This endpoint simply returns the data that is submitted to from a form
