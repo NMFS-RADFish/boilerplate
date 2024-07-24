@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { ErrorBoundary } from "@nmfs-radfish/react-radfish";
 import "./styles/theme.css";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 async function enableMocking() {
   const { worker } = await import("./mocks/browser");
@@ -29,11 +31,16 @@ async function enableMocking() {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+const queryClient = new QueryClient();
+
 enableMocking().then(() => {
   root.render(
     <ErrorBoundary>
       <React.StrictMode>
-        <App />
+        <QueryClientProvider client={queryClient}>
+          <App />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
       </React.StrictMode>
     </ErrorBoundary>,
   );
