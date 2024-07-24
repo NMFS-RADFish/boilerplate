@@ -34,7 +34,6 @@ const App = () => {
         });
         const response = await fetch(`/species`);
 
-        await new Promise((resolve) => setTimeout(resolve, 3000));
         return response.json();
       },
       select: selectFn,
@@ -60,9 +59,10 @@ const App = () => {
         <InfoAnnotation />
         <br />
         <Button
-          onClick={() =>
-            queryClient.invalidateQueries({ queryKey: ["species"] })
-          }
+          onClick={async () => {
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+            queryClient.invalidateQueries({ queryKey: ["species"] });
+          }}
         >
           Refetch Data
         </Button>
