@@ -6,9 +6,8 @@ import { TextInput, Radio, Select, Button, Label, ErrorMessage } from "@trusswor
 
 import { useFormState } from "../contexts/FormWrapper.example";
 import { fullNameValidators } from "../utilities";
-import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { useOfflineStorage, DatePicker } from "@nmfs-radfish/react-radfish";
 import { CONSTANTS } from "../config/form";
-import DatePicker from "../components/DatePicker";
 const { fullName, numberOfFish, radioOption, species, subSpecies, computedPrice } = CONSTANTS;
 
 /**
@@ -118,8 +117,28 @@ export const StepOne = () => {
     const formId = await init({ initialStep: 2 });
     navigate(`${formId}`);
   };
+  const today = new Date();
+  const fiveYearsFromNow = new Date(today);
+  fiveYearsFromNow.setFullYear(today.getFullYear() + 5);
 
-  return <DatePicker />;
+  const formatDate = (date) => date.toISOString().split("T")[0];
+  const formatTime = (date) => date.toTimeString().split(" ")[0];
+  const formatDateTime = (date) => date.toISOString().slice(0, 16);
+
+  const minDate = formatDate(today);
+  const maxDate = formatDate(fiveYearsFromNow);
+  const minTime = formatTime(today);
+  const maxTime = formatTime(fiveYearsFromNow);
+  const minDateTime = formatDateTime(today);
+  const maxDateTime = formatDateTime(fiveYearsFromNow);
+
+  return (
+    <>
+      <DatePicker type="date" min={minDate} max={maxDate} />
+      <DatePicker type="time" min={minTime} max={maxTime} />
+      <DatePicker type="datetime-local" min={minDateTime} max={maxDateTime} />
+    </>
+  );
 };
 
 export const StepTwo = ({ asyncFormOptions }) => {
