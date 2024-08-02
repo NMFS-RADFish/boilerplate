@@ -7,7 +7,7 @@ This example includes how to setup and use the on-device storage using IndexedDB
 - Offline on-device data storage (most cases)
 - Local non-relational database (online or offline use)
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/examples/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
 
 ## Steps
 
