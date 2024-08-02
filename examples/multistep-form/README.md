@@ -6,7 +6,7 @@ This example includes an example on how to build a form that includes multiple "
 
 Additionally, the data within the form should cache into IndexedDB as the user types. This means, that the form will save the data inputted into the form into IndexedDB. So, when the user returns to the form, on their current step, the data within that form should persist, along with the current step of the form.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/examples/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
 
 ## Steps
 
