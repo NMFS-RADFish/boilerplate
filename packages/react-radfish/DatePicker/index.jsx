@@ -1,6 +1,15 @@
 import React from "react";
 
-export const DatePicker = ({ type = "date", hintText, label, min, max, value, onChange }) => {
+export const DatePicker = ({
+  type = "date",
+  defaultValue,
+  hintText,
+  label,
+  min,
+  max,
+  value,
+  onChange,
+}) => {
   return (
     <div className="usa-form-group">
       <label className="usa-label" id="date-start-label" htmlFor="date-start">
@@ -12,6 +21,7 @@ export const DatePicker = ({ type = "date", hintText, label, min, max, value, on
       <div className="usa-date-picker">
         <input
           type={type}
+          defaultValue={defaultValue}
           onChange={onChange}
           value={value}
           className="usa-input"

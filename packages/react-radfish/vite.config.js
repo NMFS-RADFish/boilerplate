@@ -19,4 +19,9 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  test: {
+    environment: "jsdom",
+    include: ["**/*.spec.{js,jsx}"],
+    globals: true,
+  },
 });
