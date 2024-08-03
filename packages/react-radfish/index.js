@@ -5,6 +5,7 @@ export * from "./table";
 export * from "./Application";
 export * from "./ErrorBoundary";
 export * from "./OfflineStorage";
+export * from "./DatePicker";
 
 // hooks
 export * from "./hooks";
