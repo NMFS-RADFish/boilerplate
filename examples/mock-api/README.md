@@ -9,7 +9,7 @@ This example does _not_ include any backend persistence via IndexedDB, as this i
 `[GET] /species` returns a list of 4 species
 `[POST] /species` returns the original list, with an additional species added (this is hard coded for simplicity)
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/examples/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
 
 ## Steps
 

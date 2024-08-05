@@ -6,7 +6,7 @@ This example shows you how to configure a simple form that saves the data locall
 
 The `FormWrapper` component is a context provider for form data. It provides a context that contains the current form data, a function to update the form data, and a function to handle form input changes.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/examples/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
 
 ### Imports
 
