@@ -2,6 +2,8 @@ import React from "react";
 
 export const DatePicker = ({
   type = "date",
+  id,
+  name,
   defaultValue,
   hintText,
   label,
@@ -25,8 +27,8 @@ export const DatePicker = ({
           onChange={onChange}
           value={value}
           className="usa-input"
-          id="date-start"
-          name="date-start"
+          id={id}
+          name={name}
           aria-labelledby="date-start-label"
           aria-describedby="date-start-hint"
           min={min}
