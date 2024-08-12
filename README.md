@@ -71,7 +71,7 @@
 
 > ### ⭐ Full documentation can be found in the [RADFish Frontend Application Development Guide](https://hickory-drawbridge-d5a.notion.site/RADFish-Frontend-Application-Development-Guide-dc3c5589b019458e8b5ab3f4293ec183).
 
-Assuming you have generated the application with the cli application, you should already have a webpack server running on `localhost:3000`. We have created a example form `DemoForm.js` that demonstrates how to build a form using the `react-radfish` components. You can modify and make changes to this form as needed.
+Assuming you have generated the application with the cli application, you should already have a webpack server running on `localhost:3000`. We have created several [examples](https://github.com/NMFS-RADFish/boilerplate/tree/main/examples) that demonstrate how to build a form using the `react-radfish` components. Feel free to utilize this code and modify it for your needs.
 
 You have the following scripts available to you during development to setup this project outside of the cli bootstrapping process:
 
