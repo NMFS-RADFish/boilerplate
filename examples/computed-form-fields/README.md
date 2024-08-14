@@ -4,7 +4,7 @@
 
 This example includes an example on how to build a form where the values of certain input fields compute the value of a separate readOnly input field elsewhere in the form.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/examples/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
 
 ## Steps
 

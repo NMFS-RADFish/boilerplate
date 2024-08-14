@@ -4,7 +4,7 @@
 
 This is an example on how to create a table to display data using the `TableWrapper` context provider. `TableWrapper` is built using [React Table](https://react-table-v7-docs.netlify.app/docs/overview).
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/examples/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
 
 ## Steps
 

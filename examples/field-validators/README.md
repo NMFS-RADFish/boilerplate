@@ -4,7 +4,7 @@
 
 This example demonstrates how to enforce field validation logic on certain fields within your form. In this example, the validator ensures that no numbers should be allowed within the `fullName` input field.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/examples/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
 
 ## Steps
 
