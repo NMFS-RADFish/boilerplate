@@ -10,7 +10,7 @@ Learn more about RADFish examples at the official [documentation](https://nmfs-r
 
 ## Steps
 
-1. You can follow the same pattern to build a simple form, as described in other examples within RADFish. The difference, is that we are adding an additional variable `TOTAL_STEPS` to declare how many steps this multistep form should have.
+1. You can follow the same pattern to build a persisted form, as described in other examples within RADFish. The difference, is that we are adding an additional variable `TOTAL_STEPS` to declare how many steps this multistep form should have.
 
 ```jsx
 const TOTAL_STEPS = 2;

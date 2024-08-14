@@ -8,7 +8,7 @@ Learn more about RADFish examples at the official [documentation](https://nmfs-r
 
 ## Steps
 
-1. You can follow the same pattern to build a simple form, as described in other examples within RADFish. The difference, is that we are adding an `onBlur` handler to validate the data of the input when the user navigates away from it.
+1. You can follow the same pattern to build a persisted form, as described in other examples within RADFish. The difference, is that we are adding an `onBlur` handler to validate the data of the input when the user navigates away from it.
 
 ```jsx
 const handleBlur = (event, validators) => {
