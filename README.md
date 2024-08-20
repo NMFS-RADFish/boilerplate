@@ -56,7 +56,6 @@
     - [Testing mocks](#testing-mocks)
   - [Pattern 3 Browser integration testing (In progress)](#pattern-3-browser-integration-testing-in-progress)
   - [Pattern 4 Accessibility Testing (In progress)](#pattern-4-accessibility-testing-in-progress)
-    - [Additional Jest Configuration](#additional-jest-configuration)
     - [508 Compliance](#508-compliance)
 - [Guide to Testing Section 508 Compliance in a React Project](#guide-to-testing-section-508-compliance-in-a-react-project)
   - [1. Introduction to Section 508 Compliance](#1-introduction-to-section-508-compliance)
@@ -1004,25 +1003,25 @@ Here, we are importing the actual `"react-router-dom"` dependency, and then over
 
 ## Pattern 3 Browser integration testing (In progress)
 
-Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Jest.
+Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Vitest.
 
 ```jsx
-const puppeteer = require("puppeteer");
+import { test, expect } from 'vitest';
+import puppeteer from 'puppeteer';
 
-it("should display the homepage", async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto("http://localhost:3000");
-  await expect(page.title()).resolves.toMatch("Home Page");
-  await browser.close();
+test('should display the homepage', async () => {
+  const browser = await puppeteer.launch(); // Launch the browser
+  const page = await browser.newPage(); // Open a new page
+  await page.goto('http://localhost:3000'); // Navigate to your app's URL
+
+  // Verify the page title
+  const title = await page.title();
+  expect(title).toBe('Home Page');
+
+  await browser.close(); // Close the browser
 });
+
 ```
-
-## Pattern 4 Accessibility Testing (In progress)
-
-### Additional Jest Configuration
-
-Jest and React Testing Library is included in the RADFish framework by default. Modifying the Jest test configuration can be configured in the `jest.config.js` file. Please see the official Jest docs for the latest configuration options: https://jestjs.io/docs/configuration.
 
 ### 508 Compliance
 
