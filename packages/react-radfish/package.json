@@ -1,6 +1,6 @@
 {
   "name": "@nmfs-radfish/react-radfish",
-  "version": "0.4.11",
+  "version": "0.5.0",
   "type": "module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
