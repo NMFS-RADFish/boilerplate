@@ -4,7 +4,6 @@ import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { Toast, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { FormWrapper } from "./contexts/FormWrapper.example";
 import { TableWrapper } from "./contexts/TableWrapper.example";
-import RADFishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 import { Table } from "./pages/Table.example";
 import { Form } from "./pages/Form.example";
@@ -13,8 +12,6 @@ import { ServerSync } from "./components/ServerSync";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
 import HeaderNav from "./components/HeaderNav";
 import { Link, GridContainer } from "@trussworks/react-uswds";
-
-const ApiService = new RADFishAPIService("");
 
 function App() {
   const { updateOfflineData, findOfflineData, createOfflineData } = useOfflineStorage();
@@ -52,6 +49,7 @@ function App() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-Access-Token": "your-access-token",
           },
           body: JSON.stringify({
             ...{ formData: submittedData },

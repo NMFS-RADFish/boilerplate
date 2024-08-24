@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
-import RADFishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
-
-const ApiService = new RADFishAPIService("");
 
 const offlineErrorMsg = "No network conection, unable to sync with server";
 const noSyncMsg = "Application has not yet been synced with homebase";
@@ -26,7 +23,7 @@ export const ServerSync = () => {
   const getRequestWithFetch = async (endpoint) => {
     try {
       const response = await fetch(`${endpoint}`, {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-Access-Token": "your-access-token" },
       });
 
       if (!response.ok) {

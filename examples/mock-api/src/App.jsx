@@ -1,10 +1,7 @@
 import "./index.css";
 import React, { useState } from "react";
 import { Button, Alert, Link } from "@trussworks/react-uswds";
-import RADFishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
-
-const APIService = new RADFishAPIService();
 
 const App = () => {
   const [state, setState] = useState([]);
@@ -13,21 +10,58 @@ const App = () => {
   const getData = async () => {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
-    const { data } = await APIService.get(MSW_ENDPOINT.SPECIES);
-    setState(data);
-    setIsLoading(false);
+    try {
+      const response = await fetch(MSW_ENDPOINT.SPECIES, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Access-Token": "your-access-token",
+        },
+      });
+
+      if (!response.ok) {
+        // Set error with the JSON response
+        const error = await response.json();
+        return error;
+      }
+
+      const { data } = await response.json();
+
+      setState(data);
+      setIsLoading(false);
+    } catch (err) {
+      // Set error in case of an exception
+      const error = `[GET]: Error fetching data: ${err}`;
+      return error;
+    }
   };
 
+
   const postData = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
-    const { data } = await APIService.post(MSW_ENDPOINT.SPECIES, {
-      data: {
+    const mockData = {
         name: "tuna",
         price: 75,
         src: "https://picsum.photos/200/300",
+      };
+      
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
+    const response = await fetch(MSW_ENDPOINT.SPECIES, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Token": "your-access-token",
       },
+      body: JSON.stringify({
+        ...{ formData: mockData },
+      }),
     });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return error;
+    }
+
+    const { data } = await response.json();
 
     setState(data);
     setIsLoading(false);
