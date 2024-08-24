@@ -23,6 +23,27 @@ export const ServerSync = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [syncStatus, setSyncStatus] = useState("");
 
+  const getRequestWithFetch = async (endpoint) => {
+    try {
+      const response = await fetch(`${endpoint}`, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        // Set error with the JSON response
+        const error = await response.json();
+        return error;
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      // Set error in case of an exception
+      const error = `[GET]: Error fetching data: ${err}`;
+      return error;
+    }
+  };
+
   const syncToHomebase = async () => {
     const lastSync = await findOfflineData(HOME_BASE_DATA);
     const lastSyncMsg = `Last sync at: ${findOfflineData("lastHomebaseSync")}`;
@@ -30,14 +51,14 @@ export const ServerSync = () => {
     if (!isOffline) {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 250)); // mock throttle
-      const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
+      const { data: homebaseData } = await getRequestWithFetch(MSW_ENDPOINT.HOMEBASE);
       await updateOfflineData(HOME_BASE_DATA, homebaseData);
 
       await new Promise((resolve) => setTimeout(resolve, 1200)); // mock throttle
-      const { data: tableData } = await ApiService.get(MSW_ENDPOINT.TABLE);
+      const { data: tableData } = await getRequestWithFetch(MSW_ENDPOINT.TABLE);
       await updateOfflineData(FORM_DATA, tableData);
 
-      const { data: species } = await ApiService.get(MSW_ENDPOINT.SPECIES);
+      const { data: species } = await getRequestWithFetch(MSW_ENDPOINT.SPECIES);
       await updateOfflineData(SPECIES, species);
 
       await updateOfflineData(LAST_HOMEBASE_SYNC, [{ uuid: "lastSynced", time: Date.now() }]);
