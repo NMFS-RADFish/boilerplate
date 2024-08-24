@@ -48,7 +48,23 @@ function App() {
       submittedData.uuid && (await findOfflineData("formData", { uuid: submittedData.uuid }));
     try {
       if (!isOffline) {
-        const { data } = await ApiService.post(MSW_ENDPOINT.FORM, { formData: submittedData });
+        const response = await fetch(MSW_ENDPOINT.FORM, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...{ formData: submittedData },
+          }),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          return error;
+        }
+
+        const { data } = await response.json();
+        
         existingForm
           ? await updateOfflineData("formData", [{ uuid: data.uuid, ...data }])
           : await createOfflineData("formData", submittedData);
