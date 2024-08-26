@@ -6,24 +6,32 @@ import { MSW_ENDPOINT } from "./mocks/handlers";
 const App = () => {
   const [state, setState] = useState([]);
   const [isLoading, setIsLoading] = useState(null);
+  const mockData = {
+    name: "tuna",
+    price: 75,
+    src: "https://picsum.photos/200/300",
+  };
 
-  const getData = async (endpoint) => {
+  const getData = async () => {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch(MSW_ENDPOINT.SPECIES, {
         headers: {
           "X-Access-Token": "your-access-token",
         },
       });
 
+      console.log("response", response);
       if (!response.ok) {
         // Set error with the JSON response
         const error = await response.json();
         return error;
       }
-
+      console.log("hit");
       const { data } = await response.json();
+
+      console.log("data", data);
 
       setState(data);
       setIsLoading(false);
@@ -34,16 +42,10 @@ const App = () => {
     }
   };
 
-  const postData = async (endpoint) => {
-    const mockData = {
-      name: "tuna",
-      price: 75,
-      src: "https://picsum.photos/200/300",
-    };
-
+  const postData = async () => {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
-    const response = await fetch(endpoint, {
+    const response = await fetch(MSW_ENDPOINT.SPECIES, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
