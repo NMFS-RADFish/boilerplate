@@ -40,12 +40,9 @@ function App() {
     fetchFormData();
   }, []);
 
-  const handleFormSubmit = async (submittedData) => {
-    const existingForm =
-      submittedData.uuid && (await findOfflineData("formData", { uuid: submittedData.uuid }));
+  const postRequestWithFetch = async (endpoint, submittedData) => {
     try {
-      if (!isOffline) {
-        const response = await fetch(MSW_ENDPOINT.FORM, {
+      const response = await fetch(endpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -54,15 +51,29 @@ function App() {
           body: JSON.stringify({
             ...{ formData: submittedData },
           }),
-        });
+      });
+  
+      if (!response.ok) {
+        const error = await response.json();
+        return error;
+      }
+  
+      const data = await response.json();
+      return data;
+  
+    } catch (err) {
+      const error = `[GET]: Error fetching data: ${err}`;
+      return error;
+    }
+  };
 
-        if (!response.ok) {
-          const error = await response.json();
-          return error;
-        }
+  const handleFormSubmit = async (submittedData) => {
+    const existingForm =
+      submittedData.uuid && (await findOfflineData("formData", { uuid: submittedData.uuid }));
+    try {
+      if (!isOffline) {
+        const {data} = await postRequestWithFetch(MSW_ENDPOINT.FORM, submittedData)
 
-        const { data } = await response.json();
-        
         existingForm
           ? await updateOfflineData("formData", [{ uuid: data.uuid, ...data }])
           : await createOfflineData("formData", submittedData);

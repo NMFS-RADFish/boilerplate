@@ -7,13 +7,12 @@ const App = () => {
   const [state, setState] = useState([]);
   const [isLoading, setIsLoading] = useState(null);
 
-  const getData = async () => {
+  const getData = async (endpoint) => {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
     try {
-      const response = await fetch(MSW_ENDPOINT.SPECIES, {
+      const response = await fetch(endpoint, {
         headers: {
-          "Content-Type": "application/json",
           "X-Access-Token": "your-access-token",
         },
       });
@@ -35,17 +34,16 @@ const App = () => {
     }
   };
 
-
-  const postData = async () => {
+  const postData = async (endpoint) => {
     const mockData = {
-        name: "tuna",
-        price: 75,
-        src: "https://picsum.photos/200/300",
-      };
-      
+      name: "tuna",
+      price: 75,
+      src: "https://picsum.photos/200/300",
+    };
+
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
-    const response = await fetch(MSW_ENDPOINT.SPECIES, {
+    const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -108,7 +106,7 @@ const App = () => {
 const InfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
-      This is an example of how to use the <code>RADFishApiClient</code> along
+      This is an example of how to use the <code>native fetch API</code> along
       with <code>mock service worker</code> in order to create a mock API to
       serve data to your client. Requests to this mock API will be intercepted
       by mock service worker API methods and respond with expected data, which

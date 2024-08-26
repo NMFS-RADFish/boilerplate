@@ -6,7 +6,6 @@
 import { useEffect } from "react";
 import { useTableState } from "../contexts/TableWrapper.example";
 import { MSW_ENDPOINT } from "../mocks/handlers";
-import RadfishAPIService from "../packages/services/APIService";
 import {
   Table,
   TableBody,
@@ -28,8 +27,6 @@ import { Alert } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
-
-const ApiService = new RadfishAPIService("");
 
 const SimpleTable = () => {
   /**
@@ -73,6 +70,27 @@ const SimpleTable = () => {
     navigate(`/form/${row.original.uuid}`);
   };
 
+  const postRequestWithFetch = async (endpoint, submittedData) => {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Token": "your-access-token",
+      },
+      body: JSON.stringify({
+        ...{ formData: submittedData },
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return error;
+    }
+
+    const data = await response.json();
+    return data;
+  };
+
   /**
    * This is a demo function that simulates the submission of offline data by removing the `isOffline` flag.
    * In a real application, you should make a POST request with the offline data to your server and then clear
@@ -85,7 +103,7 @@ const SimpleTable = () => {
 
     try {
       if (!isOffline) {
-        const { data } = await ApiService.post(MSW_ENDPOINT.FORM, { formData: draftData });
+        const { data } = await postRequestWithFetch(MSW_ENDPOINT.FORM, { formData: draftData });
         await updateOfflineData("formData", [{ uuid: data.uuid, ...data }]);
         showToast(TOAST_CONFIG.SUCCESS);
       } else {

@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { Spinner, useOfflineStatus } from "@nmfs-radfish/react-radfish";
-import RADFishAPIService from "../packages/services/APIService";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
-
-const ApiService = new RADFishAPIService("");
 
 const offlineErrorMsg = "No network conection, unable to sync with server";
 const noSyncMsg = "Application has not yet been synced with homebase";
@@ -21,10 +18,31 @@ export const ServerSync = () => {
   const [syncStatus, setSyncStatus] = useState({ message: "" });
   const [lastSynced, setLastSynced] = useState("");
 
+  const getRequestWithFetch = async (endpoint) => {
+    try {
+      const response = await fetch(`${endpoint}`, {
+        headers: { "X-Access-Token": "your-access-token" },
+      });
+
+      if (!response.ok) {
+        // Set error with the JSON response
+        const error = await response.json();
+        return error;
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      // Set error in case of an exception
+      const error = `[GET]: Error fetching data: ${err}`;
+      return error;
+    }
+  };
+
   const syncToHomebase = async () => {
     const lastSync = await findOfflineData(HOME_BASE_DATA);
     const lastSyncMsg = `Last sync at: ${findOfflineData("lastHomebaseSync")}`;
-    const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
+    const { data: homebaseData } = await getRequestWithFetch(MSW_ENDPOINT.HOMEBASE); 
     await updateOfflineData(HOME_BASE_DATA, homebaseData);
 
     await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);

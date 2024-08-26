@@ -2,7 +2,7 @@
 
 [Official Documentation](https://nmfs-radfish.github.io/documentation/)
 
-This example includes how to setup and use mock service worker and the RADFishAPIClient to build out a mock API on the frontend to consume without needing to rely on a backend system. The idea is that this can be used during development while backend APIs are worked on, allowing for mock endpoints to be easily swapped out for production endpoints as needed.
+This example includes how to setup and use mock service worker and the native fetch API to build out a mock API on the frontend to consume without needing to rely on a backend system. The idea is that this can be used during development while backend APIs are worked on, allowing for mock endpoints to be easily swapped out for production endpoints as needed.
 
 This example does _not_ include any backend persistence via IndexedDB, as this is out of scope for this example. Instead, this example provides two simplified endpoints to call:
 
@@ -109,19 +109,65 @@ export const handlers = [
 ];
 ```
 
-Now, within your application code, you can access these endpoints, and query them via `RADFishAPIClient`
+Now, within your application code, you can access these endpoints, and query them by making a GET or POST request via native fetch API
 
 ```jsx
-import RADFishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
 
-const APIService = new RADFishAPIService();
+const getRequestWithFetch = async (endpoint) => {
+  try {
+    const response = await fetch(`${endpoint}`, {
+      headers: { 
+        "X-Access-Token": "your-access-token" },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return error;
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (err) {
+    const error = `[GET]: Error fetching data: ${err}`;
+    return error;
+  }
+};
+
+const postRequestWithFetch = async (endpoint, submittedData) => {
+  try {
+    const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Access-Token": "your-access-token",
+        },
+        body: JSON.stringify({
+          ...submittedData,
+        }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return error;
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (err) {
+    const error = `[GET]: Error fetching data: ${err}`;
+    return error;
+  }
+};
+
 
 // [GET] /species
-const { data } = await APIService.get(MSW_ENDPOINT.SPECIES);
+const { data } = await getRequestWithFetch(MSW_ENDPOINT.SPECIES);
 
 // [POST] /species
-const { data } = await APIService.post(MSW_ENDPOINT.SPECIES, {
+const { data } = await postRequestWithFetch(MSW_ENDPOINT.SPECIES, {
   data: {
     name: "tuna",
     price: 75,

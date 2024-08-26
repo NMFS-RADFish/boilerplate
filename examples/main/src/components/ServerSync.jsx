@@ -23,7 +23,7 @@ export const ServerSync = () => {
   const getRequestWithFetch = async (endpoint) => {
     try {
       const response = await fetch(`${endpoint}`, {
-        headers: { "Content-Type": "application/json", "X-Access-Token": "your-access-token" },
+        headers: { "X-Access-Token": "your-access-token" },
       });
 
       if (!response.ok) {
