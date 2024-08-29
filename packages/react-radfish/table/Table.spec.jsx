@@ -1,5 +1,90 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Table } from "./index";
 
-describe.skip("Table", () => {
+describe("Table", () => {
+  it("renders table with data", () => {
+    const data = [
+      { Name: "Alice", Age: 32 },
+      { Name: "Bob", Age: 28 },
+    ];
+
+    const columns = [
+      { key: "Name", label: "Name", sortable: true },
+      { key: "Age", label: "Age", sortable: true },
+    ];
+
+    render(<Table data={data} columns={columns} />);
+
+    expect(screen.getByText("Alice")).toBeInTheDocument();
+    expect(screen.getByText("Bob")).toBeInTheDocument();
+  });
+
+  it("hides column when hidden is true", () => {
+    const data = [
+      { Name: "Alice", Age: 32 },
+      { Name: "Bob", Age: 28 },
+    ];
+
+    const columns = [
+      { key: "Name", label: "Name", sortable: true },
+      { key: "Age", label: "Age", sortable: true, hidden: true },
+    ];
+
+    render(<Table data={data} columns={columns} />);
+
+    expect(screen.getByText("Name")).toBeInTheDocument();
+    expect(screen.queryByText("Age")).not.toBeInTheDocument(); // Age column should not be rendered
+  });
+
+  it('renders rows in correct order after sorting by multiple criteria', () => {
+    const data = [
+      { 'Name': 'Alice', 'Age': 32 },
+      { 'Name': 'Bob', 'Age': 28 },
+      { 'Name': 'Charlie', 'Age': 32 },
+      { 'Name': 'Alice', 'Age': 28 },
+    ];
+  
+    const columns = [
+      { key: 'Name', label: 'Name', sortable: true },
+      { key: 'Age', label: 'Age', sortable: true },
+    ];
+  
+    render(<Table data={data} columns={columns} />);
+  
+    // First click on Age sorts by Age ascending
+    fireEvent.click(screen.getByText('Age'));
+    let rows = screen.getAllByRole('row');
+    expect(within(rows[1]).getByText('Bob')).toBeInTheDocument();
+    expect(within(rows[2]).getByText('Alice')).toBeInTheDocument();
+    expect(within(rows[3]).getByText('Alice')).toBeInTheDocument();
+    expect(within(rows[4]).getByText('Charlie')).toBeInTheDocument();
+  
+    // Second click on Name sorts by Name ascending, then by Age ascending
+    fireEvent.click(screen.getByText('Name'));
+    rows = screen.getAllByRole('row');
+    expect(within(rows[1]).getByText('Alice')).toBeInTheDocument();
+    expect(within(rows[1]).getByText('28')).toBeInTheDocument();
+    expect(within(rows[2]).getByText('Alice')).toBeInTheDocument();
+    expect(within(rows[2]).getByText('32')).toBeInTheDocument();
+    expect(within(rows[3]).getByText('Bob')).toBeInTheDocument();
+    expect(within(rows[4]).getByText('Charlie')).toBeInTheDocument();
+  
+    // Third click on Age toggles Age to descending, but keeps Name ascending
+    fireEvent.click(screen.getByText('Age'));
+    rows = screen.getAllByRole('row');
+    expect(within(rows[1]).getByText('Alice')).toBeInTheDocument();
+    expect(within(rows[1]).getByText('32')).toBeInTheDocument();
+    expect(within(rows[2]).getByText('Alice')).toBeInTheDocument();
+    expect(within(rows[2]).getByText('28')).toBeInTheDocument();
+    expect(within(rows[3]).getByText('Bob')).toBeInTheDocument();
+    expect(within(rows[4]).getByText('Charlie')).toBeInTheDocument();
+  
+    // Fourth click on Age removes Age from the sort criteria, should sort only by Name
+    fireEvent.click(screen.getByText('Age'));
+    rows = screen.getAllByRole('row');
+    expect(within(rows[1]).getByText('Alice')).toBeInTheDocument();
+    expect(within(rows[2]).getByText('Alice')).toBeInTheDocument();
+    expect(within(rows[3]).getByText('Bob')).toBeInTheDocument();
+    expect(within(rows[4]).getByText('Charlie')).toBeInTheDocument();
+  });
 });
