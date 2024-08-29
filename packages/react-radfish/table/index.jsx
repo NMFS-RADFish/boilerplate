@@ -8,6 +8,18 @@ import {
   Icon,
 } from "@trussworks/react-uswds";
 
+/**
+ * A table component for displaying data with optional sorting and pagination.
+ *
+ * @param {Object} props - The props object.
+ * @param {Array<Object>} props.data - The data to display in the table.
+ * @param {Array<Object>} props.columns - The columns configuration.
+ * @param {number} props.paginationOptions.pageSize - Number of rows per page.
+ * @param {number} props.paginationOptions.currentPage - Current page number.
+ * @param {number} props.paginationOptions.totalRows - Total number of rows in the dataset.
+ * @param {Function} props.paginationOptions.onPageChange - Function to call when the page changes.
+ * @returns {JSX.Element} The rendered table component.
+ */
 const RADFishTable = (props) => {
   return <TwTable {...props}>{props.children}</TwTable>;
 };
