@@ -1,12 +1,67 @@
+import React, { useState } from "react";
 import "./style.css";
 import { flexRender } from "@tanstack/react-table";
-import {
-  Table as TwTable,
-  TextInput,
-  Select,
-  Button,
-  Icon,
-} from "@trussworks/react-uswds";
+import { Table as TwTable, TextInput, Select, Button, Icon } from "@trussworks/react-uswds";
+
+const TableStructure = ({ data, columns }) => {
+  const [sortState, setSortState] = useState([]);
+  const handleSort = (key) => {
+    const existingSort = sortState.find((sort) => sort.key === key);
+    let newSortState;
+
+    if (existingSort) {
+      if (existingSort.direction === "asc") {
+        // Toggle to descending
+        newSortState = sortState.map((sort) =>
+          sort.key === key ? { ...sort, direction: "desc" } : sort,
+        );
+      } else {
+        // Remove sort criteria if already descending
+        newSortState = sortState.filter((sort) => sort.key !== key);
+      }
+    } else {
+      // Add new sort criteria at the beginning of the array
+      newSortState = [{ key, direction: "asc" }, ...sortState];
+    }
+
+    setSortState(newSortState);
+  };
+
+  const sortedData = [...data].sort((a, b) => {
+    for (let { key, direction } of sortState) {
+      if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
+      if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
+
+  return (
+    <>
+      <thead>
+        <tr>
+          {columns
+            .filter((column) => !column.hidden)
+            .map((column) => (
+              <th key={column.key} onClick={() => column.sortable && handleSort(column.key)}>
+                {column.label}
+              </th>
+            ))}
+        </tr>
+      </thead>
+      <tbody>
+        {sortedData.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {columns
+              .filter((column) => !column.hidden)
+              .map((column) => (
+                <td key={column.key}>{row[column.key]}</td>
+              ))}
+          </tr>
+        ))}
+      </tbody>
+    </>
+  );
+};
 
 /**
  * A table component for displaying data with optional sorting and pagination.
@@ -20,8 +75,12 @@ import {
  * @param {Function} props.paginationOptions.onPageChange - Function to call when the page changes.
  * @returns {JSX.Element} The rendered table component.
  */
-const RADFishTable = (props) => {
-  return <TwTable {...props}>{props.children}</TwTable>;
+const RADFishTable = ({ data, columns, ...props }) => {
+  return (
+    <TwTable {...props}>
+      <TableStructure data={data} columns={columns} />
+    </TwTable>
+  );
 };
 
 // HEADERS
@@ -41,10 +100,7 @@ const RADFishTableHeaderCell = (props) => {
     return (
       <th colSpan={props.header.colSpan}>
         <div className="radfish-table-header-cell" onClick={handleSort}>
-          {flexRender(
-            props.header.column.columnDef.header,
-            props.header.getContext()
-          )}
+          {flexRender(props.header.column.columnDef.header, props.header.getContext())}
           <RADFishSortDirectionIcon header={props.header} />
         </div>
       </th>
@@ -65,11 +121,7 @@ const RADFishTableBody = (props) => {
 
 const RADFishTableBodyRow = (props) => {
   return (
-    <tr
-      {...props}
-      className={`radfish-table-row ${props.className || ""}`}
-      onClick={props.onClick}
-    >
+    <tr {...props} className={`radfish-table-row ${props.className || ""}`} onClick={props.onClick}>
       {props.children}
     </tr>
   );
@@ -117,10 +169,7 @@ const RADFishTablePaginationNav = ({
       <Button onClick={() => nextPage()} disabled={!getCanNextPage()}>
         <Icon.ArrowForward />
       </Button>
-      <Button
-        onClick={() => setPageIndex(pageCount)}
-        disabled={!getCanNextPage()}
-      >
+      <Button onClick={() => setPageIndex(pageCount)} disabled={!getCanNextPage()}>
         <Icon.LastPage />
       </Button>
     </>
@@ -138,11 +187,7 @@ const RADFishTablePaginationPageCount = ({ pageIndex, getPageCount }) => {
   );
 };
 
-const RADFishTablePaginationGoToPage = ({
-  pageIndex,
-  setPageIndex,
-  getPageCount,
-}) => {
+const RADFishTablePaginationGoToPage = ({ pageIndex, setPageIndex, getPageCount }) => {
   const pageCount = getPageCount();
   return (
     <>
