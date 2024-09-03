@@ -78,7 +78,7 @@ const TableStructure = ({ data, columns }) => {
 const RADFishTable = ({ data, columns, ...props }) => {
   return (
     <TwTable {...props}>
-      <TableStructure data={data} columns={columns} />
+      {data && columns ? <TableStructure data={data} columns={columns} /> : props.children}
     </TwTable>
   );
 };
