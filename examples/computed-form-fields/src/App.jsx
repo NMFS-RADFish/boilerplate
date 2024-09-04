@@ -6,15 +6,17 @@ import { Alert, Button, GridContainer, Link } from "@trussworks/react-uswds";
 
 function App() {
   return (
-    <Router>
-      <div className="App">
+    <GridContainer>
+      <Router>
+        <div className="App">
           <h1>Computed Form Fields Example</h1>
           <FormInfoAnnotation />
           <Routes>
             <Route path="/" element={<ComputedForm />} />
           </Routes>
-      </div>
-    </Router>
+        </div>
+      </Router>
+    </GridContainer>
   );
 }
 
@@ -27,7 +29,7 @@ const FormInfoAnnotation = () => {
       <br />
       <br />
       <Link
-        href="https://nmfs-radfish.github.io/documentation/docs/front-end-developlement-guide/frontend-development-guide"
+        href="https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples"
         target="_blank"
         rel="noopener noreferrer"
       >
