@@ -1,8 +1,8 @@
 {
   "version": "0.11.0",
   "dependencies": {
-    "@nmfs-radfish/radfish": "^0.2.2",
-    "@nmfs-radfish/react-radfish": "^0.4.9",
+    "@nmfs-radfish/radfish": "0.x",
+    "@nmfs-radfish/react-radfish": "0.x",
     "@tanstack/react-table": "^8.11.7",
     "@testing-library/user-event": "^13.5.0",
     "@trussworks/react-uswds": "^9.0.0",

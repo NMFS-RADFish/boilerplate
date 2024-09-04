@@ -3,8 +3,8 @@
   "version": "0.8.0",
   "private": true,
   "dependencies": {
-    "@nmfs-radfish/radfish": "^0.2.2",
-    "@nmfs-radfish/react-radfish": "^0.4.11",
+    "@nmfs-radfish/radfish": "0.x",
+    "@nmfs-radfish/react-radfish": "0.x",
     "@tanstack/react-query": "^5.51.11",
     "@tanstack/react-query-devtools": "^5.51.11",
     "@trussworks/react-uswds": "^6.1.0",
