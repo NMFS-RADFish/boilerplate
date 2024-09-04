@@ -367,28 +367,31 @@ export default MyComponent;
 
 ## Interfacing with backend services
 
-The **`RADFishAPIService`** is a class designed to facilitate interactions with a backend API. It simplifies making HTTP requests (GET, POST, PUT, DELETE) by encapsulating them into easy-to-use class methods. This service handles the construction of requests, including headers and query parameters, and processes responses.
-
-### Initializing the Service
-
-To use **`RADFishAPIService`**, you should use the included `APIService.js` module that is provided in the radfish application.
-
-```jsx
-import RADFishAPIService from "./RADFishAPIService";
-
-const ApiService = new RADFishAPIService("your_access_token_here");
-```
+You are free to use any network library of your choice to handle HTTP requests (GET, POST, PUT, DELETE). For your convenience, we’ve provided examples using the native fetch API. You can adapt these examples to the library that best fits your needs.
 
 ### Making API Requests
 
-A common pattern, is to call this `ApiService` in a `useEffect` that will trigger whenever a React component loads:
+A common pattern, is to call network requests in a `useEffect` that will trigger whenever a React component loads:
 
 ```jsx
 useEffect(() => {
-  const fetchData = async () => {
-    const { data } = await ApiService.get(API_ENDPOINT);
-    // handle data as needed
-  };
+  async function fetchData() {
+    try {
+      const response = await fetch("https://api.example.com/data", {
+        headers: {
+          "X-Access-Token": "your-access-token",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
   fetchData();
 }, []);
 ```
@@ -402,11 +405,36 @@ Asynchronous function to perform a `GET` request
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
+async function get(API_ENDPOINT, params) {
+  const queryString = new URLSearchParams(params).toString();
+  const url = `${endpoint}?${queryString}`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "X-Access-Token": "your-access-token",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
 useEffect(() => {
+  const API_ENDPOINT = "https://api.example.com/data";
+  const params = { param1: "foo" };
+
   const fetchData = async () => {
-    const { data } = await ApiService.get(API_ENDPOINT, { param1: "foo" });
+    const data = await get(API_ENDPOINT, params);
     // handle data as needed
   };
+
   fetchData();
 }, []);
 ```
@@ -416,15 +444,41 @@ useEffect(() => {
 Asynchronous function to perform a `POST` request
 
 - `@param {string} endpoint` - The API endpoint to perform the POST request.
-- `@param {Object} body` - The request body for the POST request.
+- `@param {Object} body` - The data to be sent in the request body.
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
+async function post(API_ENDPOINT, bodyData) {
+  try {
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Token": "your-access-token",
+      },
+      body: JSON.stringify({ ...bodyData }),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return { data };
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
+// Example usage
 useEffect(() => {
+  const API_ENDPOINT = "https://api.example.com/data";
+  const bodyData = { key: "value" };
+
   const postData = async () => {
-    const { data } = await ApiService.post(API_ENDPOINT, { name: "foo" });
+    const data = await post(API_ENDPOINT, bodyData);
     // handle data as needed
   };
+
   postData();
 }, []);
 ```
@@ -438,11 +492,38 @@ Asynchronous function to perform a `PUT` request
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
+async function update(endpoint, { id, bodyData }) {
+  const url = `${endpoint}/${id}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Token": "your-access-token",
+      },
+      body: JSON.stringify(bodyData),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
 useEffect(() => {
+  const API_ENDPOINT = "https://api.example.com/data";
+  const params = { id: 1, bodyData: { key: "updatedValue" } };
+
   const updateData = async () => {
-    const { data } = await ApiService.put(API_ENDPOINT, { id: 1 });
+    const data = await update(API_ENDPOINT, params);
     // handle data as needed
   };
+
   updateData();
 }, []);
 ```
@@ -456,11 +537,35 @@ Asynchronous function to perform a `DELETE` request
 - `@returns {Promise<Object|string>}` - A promise that resolves to the API response data or an error string.
 
 ```js
+async function remove(endpoint, { id }) {
+  const url = `${endpoint}/${id}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "X-Access-Token": "your-access-token",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    console.log("Data deleted successfully");
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
 useEffect(() => {
+  const API_ENDPOINT = "https://api.example.com/data";
+  const params = { id: 1 };
+
   const deleteData = async () => {
-    const { data } = await ApiService.delete(API_ENDPOINT, { id: 1 });
-    // handle data as needed
+    await remove(API_ENDPOINT, params);
+    // handle success if needed
   };
+
   deleteData();
 }, []);
 ```

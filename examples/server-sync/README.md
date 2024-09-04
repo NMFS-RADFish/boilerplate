@@ -19,7 +19,6 @@ Learn more about RADFish examples at the official [documentation](https://nmfs-r
 - `react` for managing component state and lifecycle.
 - `radfish-react` for UI components like `Button`.
 - Custom hooks: `useOfflineStatus` and `useOfflineStorage`.
-- `RADFishAPIService` for API interactions.
 
 ## Installation
 
@@ -56,8 +55,29 @@ export default App;
 To add network requests and update the offline storage in the syncToHomebase function, follow the steps below:
 
 #### Add Network Request Logic:
+ 
+For making network requests, please use a network request library of your choice. For example, you can use the native [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) or any other library that fits your needs.
 
-Use the RADFishAPIService instance (ApiService) to make network requests. For example, you might fetch data from a specific endpoint.
+```javascript
+async function fetchData() {
+  try {
+    const response = await fetch('https://api.example.com/data', {
+        headers: { "Content-Type": "application/json", "X-Access-Token": "your-access-token" },
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+fetchData();
+```
+
 
 #### Update Offline Storage:
 
@@ -68,10 +88,7 @@ Here is an example of how to integrate these steps into the syncToHomebase funct
 ```javascript
 import { useState } from "react";
 import { Button, useOfflineStatus } from "@nmfs-radfish/react-radfish";
-import RADFishAPIService from "../packages/services/APIService";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
-
-const ApiService = new RADFishAPIService("");
 
 const offlineErrorMsg = "No network connection, unable to sync with server";
 const noSyncMsg = "Application has not yet been synced with homebase";
@@ -87,6 +104,28 @@ export const ServerSync = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [syncStatus, setSyncStatus] = useState("");
 
+
+  const getRequestWithFetch = async (endpoint) => {
+    try {
+      const response = await fetch(`${endpoint}`, {
+        headers: {"X-Access-Token": "your-access-token" },
+      });
+
+      if (!response.ok) {
+        // Set error with the JSON response
+        const error = await response.json();
+        return error;
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      // Set error in case of an exception
+      const error = `[GET]: Error fetching data: ${err}`;
+      return error;
+    }
+  };
+
   const syncToHomebase = async () => {
     const lastSync = await findOfflineData(HOME_BASE_DATA);
     const lastSyncMsg = `Last sync at: ${await findOfflineData("lastHomebaseSync")}`;
@@ -96,7 +135,7 @@ export const ServerSync = () => {
 
       try {
         // Fetch data from the server
-        const { data: homebaseData } = await ApiService.get(MSW_ENDPOINT.HOMEBASE);
+        const { data: homebaseData } = await getRequestWithFetch.MSW_ENDPOINT.HOMEBASE);
 
         // Update offline storage with the fetched data
         await updateOfflineData(HOME_BASE_DATA, homebaseData);

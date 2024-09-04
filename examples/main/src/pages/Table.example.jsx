@@ -5,7 +5,6 @@
 
 import { useEffect } from "react";
 import { useTableState } from "../contexts/TableWrapper.example";
-import RADFishAPIService from "../packages/services/APIService";
 import { Button } from "@trussworks/react-uswds";
 import {
   Table,
@@ -27,8 +26,6 @@ import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { Alert } from "@trussworks/react-uswds";
 import { COMMON_CONFIG } from "../config/common";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
-
-const ApiService = new RADFishAPIService("");
 
 const SimpleTable = () => {
   /**
@@ -84,7 +81,24 @@ const SimpleTable = () => {
 
     try {
       if (!isOffline) {
-        const { data } = await ApiService.post("/form", { formData: draftData });
+        const response = await fetch("/form", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Access-Token": "your-access-token",
+          },
+          body: JSON.stringify({
+            ...{ formData: draftData },
+          }),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          return error;
+        }
+
+        const { data } = await response.json();
+
         await updateOfflineData("formData", [{ uuid: data.uuid, ...data }]);
         showToast(TOAST_CONFIG.SUCCESS);
       } else {

@@ -1,33 +1,67 @@
 import "./index.css";
 import React, { useState } from "react";
 import { Button, Alert, Link } from "@trussworks/react-uswds";
-import RADFishAPIService from "./packages/services/APIService";
 import { MSW_ENDPOINT } from "./mocks/handlers";
-
-const APIService = new RADFishAPIService();
 
 const App = () => {
   const [state, setState] = useState([]);
   const [isLoading, setIsLoading] = useState(null);
+  const mockData = {
+    name: "tuna",
+    price: 75,
+    src: "https://picsum.photos/200/300",
+  };
 
   const getData = async () => {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
-    const { data } = await APIService.get(MSW_ENDPOINT.SPECIES);
-    setState(data);
-    setIsLoading(false);
+    try {
+      const response = await fetch(MSW_ENDPOINT.SPECIES, {
+        headers: {
+          "X-Access-Token": "your-access-token",
+        },
+      });
+
+      console.log("response", response);
+      if (!response.ok) {
+        // Set error with the JSON response
+        const error = await response.json();
+        return error;
+      }
+      console.log("hit");
+      const { data } = await response.json();
+
+      console.log("data", data);
+
+      setState(data);
+      setIsLoading(false);
+    } catch (err) {
+      // Set error in case of an exception
+      const error = `[GET]: Error fetching data: ${err}`;
+      return error;
+    }
   };
 
   const postData = async () => {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
-    const { data } = await APIService.post(MSW_ENDPOINT.SPECIES, {
-      data: {
-        name: "tuna",
-        price: 75,
-        src: "https://picsum.photos/200/300",
+    const response = await fetch(MSW_ENDPOINT.SPECIES, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Token": "your-access-token",
       },
+      body: JSON.stringify({
+        ...{ formData: mockData },
+      }),
     });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return error;
+    }
+
+    const { data } = await response.json();
 
     setState(data);
     setIsLoading(false);
@@ -74,7 +108,7 @@ const App = () => {
 const InfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
-      This is an example of how to use the <code>RADFishApiClient</code> along
+      This is an example of how to use the <code>native fetch API</code> along
       with <code>mock service worker</code> in order to create a mock API to
       serve data to your client. Requests to this mock API will be intercepted
       by mock service worker API methods and respond with expected data, which
