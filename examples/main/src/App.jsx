@@ -1,6 +1,6 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
-import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
+import { Routes, Route, Link, BrowserRouter as Router } from "react-router-dom";
 import { Toast, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { FormWrapper } from "./contexts/FormWrapper.example";
 import { TableWrapper } from "./contexts/TableWrapper.example";
@@ -11,7 +11,7 @@ import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { ServerSync } from "./components/ServerSync";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
 import HeaderNav from "./components/HeaderNav";
-import { Link, GridContainer } from "@trussworks/react-uswds";
+import { GridContainer } from "@trussworks/react-uswds";
 
 function App() {
   const { updateOfflineData, findOfflineData, createOfflineData } = useOfflineStorage();
@@ -99,12 +99,12 @@ function App() {
         <div className="toast-container">
           <Toast toast={toast} />
         </div>
+        <HeaderNav>
+          <Link to="/">Home</Link>
+          <Link to="/form">Form</Link>
+          <Link to="/table">Table</Link>
+        </HeaderNav>
         <GridContainer>
-          <HeaderNav>
-            <Link to="/">Home</Link>
-            <Link to="/form">Form</Link>
-            <Link to="/table">Table</Link>
-          </HeaderNav>
           <ServerSync />
           {/* Route paths for the application. All routes need to be wrapped by `BrowserRouter` and `Routes` */}
           <Routes>

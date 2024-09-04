@@ -15,7 +15,7 @@ function App() {
           notification for 5 seconds when network is offline.
           <br />
           <Link
-            href="https://nmfs-radfish.github.io/documentation/docs/front-end-developlement-guide/offlineusage"
+            href="https://nmfs-radfish.github.io/documentation/"
             target="_blank"
             rel="noopener noreferrer"
           >

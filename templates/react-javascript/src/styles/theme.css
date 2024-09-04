@@ -23,6 +23,14 @@ body {
   border-radius: 4px;
 }
 
+.header-container {
+  background: var(--noaa-dark-blue);
+}
+
+.header-title {
+  color: white;
+}
+
 /* Minimum size for NOAA logo must be 72px (0.75 in) */
 .header-logo {
   width: 72px;
