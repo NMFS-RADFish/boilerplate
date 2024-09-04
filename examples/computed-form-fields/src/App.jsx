@@ -29,7 +29,7 @@ const FormInfoAnnotation = () => {
       <br />
       <br />
       <Link
-        href="https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples"
+        href="https://nmfs-radfish.github.io/documentation/"
         target="_blank"
         rel="noopener noreferrer"
       >

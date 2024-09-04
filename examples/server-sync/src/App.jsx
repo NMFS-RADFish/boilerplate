@@ -1,7 +1,7 @@
 import "./index.css";
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Button, Alert, Link } from "@trussworks/react-uswds";
+import { Button, Alert, Link, GridContainer } from "@trussworks/react-uswds";
 
 import { ServerSync } from "./components/ServerSync";
 
@@ -9,13 +9,15 @@ function App() {
   return (
     // Remove app div
     // Remove header
-    <div className="App">
-      <Router>
-        <h1>Server Sync Example</h1>
-        <InfoAnnotation />
-        <ServerSync />
-      </Router>
-    </div>
+    <GridContainer>
+      <div className="App">
+        <Router>
+          <h1>Server Sync Example</h1>
+          <InfoAnnotation />
+          <ServerSync />
+        </Router>
+      </div>
+    </GridContainer>
   );
 }
 
