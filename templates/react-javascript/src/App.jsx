@@ -20,31 +20,42 @@ function App() {
         Skip to main content
       </a>
       <main id="main-content">
-        <GridContainer>
-          <BrowserRouter>
-            <Header basic={true} showMobileOverlay={isExpanded}>
-              <div className="usa-nav-container">
-                <div className="usa-navbar">
-                  <Title>RADFish Application</Title>
-                  <NavMenuButton
-                    onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
-                    label="Menu"
-                  />
-                </div>
-                <PrimaryNav
-                  items={[<Link to="/">Home</Link>]}
-                  mobileExpanded={isExpanded}
-                  onToggleMobileNav={() =>
-                    setExpanded((prvExpanded) => !prvExpanded)
-                  }
-                ></PrimaryNav>
+        <BrowserRouter>
+          <Header
+            basic={true}
+            showMobileOverlay={isExpanded}
+            className="header-container"
+          >
+            <div className="usa-nav-container">
+              <div className="usa-navbar">
+                <Title>RADFish Application</Title>
+                <NavMenuButton
+                  onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
+                  label="Menu"
+                />
               </div>
-            </Header>
+              <PrimaryNav
+                items={[
+                  <Link
+                    to="/"
+                    style={{ color: `${isExpanded ? "black" : "white"}` }}
+                  >
+                    Home
+                  </Link>,
+                ]}
+                mobileExpanded={isExpanded}
+                onToggleMobileNav={() =>
+                  setExpanded((prvExpanded) => !prvExpanded)
+                }
+              ></PrimaryNav>
+            </div>
+          </Header>
+          <GridContainer>
             <Routes>
               <Route path="/" element={<HomePage />} />
             </Routes>
-          </BrowserRouter>
-        </GridContainer>
+          </GridContainer>
+        </BrowserRouter>
       </main>
     </Application>
   );
