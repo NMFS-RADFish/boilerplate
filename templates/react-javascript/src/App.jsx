@@ -28,7 +28,7 @@ function App() {
           >
             <div className="usa-nav-container">
               <div className="usa-navbar">
-                <Title>RADFish Application</Title>
+                <Title className="header-title">RADFish Application</Title>
                 <NavMenuButton
                   onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
                   label="Menu"
