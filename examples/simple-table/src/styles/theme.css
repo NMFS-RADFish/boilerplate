@@ -27,3 +27,12 @@ body {
 .header-logo {
   width: 72px;
 }
+
+.radfish-table {
+  width: 100%;
+  background-color: lightgray;
+}
+
+.radfish-table > thead > tr > th {
+  border: 1px solid var(--noaa-border-dark);
+}

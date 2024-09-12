@@ -91,7 +91,7 @@ function App() {
       <Button type="button" onClick={seedTableData}>
         Seed Table Data
       </Button>
-      <Table data={data} columns={columns} />
+      <Table data={data} columns={columns} className="radfish-table"/>
       {/* <Table bordered fullWidth fixed>
         <TableHeader table={table}>
           <TableHeaderRow table={table}>
