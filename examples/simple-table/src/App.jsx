@@ -1,53 +1,55 @@
 import "./index.css";
-import React, { useEffect } from "react";
+import React from "react";
 import { Alert, Button, Link } from "@trussworks/react-uswds";
 import {
-  TableBody,
-  TableBodyRow,
-  TableHeaderCell,
-  TableHeader,
-  TableHeaderRow,
-  TableBodyCell,
-  TablePaginationNav,
-  TablePaginationPageCount,
-  TablePaginationGoToPage,
-  TablePaginationSelectRowCount,
+  Table,
   dispatchToast,
+  useOfflineStatus,
+  useOfflineStorage,
 } from "@nmfs-radfish/react-radfish";
-import { Table, useOfflineStatus } from "@nmfs-radfish/react-radfish";
-import { useTableState } from "./packages/contexts/TableWrapper";
-import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
 // mockData is used to populate the table with data, usually this would come from an API call.
 const mockData = [
   {
-    uuid: "uuid-123",
-    isDraft: true,
-    fullName: "Samwise Gamgee",
+    uuid: "1",
+    isDraft: "true",
     species: "Marlin",
-    computedPrice: 50,
+    price: 50,
     image: "https://picsum.photos/200/300",
   },
   {
-    uuid: "uuid-456",
-    isDraft: false,
-    fullName: "Galadriel",
+    uuid: "2",
+    isDraft: "false",
     species: "Mahimahi",
-    computedPrice: 1000,
+    price: 1000,
     image: "https://picsum.photos/200/300",
   },
   {
-    uuid: "uuid-789",
-    isDraft: false,
-    fullName: "Frodo Baggins",
+    uuid: "3",
+    isDraft: "false",
     species: "Grouper",
-    computedPrice: 80,
+    price: 80,
+    image: "https://picsum.photos/200/300",
+  },
+  {
+    uuid: "4",
+    isDraft: "false",
+    species: "Grouper",
+    price: 30,
     image: "https://picsum.photos/200/300",
   },
 ];
 
+const columns = [
+  { key: "isDraft", label: "Status", sortable: true },
+  { key: "uuid", label: "Id", sortable: true },
+  { key: "species", label: "Species", sortable: true },
+  { key: "image", label: "Image", sortable: true },
+  { key: "price", label: "Price", sortable: true },
+];
+
 function App() {
-  const { table, headerNames, rowModel, setData } = useTableState();
+  const [data, setData] = React.useState([]);
   const { findOfflineData, updateOfflineData } = useOfflineStorage();
   const { isOffline } = useOfflineStatus();
 
@@ -89,7 +91,8 @@ function App() {
       <Button type="button" onClick={seedTableData}>
         Seed Table Data
       </Button>
-      <Table bordered fullWidth fixed>
+      <Table data={data} columns={columns} />
+      {/* <Table bordered fullWidth fixed>
         <TableHeader table={table}>
           <TableHeaderRow table={table}>
             {headerNames.map((header) => {
@@ -144,7 +147,7 @@ function App() {
             );
           })}
         </TableBody>
-      </Table>
+      </Table> */}
       <Alert type="info" slim={true}>
         Below are examples of the different pagination components available. Each component is
         optional and can be used as needed. Components can be found in the `react-radfish`
@@ -153,7 +156,7 @@ function App() {
       <div className="grid-container margin-bottom-3">
         <div className="grid-row display-flex tablet:flex-justify flex-align-center mobile-lg:display-flex flex-justify-center">
           <div className="width-mobile grid-col-auto display-flex flex-no-wrap">
-            <TablePaginationNav
+            {/* <TablePaginationNav
               setPageIndex={table.setPageIndex}
               previousPage={table.previousPage}
               nextPage={table.nextPage}
@@ -175,7 +178,7 @@ function App() {
             <TablePaginationSelectRowCount
               pageSize={table.getState().pagination.pageSize}
               setPageSize={table.setPageSize}
-            />
+            /> */}
           </div>
         </div>
       </div>

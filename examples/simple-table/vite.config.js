@@ -4,6 +4,11 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@nmfs-radfish/react-radfish': path.resolve(__dirname, 'node_modules/@nmfs-radfish/react-radfish'),
+    },
+  },
   base: "/",
   plugins: [
     react(),

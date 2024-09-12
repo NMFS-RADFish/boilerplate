@@ -5,22 +5,20 @@ import { Table as TwTable, TextInput, Select, Button, Icon } from "@trussworks/r
 
 const TableStructure = ({ data, columns }) => {
   const [sortState, setSortState] = useState([]);
+
   const handleSort = (key) => {
     const existingSort = sortState.find((sort) => sort.key === key);
     let newSortState;
 
     if (existingSort) {
       if (existingSort.direction === "asc") {
-        // Toggle to descending
         newSortState = sortState.map((sort) =>
           sort.key === key ? { ...sort, direction: "desc" } : sort,
         );
       } else {
-        // Remove sort criteria if already descending
         newSortState = sortState.filter((sort) => sort.key !== key);
       }
     } else {
-      // Add new sort criteria at the beginning of the array
       newSortState = [{ key, direction: "asc" }, ...sortState];
     }
 
@@ -42,8 +40,17 @@ const TableStructure = ({ data, columns }) => {
           {columns
             .filter((column) => !column.hidden)
             .map((column) => (
-              <th key={column.key} onClick={() => column.sortable && handleSort(column.key)}>
-                {column.label}
+              <th
+                key={column.key}
+                onClick={() => column.sortable && handleSort(column.key)}
+                className="sortable-column"
+              >
+                <div className="radfish-table-header-cell">
+                  {column.label}
+                  {column.sortable && (
+                    <SortDirectionIcon columnKey={column.key} sortState={sortState} />
+                  )}
+                </div>
               </th>
             ))}
         </tr>
@@ -61,6 +68,16 @@ const TableStructure = ({ data, columns }) => {
       </tbody>
     </>
   );
+};
+
+const SortDirectionIcon = ({ columnKey, sortState }) => {
+  const sortInfo = sortState.find((sort) => sort.key === columnKey);
+
+  if (!sortInfo) {
+    return <Icon.UnfoldMore />; // Default icon when not sorted
+  }
+
+  return sortInfo.direction === "asc" ? <Icon.ArrowUpward /> : <Icon.ArrowDownward />;
 };
 
 /**
