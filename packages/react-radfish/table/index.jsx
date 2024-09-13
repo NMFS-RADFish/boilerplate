@@ -1,12 +1,34 @@
+import React, { useState, useEffect } from "react";
 import "./style.css";
 import { flexRender } from "@tanstack/react-table";
-import {
-  Table as TwTable,
-  TextInput,
-  Select,
-  Button,
-  Icon,
-} from "@trussworks/react-uswds";
+import { Table as TwTable, TextInput, Select, Button, Icon } from "@trussworks/react-uswds";
+
+const TableStructure = ({ data, columns }) => {
+  return (
+    <>
+      <thead>
+        <tr>
+          {columns
+            .filter((column) => !column.hidden)
+            .map((column) => (
+              <th key={column.key}>{column.label}</th>
+            ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {columns
+              .filter((column) => !column.hidden)
+              .map((column) => (
+                <td key={column.key}>{row[column.key]}</td>
+              ))}
+          </tr>
+        ))}
+      </tbody>
+    </>
+  );
+};
 
 /**
  * A table component for displaying data with optional sorting and pagination.
@@ -20,8 +42,77 @@ import {
  * @param {Function} props.paginationOptions.onPageChange - Function to call when the page changes.
  * @returns {JSX.Element} The rendered table component.
  */
-const RADFishTable = (props) => {
-  return <TwTable {...props}>{props.children}</TwTable>;
+
+const RADFishTable = ({
+  data,
+  columns,
+  paginationOptions: { pageSize, currentPage, totalRows, onPageChange },
+  ...props
+}) => {
+  const [pageIndex, setPageIndex] = useState(currentPage - 1);
+
+  const totalPages = totalRows > 0 && pageSize > 0 ? Math.ceil(totalRows / pageSize) : 1;
+
+  const handlePageChange = (newPageIndex) => {
+    console.log("handlePageChange called with index:", newPageIndex);
+
+    if (newPageIndex !== pageIndex) {
+      setPageIndex(newPageIndex);
+      onPageChange(newPageIndex + 1);
+    }
+  };
+
+  const paginatedData = data.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+
+  useEffect(() => {
+    setPageIndex(currentPage - 1);
+  }, [currentPage]);
+
+  return (
+    <>
+      <TwTable {...props}>
+        {paginatedData && columns ? (
+          <TableStructure data={paginatedData} columns={columns} />
+        ) : (
+          props.children
+        )}
+      </TwTable>
+
+      <div className="pagination-controls">
+        <Button
+          onClick={() => handlePageChange(0)}
+          disabled={pageIndex === 0}
+          data-testid="first-page"
+        >
+          <Icon.FirstPage />
+        </Button>
+        <Button
+          onClick={() => handlePageChange(pageIndex - 1)}
+          disabled={pageIndex === 0}
+          data-testid="previous-page"
+        >
+          <Icon.ArrowBack />
+        </Button>
+        <span>
+          Page {pageIndex + 1} of {totalPages}
+        </span>
+        <Button
+          onClick={() => handlePageChange(pageIndex + 1)}
+          disabled={pageIndex >= totalPages - 1}
+          data-testid="next-page"
+        >
+          <Icon.ArrowForward />
+        </Button>
+        <Button
+          onClick={() => handlePageChange(totalPages - 1)}
+          disabled={pageIndex >= totalPages - 1}
+          data-testid="last-page"
+        >
+          <Icon.LastPage />
+        </Button>
+      </div>
+    </>
+  );
 };
 
 // HEADERS
@@ -41,10 +132,7 @@ const RADFishTableHeaderCell = (props) => {
     return (
       <th colSpan={props.header.colSpan}>
         <div className="radfish-table-header-cell" onClick={handleSort}>
-          {flexRender(
-            props.header.column.columnDef.header,
-            props.header.getContext()
-          )}
+          {flexRender(props.header.column.columnDef.header, props.header.getContext())}
           <RADFishSortDirectionIcon header={props.header} />
         </div>
       </th>
@@ -65,11 +153,7 @@ const RADFishTableBody = (props) => {
 
 const RADFishTableBodyRow = (props) => {
   return (
-    <tr
-      {...props}
-      className={`radfish-table-row ${props.className || ""}`}
-      onClick={props.onClick}
-    >
+    <tr {...props} className={`radfish-table-row ${props.className || ""}`} onClick={props.onClick}>
       {props.children}
     </tr>
   );
@@ -108,18 +192,27 @@ const RADFishTablePaginationNav = ({
   const pageCount = getPageCount() - 1;
   return (
     <>
-      <Button onClick={() => setPageIndex(0)} disabled={!getCanPreviousPage()}>
+      <Button
+        onClick={() => setPageIndex(0)}
+        disabled={!getCanPreviousPage()}
+        data-testid="first-page"
+      >
         <Icon.FirstPage />
       </Button>
-      <Button onClick={() => previousPage()} disabled={!getCanPreviousPage()}>
+      <Button
+        onClick={() => previousPage()}
+        disabled={!getCanPreviousPage()}
+        data-testid="previous-page"
+      >
         <Icon.ArrowBack />
       </Button>
-      <Button onClick={() => nextPage()} disabled={!getCanNextPage()}>
+      <Button onClick={() => nextPage()} disabled={!getCanNextPage()} data-testid="next-page">
         <Icon.ArrowForward />
       </Button>
       <Button
         onClick={() => setPageIndex(pageCount)}
         disabled={!getCanNextPage()}
+        data-testid="last-page"
       >
         <Icon.LastPage />
       </Button>
@@ -138,11 +231,7 @@ const RADFishTablePaginationPageCount = ({ pageIndex, getPageCount }) => {
   );
 };
 
-const RADFishTablePaginationGoToPage = ({
-  pageIndex,
-  setPageIndex,
-  getPageCount,
-}) => {
+const RADFishTablePaginationGoToPage = ({ pageIndex, setPageIndex, getPageCount }) => {
   const pageCount = getPageCount();
   return (
     <>

@@ -24,11 +24,14 @@ describe("Table", () => {
           pageSize: 2,
           currentPage: 1,
           onPageChange: onPageChangeMock,
+          totalRows: data.length,
         }}
       />,
     );
 
-    fireEvent.click(screen.getByText("Next")); // Assuming "Next" is the label for the next page button
+    screen.debug();
+
+    fireEvent.click(screen.getByTestId("next-page")); // Click the "Next" button using data-testid
 
     expect(onPageChangeMock).toHaveBeenCalledWith(2); // Should have been called with the next page number
   });
