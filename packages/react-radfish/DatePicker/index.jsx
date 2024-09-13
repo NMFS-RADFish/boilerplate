@@ -7,11 +7,8 @@ export const DatePicker = ({
   defaultValue,
   hintText,
   label,
-  min,
-  max,
-  value,
-  onChange,
   className = "",
+  ...props
 }) => {
   const labelId = `${id}-label`;
   const hintId = `${id}-hint`;
@@ -28,15 +25,12 @@ export const DatePicker = ({
         <input
           type={type}
           defaultValue={defaultValue}
-          onChange={onChange}
-          value={value}
           className="usa-input"
           id={id}
           name={name}
           aria-labelledby={labelId}
           aria-describedby={hintId}
-          min={min}
-          max={max}
+          {...props}
         />
       </div>
     </div>
