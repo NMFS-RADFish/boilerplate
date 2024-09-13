@@ -11,13 +11,17 @@ export const DatePicker = ({
   max,
   value,
   onChange,
+  className = "",
 }) => {
+  const labelId = `${id}-label`;
+  const hintId = `${id}-hint`;
+
   return (
-    <div className="usa-form-group">
-      <label className="usa-label" id="date-start-label" htmlFor="date-start">
+    <div className={"usa-form-group " + className}>
+      <label className="usa-label" id={labelId} htmlFor={id}>
         {label}
       </label>
-      <div className="usa-hint" id="date-start-hint">
+      <div className="usa-hint" id={hintId}>
         {hintText}
       </div>
       <div className="usa-date-picker">
@@ -29,8 +33,8 @@ export const DatePicker = ({
           className="usa-input"
           id={id}
           name={name}
-          aria-labelledby="date-start-label"
-          aria-describedby="date-start-hint"
+          aria-labelledby={labelId}
+          aria-describedby={hintId}
           min={min}
           max={max}
         />
