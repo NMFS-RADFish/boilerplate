@@ -12,28 +12,28 @@ import {
 const mockData = [
   {
     uuid: "1",
-    isDraft: "true",
+    isDraft: true,
     species: "Marlin",
     price: 50,
     image: "https://picsum.photos/200/300",
   },
   {
     uuid: "2",
-    isDraft: "false",
+    isDraft: false,
     species: "Mahimahi",
     price: 1000,
     image: "https://picsum.photos/200/300",
   },
   {
     uuid: "3",
-    isDraft: "false",
+    isDraft: false,
     species: "Grouper",
     price: 80,
     image: "https://picsum.photos/200/300",
   },
   {
     uuid: "4",
-    isDraft: "false",
+    isDraft: false,
     species: "Grouper",
     price: 30,
     image: "https://picsum.photos/200/300",
@@ -41,11 +41,48 @@ const mockData = [
 ];
 
 const columns = [
-  { key: "isDraft", label: "Status", sortable: true },
-  { key: "uuid", label: "Id", sortable: true },
-  { key: "species", label: "Species", sortable: true },
-  { key: "image", label: "Image", sortable: true },
-  { key: "price", label: "Price", sortable: true },
+  {
+    key: "isDraft",
+    label: "Status",
+    sortable: true,
+    render: (row) => console.log('row', row) || (
+      <span>
+        {row.isDraft ? "Draft" : "Submitted"}
+        {row.isDraft && (
+          <Button
+            onClick={(e) => handleSubmit(e, row)}
+            className="font-ui-3xs padding-3px margin-left-205"
+          >
+            Submit
+          </Button>
+        )}
+      </span>
+    ),
+  },
+  {
+    key: "uuid",
+    label: "Id",
+    sortable: true,
+    // No custom render needed, using default rendering
+  },
+  {
+    key: "species",
+    label: "Species",
+    sortable: true,
+    // No custom render needed, using default rendering
+  },
+  {
+    key: "image",
+    label: "Image",
+    sortable: true,
+    render: (row) => <img src={row.image} alt={row.species} width={100} />,
+  },
+  {
+    key: "price",
+    label: "Price",
+    sortable: true,
+    render: (row) => <strong>${row.price}</strong>,
+  },
 ];
 
 function App() {
@@ -83,6 +120,49 @@ function App() {
     }
   };
 
+  const columns = [
+    {
+      key: "isDraft",
+      label: "Status",
+      sortable: true,
+      render: (row) => console.log('row', row) || (
+        <span>
+          {row.isDraft ? "Draft" : "Submitted"}
+          {row.isDraft && (
+            <Button
+              onClick={(e) => handleSubmit(e, row)}
+              className="font-ui-3xs padding-3px margin-left-205"
+            >
+              Submit
+            </Button>
+          )}
+        </span>
+      ),
+    },
+    {
+      key: "uuid",
+      label: "Id",
+      sortable: true,
+    },
+    {
+      key: "species",
+      label: "Species",
+      sortable: true,
+    },
+    {
+      key: "image",
+      label: "Image",
+      sortable: true,
+      render: (row) => <img src={row.image} alt={row.species} width={100} />,
+    },
+    {
+      key: "price",
+      label: "Price",
+      sortable: true,
+      render: (row) => <strong>${row.price}</strong>,
+    },
+  ];
+
   return (
     <div className="grid-container">
       <h1>Simple Table Example</h1>
@@ -91,7 +171,7 @@ function App() {
       <Button type="button" onClick={seedTableData}>
         Seed Table Data
       </Button>
-      <Table data={data} columns={columns} className="radfish-table"/>
+      <Table data={data} columns={columns} className="radfish-table" />
       {/* <Table bordered fullWidth fixed>
         <TableHeader table={table}>
           <TableHeaderRow table={table}>
@@ -156,6 +236,7 @@ function App() {
       <div className="grid-container margin-bottom-3">
         <div className="grid-row display-flex tablet:flex-justify flex-align-center mobile-lg:display-flex flex-justify-center">
           <div className="width-mobile grid-col-auto display-flex flex-no-wrap">
+            <hi>Pagination In Progress</hi>
             {/* <TablePaginationNav
               setPageIndex={table.setPageIndex}
               previousPage={table.previousPage}

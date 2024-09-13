@@ -4,77 +4,80 @@ import { flexRender } from "@tanstack/react-table";
 import { Table as TwTable, TextInput, Select, Button, Icon } from "@trussworks/react-uswds";
 
 const TableStructure = ({ data, columns }) => {
-  const [sortState, setSortState] = useState([]);
-
-  const handleSort = (key) => {
-    const existingSort = sortState.find((sort) => sort.key === key);
-    let newSortState;
-
-    if (existingSort) {
-      if (existingSort.direction === "asc") {
-        newSortState = sortState.map((sort) =>
-          sort.key === key ? { ...sort, direction: "desc" } : sort,
-        );
+    const [sortState, setSortState] = useState([]);
+  
+    const handleSort = (key) => {
+      const existingSort = sortState.find((sort) => sort.key === key);
+      let newSortState;
+  
+      if (existingSort) {
+        if (existingSort.direction === "asc") {
+          newSortState = sortState.map((sort) =>
+            sort.key === key ? { ...sort, direction: "desc" } : sort
+          );
+        } else {
+          newSortState = sortState.filter((sort) => sort.key !== key);
+        }
       } else {
-        newSortState = sortState.filter((sort) => sort.key !== key);
+        newSortState = [{ key, direction: "asc" }, ...sortState];
       }
-    } else {
-      newSortState = [{ key, direction: "asc" }, ...sortState];
-    }
-
-    setSortState(newSortState);
-  };
-
-  const sortedData = [...data].sort((a, b) => {
-    for (let { key, direction } of sortState) {
-      if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
-      if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
-    }
-    return 0;
-  });
-
-  return (
-    <>
-      <thead>
-        <tr>
-          {columns
-            .filter((column) => !column.hidden)
-            .map((column) => (
-              <th
-                key={column.key}
-                onClick={() => column.sortable && handleSort(column.key)}
-                className="sortable-column"
-              >
-                <div className="radfish-table-header-cell">
-                  {column.label}
-                  {column.sortable && (
-                    <SortDirectionIcon columnKey={column.key} sortState={sortState} />
-                  )}
-                </div>
-              </th>
-            ))}
-        </tr>
-      </thead>
-      <tbody>
-        {sortedData.map((row, rowIndex) => (
-          <tr key={rowIndex}>
+  
+      setSortState(newSortState);
+    };
+  
+    const sortedData = [...data].sort((a, b) => {
+      for (let { key, direction } of sortState) {
+        if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
+        if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
+      }
+      return 0;
+    });
+  
+    return (
+      <>
+        <thead>
+          <tr>
             {columns
               .filter((column) => !column.hidden)
               .map((column) => (
-                <td key={column.key}>{row[column.key]}</td>
+                <th
+                  key={column.key}
+                  onClick={() => column.sortable && handleSort(column.key)}
+                  className="sortable-column"
+                >
+                  <div className="radfish-table-header-cell">
+                    {column.label}
+                    {column.sortable && (
+                      <SortDirectionIcon columnKey={column.key} sortState={sortState} />
+                    )}
+                  </div>
+                </th>
               ))}
           </tr>
-        ))}
-      </tbody>
-    </>
-  );
-};
+        </thead>
+        <tbody>
+          {sortedData.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns
+                .filter((column) => !column.hidden)
+                .map((column) => (
+                  <td key={column.key}>
+                    {column.render ? column.render(row) : row[column.key]}
+                  </td>
+                ))}
+            </tr>
+          ))}
+        </tbody>
+      </>
+    );
+  };
+  
 
 const SortDirectionIcon = ({ columnKey, sortState }) => {
   const sortInfo = sortState.find((sort) => sort.key === columnKey);
 
   if (!sortInfo) {
-    return <Icon.UnfoldMore />; // Default icon when not sorted
+    return <Icon.UnfoldMore />;
   }
 
   return sortInfo.direction === "asc" ? <Icon.ArrowUpward /> : <Icon.ArrowDownward />;
