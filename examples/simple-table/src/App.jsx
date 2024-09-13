@@ -63,13 +63,11 @@ const columns = [
     key: "uuid",
     label: "Id",
     sortable: true,
-    // No custom render needed, using default rendering
   },
   {
     key: "species",
     label: "Species",
     sortable: true,
-    // No custom render needed, using default rendering
   },
   {
     key: "image",
@@ -172,62 +170,6 @@ function App() {
         Seed Table Data
       </Button>
       <Table data={data} columns={columns} className="radfish-table" />
-      {/* <Table bordered fullWidth fixed>
-        <TableHeader table={table}>
-          <TableHeaderRow table={table}>
-            {headerNames.map((header) => {
-              return <TableHeaderCell key={header.id} header={header} />;
-            })}
-          </TableHeaderRow>
-        </TableHeader>
-        <TableBody table={table}>
-          {rowModel.rows.map((row) => {
-            const isOfflineData = row.original.isDraft;
-            return (
-              <TableBodyRow
-                row={row}
-                className={isOfflineData && "bg-gray-10"}
-                key={row.original.uuid}
-                data-testid="table-body-row"
-              >
-                {row.getVisibleCells().map((cell) => {
-                  const isStatusColumn = cell.column.id === "isDraft";
-                  const isImgColumn = cell.column.id === "image";
-                  if (isImgColumn) {
-                    const src = cell.getValue();
-                    return (
-                      <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
-                        <img src={src} />
-                      </TableBodyCell>
-                    );
-                  }
-                  if (isStatusColumn) {
-                    const val = cell.getValue();
-                    return (
-                      <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
-                        {val ? "Draft" : "Submitted"}
-                        {val && (
-                          <Button
-                            onClick={(e) => handleSubmit(e, row.original)}
-                            className="font-ui-3xs padding-3px margin-left-205"
-                          >
-                            Submit
-                          </Button>
-                        )}
-                      </TableBodyCell>
-                    );
-                  }
-                  return (
-                    <TableBodyCell className="radfish-table-body-cell" key={cell.id} cell={cell}>
-                      {cell.getValue()}
-                    </TableBodyCell>
-                  );
-                })}
-              </TableBodyRow>
-            );
-          })}
-        </TableBody>
-      </Table> */}
       <Alert type="info" slim={true}>
         Below are examples of the different pagination components available. Each component is
         optional and can be used as needed. Components can be found in the `react-radfish`
