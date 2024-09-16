@@ -90,6 +90,10 @@ const SortDirectionIcon = ({ columnKey, sortState }) => {
  * @param {Object} props - The props object.
  * @param {Array<Object>} props.data - The data to display in the table.
  * @param {Array<Object>} props.columns - The columns configuration.
+ * @param {string} columns[].key - The key value to reference in your data object.
+ * @param {string} columns[].label - Display name for the column.
+ * @param {boolean} columns[].sortable - Flag to determine if the column is sortable.
+ * @param {function(Object): JSX.Element} columns[].render - A function to render the column data for each row.
  * @param {number} props.paginationOptions.pageSize - Number of rows per page.
  * @param {number} props.paginationOptions.currentPage - Current page number.
  * @param {number} props.paginationOptions.totalRows - Total number of rows in the dataset.
