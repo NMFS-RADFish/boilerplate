@@ -126,7 +126,7 @@ function App() {
       <Button type="button" onClick={seedTableData}>
         Seed Table Data
       </Button>
-      <Table data={data} columns={columns} className="myClass" />
+      <Table data={data} columns={columns} />
       <Alert type="info" slim={true}>
         Below are examples of the different pagination components available. Each component is
         optional and can be used as needed. Components can be found in the `react-radfish`
