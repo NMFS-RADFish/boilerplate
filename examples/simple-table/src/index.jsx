@@ -5,7 +5,6 @@ import App from "./App";
 import { TableWrapper } from "./packages/contexts/TableWrapper";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Application, ErrorBoundary, OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
-import "@nmfs-radfish/react-radfish/style.css";
 
 const offlineStorageConfig = {
   type: "indexedDB",
