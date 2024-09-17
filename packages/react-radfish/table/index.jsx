@@ -3,70 +3,53 @@ import "./style.css";
 import { flexRender } from "@tanstack/react-table";
 import { Table as TwTable, TextInput, Select, Button, Icon } from "@trussworks/react-uswds";
 
-const TableStructure = ({ data, columns }) => {
-  const [sortState, setSortState] = useState([]);
+const TableStructureSortDirectionIcon = ({ columnKey, sortState }) => {
+  const sortInfo = sortState.find((sort) => sort.key === columnKey);
 
-  const handleSort = (key) => {
-    const existingSort = sortState.find((sort) => sort.key === key);
-    let newSortState;
+  if (!sortInfo) {
+    return <Icon.UnfoldMore />;
+  }
 
-    if (existingSort) {
-      if (existingSort.direction === "asc") {
-        newSortState = sortState.map((sort) =>
-          sort.key === key ? { ...sort, direction: "desc" } : sort,
-        );
-      } else {
-        newSortState = sortState.filter((sort) => sort.key !== key);
-      }
-    } else {
-      newSortState = [{ key, direction: "asc" }, ...sortState];
-    }
+  return sortInfo.direction === "asc" ? <Icon.ArrowUpward /> : <Icon.ArrowDownward />;
+};
 
-    setSortState(newSortState);
-  };
-
-  const sortedData = [...data].sort((a, b) => {
-    for (let { key, direction } of sortState) {
-      if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
-      if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
-    }
-    return 0;
-  });
-
-  const SortDirectionIcon = ({ columnKey, sortState }) => {
-    const sortInfo = sortState.find((sort) => sort.key === columnKey);
-
-    if (!sortInfo) {
-      return <Icon.UnfoldMore />;
-    }
-
-    return sortInfo.direction === "asc" ? <Icon.ArrowUpward /> : <Icon.ArrowDownward />;
-  };
-
+const TableStructure = ({ data, columns, handleSort, sortState }) => {
   return (
     <>
       <RADFishTableHeader>
         <RADFishTableHeaderRow>
           {columns
             .filter((column) => !column.hidden)
-            .map((column) => (
-              <th
-                key={column.key}
-                onClick={() => column.sortable && handleSort(column.key)}
-                className="sortable-column"
-              >
-                <div className="radfish-table-header-cell">
+            .map((column) => {
+              if (column.sortable) {
+                return (
+                  <th
+                    key={column.key}
+                    onClick={() => column.sortable && handleSort(column.key)}
+                    className={`${column.sortable ? "sortable-column" : ""} ${column.className || ""}`}
+                  >
+                    <div className="radfish-table-header-cell">
+                      {column.label}
+                      {column.sortable && (
+                        <TableStructureSortDirectionIcon
+                          columnKey={column.key}
+                          sortState={sortState}
+                        />
+                      )}
+                    </div>
+                  </th>
+                );
+              }
+              return (
+                <th key={column.key} className={`${column.className || ""}`}>
                   {column.label}
-                  {column.sortable && (
-                    <SortDirectionIcon columnKey={column.key} sortState={sortState} />
-                  )}
-                </div>
-              </th>
-            ))}
+                </th>
+              );
+            })}
         </RADFishTableHeaderRow>
       </RADFishTableHeader>
       <RADFishTableBody>
-        {sortedData.map((row, rowIndex) => (
+        {data.map((row, rowIndex) => (
           <RADFishTableBodyRow key={rowIndex}>
             {columns
               .filter((column) => !column.hidden)
@@ -108,7 +91,35 @@ const RADFishTable = ({
   className,
   ...props
 }) => {
+  const [sortState, setSortState] = useState([]);
   const [pageIndex, setPageIndex] = useState(currentPage - 1);
+
+  const handleSort = (key) => {
+    const existingSort = sortState.find((sort) => sort.key === key);
+    let newSortState;
+
+    if (existingSort) {
+      if (existingSort.direction === "asc") {
+        newSortState = sortState.map((sort) =>
+          sort.key === key ? { ...sort, direction: "desc" } : sort,
+        );
+      } else {
+        newSortState = sortState.filter((sort) => sort.key !== key);
+      }
+    } else {
+      newSortState = [{ key, direction: "asc" }, ...sortState];
+    }
+
+    setSortState(newSortState);
+  };
+
+  const sortedData = [...data].sort((a, b) => {
+    for (let { key, direction } of sortState) {
+      if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
+      if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
 
   const totalPages = totalRows > 0 && pageSize > 0 ? Math.ceil(totalRows / pageSize) : 1;
 
@@ -121,7 +132,7 @@ const RADFishTable = ({
     }
   };
 
-  const paginatedData = data.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+  const paginatedData = sortedData.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
 
   useEffect(() => {
     setPageIndex(currentPage - 1);
@@ -131,7 +142,12 @@ const RADFishTable = ({
     <>
       <TwTable {...props} className={`radfish-table ${className || ""}`}>
         {paginatedData && columns ? (
-          <TableStructure data={paginatedData} columns={columns} />
+          <TableStructure
+            data={paginatedData}
+            columns={columns}
+            handleSort={handleSort}
+            sortState={sortState}
+          />
         ) : (
           props.children
         )}

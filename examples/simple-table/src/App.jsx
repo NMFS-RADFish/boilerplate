@@ -87,6 +87,7 @@ function App() {
       key: "isDraft",
       label: "Status",
       sortable: true,
+      className: "status-column",
       render: (row) => (
         <span>
           {row.isDraft ? "Draft" : "Submitted"}
@@ -114,7 +115,7 @@ function App() {
     {
       key: "image",
       label: "Image",
-      sortable: true,
+      sortable: false,
       render: (row) => <img src={row.image} alt={row.species} height={75} width={150} />,
     },
     {

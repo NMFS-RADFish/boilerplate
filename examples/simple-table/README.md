@@ -76,7 +76,8 @@ Each object in `columns` should have the following properties:
 - **`key`**: (string) The key used to access the data value for this column.
 - **`label`**: (string) The display name of the column header.
 - **`sortable`**: (boolean) Indicates whether this column should allow sorting.
-- **`render`**: (function) _(Optional)_ A function that returns a JSX element to customize the rendering of the cell for this column.
+- **`render`**: (function) _(Optional)_ A function that returns a JSX element to 
+- **`className`**: (string) _(Optional)_ For custom styling.
 
 ### `paginationOptions`
 
