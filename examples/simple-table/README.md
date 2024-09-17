@@ -1,121 +1,168 @@
 # Simple Table Example
 
-[Official Documentation](https://nmfs-radfish.github.io/documentation/)
+This example demonstrates how to use the `<Table>` component to display tabular data.
 
-This is an example on how to create a table to display data using the `<Table>` component. The `<Table>` component is a flexible and customizable table component designed for displaying tabular data. It supports sorting, pagination, and custom rendering of cells.
+Learn more about RADFish Table component at the [official documentation](https://nmfs-radfish.github.io/documentation/docs/design-system/custom-components/table).
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/developer-documentation/examples-and-templates#examples)
+## Table Overview
+
+The `<Table>` component is flexible and customizable, allowing you to define column configurations, enable sorting, and paginate large datasets. In this example, we use mock data representing different fish species with attributes such as status (draft/submitted), UUID, species name, image, and price.
+
+## Features
+
+- **Sorting**: Click on any column header to sort the table by that column. Sorting toggles between ascending, descending, and unsorted states.
+- **Multi-Column Sorting**: Multi-column sorting allows you to sort data by multiple columns. Click additional column headers in the desired order of sorting priority.
+- **Pagination**: Use the pagination controls below the table to navigate through multiple pages of data. You can move between the first, previous, next, and last page, and see the current page number and total pages.
+- **Custom Rendering**: Certain columns (like the image and price) use custom render functions to display data in a more user-friendly way.
+- **Status Submission**: Rows with a "Draft" status display a "Submit" button, which updates the status to "Submitted" when clicked.
 
 ## Usage
 
-### Basic Example
+### Data Structure
 
-To use the `<Table>` component, import it and pass the required `data`, `columns`, and `paginationOptions`.
+The `data` prop is an array of objects where each object represents a row in the table. Each object should have keys that correspond to the `key` values defined in your `columns` array.
 
 ```jsx
-import React from "react";
-import { Table } from "@trussworks/react-uswds";
+const mockData = [
+  {
+    uuid: "1",
+    isDraft: true,
+    species: "Marlin",
+    price: 50,
+    image: "https://picsum.photos/150/75",
+  },
+  {
+    uuid: "2",
+    isDraft: false,
+    species: "Mahimahi",
+    price: 100,
+    image: "https://picsum.photos/150/75",
+  },
+  // More data...
+];
+```
 
+### Columns Configuration
+
+The `columns` array defines how the table displays and interacts with the data. Each column object can include:
+
+- **`key`**: (string) A unique identifier that matches a key in your data object.
+- **`label`**: (string) The header text displayed for the column.
+- **`sortable`**: (boolean) A boolean that determines whether sorting is enabled for this column.
+- **`render`**: (function) _(Optional)_ A function that customizes how data is displayed in that column.
+- **`className`**: (string) _(Optional)_ For custom styling.
+
+```jsx
 const columns = [
   {
-    key: "id",
+    key: "isDraft",
+    label: "Status",
+    sortable: true,
+    render: (row) => (
+      <span>
+        {row.isDraft ? "Draft" : "Submitted"}
+        {row.isDraft && <Button onClick={(e) => handleSubmit(e, row)}>Submit</Button>}
+      </span>
+    ),
+  },
+  {
+    key: "uuid",
     label: "ID",
     sortable: true,
   },
   {
-    key: "name",
-    label: "Name",
+    key: "species",
+    label: "Species",
     sortable: true,
   },
   {
-    key: "age",
-    label: "Age",
+    key: "price",
+    label: "Price",
     sortable: true,
-    render: (row) => <strong>{row.age}</strong>, // Custom render for the Age column
+    render: (row) => <strong>${row.price}</strong>,
+  },
+  {
+    key: "image",
+    label: "Image",
+    render: (row) => <img src={row.image} alt={row.species} height={75} width={150} />,
   },
 ];
-
-const data = [
-  { id: 1, name: "John Doe", age: 25 },
-  { id: 2, name: "Jane Smith", age: 30 },
-  { id: 3, name: "Alice Johnson", age: 28 },
-];
-
-const handlePageChange = (newPage) => {
-  console.log(`Page changed to: ${newPage}`);
-};
-
-const paginationOptions = {
-  pageSize: 2,
-  currentPage: 1,
-  totalRows: 3,
-  onPageChange: handlePageChange,
-};
-
-const MyTableComponent = () => (
-  <Table data={data} columns={columns} paginationOptions={paginationOptions} />
-);
-
-export default MyTableComponent;
 ```
 
-## Props
+#### Custom Rendering with render
 
-### `data`
+Use the `render` function to customize how data is displayed in a column. This is useful for rendering components like buttons or images.
 
-- **Type**: `Array<Object>`
-- **Description**: The array of objects representing your table's data. Each object should have keys matching the `key` values provided in the `columns` prop.
+- Rendering a Button:
 
-### `columns`
+  ```jsx
+  {
+      key: "isDraft",
+      label: "Status",
+      render: (row) => (
+          <span>
+              {row.isDraft ? "Draft" : "Submitted"}
+              {row.isDraft && (
+              <Button onClick={(e) => handleSubmit(e, row)}>
+                  Submit
+              </Button>
+              )}
+          </span>
+      ),
+  },
+  ```
 
-- **Type**: `Array<Object>`
-- **Description**: Defines the structure and configuration of the table columns.
+- Rendering an Image:
 
-Each object in `columns` should have the following properties:
+  ```jsx
+  {
+      key: "image",
+      label: "Image",
+      render: (row) => (
+          <img src={row.image} alt={row.species} height={75} width={150} />
+      ),
+  },
+  ```
 
-- **`key`**: (string) The key used to access the data value for this column.
-- **`label`**: (string) The display name of the column header.
-- **`sortable`**: (boolean) Indicates whether this column should allow sorting.
-- **`render`**: (function) _(Optional)_ A function that returns a JSX element to 
-- **`className`**: (string) _(Optional)_ For custom styling.
+### Pagination
 
-### `paginationOptions`
+Control table pagination using the `paginationOptions` prop.
 
-- **Type**: `Object`
-- **Description**: Provides options for handling pagination.
+Pagination Options:
 
-The `paginationOptions` object should include:
+- `pageSize`: (number) Number of rows displayed per page.
+- `currentPage`: (number) The current page number (starting from 1).
+- `totalRows`: (number) Total number of rows in your dataset.
+- `onPageChange`: (function) Function called when the page changes.
 
-- **`pageSize`**: (number) Number of rows to display per page.
-- **`currentPage`**: (number) The current page being displayed.
-- **`totalRows`**: (number) The total number of rows in the dataset.
-- **`onPageChange`**: (function) Callback function triggered when the page changes. It provides the new page index as an argument.
+```jsx
+const paginationOptions = {
+  pageSize: 5,
+  currentPage: 1,
+  onPageChange: onPageChange,
+  totalRows: data.length,
+};
+```
 
-### `className`
+### Additional Props and Styling
 
-- **Type**: `string`
-- **Description**: An optional `className` for custom styling.
+Our `<Table>` component is built upon the Trussworks `<Table>` component from the `@trussworks/react-uswds` library. This integration allows you to leverage additional props to customize the appearance and behavior of the table.
 
-## Sorting
+#### Using Trussworks Props
 
-To enable sorting for a column, set `sortable: true` in the `columns` configuration for that column. Clicking the column header will toggle between ascending, descending, and unsorted states.
+You can pass these props directly to the `<Table>` component to enhance its styling:
 
-### Multi-Sort
+```jsx
+<Table
+  data={data}
+  columns={columns}
+  paginationOptions={paginationOptions}
+  className="my-custom-table"
+  striped
+  bordered
+/>
+```
 
-The table supports **multi-column sorting**, allowing you to sort data by multiple columns in order of priority. This means you can first sort by one column, then apply additional sorts on other columns, and the data will be sorted based on all specified columns.
+#### Referencing Trussworks Documentation
 
-#### How to Use Multi-Sort
-
-- **Applying Multiple Sorts**: Click on the column headers you wish to sort by, in the order of sorting priority. Each click adds or updates the sort state for that column.
-  
-- **Sort Order Priority**: The order in which you click the columns determines their priority in sorting. The first column clicked is the primary sort, the second is the secondary sort, and so on.
-  
-- **Changing Sort Direction**: Clicking on a sorted column header cycles its sort direction between ascending, descending, and unsorted (which removes it from the sort state).
-
-## Custom Cell Rendering
-
-You can pass a render function to any column to customize how the data is displayed in that column. The render function receives the row object as an argument.
-
-## Pagination
-
-The paginationOptions prop allows you to specify pagination controls for the table. The component will display a pagination control bar to navigate between pages.
+For a complete list of available props and detailed descriptions, please refer to the [Trussworks Table Component Documentation](https://trussworks.github.io/react-uswds/?path=/docs/components-table--docs).
