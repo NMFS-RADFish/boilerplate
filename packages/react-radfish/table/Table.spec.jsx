@@ -14,7 +14,16 @@ describe("Table", () => {
       { key: "Age", label: "Age", sortable: true },
     ];
 
-    render(<Table data={data} columns={columns} />);
+    const onPageChangeMock = vi.fn();
+
+    const paginationOptions = {
+      pageSize: 2,
+      currentPage: 1,
+      onPageChange: onPageChangeMock,
+      totalRows: data.length,
+    };
+
+    render(<Table data={data} columns={columns} paginationOptions={paginationOptions} />);
 
     expect(screen.getByText("Alice")).toBeInTheDocument();
     expect(screen.getByText("Bob")).toBeInTheDocument();
@@ -31,7 +40,16 @@ describe("Table", () => {
       { key: "Age", label: "Age", sortable: true, hidden: true },
     ];
 
-    render(<Table data={data} columns={columns} />);
+    const onPageChangeMock = vi.fn();
+
+    const paginationOptions = {
+      pageSize: 2,
+      currentPage: 1,
+      onPageChange: onPageChangeMock,
+      totalRows: data.length,
+    };
+
+    render(<Table data={data} columns={columns} paginationOptions={paginationOptions} />);
 
     expect(screen.getByText("Name")).toBeInTheDocument();
     expect(screen.queryByText("Age")).not.toBeInTheDocument(); // Age column should not be rendered
@@ -50,7 +68,16 @@ describe("Table", () => {
       { key: "Age", label: "Age", sortable: true },
     ];
 
-    render(<Table data={data} columns={columns} />);
+    const onPageChangeMock = vi.fn();
+
+    const paginationOptions = {
+      pageSize: 4,
+      currentPage: 1,
+      onPageChange: onPageChangeMock,
+      totalRows: data.length,
+    };
+
+    render(<Table data={data} columns={columns} paginationOptions={paginationOptions} />);
 
     // First click on Age sorts by Age ascending
     fireEvent.click(screen.getByText("Age"));
@@ -111,11 +138,14 @@ describe("Table", () => {
           pageSize: 2,
           currentPage: 1,
           onPageChange: onPageChangeMock,
+          totalRows: data.length,
         }}
       />,
     );
 
-    fireEvent.click(screen.getByText("Next")); // Assuming "Next" is the label for the next page button
+    screen.debug();
+
+    fireEvent.click(screen.getByTestId("next-page")); // Click the "Next" button using data-testid
 
     expect(onPageChangeMock).toHaveBeenCalledWith(2); // Should have been called with the next page number
   });
