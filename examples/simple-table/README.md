@@ -2,65 +2,119 @@
 
 [Official Documentation](https://nmfs-radfish.github.io/documentation/)
 
-This is an example on how to create a table to display data using the `TableWrapper` context provider. `TableWrapper` is built using [React Table](https://react-table-v7-docs.netlify.app/docs/overview).
+This is an example on how to create a table to display data using the `<Table>` component. The `<Table>` component is a flexible and customizable table component designed for displaying tabular data. It supports sorting, pagination, and custom rendering of cells.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/developer-documentation/examples-and-templates#examples)
 
-## Steps
+## Usage
 
-1. `npm install @tanstack/react-table`
-2. Import the `TableWrapper` context provider into a parent component, in this example the parent component is `index.jsx`. The context provider takes two props:
-   1. `pageSize` : how many rows to display per page, the default value is 10.
-   2. `columnMap` : this creates the column names and maps the column cells to the column header.
-3. Configure the column mapping in the parent component, in this example the parent component is `index.jsx`.
+### Basic Example
 
-   1. Import `createColumnHelper` and create the `columnHelper` array:
+To use the `<Table>` component, import it and pass the required `data`, `columns`, and `paginationOptions`.
 
-   ````jsx
-    import { createColumnHelper } from "@tanstack/react-table";
+```jsx
+import React from "react";
+import { Table } from "@trussworks/react-uswds";
 
-    const columnHelper = createColumnHelper();
+const columns = [
+  {
+    key: "id",
+    label: "ID",
+    sortable: true,
+  },
+  {
+    key: "name",
+    label: "Name",
+    sortable: true,
+  },
+  {
+    key: "age",
+    label: "Age",
+    sortable: true,
+    render: (row) => <strong>{row.age}</strong>, // Custom render for the Age column
+  },
+];
 
-    const columnMap = [
-   	columnHelper.accessor("isDraft", {
-   		cell: (info) => (info.getValue() ? "Draft " : "Submitted"),
-   		header: () => <span>Status</span>,
-   	}),
-   	columnHelper.accessor("uuid", {
-   		cell: (info) => info.getValue(),
-   		header: () => <span>Id</span>,
-   	}),
-   	columnHelper.accessor("species", {
-   		cell: (info) => info.getValue(),
-   		header: () => <span>Species</span>,
-   	}),
-   	columnHelper.accessor("numberOfFish", {
-   		cell: (info) => info.getValue(),
-   		header: () => <span>Amount Caught</span>,
-   	}),
-   	columnHelper.accessor("computedPrice", {
-   		cell: (info) => info.getValue(),
-   		header: () => <span>Price</span>,
-   	}),
-   ];```
+const data = [
+  { id: 1, name: "John Doe", age: 25 },
+  { id: 2, name: "Jane Smith", age: 30 },
+  { id: 3, name: "Alice Johnson", age: 28 },
+];
 
-   ````
+const handlePageChange = (newPage) => {
+  console.log(`Page changed to: ${newPage}`);
+};
 
-4. Wrap the parent component with the `Table Wrapper` context provider and pass in the necessary props:
-   ```jsx
-   <TableWrapper columnMap={columnMap} pageSize={10}>
-     <App />
-   </TableWrapper>
-   ```
-5. The `TableWrapper` context provider provides a `useTableState` hook that can be used to interact with the table. The following utilities are available:
-   ```jsx
-   const contextValue = {
-     table, // can be used to get full access to table
-     headerNames, // get header/column names
-     rowModel, // get row info
-     setData, // set the table data
-     showOfflineSubmit, // display offline submit button
-     setShowOfflineSubmit, // set whether or not to display button
-   };
-   ```
-6. See `App.jsx` for full example of how to construct the table using the `react-radfish` components and use the `useTableState` hook.
+const paginationOptions = {
+  pageSize: 2,
+  currentPage: 1,
+  totalRows: 3,
+  onPageChange: handlePageChange,
+};
+
+const MyTableComponent = () => (
+  <Table data={data} columns={columns} paginationOptions={paginationOptions} />
+);
+
+export default MyTableComponent;
+```
+
+## Props
+
+### `data`
+
+- **Type**: `Array<Object>`
+- **Description**: The array of objects representing your table's data. Each object should have keys matching the `key` values provided in the `columns` prop.
+
+### `columns`
+
+- **Type**: `Array<Object>`
+- **Description**: Defines the structure and configuration of the table columns.
+
+Each object in `columns` should have the following properties:
+
+- **`key`**: (string) The key used to access the data value for this column.
+- **`label`**: (string) The display name of the column header.
+- **`sortable`**: (boolean) Indicates whether this column should allow sorting.
+- **`render`**: (function) _(Optional)_ A function that returns a JSX element to customize the rendering of the cell for this column.
+
+### `paginationOptions`
+
+- **Type**: `Object`
+- **Description**: Provides options for handling pagination.
+
+The `paginationOptions` object should include:
+
+- **`pageSize`**: (number) Number of rows to display per page.
+- **`currentPage`**: (number) The current page being displayed.
+- **`totalRows`**: (number) The total number of rows in the dataset.
+- **`onPageChange`**: (function) Callback function triggered when the page changes. It provides the new page index as an argument.
+
+### `className`
+
+- **Type**: `string`
+- **Description**: An optional `className` for custom styling.
+
+## Sorting
+
+To enable sorting for a column, set `sortable: true` in the `columns` configuration for that column. Clicking the column header will toggle between ascending, descending, and unsorted states.
+
+### Multi-Sort
+
+The table supports **multi-column sorting**, allowing you to sort data by multiple columns in order of priority. This means you can first sort by one column, then apply additional sorts on other columns, and the data will be sorted based on all specified columns.
+
+#### How to Use Multi-Sort
+
+- **Applying Multiple Sorts**: Click on the column headers you wish to sort by, in the order of sorting priority. Each click adds or updates the sort state for that column.
+  
+- **Sort Order Priority**: The order in which you click the columns determines their priority in sorting. The first column clicked is the primary sort, the second is the secondary sort, and so on.
+  
+- **Changing Sort Direction**: Clicking on a sorted column header cycles its sort direction between ascending, descending, and unsorted (which removes it from the sort state).
+
+## Custom Cell Rendering
+
+You can pass a render function to any column to customize how the data is displayed in that column. The render function receives the row object as an argument.
+
+## Pagination
+
+The paginationOptions prop allows you to specify pagination controls for the table. The component will display a pagination control bar to navigate between pages.

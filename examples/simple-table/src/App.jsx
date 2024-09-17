@@ -21,7 +21,7 @@ const mockData = [
     uuid: "2",
     isDraft: false,
     species: "Mahimahi",
-    price: 1000,
+    price: 100,
     image: "https://picsum.photos/150/75",
   },
   {
@@ -36,6 +36,13 @@ const mockData = [
     isDraft: false,
     species: "Grouper",
     price: 30,
+    image: "https://picsum.photos/150/75",
+  },
+  {
+    uuid: "5",
+    isDraft: false,
+    species: "Salmon",
+    price: 80,
     image: "https://picsum.photos/150/75",
   },
 ];
@@ -118,6 +125,10 @@ function App() {
     },
   ];
 
+  const onPageChange = () => {
+    console.log("onPageChange called");
+  };
+
   return (
     <div className="grid-container">
       <h1>Simple Table Example</h1>
@@ -126,42 +137,21 @@ function App() {
       <Button type="button" onClick={seedTableData}>
         Seed Table Data
       </Button>
-      <Table data={data} columns={columns} />
+      <Table
+        data={data}
+        columns={columns}
+        paginationOptions={{
+          pageSize: 3,
+          currentPage: 1,
+          onPageChange: onPageChange,
+          totalRows: data.length,
+        }}
+      />
       <Alert type="info" slim={true}>
         Below are examples of the different pagination components available. Each component is
         optional and can be used as needed. Components can be found in the `react-radfish`
         directory.
       </Alert>
-      <div className="grid-container margin-bottom-3">
-        <div className="grid-row display-flex tablet:flex-justify flex-align-center mobile-lg:display-flex flex-justify-center">
-          <div className="width-mobile grid-col-auto display-flex flex-no-wrap">
-            <h1>Pagination In Progress</h1>
-            {/* <TablePaginationNav
-              setPageIndex={table.setPageIndex}
-              previousPage={table.previousPage}
-              nextPage={table.nextPage}
-              getCanPreviousPage={table.getCanPreviousPage}
-              getCanNextPage={table.getCanNextPage}
-              getPageCount={table.getPageCount}
-            />
-          </div>
-          <div className="grid-col-auto display-flex flex-wrap flex-align-center margin-y-1">
-            <TablePaginationPageCount
-              pageIndex={table.getState().pagination.pageIndex + 1}
-              getPageCount={table.getPageCount}
-            />
-            <TablePaginationGoToPage
-              pageIndex={table.getState().pagination.pageIndex + 1}
-              setPageIndex={table.setPageIndex}
-              getPageCount={table.getPageCount}
-            />
-            <TablePaginationSelectRowCount
-              pageSize={table.getState().pagination.pageSize}
-              setPageSize={table.setPageSize}
-            /> */}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

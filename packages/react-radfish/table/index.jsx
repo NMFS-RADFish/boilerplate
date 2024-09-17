@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./style.css";
 import { flexRender } from "@tanstack/react-table";
 import { Table as TwTable, TextInput, Select, Button, Icon } from "@trussworks/react-uswds";
@@ -32,6 +32,16 @@ const TableStructure = ({ data, columns }) => {
     }
     return 0;
   });
+
+  const SortDirectionIcon = ({ columnKey, sortState }) => {
+    const sortInfo = sortState.find((sort) => sort.key === columnKey);
+
+    if (!sortInfo) {
+      return <Icon.UnfoldMore />;
+    }
+
+    return sortInfo.direction === "asc" ? <Icon.ArrowUpward /> : <Icon.ArrowDownward />;
+  };
 
   return (
     <>
@@ -74,16 +84,6 @@ const TableStructure = ({ data, columns }) => {
   );
 };
 
-const SortDirectionIcon = ({ columnKey, sortState }) => {
-  const sortInfo = sortState.find((sort) => sort.key === columnKey);
-
-  if (!sortInfo) {
-    return <Icon.UnfoldMore />;
-  }
-
-  return sortInfo.direction === "asc" ? <Icon.ArrowUpward /> : <Icon.ArrowDownward />;
-};
-
 /**
  * A table component for displaying data with optional sorting and pagination.
  *
@@ -100,11 +100,77 @@ const SortDirectionIcon = ({ columnKey, sortState }) => {
  * @param {Function} props.paginationOptions.onPageChange - Function to call when the page changes.
  * @returns {JSX.Element} The rendered table component.
  */
-const RADFishTable = ({ data, columns, className, ...props }) => {
+
+const RADFishTable = ({
+  data,
+  columns,
+  paginationOptions: { pageSize, currentPage, totalRows, onPageChange },
+  className,
+  ...props
+}) => {
+  const [pageIndex, setPageIndex] = useState(currentPage - 1);
+
+  const totalPages = totalRows > 0 && pageSize > 0 ? Math.ceil(totalRows / pageSize) : 1;
+
+  const handlePageChange = (newPageIndex) => {
+    console.log("handlePageChange called with index:", newPageIndex);
+
+    if (newPageIndex !== pageIndex) {
+      setPageIndex(newPageIndex);
+      onPageChange(newPageIndex + 1);
+    }
+  };
+
+  const paginatedData = data.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+
+  useEffect(() => {
+    setPageIndex(currentPage - 1);
+  }, [currentPage]);
+
   return (
-    <TwTable {...props} className={`radfish-table ${className || ""}`}>
-      {data && columns ? <TableStructure data={data} columns={columns} /> : props.children}
-    </TwTable>
+    <>
+      <TwTable {...props} className={`radfish-table ${className || ""}`}>
+        {paginatedData && columns ? (
+          <TableStructure data={paginatedData} columns={columns} />
+        ) : (
+          props.children
+        )}
+      </TwTable>
+
+      <div className="pagination-controls">
+        <Button
+          onClick={() => handlePageChange(0)}
+          disabled={pageIndex === 0}
+          data-testid="first-page"
+        >
+          <Icon.FirstPage />
+        </Button>
+        <Button
+          onClick={() => handlePageChange(pageIndex - 1)}
+          disabled={pageIndex === 0}
+          data-testid="previous-page"
+        >
+          <Icon.ArrowBack />
+        </Button>
+        <span>
+          Page {pageIndex + 1} of {totalPages}
+        </span>
+        <Button
+          onClick={() => handlePageChange(pageIndex + 1)}
+          disabled={pageIndex >= totalPages - 1}
+          data-testid="next-page"
+        >
+          <Icon.ArrowForward />
+        </Button>
+        <Button
+          onClick={() => handlePageChange(totalPages - 1)}
+          disabled={pageIndex >= totalPages - 1}
+          data-testid="last-page"
+        >
+          <Icon.LastPage />
+        </Button>
+      </div>
+    </>
   );
 };
 
@@ -183,16 +249,28 @@ const RADFishTablePaginationNav = ({
   const pageCount = getPageCount() - 1;
   return (
     <>
-      <Button onClick={() => setPageIndex(0)} disabled={!getCanPreviousPage()}>
+      <Button
+        onClick={() => setPageIndex(0)}
+        disabled={!getCanPreviousPage()}
+        data-testid="first-page"
+      >
         <Icon.FirstPage />
       </Button>
-      <Button onClick={() => previousPage()} disabled={!getCanPreviousPage()}>
+      <Button
+        onClick={() => previousPage()}
+        disabled={!getCanPreviousPage()}
+        data-testid="previous-page"
+      >
         <Icon.ArrowBack />
       </Button>
-      <Button onClick={() => nextPage()} disabled={!getCanNextPage()}>
+      <Button onClick={() => nextPage()} disabled={!getCanNextPage()} data-testid="next-page">
         <Icon.ArrowForward />
       </Button>
-      <Button onClick={() => setPageIndex(pageCount)} disabled={!getCanNextPage()}>
+      <Button
+        onClick={() => setPageIndex(pageCount)}
+        disabled={!getCanNextPage()}
+        data-testid="last-page"
+      >
         <Icon.LastPage />
       </Button>
     </>
