@@ -40,6 +40,13 @@ const mockData = [
     price: 80,
     image: "https://picsum.photos/150/75",
   },
+  {
+    uuid: "6",
+    isDraft: true,
+    species: "Salmon",
+    price: 20,
+    image: "https://picsum.photos/150/75",
+  },
 ];
 
 function App() {
@@ -119,7 +126,7 @@ function App() {
         data={data}
         columns={columns}
         paginationOptions={{
-          pageSize: 5,
+          pageSize: 3,
           currentPage: 1,
           onPageChange: onPageChange,
           totalRows: data.length,

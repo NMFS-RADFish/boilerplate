@@ -87,12 +87,14 @@ const TableStructure = ({ data, columns, handleSort, sortState }) => {
 const RADFishTable = ({
   data,
   columns,
-  paginationOptions: { pageSize, currentPage, totalRows, onPageChange },
+  paginationOptions,
   className,
   ...props
 }) => {
   const [sortState, setSortState] = useState([]);
-  const [pageIndex, setPageIndex] = useState(currentPage - 1);
+  const [pageIndex, setPageIndex] = useState(
+    paginationOptions?.currentPage ? paginationOptions.currentPage - 1 : 0,
+  );
 
   const handleSort = (key) => {
     const existingSort = sortState.find((sort) => sort.key === key);
@@ -121,22 +123,32 @@ const RADFishTable = ({
     return 0;
   });
 
-  const totalPages = totalRows > 0 && pageSize > 0 ? Math.ceil(totalRows / pageSize) : 1;
+  const totalPages =
+  paginationOptions?.totalRows > 0 && paginationOptions?.pageSize > 0
+    ? Math.ceil(paginationOptions.totalRows / paginationOptions.pageSize)
+    : 1;
 
   const handlePageChange = (newPageIndex) => {
     console.log("handlePageChange called with index:", newPageIndex);
 
     if (newPageIndex !== pageIndex) {
       setPageIndex(newPageIndex);
-      onPageChange(newPageIndex + 1);
+      paginationOptions?.onPageChange(newPageIndex + 1);
     }
   };
 
-  const paginatedData = sortedData.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+  const paginatedData = paginationOptions
+    ? sortedData.slice(
+        pageIndex * paginationOptions.pageSize,
+        (pageIndex + 1) * paginationOptions.pageSize,
+      )
+    : data;
 
   useEffect(() => {
-    setPageIndex(currentPage - 1);
-  }, [currentPage]);
+    if (paginationOptions?.currentPage) {
+      setPageIndex(paginationOptions.currentPage - 1);
+    }
+  }, [paginationOptions?.currentPage]);
 
   return (
     <>
@@ -153,39 +165,41 @@ const RADFishTable = ({
         )}
       </TwTable>
 
-      <div className="pagination-controls">
-        <Button
-          onClick={() => handlePageChange(0)}
-          disabled={pageIndex === 0}
-          data-testid="first-page"
-        >
-          <Icon.FirstPage />
-        </Button>
-        <Button
-          onClick={() => handlePageChange(pageIndex - 1)}
-          disabled={pageIndex === 0}
-          data-testid="previous-page"
-        >
-          <Icon.ArrowBack />
-        </Button>
-        <span>
-          Page {pageIndex + 1} of {totalPages}
-        </span>
-        <Button
-          onClick={() => handlePageChange(pageIndex + 1)}
-          disabled={pageIndex >= totalPages - 1}
-          data-testid="next-page"
-        >
-          <Icon.ArrowForward />
-        </Button>
-        <Button
-          onClick={() => handlePageChange(totalPages - 1)}
-          disabled={pageIndex >= totalPages - 1}
-          data-testid="last-page"
-        >
-          <Icon.LastPage />
-        </Button>
-      </div>
+      {paginationOptions && (
+        <div className="pagination-controls">
+          <Button
+            onClick={() => handlePageChange(0)}
+            disabled={pageIndex === 0}
+            data-testid="first-page"
+          >
+            <Icon.FirstPage />
+          </Button>
+          <Button
+            onClick={() => handlePageChange(pageIndex - 1)}
+            disabled={pageIndex === 0}
+            data-testid="previous-page"
+          >
+            <Icon.ArrowBack />
+          </Button>
+          <span>
+            Page {pageIndex + 1} of {totalPages}
+          </span>
+          <Button
+            onClick={() => handlePageChange(pageIndex + 1)}
+            disabled={pageIndex >= totalPages - 1}
+            data-testid="next-page"
+          >
+            <Icon.ArrowForward />
+          </Button>
+          <Button
+            onClick={() => handlePageChange(totalPages - 1)}
+            disabled={pageIndex >= totalPages - 1}
+            data-testid="last-page"
+          >
+            <Icon.LastPage />
+          </Button>
+        </div>
+      )}
     </>
   );
 };
