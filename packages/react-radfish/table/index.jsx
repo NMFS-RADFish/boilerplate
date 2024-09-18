@@ -166,7 +166,7 @@ const RADFishTable = ({
       </TwTable>
 
       {paginationOptions && (
-        <div className="pagination-controls">
+        <div className="radfish-pagination-controls">
           <Button
             onClick={() => handlePageChange(0)}
             disabled={pageIndex === 0}

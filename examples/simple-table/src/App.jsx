@@ -175,7 +175,7 @@ function InfoAnnotation() {
       <br />
       <br />
       <Link
-        href="https://nmfs-radfish.github.io/documentation/docs/developer-documentation/examples-and-templates#examples"
+        href="https://nmfs-radfish.github.io/documentation/docs/design-system/custom-components/table"
         target="_blank"
         rel="noopener noreferrer"
       >
