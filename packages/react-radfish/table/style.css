@@ -1,3 +1,23 @@
+.radfish-table {
+  width: 100%;
+  background-color: lightgray;
+}
+
+.radfish-table > thead > tr > th {
+  border: 1px solid var(--noaa-border-dark);
+}
+
+.radfish-table-header-cell {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.radfish-table-row {
+  cursor: pointer;
+}
+
 #radfish-table-pagination-goto {
   width: 65px;
   margin: 0px 5px;
@@ -8,13 +28,12 @@
   margin: 0;
 }
 
-.radfish-table-row {
-  cursor: pointer;
+.radfish-pagination-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
 }
-
-.radfish-table-header-cell {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  user-select: none;
+.radfish-pagination-controls > button {
+    margin: 0
 }
