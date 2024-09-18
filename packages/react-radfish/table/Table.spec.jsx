@@ -143,8 +143,6 @@ describe("Table", () => {
       />,
     );
 
-    screen.debug();
-
     fireEvent.click(screen.getByTestId("next-page")); // Click the "Next" button using data-testid
 
     expect(onPageChangeMock).toHaveBeenCalledWith(2); // Should have been called with the next page number
