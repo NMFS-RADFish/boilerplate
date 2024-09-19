@@ -27,3 +27,7 @@ body {
 .header-logo {
   width: 72px;
 }
+
+.status-column {
+  width: 220px;
+}
