@@ -1,10 +1,10 @@
 # Conditional Form Fields Example
 
-[Official Documentation](https://nmfs-radfish.github.io/documentation/)
+[Official Documentation](https://nmfs-radfish.github.io/radfish/)
 
 This example includes an example on how to build a form where the values of certain input fields control the visibility of other fields within that form. In this case, filling out `fullName` with make the `nickname` field visible. Removing `fullName` will make `nickname` disappear, as well as remove `nickname` from `formState`
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples)
 
 ## Steps
 

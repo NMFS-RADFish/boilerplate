@@ -1,13 +1,13 @@
 # On-Device Storage Example
 
-[Official Documentation](https://nmfs-radfish.github.io/documentation/)
+[Official Documentation](https://nmfs-radfish.github.io/radfish/)
 
 This example includes how to setup and use the on-device storage using IndexedDB and [Dexie.js](https://dexie.org/docs/Tutorial/Getting-started). Example use-cases for on-device storage:
 
 - Offline on-device data storage (most cases)
 - Local non-relational database (online or offline use)
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples)
 
 ## Steps
 

@@ -1,6 +1,6 @@
 # Mock API Example
 
-[Official Documentation](https://nmfs-radfish.github.io/documentation/)
+[Official Documentation](https://nmfs-radfish.github.io/radfish/)
 
 This example shows you how you could use the [React Query library](https://tanstack.com/query/latest) to manage state in your application.
 

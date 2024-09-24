@@ -22,16 +22,13 @@ const App = () => {
         },
       });
 
-      console.log("response", response);
       if (!response.ok) {
         // Set error with the JSON response
         const error = await response.json();
         return error;
       }
-      console.log("hit");
-      const { data } = await response.json();
 
-      console.log("data", data);
+      const { data } = await response.json();
 
       setState(data);
       setIsLoading(false);
@@ -116,7 +113,7 @@ const InfoAnnotation = () => {
       <br />
       <br />
       <Link
-        href="https://nmfs-radfish.github.io/documentation"
+        href="https://nmfs-radfish.github.io/radfish"
         target="_blank"
         rel="noopener noreferrer"
       >
