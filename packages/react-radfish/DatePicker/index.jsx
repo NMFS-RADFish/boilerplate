@@ -4,7 +4,6 @@ export const DatePicker = ({
   type = "date",
   id,
   name,
-  defaultValue,
   hintText,
   label,
   className = "",
@@ -24,7 +23,6 @@ export const DatePicker = ({
       <div className="usa-date-picker">
         <input
           type={type}
-          defaultValue={defaultValue}
           className="usa-input"
           id={id}
           name={name}
