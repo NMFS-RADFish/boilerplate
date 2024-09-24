@@ -10,8 +10,8 @@ export const DatePicker = ({
   className = "",
   ...props
 }) => {
-  const labelId = `${id}-label`;
-  const hintId = `${id}-hint`;
+  const labelId = id ? `${id}-label` : undefined;
+  const hintId = id ? `${id}-hint` : undefined;
 
   return (
     <div className={"usa-form-group " + className}>
