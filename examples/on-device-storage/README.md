@@ -62,7 +62,7 @@ The `useOfflineStorage` hook returns an object with the following methods:
 - `findOfflineData(tableName, criteria)` — Finds data in the storage based on the given criteria, returns all data if not criteria parameter is passed.
 
   - `tableName`: Name of the IndexedDB name
-  - `criteria`: The criteria object to use for finding data, eg {uuid: 123}.
+  - `criteria`: The criteria object to use for finding data, eg `{uuid: 123}`.
   - Returns a promise that resolves to an array of tuples:
     `[ [ uuid, { key: value } ], [ uuid2, { key: value } ] ]`
 
