@@ -29,6 +29,7 @@ Learn more about RADFish examples at the official [documentation](https://nmfs-r
    ```
 
 2. Import the component and required hooks in your project:
+
    ```javascript
    import { ServerSync } from "./components/ServerSync";
    ```
@@ -46,9 +47,9 @@ function App() {
     </div>
   );
 }
-```
 
 export default App;
+```
 
 ## Adding Network Requests and Updating Offline Storage
 
