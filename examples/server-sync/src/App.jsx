@@ -36,7 +36,7 @@ const InfoAnnotation = () => {
       The data is cached in index db and you can view it by opening the application tab in the
       browser developer tools.
       <Link
-        href="https://nmfs-radfish.github.io/documentation"
+        href="https://nmfs-radfish.github.io/radfish"
         target="_blank"
         rel="noopener noreferrer"
       >

@@ -68,7 +68,7 @@
 
 ## Getting Started
 
-> ### ⭐ Full documentation can be found in the [RADFish Frontend Application Development Guide](https://nmfs-radfish.github.io/documentation/).
+> ### ⭐ Full documentation can be found in the [RADFish Frontend Application Development Guide](https://nmfs-radfish.github.io/radfish/).
 
 Assuming you have generated the application with the cli application, you should already have a webpack server running on `localhost:3000`. We have created several [examples](https://github.com/NMFS-RADFish/boilerplate/tree/main/examples) that demonstrate how to build a form using the `react-radfish` components. Feel free to utilize this code and modify it for your needs.
 

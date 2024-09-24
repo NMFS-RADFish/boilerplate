@@ -1,12 +1,12 @@
 # Network Status Example
 
-[Official Documentation](https://nmfs-radfish.github.io/documentation/)
+[Official Documentation](https://nmfs-radfish.github.io/radfish/)
 
 This example shows you how to detect if a user has network connectivity. If the user is offline a toast alert will be displayed at the top of the app.
 
 The `useOfflineStatus` hook provides a `isOffline` utility that detects whether or not a user has network connectivity. It uses the `navigator` browser API. Please see the [MDN Navigator Docs](https://developer.mozilla.org/en-US/docs/Web/API/Navigator) for limitations.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples)
 
 ## Steps
 

@@ -60,7 +60,7 @@ const ComputedForm = () => {
         <Alert type="info" slim={true}>
           The current implementation is using our mock server which can be found at /directory.
           Documentation for the mock service worker can be found at{" "}
-          <a href="https://nmfs-radfish.github.io/documentation/docs/front-end-developlement-guide/mock-api">
+          <a href="https://nmfs-radfish.github.io/radfish/docs/front-end-developlement-guide/mock-api">
             this link
           </a>
         </Alert>

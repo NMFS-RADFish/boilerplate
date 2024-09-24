@@ -1,6 +1,6 @@
 # Mock API Example
 
-[Official Documentation](https://nmfs-radfish.github.io/documentation/)
+[Official Documentation](https://nmfs-radfish.github.io/radfish/)
 
 This example includes how to setup and use mock service worker and the native fetch API to build out a mock API on the frontend to consume without needing to rely on a backend system. The idea is that this can be used during development while backend APIs are worked on, allowing for mock endpoints to be easily swapped out for production endpoints as needed.
 
@@ -9,7 +9,7 @@ This example does _not_ include any backend persistence via IndexedDB, as this i
 `[GET] /species` returns a list of 4 species
 `[POST] /species` returns the original list, with an additional species added (this is hard coded for simplicity)
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/documentation/docs/building-your-application/templates_examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples)
 
 ## Steps
 

@@ -2,7 +2,7 @@
 
 This example demonstrates how to use the `<Table>` component to display tabular data.
 
-Learn more about RADFish Table component at the [official documentation](https://nmfs-radfish.github.io/documentation/docs/design-system/custom-components/table).
+Learn more about RADFish Table component at the [official documentation](https://nmfs-radfish.github.io/radfish/docs/design-system/custom-components/table).
 
 ## Table Overview
 

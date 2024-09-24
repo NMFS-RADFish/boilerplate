@@ -12,7 +12,7 @@ function HomePage() {
         </p>
         <p>
           <Link
-            to="https://nmfs-radfish.github.io/documentation/docs/getting-started"
+            to="https://nmfs-radfish.github.io/radfish/docs/getting-started"
             target="_blank"
           >
             <Button>Documentation</Button>

@@ -113,7 +113,7 @@ const InfoAnnotation = () => {
       <br />
       <br />
       <Link
-        href="https://nmfs-radfish.github.io/documentation"
+        href="https://nmfs-radfish.github.io/radfish"
         target="_blank"
         rel="noopener noreferrer"
       >
