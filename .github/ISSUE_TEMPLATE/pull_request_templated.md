@@ -18,8 +18,8 @@ To ensure a smooth review and merge process, please consider the following:
 
 <!---
 Step 1: Please use the following format for your PR title:
-RADFish - [Component]: [Short description of what this PR fixes or adds]
-Example: "RADFish - Form: Improve validation for email input"
+RADFish - [Component]: [Brief description of the change] (#IssueNumber)
+Example: "RADFish - Button: Increase font size for accessibility (#321)"
  -->
 
 ## Description
