@@ -1,0 +1,74 @@
+name: "Bug Report 🐛"
+description: "Report a bug to help RADFish improve."
+title: "RADFish Boilerplate - Bug: [YOUR BUG TITLE HERE]"
+labels: ['bug']
+body:
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: "Bug Description"
+      description: "Provide a clear and detailed description of the bug you're experiencing. Include whether it affects major or minor functionality and if there's a workaround."
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: "Steps to Reproduce"
+      description: "List the steps that lead to the bug."
+      placeholder: |
+        1. Navigate to '...'
+        2. Perform '....'
+        3. Scroll to '....'
+        4. See the issue...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: "Expected Outcome"
+      description: "Describe what you expected to happen."
+    validations:
+      required: true
+  - type: textarea
+    id: related-code
+    attributes:
+      label: "Relevant Code"
+      description: "Include any code snippets or links to the relevant code that may help resolve the bug (if available)."
+    validations:
+      required: false
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "Screenshots"
+      description: "Attach screenshots to illustrate the issue, if applicable."
+    validations:
+      required: false
+  - type: textarea
+    id: system-info
+    attributes:
+      label: "System Information"
+      description: "Provide details about your system, including the version of the software, operating system, and browser."
+      placeholder: |
+        - Version:
+        - Device:
+        - Operating System:
+        - Browser and version:
+    validations:
+      required: false
+  - type: textarea
+    id: additional-details
+    attributes:
+      label: "Additional Information"
+      description: "Provide any other relevant context or information about the issue."
+    validations:
+      required: false
+  # - type: checkboxes
+  #   id: confirmation
+  #   attributes:
+  #     label: "Code of Conduct Agreement"
+  #     description: "Please confirm the following:"
+  #     options:
+  #       - label: "I agree to follow this project's [Code of Conduct](https://example.com/code-of-conduct)."
+  #         required: true
+  #       - label: "I have searched for duplicate issues in the [issue tracker](https://github.com/NMFS-RADFish/boilerplate/issues)."
+  #         required: true
