@@ -10,8 +10,8 @@ To ensure a smooth review and merge process, please consider the following:
 
 - Feel free to remove any sections of this template that aren’t relevant to your PR (including this welcome message!).
 
-- You can learn more about contributing by reading our
-  [official contribute doc](https://nmfs-radfish.github.io/radfish/about/contribute).
+- You can learn more about making a pull request by reading our
+  [official documentation](https://nmfs-radfish.github.io/radfish/about/contribute#6-how-to-make-a-pull-request).
   If you have any questions, don’t hesitate to get in touch.
 
 -->
