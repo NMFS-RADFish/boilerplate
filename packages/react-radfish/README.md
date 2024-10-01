@@ -21,14 +21,14 @@ This library is open source and can be found here: https://www.npmjs.com/package
 React-Radfish provides components like Application Container, DatePicker, and Table, which simplify building NOAA-themed applications.
 
 ```jsx
-import { ApplicationContainer, DatePicker, Table } from '@nmfs-radfish/react-radfish';
+import { Application, DatePicker, Table } from '@nmfs-radfish/react-radfish';
 
 function MyApp() {
   return (
-    <ApplicationContainer>
+    <Application>
       <DatePicker />
       <Table data={tableData} columns={tableColumns} />
-    </ApplicationContainer>
+    </Application>
   );
 }
 
