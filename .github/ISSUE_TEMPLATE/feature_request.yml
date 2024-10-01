@@ -1,0 +1,44 @@
+name: "Feature Request ✨"
+description: "Suggest a new feature or improvement for this project."
+title: "Feature Request: [Enter a title]"
+labels: ['enhancement']
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Feature Description"
+      description: "A clear and concise description of the feature you are requesting."
+    validations:
+      required: true
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: "Why is this feature important?"
+      description: "Explain why this feature would improve the project or solve a specific problem."
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: "How should this feature work?"
+      description: "Describe how you imagine the feature working or how it could be implemented."
+    validations:
+      required: true
+  - type: textarea
+    id: extra-context
+    attributes:
+      label: "Additional Context"
+      description: "Add any other context, screenshots, or references to help explain your request."
+    validations:
+      required: false
+  # - type: checkboxes
+  #   id: agreement
+  #   attributes:
+  #     label: "Code of Conduct Confirmation"
+  #     description: "Please confirm the following:"
+  #     options:
+  #       - label: "I have searched for duplicate issues in the [issue tracker](https://github.com/NMFS-RADFish/boilerplate/issues)."
+  #         required: true
+        # - label: "I agree to follow this project's [Code of Conduct](https://example.com/code-of-conduct)."
+        #   required: true
+
