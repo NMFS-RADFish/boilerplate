@@ -1,6 +1,6 @@
-![NPM Version](https://img.shields.io/npm/v/%40nmfs-radfish%2Freact-radfish)
-
 # react-radfish
+
+![NPM Version](https://img.shields.io/npm/v/%40nmfs-radfish%2Freact-radfish)
 
 The react-radfish NPM package contains the React component library needed to power any RADFish project built with React or React flavored framework (like Remix or Next.js). The idea is that these modules expose components that can be used in a consistent fashion across different React projects.
 

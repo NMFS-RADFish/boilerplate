@@ -1,6 +1,6 @@
-![NPM Version](https://img.shields.io/npm/v/%40nmfs-radfish%2Fradfish)
-
 # radfish
+
+![NPM Version](https://img.shields.io/npm/v/%40nmfs-radfish%2Fradfish)
 
 The radfish NPM package contains the core Javascript modules needed to power any RADFish project. The idea is that these modules are framework agnostic, and should be fully functional whether you are building an application in React, Svelte, or even Vanilla JavaScript.
 
