@@ -1,6 +1,8 @@
-# Example Permit Form
+# Form Structure Example
 
-The purpose of this repo is to provide an example of building a form using core component provided by [Trussworks react-uswds](https://github.com/trussworks/react-uswds).
+[Official Documentation](https://nmfs-radfish.github.io/radfish/)
+
+This example of building a non-trivial form using core component provided by [Trussworks react-uswds](https://github.com/trussworks/react-uswds).
 
 This example is __NOT__ intended to show a full form implementation, such as sending a request on submit.
 
@@ -17,6 +19,7 @@ Trussworks `grid` components have been used to define the structure of the page.
 ```
 
 How to place to `input` components on a row.
+
 ```html
 <Grid row gap>
     <Grid col={8}>
@@ -26,20 +29,24 @@ How to place to `input` components on a row.
     <Grid col={4}>
         <Label htmlFor="suffix-select" className="text-bold"> Suffix: </Label>
         <Select id="suffix-select" name="suffixSelect" >
-```                    
+```
 
 Several techniques for applying CSS to get the desired results have been used.
 
 - Component props
+
 ```html
 <Grid row gap="md">
 ```
+
 - USWDS classes
+
 ```html
 <Grid row className="flex-justify-center">
 ```
 
 - Custom CSS classes
+
 ```html
 <div className="app-input-boundary">
 ```
@@ -66,7 +73,9 @@ The form does include two additional examples.
     name="permitYear"
     inputRef={inputFocus}
 ```
+
 1. Display `FormData` values on `Submit` and reset the form.
+
 ```js
   const handleSubmit = (event) => {
     event.preventDefault();
