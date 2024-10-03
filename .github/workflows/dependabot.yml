@@ -1,0 +1,58 @@
+version: 1
+updates:
+  - package-ecosystem: "npm"
+    directory: "/packages/radfish"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/packages/react-radfish"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/computed-form-fields"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/conditional-form-fields"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/field-validators"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/main"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/mock-api"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/multi-step-form"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/network-status"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/on-device-storage"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/persisted-form"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/react-query"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/server-sync"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/examples/simple-table"
+    schedule:
+      interval: "weekly"
