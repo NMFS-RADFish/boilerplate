@@ -77,7 +77,7 @@ describe("Table", () => {
       totalRows: data.length,
     };
 
-    render(<Table data={data} columns={columns} paginationOptions={paginationOptions} />);
+    render(<Table data={data} columns={columns} />);
 
     // First click on Age sorts by Age ascending
     fireEvent.click(screen.getByText("Age"));
