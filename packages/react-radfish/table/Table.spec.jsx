@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
-import { render, screen, fireEvent, within } from "@testing-library/react";
+import { ErrorBoundary } from "..";
+import { render, screen, fireEvent, within, act } from "@testing-library/react";
 import { Table } from "./index";
 
 describe("Table", () => {
@@ -180,6 +181,8 @@ describe("Table", () => {
   });
 
   it("will not call onPageChange if not provided", () => {
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
     const data = [
       { Name: "Alice", Age: 32 },
       { Name: "Bob", Age: 28 },
@@ -192,17 +195,25 @@ describe("Table", () => {
     ];
 
     render(
-      <Table
-        data={data}
-        columns={columns}
-        paginationOptions={{
-          pageSize: 2,
-          currentPage: 1,
-          totalRows: data.length,
-        }}
-      />,
+      <ErrorBoundary>
+        <Table
+          data={data}
+          columns={columns}
+          paginationOptions={{
+            pageSize: 2,
+            currentPage: 1,
+            totalRows: data.length,
+          }}
+        />
+      </ErrorBoundary>,
     );
 
     fireEvent.click(screen.getByTestId("next-page")); // Click the "Next" button using data-testid
+
+    // Assert that console.error was not called
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+    // Restore the original console.error
+    consoleErrorSpy.mockRestore();
   });
 });
