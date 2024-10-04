@@ -131,9 +131,12 @@ const RADFishTable = ({
       : 1;
 
   const handlePageChange = (newPageIndex) => {
+    const onPageChange = paginationOptions?.onPageChange;
     if (newPageIndex !== pageIndex) {
       setPageIndex(newPageIndex);
-      paginationOptions?.onPageChange(newPageIndex + 1);
+      if (onPageChange) {
+        onPageChange(newPageIndex + 1);
+      }
     }
   };
 

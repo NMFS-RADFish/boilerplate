@@ -148,7 +148,7 @@ describe("Table", () => {
     expect(onPageChangeMock).toHaveBeenCalledWith(2); // Should have been called with the next page number
   });
 
-  it("use default value if totalRows not provided", () => {
+  it("uses default value if totalRows not provided", () => {
     const data = [
       { Name: "Alice", Age: 32 },
       { Name: "Bob", Age: 28 },
@@ -174,8 +174,35 @@ describe("Table", () => {
       />,
     );
 
-    fireEvent.click(screen.getByTestId("next-page")); // Click the "Next" button using data-testid
+    fireEvent.click(screen.getByTestId("next-page"));
 
-    expect(onPageChangeMock).toHaveBeenCalledWith(2); // Should have been called with the next page number
+    expect(onPageChangeMock).toHaveBeenCalledWith(2);
+  });
+
+  it("will not call onPageChange if not provided", () => {
+    const data = [
+      { Name: "Alice", Age: 32 },
+      { Name: "Bob", Age: 28 },
+      { Name: "Charlie", Age: 22 },
+    ];
+
+    const columns = [
+      { key: "Name", label: "Name", sortable: true },
+      { key: "Age", label: "Age", sortable: true },
+    ];
+
+    render(
+      <Table
+        data={data}
+        columns={columns}
+        paginationOptions={{
+          pageSize: 2,
+          currentPage: 1,
+          totalRows: data.length,
+        }}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId("next-page")); // Click the "Next" button using data-testid
   });
 });
