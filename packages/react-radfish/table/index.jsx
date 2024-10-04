@@ -140,7 +140,7 @@ const RADFishTable = ({
         pageIndex * paginationOptions.pageSize,
         (pageIndex + 1) * paginationOptions.pageSize,
       )
-    : data;
+    : sortedData;
 
   useEffect(() => {
     if (paginationOptions?.currentPage) {
