@@ -123,10 +123,12 @@ const RADFishTable = ({
     return 0;
   });
 
+  const totalRows = paginationOptions?.totalRows || data.length;
+  
   const totalPages =
-  paginationOptions?.totalRows > 0 && paginationOptions?.pageSize > 0
-    ? Math.ceil(paginationOptions.totalRows / paginationOptions.pageSize)
-    : 1;
+    totalRows > 0 && paginationOptions?.pageSize > 0
+      ? Math.ceil(totalRows / paginationOptions.pageSize)
+      : 1;
 
   const handlePageChange = (newPageIndex) => {
     if (newPageIndex !== pageIndex) {
