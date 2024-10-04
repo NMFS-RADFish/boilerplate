@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directories:
+      - "/packages/radfish"
+      - "/packages/react-radfish"
+      - "/templates/react-javascript"
+      - "/examples/computed-form-fields"
+      - "/examples/conditional-form-fields"
+      - "/examples/field-validators"
+      - "/examples/main"
+      - "/examples/mock-api"
+      - "/examples/multi-step-form"
+      - "/examples/network-status"
+      - "/examples/on-device-storage"
+      - "/examples/persisted-form"
+      - "/examples/react-query"
+      - "/examples/server-sync"
+      - "/examples/simple-table"
+    schedule:
+      interval: "weekly"
