@@ -2,7 +2,7 @@
 
 ![test and build workflow](https://github.com/NMFS-RADFish/boilerplate/actions/workflows/run-tests.yml/badge.svg)
 
-![radfish_logo](https://github.com/NMFS-RADFish/boilerplate/assets/11274285/f0c1f78d-d2bd-4590-897c-c6ec87522dd1)
+![radfish_logo](https://github.com/user-attachments/assets/1e7b0f8c-2387-40e4-bdab-0b5e21662681)
 
 - [RADFish Boilerplate Application Code](#radfish-boilerplate-application-code)
   - [Getting Started](#getting-started)
