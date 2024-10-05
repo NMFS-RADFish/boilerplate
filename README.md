@@ -5,9 +5,10 @@
 
 ![test and build workflow](https://github.com/NMFS-RADFish/boilerplate/actions/workflows/run-tests.yml/badge.svg)
 
-This repository is a monorepo containing packages, templates, and examples for building NOAA web applications. The `radfish` and `react-radfish` packages help developers manage offline storage and utilize custom components based on the US Web Design System (USWDS). Additionally, the repository provides examples for building complex forms, tables, and managing application state.
+The boilerplate is a monorepo containing packages, templates, and examples for building NOAA web applications. The `radfish` and `react-radfish` packages help developers manage offline storage and utilize custom components based on the US Web Design System (USWDS). Additionally, this repository provides examples for building complex forms, tables, and managing application state.
 
-To get started, please refer to our [official documentation](https://nmfs-radfish.github.io/radfish/).
+This boilerplate is the parent repository for the [Examples and Templates](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates) section of the [official documentation](https://nmfs-radfish.github.io/radfish/).
+
 
 - [RADFish Boilerplate Application Code](#radfish-boilerplate-application-code)
   - [Getting Started](#getting-started)
