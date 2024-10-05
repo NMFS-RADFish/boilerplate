@@ -1,8 +1,13 @@
-# RADFish Boilerplate Application Code
+<p>
+  <img src="https://github.com/user-attachments/assets/1e7b0f8c-2387-40e4-bdab-0b5e21662681" alt="Project Logo" width="75" />
+  <span style="font-size: 32px; font-weight: bold; margin-left: 10px;;">RADFish Boilerplate Application Code</span>
+</p>
 
 ![test and build workflow](https://github.com/NMFS-RADFish/boilerplate/actions/workflows/run-tests.yml/badge.svg)
 
-![radfish_logo](https://github.com/user-attachments/assets/1e7b0f8c-2387-40e4-bdab-0b5e21662681)
+This repository is a monorepo containing packages, templates, and examples for building NOAA web applications. The `radfish` and `react-radfish` packages help developers manage offline storage and utilize custom components based on the US Web Design System (USWDS). Additionally, the repository provides examples for building complex forms, tables, and managing application state.
+
+To get started, please refer to our [official documentation](https://nmfs-radfish.github.io/radfish/).
 
 - [RADFish Boilerplate Application Code](#radfish-boilerplate-application-code)
   - [Getting Started](#getting-started)
