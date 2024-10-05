@@ -1,14 +1,12 @@
-<p>
-  <img src="https://github.com/user-attachments/assets/1e7b0f8c-2387-40e4-bdab-0b5e21662681" alt="Project Logo" width="75" />
-  <span style="font-size: 32px; font-weight: bold; margin-left: 10px;;">RADFish Boilerplate Application Code</span>
-</p>
+<img align="left" hspace="5" width="40" src="https://github.com/user-attachments/assets/1e7b0f8c-2387-40e4-bdab-0b5e21662681">
+
+# RADFish Boilerplate Application Code
 
 ![test and build workflow](https://github.com/NMFS-RADFish/boilerplate/actions/workflows/run-tests.yml/badge.svg)
 
 The boilerplate is a monorepo containing packages, templates, and examples for building NOAA web applications. The `radfish` and `react-radfish` packages help developers manage offline storage and utilize custom components based on the US Web Design System (USWDS). Additionally, this repository provides examples for building complex forms, tables, and managing application state.
 
-This boilerplate is the parent repository for the [Examples and Templates](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates) section of the [official documentation](https://nmfs-radfish.github.io/radfish/).
-
+This boilerplate is the parent repository for the [examples and templates](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates) section of the [official documentation](https://nmfs-radfish.github.io/radfish/).
 
 - [RADFish Boilerplate Application Code](#radfish-boilerplate-application-code)
   - [Getting Started](#getting-started)
@@ -291,7 +289,7 @@ Step-by-step instructions to configure offline storage:
 
       ```jsx
       const storageMethod = new LocalStorageMethod(
-        import.meta.env.VITE_LOCAL_STORAGE_KEY
+        import.meta.env.VITE_LOCAL_STORAGE_KEY,
       );
       ```
 
@@ -301,7 +299,7 @@ Step-by-step instructions to configure offline storage:
       const storageMethod = new IndexedDBStorageMethod(
         import.meta.env.VITE_INDEXED_DB_NAME,
         import.meta.env.VITE_INDEXED_DB_VERSION,
-        { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" }
+        { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" },
       );
       ```
 
@@ -312,10 +310,10 @@ Step-by-step instructions to configure offline storage:
    const storageMethod = new IndexedDBStorageMethod(
      import.meta.env.VITE_INDEXED_DB_NAME,
      import.meta.env.VITE_INDEXED_DB_VERSION,
-     { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" }
+     { formSpecies: "uuid, fullName, numberOfFish", species: "name, price" },
    );
    const storageMethod = new LocalStorageMethod(
-     import.meta.env.VITE_LOCAL_STORAGE_KEY
+     import.meta.env.VITE_LOCAL_STORAGE_KEY,
    );
    // 2. Create Storage Method
    const storageModel = StorageModelFactory.createModel(storageMethod);
@@ -603,7 +601,7 @@ enableMocking().then(() => {
   root.render(
     <React.StrictMode>
       <App />
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 });
 ```
@@ -764,8 +762,8 @@ export const FormWrapper = ({ children, onSubmit }) => {
       Object.entries(FORM_CONFIG).map(([key, config]) => [
         key,
         config.visibility?.visibleOnMount,
-      ])
-    )
+      ]),
+    ),
   );
 
   // triggered whenever an input value is changed in form. This is the main state handler, and is responsible, in turn, to execute any complex callbacks
@@ -782,7 +780,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
           // if there are linkedinputids, handle the complex behavior handler as needed.
           const updatedComplexForm = handleInputVisibility(
             linkedinputids,
-            updatedForm
+            updatedForm,
           );
           // ...add other handlers as needed (for instance, handleComputedValues)
           return updatedComplexForm;
@@ -791,7 +789,7 @@ export const FormWrapper = ({ children, onSubmit }) => {
         }
       });
     },
-    [handleInputVisibility] // include callbacks into dependency array
+    [handleInputVisibility], // include callbacks into dependency array
   );
 
   const handleInputVisibility = useCallback((inputIds, formData) => {
@@ -1080,7 +1078,7 @@ it("should display the homepage", () => {
   const { queryByText, container } = render(
     <tableWrapper.TableWrapper>
       <SimpleTable />
-    </tableWrapper.TableWrapper>
+    </tableWrapper.TableWrapper>,
   );
 
   const tableRow = screen.queryByTestId("table-body-row");
@@ -1117,21 +1115,20 @@ Here, we are importing the actual `"react-router-dom"` dependency, and then over
 Browser testing involves testing the application in a web browser environment. Tools like [Puppeteer](https://pptr.dev/) can be used alongside Vitest.
 
 ```jsx
-import { test, expect } from 'vitest';
-import puppeteer from 'puppeteer';
+import { test, expect } from "vitest";
+import puppeteer from "puppeteer";
 
-test('should display the homepage', async () => {
+test("should display the homepage", async () => {
   const browser = await puppeteer.launch(); // Launch the browser
   const page = await browser.newPage(); // Open a new page
-  await page.goto('http://localhost:3000'); // Navigate to your app's URL
+  await page.goto("http://localhost:3000"); // Navigate to your app's URL
 
   // Verify the page title
   const title = await page.title();
-  expect(title).toBe('Home Page');
+  expect(title).toBe("Home Page");
 
   await browser.close(); // Close the browser
 });
-
 ```
 
 ### 508 Compliance
