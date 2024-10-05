@@ -1,4 +1,4 @@
-<img align="left" hspace="5" width="40" src="https://github.com/user-attachments/assets/1e7b0f8c-2387-40e4-bdab-0b5e21662681">
+<img align="left" width="45" src="https://github.com/user-attachments/assets/1e7b0f8c-2387-40e4-bdab-0b5e21662681">
 
 # RADFish Boilerplate Application Code
 
