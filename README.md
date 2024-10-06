@@ -4,6 +4,12 @@
 
 ![radfish_logo](https://github.com/NMFS-RADFish/boilerplate/assets/11274285/f0c1f78d-d2bd-4590-897c-c6ec87522dd1)
 
+# Contributing
+
+Thank you for considering contributing to this project! Contributions of all kinds are welcome, whether it’s bug reporting, feature requests, improving documentation, or submitting code. Before you get started, please take a moment to read through our [contribution guidelines](https://nmfs-radfish.github.io/radfish/about/contribute).
+
+
+
 - [RADFish Boilerplate Application Code](#radfish-boilerplate-application-code)
   - [Getting Started](#getting-started)
   - [Directory Structure](#directory-structure)
