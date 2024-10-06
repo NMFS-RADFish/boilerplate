@@ -123,15 +123,20 @@ const RADFishTable = ({
     return 0;
   });
 
+  const totalRows = paginationOptions?.totalRows || data.length;
+  
   const totalPages =
-  paginationOptions?.totalRows > 0 && paginationOptions?.pageSize > 0
-    ? Math.ceil(paginationOptions.totalRows / paginationOptions.pageSize)
-    : 1;
+    totalRows > 0 && paginationOptions?.pageSize > 0
+      ? Math.ceil(totalRows / paginationOptions.pageSize)
+      : 1;
 
   const handlePageChange = (newPageIndex) => {
+    const onPageChange = paginationOptions?.onPageChange;
     if (newPageIndex !== pageIndex) {
       setPageIndex(newPageIndex);
-      paginationOptions?.onPageChange(newPageIndex + 1);
+      if (onPageChange) {
+        onPageChange(newPageIndex + 1);
+      }
     }
   };
 
@@ -140,7 +145,7 @@ const RADFishTable = ({
         pageIndex * paginationOptions.pageSize,
         (pageIndex + 1) * paginationOptions.pageSize,
       )
-    : data;
+    : sortedData;
 
   useEffect(() => {
     if (paginationOptions?.currentPage) {
