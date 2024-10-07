@@ -10,7 +10,7 @@ updates:
       - "/examples/field-validators"
       - "/examples/main"
       - "/examples/mock-api"
-      - "/examples/multi-step-form"
+      - "/examples/multistep-form"
       - "/examples/network-status"
       - "/examples/on-device-storage"
       - "/examples/persisted-form"
