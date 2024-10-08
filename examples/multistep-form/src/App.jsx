@@ -1,7 +1,7 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { MultiStepForm } from "./pages/Form";
+import HomePage from "./pages/Home";
 import { Alert, Button, Link } from "@trussworks/react-uswds";
 
 function App() {
@@ -12,8 +12,8 @@ function App() {
       <br />
       <Router>
         <Routes>
-          <Route path="/" element={<MultiStepForm />} />
-          <Route path="/:id" element={<MultiStepForm />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/:id" element={<HomePage />} />
         </Routes>
       </Router>
     </div>

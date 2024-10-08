@@ -62,7 +62,7 @@ const states = [
 const TOTAL_STEPS = 2;
 const { fullName, email, city, state, zipcode } = CONSTANTS;
 
-const MultiStepForm = () => {
+const HomePage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({});
@@ -343,4 +343,4 @@ const MultiStepForm = () => {
   );
 };
 
-export { MultiStepForm };
+export default HomePage;
