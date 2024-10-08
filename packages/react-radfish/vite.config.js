@@ -1,6 +1,6 @@
 import path from "path";
 import { defineConfig, loadEnv } from "vite";
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
@@ -11,7 +11,7 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "@nmfs-radfish/radfish"],
       output: {
         globals: {
           react: "React",
