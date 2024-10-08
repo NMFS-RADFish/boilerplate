@@ -2,21 +2,23 @@ import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { Application } from "@nmfs-radfish/react-radfish";
-import { Alert, Button, Link } from "@trussworks/react-uswds";
+import { Alert, Button, GridContainer, Link } from "@trussworks/react-uswds";
 import HomePage from "./pages/Home";
 
 function App() {
   return (
     <Application>
-      <Router>
-        <div className="App">
-          <h1>Computed Form Fields Example</h1>
-          <FormInfoAnnotation />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-          </Routes>
-        </div>
-      </Router>
+      <GridContainer>
+        <Router>
+          <div className="App">
+            <h1>Computed Form Fields Example</h1>
+            <FormInfoAnnotation />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+            </Routes>
+          </div>
+        </Router>
+      </GridContainer>
     </Application>
   );
 }
