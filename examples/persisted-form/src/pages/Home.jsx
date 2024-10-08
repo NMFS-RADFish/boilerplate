@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FormGroup, TextInput, Label, Button, Form } from "@trussworks/react-uswds";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
-export const PersistedForm = () => {
+const HomePage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({});
@@ -122,3 +122,5 @@ export const PersistedForm = () => {
     </Form>
   );
 };
+
+export default HomePage
