@@ -221,6 +221,7 @@ const HomePage = () => {
   ]
     .filter(Boolean) // Filters out empty or undefined error messages
     .join(", ");
+
   return (
     <Form
       className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
