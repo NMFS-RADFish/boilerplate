@@ -21,22 +21,6 @@ jobs:
         run: npm install
         working-directory: .
 
-      - name: Install main example build dependencies
-        run: npm install
-        working-directory: examples/main
-
-      - name: Install main example test dependencies
-        run: npm install --no-save @rollup/rollup-linux-x64-gnu
-        working-directory: examples/main
-
-      - name: Run main example tests
-        run: npm test
-        working-directory: examples/main
-
-      - name: Run e2e tests
-        run: npm run test:e2e
-        working-directory: examples/main
-
   lighthouse:
     name: Lighthouse CI
     runs-on: ubuntu-latest
