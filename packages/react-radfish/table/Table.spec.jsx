@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { ErrorBoundary } from "..";
+import { ErrorBoundary } from "../ErrorBoundary";
 import { render, screen, fireEvent, within, act } from "@testing-library/react";
 import { Table } from "./index";
 
