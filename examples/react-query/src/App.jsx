@@ -72,22 +72,17 @@ const App = () => {
           value={minimumPrice}
           onChange={(e) => setMinimumPrice(Math.max(0, Number(e.target.value)))}
         />
-        <Table fullWidth bordered>
-          <TableHeader>
-            <TableHeaderRow>
-              <td>Name</td>
-              <td>Price</td>
-            </TableHeaderRow>
-          </TableHeader>
-          <TableBody>
-            {data?.map((species) => (
-              <TableBodyRow key={species.id}>
-                <TableBodyCell>{species.name}</TableBodyCell>
-                <TableBodyCell>{species.price}</TableBodyCell>
-              </TableBodyRow>
-            ))}
-          </TableBody>
-        </Table>
+        {data && (
+          <Table
+            fullWidth
+            bordered
+            data={data}
+            columns={[
+              { key: "name", label: "Name" },
+              { key: "price", label: "Price" },
+            ]}
+          />
+        )}
       </div>
     </Application>
   );
