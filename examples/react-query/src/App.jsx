@@ -1,9 +1,9 @@
-import "./index.css";
 import React from "react";
+import "./index.css";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import HomePage from "./pages/Home";
 import { GridContainer } from "@trussworks/react-uswds";
 import { Application } from "@nmfs-radfish/react-radfish";
+import HomePage from "./pages/Home";
 
 const App = () => {
   return (

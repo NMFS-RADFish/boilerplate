@@ -2,3 +2,4 @@
 /*  this could eventually live within our component library, and bundled as a dependency
 */
 @import "@trussworks/react-uswds/lib/index.css";
+@import "@trussworks/react-uswds/lib/uswds.css";
