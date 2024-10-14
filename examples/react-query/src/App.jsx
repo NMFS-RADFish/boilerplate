@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import "./index.css";
 
-import { Button, Alert, Link, TextInput } from "@trussworks/react-uswds";
+import { Button, Alert, Label, Link, TextInput } from "@trussworks/react-uswds";
 import { Application, dispatchToast } from "@nmfs-radfish/react-radfish";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -67,27 +67,29 @@ const App = () => {
           Refetch Data
         </Button>
         <pre>Total number of species: {totalSpeciesCount}</pre>
+        <Label htmlFor="minimum-price-input">Minimum Price filter</Label>
         <TextInput
+          id="minimum-price-input"
           type="number"
-          value={minimumPrice}
+          label="Minimum Price"
+          defaultValue={minimumPrice}
+          min={0}
           onChange={(e) => setMinimumPrice(Math.max(0, Number(e.target.value)))}
         />
-        <Table fullWidth bordered>
-          <TableHeader>
-            <TableHeaderRow>
-              <td>Name</td>
-              <td>Price</td>
-            </TableHeaderRow>
-          </TableHeader>
-          <TableBody>
-            {data?.map((species) => (
-              <TableBodyRow key={species.id}>
-                <TableBodyCell>{species.name}</TableBodyCell>
-                <TableBodyCell>{species.price}</TableBodyCell>
-              </TableBodyRow>
-            ))}
-          </TableBody>
-        </Table>
+        {data && (
+          <Table
+            fullWidth
+            bordered
+            data={data}
+            columns={[
+              { key: "name", label: "Name" },
+              {
+                key: "price",
+                label: "Price",
+              },
+            ]}
+          />
+        )}
       </div>
     </Application>
   );
