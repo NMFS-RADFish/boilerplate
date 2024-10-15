@@ -186,3 +186,5 @@ export const ServerSync = () => {
   );
 };
 ```
+
+![Server Sync](./src/assets/server-sync.png)

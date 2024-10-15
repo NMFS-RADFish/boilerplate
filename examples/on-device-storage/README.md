@@ -78,3 +78,5 @@ The `useOfflineStorage` hook returns an object with the following methods:
   - `uuids`: An array of UUIDs to delete
   - Returns a promise that resolves to the updated data as an object:
     `{ numberOfFish: 10, species: salmon }`
+
+![On-Device Storage](./src/assets/on-device-storage.png)

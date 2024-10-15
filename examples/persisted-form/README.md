@@ -115,3 +115,5 @@ return (
 ```
 
 4. Construct your form using the `react-radfish` components. See the `/src/pages/Form.jsx` file to see how to construct the form and use the methods available from `FormWrapper`.
+
+![Persisted Form](./src/assets/persisted-form.png)
