@@ -6,7 +6,7 @@ import { Alert, Button, GridContainer, Link } from "@trussworks/react-uswds";
 
 function App() {
   return (
-    <div className="App grid-container">
+    <Application>
       <h1>Conditional Form Fields Example</h1>
       <FormInfoAnnotation />
       <Router>
@@ -14,7 +14,7 @@ function App() {
           <Route path="/" element={<ConditionalForm />} />
         </Routes>
       </Router>
-    </div>
+    </Application>
   );
 }
 
@@ -29,11 +29,7 @@ const FormInfoAnnotation = () => {
       field validators, please see the <code>field-validators</code> example.
       <br />
       <br />
-      <Link
-        href="https://nmfs-radfish.github.io/radfish"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <Link href="https://nmfs-radfish.github.io/radfish" target="_blank" rel="noopener noreferrer">
         <Button type="button">Go To Documentation</Button>
       </Link>
     </Alert>

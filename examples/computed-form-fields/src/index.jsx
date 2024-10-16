@@ -9,9 +9,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ErrorBoundary>
     <React.StrictMode>
-      <Application>
-        <App />
-      </Application>
+      <App />
     </React.StrictMode>
   </ErrorBoundary>,
 );

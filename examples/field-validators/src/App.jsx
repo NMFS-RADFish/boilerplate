@@ -6,7 +6,7 @@ import { FieldValidatorForm } from "./pages/Form";
 
 function App() {
   return (
-    <div className="App grid-container">
+    <Application>
       <h1>Field Validators</h1>
       <FormInfoAnnotation />
       <Router>
@@ -14,7 +14,7 @@ function App() {
           <Route path="/" element={<FieldValidatorForm />} />
         </Routes>
       </Router>
-    </div>
+    </Application>
   );
 }
 
@@ -30,11 +30,7 @@ function FormInfoAnnotation() {
       validation test cases within each validation array.
       <br />
       <br />
-      <Link
-        href="https://nmfs-radfish.github.io/radfish"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <Link href="https://nmfs-radfish.github.io/radfish" target="_blank" rel="noopener noreferrer">
         <Button type="button">Go To Documentation</Button>
       </Link>
     </Alert>

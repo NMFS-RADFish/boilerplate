@@ -3,20 +3,22 @@ import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { ComputedForm } from "./pages/Form";
 import { Alert, Button, GridContainer, Link } from "@trussworks/react-uswds";
-
+import { Application } from "@nmfs-radfish/react-radfish";
 function App() {
   return (
-    <GridContainer>
-      <Router>
-        <div className="App">
-          <h1>Computed Form Fields Example</h1>
-          <FormInfoAnnotation />
-          <Routes>
-            <Route path="/" element={<ComputedForm />} />
-          </Routes>
-        </div>
-      </Router>
-    </GridContainer>
+    <Application>
+      <GridContainer>
+        <Router>
+          <div className="App">
+            <h1>Computed Form Fields Example</h1>
+            <FormInfoAnnotation />
+            <Routes>
+              <Route path="/" element={<ComputedForm />} />
+            </Routes>
+          </div>
+        </Router>
+      </GridContainer>
+    </Application>
   );
 }
 

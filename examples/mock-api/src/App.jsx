@@ -65,40 +65,42 @@ const App = () => {
   };
 
   return (
-    <div className="grid-container">
-      <h1>Mock API Example</h1>
-      <InfoAnnotation />
-      <br />
-      <Button type="submit" onClick={(e) => getData(e)}>
-        Get Data
-      </Button>
-      {state.length > 0 && (
-        <Button type="submit" onClick={(e) => postData(e)}>
-          Post Data
+    <Application>
+      <div className="grid-container">
+        <h1>Mock API Example</h1>
+        <InfoAnnotation />
+        <br />
+        <Button type="submit" onClick={(e) => getData(e)}>
+          Get Data
         </Button>
-      )}
+        {state.length > 0 && (
+          <Button type="submit" onClick={(e) => postData(e)}>
+            Post Data
+          </Button>
+        )}
 
-      <h2>Mock API Data</h2>
+        <h2>Mock API Data</h2>
 
-      {isLoading && <p>Loading...</p>}
+        {isLoading && <p>Loading...</p>}
 
-      {state.length > 0
-        ? `Number of fetched items: ${state.length}`
-        : "Request data to see items"}
+        {state.length > 0
+          ? `Number of fetched items: ${state.length}`
+          : "Request data to see items"}
 
-      {state.map((data, i) => {
-        return (
-          <div key={i}>
-            Species: {data?.name}
-            <br />
-            Price: {data?.price}
-            <br />
-            <img src={data?.src} />
-            <hr />
-          </div>
-        );
-      })}
-    </div>
+        {state.map((data, i) => {
+          return (
+            <div key={i}>
+              Species: {data?.name}
+              <br />
+              Price: {data?.price}
+              <br />
+              <img src={data?.src} />
+              <hr />
+            </div>
+          );
+        })}
+      </div>
+    </Application>
   );
 };
 
