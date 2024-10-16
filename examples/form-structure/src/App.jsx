@@ -10,7 +10,6 @@ import {
   Header,
 } from "@trussworks/react-uswds";
 
-import HomePage from "./pages/Home";
 import FormPage from "./pages/Form";
 
 function App() {
