@@ -1,71 +1,46 @@
 import "./index.css";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { useState } from "react";
-import { Application } from "@nmfs-radfish/react-radfish";
-import {
-  GridContainer,
-  Title,
-  NavMenuButton,
-  PrimaryNav,
-  Header,
-} from "@trussworks/react-uswds";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Alert, Button, Link } from "@trussworks/react-uswds";
 
 import FormPage from "./pages/Form";
 
 function App() {
-  const [isExpanded, setExpanded] = useState(false);
-  return (
-    <Application>
-      <a className="usa-skipnav" href="#main-content">
-        Skip to main content
-      </a>
-      <main id="main-content">
-        <BrowserRouter>
-          <Header
-            basic={true}
-            showMobileOverlay={isExpanded}
-            className="header-container"
-          >
-            <div className="usa-nav-container">
-              <div className="usa-navbar">
-                <Title className="header-title">RADFish Application</Title>
-                <NavMenuButton
-                  onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
-                  label="Menu"
-                />
-              </div>
-              <PrimaryNav
-                items={[
-                  <Link
-                    to="/"
-                    style={{ color: `${isExpanded ? "black" : "white"}` }}
-                  >
-                    Home
-                  </Link>,
-                  <Link
-                    to="/form"
-                    style={{ color: `${isExpanded ? "black" : "white"}` }}
-                  >
-                    Form
-                  </Link>,
-                ]}
-                mobileExpanded={isExpanded}
-                onToggleMobileNav={() =>
-                  setExpanded((prvExpanded) => !prvExpanded)
-                }
-              ></PrimaryNav>
-            </div>
-          </Header>
-          <GridContainer>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/form" element={<FormPage />} />
-            </Routes>
-          </GridContainer>
-        </BrowserRouter>
-      </main>
-    </Application>
+  return (<div className="App grid-container">
+    <h1>Structured Form</h1>
+    <FormInfoAnnotation />
+    <br />
+    <Router>
+      <Routes>
+        <Route path="/" element={<FormPage />} />
+      </Routes>
+    </Router>
+  </div>
   );
 }
+
+const FormInfoAnnotation = () => {
+  return (
+    <Alert type="info" headingLevel={"h2"} heading="Information">
+      This example of building a non-trivial form using core components provided by <Link href="https://github.com/trussworks/react-uswds" target="_blank" rel="noopener noreferrer">Trussworks react-uswds</Link>. There are several useful elements that make up this example.
+      <ul>
+        <li>The Form structure is defined using the <em>Grid</em> components provided by <code>trussworks/react-uswds</code>.</li>
+        <li>A <code>useEffect</code> hook is used to set the input focus when the page loads.</li>
+        <li>A <code>handleSubmit</code> has been defined, showing how the <code>formData</code> elements can be retrieved and the form reset.</li>
+      </ul>
+      <strong>Note:</strong> Annotations are for informational purposes only. In production, you
+      would remove the annotations. Components with annotations above them are optional. You can
+      choose whether or not to use them in your application.
+      <br />
+      <br />
+      <Link
+        href="https://nmfs-radfish.github.io/radfish"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button type="button">Go To Documentation</Button>
+      </Link>
+    </Alert>
+  );
+};
 
 export default App;

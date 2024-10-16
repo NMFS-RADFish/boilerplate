@@ -88,7 +88,6 @@ The form does include two additional examples.
       alertString += `${key}: ${value}\n`;
     }
 
-    console.log(values);
     window.alert(alertString);
     // Reset for after triggering Submit
     event.target.reset();
