@@ -26,7 +26,7 @@ export class IndexedDBMethod extends StorageMethod {
    * @throws {Error} If an error occurs while adding the data to IndexedDB.
    */
   async create(tableName, data) {
-    if (typeof criteria !== "object" || Array.isArray(data)) {
+    if (typeof data !== "object" || Array.isArray(data)) {
       throw new Error(
         "The `data` parameter must be an Object: { bar: 'foo' }."
       );

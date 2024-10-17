@@ -7,7 +7,7 @@ describe("DatePicker Component", () => {
   test("renders DatePicker, uncontrolled input has its value reset", () => {
     render(
       <form>
-        <DatePicker label="Select Date" defaultValue="2024-08-01" />
+        <DatePicker label="Select Date" id="date-picker" defaultValue="2024-08-01" />
         <button type="reset">Reset</button>
       </form>,
     );
@@ -42,7 +42,7 @@ describe("DatePicker Component", () => {
 
       return (
         <form onReset={handleReset}>
-          <DatePicker label="Select Date" value={date} onChange={handleChange} />
+          <DatePicker label="Select Date" id="date-picker" value={date} onChange={handleChange} />
           <button type="reset">Reset</button>
         </form>
       );
@@ -63,5 +63,24 @@ describe("DatePicker Component", () => {
     // Trigger form reset
     fireEvent.click(resetButton);
     expect(dateInput).toHaveValue("2024-08-01");
+  });
+
+  test("renders DatePicker with custom className", () => {
+    render(<DatePicker label="Custom Class" id="custom-class" className="custom-datepicker" />);
+    const formGroup = screen.getByLabelText("Custom Class").closest(".usa-form-group");
+    expect(formGroup).toHaveClass("custom-datepicker");
+  });
+
+  test("renders DatePicker with correct label", () => {
+    render(<DatePicker label="Test Label" id="test-label" />);
+    const label = screen.getByText("Test Label");
+    expect(label).toBeInTheDocument();
+    expect(label).toHaveAttribute("for", "test-label");
+  });
+
+  test("renders DatePicker with correct id", () => {
+    render(<DatePicker label="Test ID" id="test-id" />);
+    const input = screen.getByLabelText("Test ID");
+    expect(input).toHaveAttribute("id", "test-id");
   });
 });
