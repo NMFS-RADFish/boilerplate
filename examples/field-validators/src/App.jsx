@@ -1,20 +1,23 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Alert, Button, Link } from "@trussworks/react-uswds";
-import { FieldValidatorForm } from "./pages/Form";
+import { Alert, Button, Link, GridContainer } from "@trussworks/react-uswds";
+import { Application } from "@nmfs-radfish/react-radfish";
+import HomePage from "./pages/Home";
 
 function App() {
   return (
-    <div className="App grid-container">
-      <h1>Field Validators</h1>
-      <FormInfoAnnotation />
-      <Router>
-        <Routes>
-          <Route path="/" element={<FieldValidatorForm />} />
-        </Routes>
-      </Router>
-    </div>
+    <Application>
+      <GridContainer>
+        <h1>Field Validators</h1>
+        <FormInfoAnnotation />
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+        </Router>
+      </GridContainer>
+    </Application>
   );
 }
 
@@ -30,11 +33,7 @@ function FormInfoAnnotation() {
       validation test cases within each validation array.
       <br />
       <br />
-      <Link
-        href="https://nmfs-radfish.github.io/radfish"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <Link href="https://nmfs-radfish.github.io/radfish" target="_blank" rel="noopener noreferrer">
         <Button type="button">Go To Documentation</Button>
       </Link>
     </Alert>

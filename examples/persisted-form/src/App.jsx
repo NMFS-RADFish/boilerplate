@@ -1,22 +1,23 @@
 import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Alert, Link, Button } from "@trussworks/react-uswds";
-import { PersistedForm } from "./pages/Form";
+import { Alert, Link, Button, GridContainer } from "@trussworks/react-uswds";
+import { Application } from "@nmfs-radfish/react-radfish";
+import HomePage from "./pages/Home";
 
 function App() {
   return (
-    <div className="App">
-      <div className="grid-container">
+    <Application>
+      <GridContainer>
         <h1>Persisted Form Example</h1>
         <FormInfoAnnotation />
         <Router>
           <Routes>
-            <Route path="/" element={<PersistedForm />} />
-            <Route path="/:id" element={<PersistedForm />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/:id" element={<HomePage />} />
           </Routes>
         </Router>
-      </div>
-    </div>
+      </GridContainer>
+    </Application>
   );
 }
 
@@ -37,11 +38,7 @@ const FormInfoAnnotation = () => {
       store like IndexDB or a remote API
       <br />
       <br />
-      <Link
-        href="https://nmfs-radfish.github.io/radfish"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <Link href="https://nmfs-radfish.github.io/radfish" target="_blank" rel="noopener noreferrer">
         <Button type="button">Go To Documentation</Button>
       </Link>
       <Link
