@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Form, Label, TextInput, Select, Grid, GridContainer, Button, Fieldset } from "@trussworks/react-uswds";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 
-function FormPage() {
+function HomePage() {
   const [resetToggle, setResetToggle] = useState(false);
   const inputFocus = useRef(null);
   // When the page mounts the "permitYear" Select will have focus set.
@@ -86,22 +86,20 @@ function FormPage() {
           </Grid>
         </Grid>
         <Grid row gap="md">
-          {/* Grid prop 'tablet={{ col: true }}' renders the form in columns while at least table side and collapses to single column on narrower displays. */}
           <Grid tablet={{ col: true }} className="tablet:margin-bottom-3">
             <Fieldset className="app-input-boundary" required>
-            {/* <div className="app-input-boundary"> */}
               <p className="margin-top-0">You may enter the name of a business or a person. The owner name must match the name on you Coast Guard Documentation or State Registration. <abbr className="use-hint usa-hint--required text-bold"> *</abbr></p>
               <Label htmlFor="business-name" className="text-bold">Business Name:</Label>
-              <TextInput id="business-name" name="businessName" />
+              <TextInput id="business-name" name="businessName" autoComplete="organization" />
               <div className="text-center text-bold margin-top-1">- Or -</div>
               <Label htmlFor="last-name" className="text-bold margin-top-05">Last Name:</Label>
-              <TextInput id="last-name" name="lastName" />
+              <TextInput id="last-name" name="lastName" autoComplete="family-name"/>
               <Label htmlFor="first-name" className="text-bold">First Name:</Label>
-              <TextInput id="first-name" name="firstName" />
+              <TextInput id="first-name" name="firstName" autoComplete="given-name"/>
               <Grid row gap>
                 <Grid col={8}>
                   <Label htmlFor="middle-name" className="text-bold">Middle Name:</Label>
-                  <TextInput id="middle-name" name="middleName" />
+                  <TextInput id="middle-name" name="middleName" autoComplete="additional-name"/>
                 </Grid>
                 <Grid col={4}>
                   <Label htmlFor="suffix-select" className="text-bold"> Suffix: </Label>
@@ -124,10 +122,9 @@ function FormPage() {
                   </Select>
                 </Grid>
               </Grid>
-            {/* </div> */}
             </Fieldset>
             <Label htmlFor="address1" className="text-bold" requiredMarker>Address Line 1:</Label>
-            <TextInput id="address1" name="address1" required />
+            <TextInput id="address1" name="address1" autoComplete="street-address" required />
             <Label htmlFor="address2" className="text-bold" hint=" (optional)">Address Line 2:</Label>
             <TextInput id="address2" name="address2" />
           </Grid>
@@ -143,7 +140,7 @@ function FormPage() {
                 USCG Documentation or State Registration Expiration date:<abbr className="usa-hint usa-hint--required"> *</abbr>
               </span>} required>
             </DatePicker>
-            <Label className="text-bold">Home Port (city and state where your vessel is moored)</Label>
+            <Fieldset className="app-legend-bold-text margin-top-3" legend="Home Port (city and state where your vessel is moored)">
             <Grid row gap>
               <Grid col={7}>
                 <Label htmlFor="home-city" className="margin-top-0 text-bold" requiredMarker>Home City:</Label>
@@ -169,9 +166,9 @@ function FormPage() {
                   </option>
                 </Select>
               </Grid>
-            </Grid>
+            </Grid></Fieldset>
             <Label htmlFor="tel-number" requiredMarker className="text-bold">Telephone Number:</Label>
-            <TextInput id="tel-number" name="telNumber" required />
+            <TextInput id="tel-number" name="telNumber" autoComplete="tel" required />
             <Label htmlFor="alt-tel-number" className="text-bold" hint=" (optional)">Alternate Telephone Number:</Label>
             <TextInput id="alt-tel-number" name="altTelNumber" />
             <Button type="submit" size="big" className="float-right margin-right-0">Submit</Button>
@@ -182,4 +179,4 @@ function FormPage() {
   );
 }
 
-export default FormPage;
+export default HomePage;

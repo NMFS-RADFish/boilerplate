@@ -2,7 +2,7 @@ import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Alert, Button, Link } from "@trussworks/react-uswds";
 
-import FormPage from "./pages/Form";
+import HomePage from "./pages/Home";
 
 function App() {
   return (<div className="App grid-container">
