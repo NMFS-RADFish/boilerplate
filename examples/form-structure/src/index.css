@@ -32,6 +32,7 @@ body {
   padding: 0.5rem 0;
 }
 
-.app-legend-bold-text > legend {
+.app-legend-bold-text > legend,
+.app-label-bold-text > label {
   font-weight: bold;
 }
