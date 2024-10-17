@@ -134,39 +134,41 @@ function HomePage() {
             <Label htmlFor="hull-id" className="text-bold" requiredMarker>Hull Id (USCG Documentation or State Registration Nbr):</Label>
             <TextInput id="hull-id" name="hullId" required />
             <DatePicker
-              id="registrationDate"
+              id="registration-date"
               name="registrationDate"
-              label={<span className="text-bold"> 
-                USCG Documentation or State Registration Expiration date:<abbr className="usa-hint usa-hint--required"> *</abbr>
-              </span>} required>
+              className="app-label-bold-text"
+              label="USCG Documentation or State Registration Expiration date:"
+              required
+            >
             </DatePicker>
             <Fieldset className="app-legend-bold-text margin-top-3" legend="Home Port (city and state where your vessel is moored)">
-            <Grid row gap>
-              <Grid col={7}>
-                <Label htmlFor="home-city" className="margin-top-0 text-bold" requiredMarker>Home City:</Label>
-                <TextInput id="home-city" name="homeCity" required />
+              <Grid row gap>
+                <Grid col={7}>
+                  <Label htmlFor="home-city" className="margin-top-0 text-bold" requiredMarker>Home City:</Label>
+                  <TextInput id="home-city" name="homeCity" required />
+                </Grid>
+                <Grid col={5}>
+                  <Label htmlFor="home-state-select" className="margin-top-0 text-bold" requiredMarker>Home State:</Label>
+                  <Select
+                    id="home-state-select"
+                    name="homeStateSelect"
+                  >
+                    <option>
+                      - Select -{' '}
+                    </option>
+                    <option value="ME">
+                      Maine
+                    </option>
+                    <option value="MA">
+                      Massachusetts
+                    </option>
+                    <option value="RI">
+                      Rhode Island
+                    </option>
+                  </Select>
+                </Grid>
               </Grid>
-              <Grid col={5}>
-                <Label htmlFor="home-state-select" className="margin-top-0 text-bold" requiredMarker>Home State:</Label>
-                <Select
-                  id="home-state-select"
-                  name="homeStateSelect"
-                >
-                  <option>
-                    - Select -{' '}
-                  </option>
-                  <option value="ME">
-                    Maine
-                  </option>
-                  <option value="MA">
-                    Massachusetts
-                  </option>
-                  <option value="RI">
-                    Rhode Island
-                  </option>
-                </Select>
-              </Grid>
-            </Grid></Fieldset>
+            </Fieldset>
             <Label htmlFor="tel-number" requiredMarker className="text-bold">Telephone Number:</Label>
             <TextInput id="tel-number" name="telNumber" autoComplete="tel" required />
             <Label htmlFor="alt-tel-number" className="text-bold" hint=" (optional)">Alternate Telephone Number:</Label>
