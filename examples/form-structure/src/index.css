@@ -31,3 +31,7 @@ body {
   background-color: #ebebeb;
   padding: 0.5rem 0;
 }
+
+.app-legend-bold-text > legend {
+  font-weight: bold;
+}
