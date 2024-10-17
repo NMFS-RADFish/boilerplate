@@ -4,35 +4,31 @@ export const DatePicker = ({
   type = "date",
   id,
   name,
-  defaultValue,
   hintText,
   label,
-  min,
-  max,
-  value,
-  onChange,
+  className = "",
+  ...props
 }) => {
+  const labelId = id ? `${id}-label` : undefined;
+  const hintId = id ? `${id}-hint` : undefined;
+
   return (
-    <div className="usa-form-group">
-      <label className="usa-label" id="date-start-label" htmlFor="date-start">
+    <div className={"usa-form-group " + className}>
+      <label className="usa-label" id={labelId} htmlFor={id}>
         {label}
       </label>
-      <div className="usa-hint" id="date-start-hint">
+      <div className="usa-hint" id={hintId}>
         {hintText}
       </div>
       <div className="usa-date-picker">
         <input
           type={type}
-          defaultValue={defaultValue}
-          onChange={onChange}
-          value={value}
           className="usa-input"
           id={id}
           name={name}
-          aria-labelledby="date-start-label"
-          aria-describedby="date-start-hint"
-          min={min}
-          max={max}
+          aria-labelledby={labelId}
+          aria-describedby={hintId}
+          {...props}
         />
       </div>
     </div>
