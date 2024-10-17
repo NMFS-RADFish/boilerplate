@@ -93,13 +93,13 @@ function HomePage() {
               <TextInput id="business-name" name="businessName" autoComplete="organization" />
               <div className="text-center text-bold margin-top-1">- Or -</div>
               <Label htmlFor="last-name" className="text-bold margin-top-05">Last Name:</Label>
-              <TextInput id="last-name" name="lastName" autoComplete="family-name"/>
+              <TextInput id="last-name" name="lastName" autoComplete="family-name" />
               <Label htmlFor="first-name" className="text-bold">First Name:</Label>
-              <TextInput id="first-name" name="firstName" autoComplete="given-name"/>
+              <TextInput id="first-name" name="firstName" autoComplete="given-name" />
               <Grid row gap>
                 <Grid col={8}>
                   <Label htmlFor="middle-name" className="text-bold">Middle Name:</Label>
-                  <TextInput id="middle-name" name="middleName" autoComplete="additional-name"/>
+                  <TextInput id="middle-name" name="middleName" autoComplete="additional-name" />
                 </Grid>
                 <Grid col={4}>
                   <Label htmlFor="suffix-select" className="text-bold"> Suffix: </Label>
