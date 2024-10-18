@@ -5,10 +5,10 @@ export const MSW_ENDPOINT = {
 };
 
 export const species = [
-  { name: "grouper", price: 25.0, src: "https://picsum.photos/200/300" },
-  { name: "salmon", price: 58.0, src: "https://picsum.photos/200/300" },
-  { name: "marlin", price: 100.0, src: "https://picsum.photos/200/300" },
-  { name: "mahimahi", price: 44.0, src: "https://picsum.photos/200/300" },
+  { name: "grouper", price: 25.0, src: "./sample-img.webp" },
+  { name: "salmon", price: 58.0, src: "./sample-img.webp" },
+  { name: "marlin", price: 100.0, src: "./sample-img.webp" },
+  { name: "mahimahi", price: 44.0, src: "./sample-img.webp" },
 ];
 
 export const handlers = [

@@ -9,7 +9,7 @@ const HomePage = () => {
   const mockData = {
     name: "tuna",
     price: 75,
-    src: "https://picsum.photos/200/300",
+    src: "./sample-img.webp",
   };
 
   const getData = async () => {
