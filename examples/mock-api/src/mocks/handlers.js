@@ -26,7 +26,7 @@ export const handlers = [
   // In a full stack implementation, there will likely be some logic on the server to handle/store persistent data
   http.post(MSW_ENDPOINT.SPECIES, async ({ request }) => {
     const requestData = await request.json();
-    const response = [requestData.data, ...species];
+    const response = [requestData.formData, ...species];
 
     return HttpResponse.json({ data: response }, { status: 201 });
   }),
