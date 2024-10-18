@@ -81,10 +81,10 @@ export const MSW_ENDPOINT = {
 };
 
 export const species = [
-  { name: "grouper", price: 25.0, src: "https://picsum.photos/200/300" },
-  { name: "salmon", price: 58.0, src: "https://picsum.photos/200/300" },
-  { name: "marlin", price: 100.0, src: "https://picsum.photos/200/300" },
-  { name: "mahimahi", price: 44.0, src: "https://picsum.photos/200/300" },
+  { name: "grouper", price: 25.0, src: "./sample-img.jpg" },
+  { name: "salmon", price: 58.0, src: "./sample-img.jpg" },
+  { name: "marlin", price: 100.0, src: "./sample-img.jpg" },
+  { name: "mahimahi", price: 44.0, src: "./sample-img.jpg" },
 ];
 
 export const handlers = [
@@ -171,7 +171,7 @@ const { data } = await postRequestWithFetch(MSW_ENDPOINT.SPECIES, {
   data: {
     name: "tuna",
     price: 75,
-    src: "https://picsum.photos/200/300",
+    src: "./sample-img.jpg",
   },
 });
 ```

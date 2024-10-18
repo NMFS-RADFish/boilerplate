@@ -7,7 +7,7 @@ import { dispatchToast } from "@nmfs-radfish/react-radfish";
 const fullName = "fullName";
 const nickname = "nickname";
 
-const ConditionalForm = () => {
+const HomePage = () => {
   const [formData, setFormData] = useState({});
 
   const handleSubmit = (event) => {
@@ -69,4 +69,4 @@ const ConditionalForm = () => {
   );
 };
 
-export { ConditionalForm };
+export default HomePage ;

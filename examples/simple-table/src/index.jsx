@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
-import { Application, ErrorBoundary, OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
+import { ErrorBoundary, OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
 
 const offlineStorageConfig = {
   type: "indexedDB",
@@ -18,11 +18,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ErrorBoundary>
     <React.StrictMode>
-      <Application>
-        <OfflineStorageWrapper config={offlineStorageConfig}>
-          <App />
-        </OfflineStorageWrapper>
-      </Application>
+      <OfflineStorageWrapper config={offlineStorageConfig}>
+        <App />
+      </OfflineStorageWrapper>
     </React.StrictMode>
   </ErrorBoundary>,
 );
