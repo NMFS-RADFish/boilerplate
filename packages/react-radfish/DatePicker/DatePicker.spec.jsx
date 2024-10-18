@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { DatePicker } from "./index";
@@ -83,4 +83,72 @@ describe("DatePicker Component", () => {
     const input = screen.getByLabelText("Test ID");
     expect(input).toHaveAttribute("id", "test-id");
   });
+
+  test("renders DatePicker as required has requiredMarker", () => {
+    render(<DatePicker label="Test Required" id="test-required" required />);
+
+    const input = screen.getByTestId("date-picker-input");
+    expect(input).toBeInTheDocument();
+    expect(input).toBeRequired();
+
+    const label = screen.getByTestId("label");
+    expect(label).toBeInTheDocument();
+
+    const marker = screen.queryByText("*");
+    expect(marker).toBeInTheDocument();
+  });
+
+  test("renders DatePicker as NOT required and requiredMarker not set", () => {
+    render(<DatePicker label="Test Not Required" id="test-not-required" />);
+    const input = screen.getByTestId("date-picker-input");
+    expect(input).toBeInTheDocument();
+    expect(input).not.toBeRequired();
+
+    const marker = screen.queryByText("*");
+    expect(marker).not.toBeInTheDocument();
+
+  });
+
+  test("renders DatePicker with Label error prop", () => {
+    render(<DatePicker label="Error Prop" id="test-error" error />);
+    const label = screen.getByTestId("label");
+    expect(label).toBeInTheDocument();
+    expect(label).toHaveClass("usa-label--error");
+  });
+
+  test("renders DatePicker with Label srOnly prop", () => {
+    render(<DatePicker label="srOnly prop" id="test-sronly" srOnly />);
+    const label = screen.getByTestId("label");
+    expect(label).toBeInTheDocument();
+    expect(label).toHaveClass("usa-sr-only");
+  });
+
+  test("renders DatePicker appropriately with passed ref", () => {
+    let testRef;
+    const Parent = () => {
+      testRef = useRef(null);
+      return (
+        <DatePicker
+          id="date-picker-with-ref"
+          name="datePickerWithRef"
+          label="DatePicker with Ref"
+          inputRef={testRef}
+        />
+      )
+    }
+    render(<Parent />);
+
+    const parentRef = testRef;
+
+    expect(parentRef.current).toBeInTheDocument();
+    expect(parentRef.current.tagName).toBe('INPUT');
+  });
+
+  test("renders DatePicker with hint text", () => {
+    render(<DatePicker label="Include label hint" id="date-picker-hint" hint="(Optional)" />)
+    const hint = screen.getByText("(Optional)");
+    expect(hint).toBeInTheDocument();
+    expect(hint).toHaveClass("usa-hint");
+  });
+
 });
