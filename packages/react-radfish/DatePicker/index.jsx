@@ -1,33 +1,43 @@
 import React from "react";
+import { Label } from "@trussworks/react-uswds";
 
 export const DatePicker = ({
   type = "date",
   id,
   name,
-  hintText,
+  hint,
   label,
   className = "",
+  error,
+  srOnly,
+  inputRef,
+  required,
   ...props
 }) => {
-  const labelId = id ? `${id}-label` : undefined;
-  const hintId = id ? `${id}-hint` : undefined;
+  const isRequired = required ? true : false;
 
   return (
-    <div className={"usa-form-group " + className}>
-      <label className="usa-label" id={labelId} htmlFor={id}>
-        {label}
-      </label>
-      <div className="usa-hint" id={hintId}>
-        {hintText}
-      </div>
+    <div data-testid="date-picker" className={"usa-form-group " + className}>
+      {label && (
+        <Label
+          htmlFor={id}
+          hint={hint}
+          error={error}
+          srOnly={srOnly}
+          requiredMarker={isRequired}
+        >
+          {label}
+        </Label>
+      )}
       <div className="usa-date-picker">
         <input
+          data-testid="date-picker-input"
           type={type}
           className="usa-input"
           id={id}
           name={name}
-          aria-labelledby={labelId}
-          aria-describedby={hintId}
+          ref={inputRef}
+          required={isRequired}
           {...props}
         />
       </div>
