@@ -5,10 +5,10 @@ export const MSW_ENDPOINT = {
 };
 
 export const species = [
-  { name: "grouper", price: 25.0, src: "https://picsum.photos/200/300" },
-  { name: "salmon", price: 58.0, src: "https://picsum.photos/200/300" },
-  { name: "marlin", price: 100.0, src: "https://picsum.photos/200/300" },
-  { name: "mahimahi", price: 44.0, src: "https://picsum.photos/200/300" },
+  { name: "grouper", price: 25.0, src: "./sample-img.webp" },
+  { name: "salmon", price: 58.0, src: "./sample-img.webp" },
+  { name: "marlin", price: 100.0, src: "./sample-img.webp" },
+  { name: "mahimahi", price: 44.0, src: "./sample-img.webp" },
 ];
 
 export const handlers = [
@@ -26,7 +26,7 @@ export const handlers = [
   // In a full stack implementation, there will likely be some logic on the server to handle/store persistent data
   http.post(MSW_ENDPOINT.SPECIES, async ({ request }) => {
     const requestData = await request.json();
-    const response = [requestData.data, ...species];
+    const response = [requestData.formData, ...species];
 
     return HttpResponse.json({ data: response }, { status: 201 });
   }),

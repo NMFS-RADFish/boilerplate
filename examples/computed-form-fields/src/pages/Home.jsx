@@ -17,7 +17,7 @@ const computedPrice = "computedPrice";
 const speciesData = ["grouper", "salmon", "marlin", "mahimahi"];
 import { dispatchToast } from "@nmfs-radfish/react-radfish";
 
-const ComputedForm = () => {
+const HomePage = () => {
   const [formData, setFormData] = useState({});
 
   const handleSubmit = (event) => {
@@ -120,4 +120,4 @@ const computeFieldValue = (numberOfFish, species) => {
   return computedPrice.toString();
 };
 
-export { ComputedForm };
+export default HomePage;
