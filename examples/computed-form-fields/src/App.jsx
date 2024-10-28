@@ -3,7 +3,6 @@ import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { Application } from "@nmfs-radfish/react-radfish";
 import { Alert, Button, GridContainer, Link } from "@trussworks/react-uswds";
-import { Application } from "@nmfs-radfish/react-radfish";
 import HomePage from "./pages/Home";
 
 function App() {
