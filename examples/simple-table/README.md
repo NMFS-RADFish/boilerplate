@@ -30,14 +30,14 @@ const mockData = [
     isDraft: true,
     species: "Marlin",
     price: 50,
-    image: "https://picsum.photos/150/75",
+    image: "./sample-img.webp",
   },
   {
     uuid: "2",
     isDraft: false,
     species: "Mahimahi",
     price: 100,
-    image: "https://picsum.photos/150/75",
+    image: "./sample-img.webp",
   },
   // More data...
 ];

@@ -1,105 +1,24 @@
 import "./index.css";
-import React, { useState } from "react";
-import { Button, Alert, Link } from "@trussworks/react-uswds";
-import { MSW_ENDPOINT } from "./mocks/handlers";
+import React from "react";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
+import { Application } from "@nmfs-radfish/react-radfish";
+import { Button, Alert, GridContainer, Link } from "@trussworks/react-uswds";
+import HomePage from "./pages/Home";
 
 const App = () => {
-  const [state, setState] = useState([]);
-  const [isLoading, setIsLoading] = useState(null);
-  const mockData = {
-    name: "tuna",
-    price: 75,
-    src: "https://picsum.photos/200/300",
-  };
-
-  const getData = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
-    try {
-      const response = await fetch(MSW_ENDPOINT.SPECIES, {
-        headers: {
-          "X-Access-Token": "your-access-token",
-        },
-      });
-
-      if (!response.ok) {
-        // Set error with the JSON response
-        const error = await response.json();
-        return error;
-      }
-
-      const { data } = await response.json();
-
-      setState(data);
-      setIsLoading(false);
-    } catch (err) {
-      // Set error in case of an exception
-      const error = `[GET]: Error fetching data: ${err}`;
-      return error;
-    }
-  };
-
-  const postData = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 500)); // mock throttle
-    const response = await fetch(MSW_ENDPOINT.SPECIES, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Access-Token": "your-access-token",
-      },
-      body: JSON.stringify({
-        ...{ formData: mockData },
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      return error;
-    }
-
-    const { data } = await response.json();
-
-    setState(data);
-    setIsLoading(false);
-  };
-
   return (
     <Application>
-      <div className="grid-container">
-        <h1>Mock API Example</h1>
-        <InfoAnnotation />
-        <br />
-        <Button type="submit" onClick={(e) => getData(e)}>
-          Get Data
-        </Button>
-        {state.length > 0 && (
-          <Button type="submit" onClick={(e) => postData(e)}>
-            Post Data
-          </Button>
-        )}
-
-        <h2>Mock API Data</h2>
-
-        {isLoading && <p>Loading...</p>}
-
-        {state.length > 0
-          ? `Number of fetched items: ${state.length}`
-          : "Request data to see items"}
-
-        {state.map((data, i) => {
-          return (
-            <div key={i}>
-              Species: {data?.name}
-              <br />
-              Price: {data?.price}
-              <br />
-              <img src={data?.src} />
-              <hr />
-            </div>
-          );
-        })}
-      </div>
+      <GridContainer>
+        <div className="App grid-container">
+          <h1>Mock API Example</h1>
+          <InfoAnnotation />
+          <Router>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+            </Routes>
+          </Router>
+        </div>
+      </GridContainer>
     </Application>
   );
 };

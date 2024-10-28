@@ -15,7 +15,7 @@ import { dispatchToast } from "@nmfs-radfish/react-radfish";
 
 const { fullName } = CONSTANTS;
 
-const FieldValidatorForm = () => {
+const HomePage = () => {
   const [formData, setFormData] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
 
@@ -86,4 +86,4 @@ const FieldValidatorForm = () => {
   );
 };
 
-export { FieldValidatorForm };
+export default HomePage;

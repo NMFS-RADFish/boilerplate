@@ -1,19 +1,22 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { Alert, Button, Link } from "@trussworks/react-uswds";
-import { FieldValidatorForm } from "./pages/Form";
+import { Alert, Button, Link, GridContainer } from "@trussworks/react-uswds";
+import { Application } from "@nmfs-radfish/react-radfish";
+import HomePage from "./pages/Home";
 
 function App() {
   return (
     <Application>
-      <h1>Field Validators</h1>
-      <FormInfoAnnotation />
-      <Router>
-        <Routes>
-          <Route path="/" element={<FieldValidatorForm />} />
-        </Routes>
-      </Router>
+      <GridContainer>
+        <h1>Field Validators</h1>
+        <FormInfoAnnotation />
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+        </Router>
+      </GridContainer>
     </Application>
   );
 }

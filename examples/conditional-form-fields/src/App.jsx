@@ -1,19 +1,24 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import { ConditionalForm } from "./pages/Form";
+import { Application } from "@nmfs-radfish/react-radfish";
 import { Alert, Button, GridContainer, Link } from "@trussworks/react-uswds";
+import HomePage from "./pages/Home";
 
 function App() {
   return (
     <Application>
-      <h1>Conditional Form Fields Example</h1>
-      <FormInfoAnnotation />
-      <Router>
-        <Routes>
-          <Route path="/" element={<ConditionalForm />} />
-        </Routes>
-      </Router>
+      <GridContainer>
+        <div className="App grid-container">
+          <h1>Conditional Form Fields Example</h1>
+          <FormInfoAnnotation />
+          <Router>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+            </Routes>
+          </Router>
+        </div>
+      </GridContainer>
     </Application>
   );
 }

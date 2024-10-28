@@ -62,7 +62,7 @@ const states = [
 const TOTAL_STEPS = 2;
 const { fullName, email, city, state, zipcode } = CONSTANTS;
 
-const MultiStepForm = () => {
+const HomePage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({});
@@ -221,6 +221,7 @@ const MultiStepForm = () => {
   ]
     .filter(Boolean) // Filters out empty or undefined error messages
     .join(", ");
+
   return (
     <Form
       className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
@@ -343,4 +344,4 @@ const MultiStepForm = () => {
   );
 };
 
-export { MultiStepForm };
+export default HomePage;
