@@ -14,7 +14,7 @@
   user-select: none;
 }
 
-.radfish-table-row {
+.radfish-table-row--clickable {
   cursor: pointer;
 }
 
@@ -29,11 +29,11 @@
 }
 
 .radfish-pagination-controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
 }
 .radfish-pagination-controls > button {
-    margin: 0
+  margin: 0;
 }
