@@ -249,7 +249,7 @@ const RADFishTableBodyRow = (props) => {
   return (
     <tr
       {...props}
-      className={`${props.onClick ? "radfish-table-row" : ""} ${props.className || ""}`}
+      className={`${props.onClick ? "radfish-table-row--clickable" : ""} ${props.className || ""}`}
       onClick={props.onClick}
     >
       {props.children}

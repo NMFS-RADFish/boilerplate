@@ -14,7 +14,7 @@
   user-select: none;
 }
 
-.radfish-table-row {
+.radfish-table-row--clickable {
   cursor: pointer;
 }
 
