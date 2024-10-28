@@ -28,3 +28,6 @@ Learn more about RADFish examples at the official [documentation](https://nmfs-r
      }
    }, [isOffline]);
    ```
+
+# Network Status Example Preview
+![Network Status](./src/assets/network-status.png)
