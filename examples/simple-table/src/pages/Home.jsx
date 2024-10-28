@@ -132,6 +132,7 @@ const HomePage = () => {
           onPageChange: onPageChange,
           totalRows: data.length,
         }}
+        onRowClick={(row) => {console.log("Row clicked:", row)}}
         striped
         bordered
       />
