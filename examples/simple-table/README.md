@@ -30,14 +30,14 @@ const mockData = [
     isDraft: true,
     species: "Marlin",
     price: 50,
-    image: "https://picsum.photos/150/75",
+    image: "./sample-img.webp",
   },
   {
     uuid: "2",
     isDraft: false,
     species: "Mahimahi",
     price: 100,
-    image: "https://picsum.photos/150/75",
+    image: "./sample-img.webp",
   },
   // More data...
 ];
@@ -167,3 +167,6 @@ You can pass these props directly to the `<Table>` component to enhance its styl
 #### Referencing Trussworks Documentation
 
 For a complete list of available props and detailed descriptions, please refer to the [Trussworks Table Component Documentation](https://trussworks.github.io/react-uswds/?path=/docs/components-table--docs).
+
+# Simple Table Example Preview
+![Simple Table](./src/assets/simple-table.png)
