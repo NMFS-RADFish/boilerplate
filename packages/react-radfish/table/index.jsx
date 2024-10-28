@@ -88,10 +88,11 @@ const RADFishTable = ({
   data,
   columns,
   paginationOptions,
+  defaultSort,
   className,
   ...props
 }) => {
-  const [sortState, setSortState] = useState([]);
+  const [sortState, setSortState] = useState(defaultSort || []);
   const [pageIndex, setPageIndex] = useState(
     paginationOptions?.currentPage ? paginationOptions.currentPage - 1 : 0,
   );

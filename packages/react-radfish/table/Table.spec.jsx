@@ -78,7 +78,7 @@ describe("Table", () => {
       totalRows: data.length,
     };
 
-    render(<Table data={data} columns={columns} />);
+    render(<Table data={data} columns={columns} paginationOptions={paginationOptions} />);
 
     // First click on Age sorts by Age ascending
     fireEvent.click(screen.getByText("Age"));
@@ -215,5 +215,63 @@ describe("Table", () => {
 
     // Restore the original console.error
     consoleErrorSpy.mockRestore();
+  });
+
+  it("applies defaultSort correctly and renders rows in the expected order", () => {
+    const data = [
+      { id: 1, firstName: "Alice", lastName: "Smith", age: 25 },
+      { id: 2, firstName: "Bob", lastName: "Jones", age: 30 },
+      { id: 3, firstName: "Charlie", lastName: "Smith", age: 20 },
+      { id: 4, firstName: "Dave", lastName: "Jones", age: 40 },
+      { id: 5, firstName: "Eva", lastName: "Brown", age: 35 },
+    ];
+
+    const columns = [
+      { key: "firstName", label: "First Name", sortable: true },
+      { key: "lastName", label: "Last Name", sortable: true },
+      { key: "age", label: "Age", sortable: true },
+    ];
+
+    const defaultSort = [
+      { key: "lastName", direction: "asc" },
+      { key: "firstName", direction: "desc" },
+    ];
+
+    const onPageChangeMock = vi.fn();
+
+    const paginationOptions = {
+      pageSize: 5,
+      currentPage: 1,
+      onPageChange: onPageChangeMock,
+      totalRows: data.length,
+    };
+
+    render(
+      <Table
+        data={data}
+        columns={columns}
+        defaultSort={defaultSort}
+        paginationOptions={paginationOptions}
+      />,
+    );
+
+    // Get all data rows (excluding the header row)
+    const rows = screen.getAllByRole("row").slice(1); // Remove header row
+
+    // Expected order based on defaultSort
+    const expectedOrder = [
+      { firstName: "Eva", lastName: "Brown" },
+      { firstName: "Dave", lastName: "Jones" },
+      { firstName: "Bob", lastName: "Jones" },
+      { firstName: "Charlie", lastName: "Smith" },
+      { firstName: "Alice", lastName: "Smith" },
+    ];
+
+    // Assert that the rows are in the expected order
+    expectedOrder.forEach((expectedData, index) => {
+      const row = rows[index];
+      expect(within(row).getByText(expectedData.firstName)).toBeInTheDocument();
+      expect(within(row).getByText(expectedData.lastName)).toBeInTheDocument();
+    });
   });
 });
