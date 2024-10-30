@@ -10,14 +10,6 @@ describe("Toast Component", () => {
   });
 
   test("renders Success Alert when toast status is 'success'", () => {
-    const toast = { status: "success", message: "Application currently offline" };
-    render(<Toast toast={toast} />);
-    const offlineAlert = screen.getByRole("toast-notification");
-    expect(offlineAlert).toBeInTheDocument();
-    expect(offlineAlert).toHaveTextContent("Application currently offline");
-  });
-
-  test("renders Success Alert when toast status is 'success'", () => {
     const toast = { status: "success", message: "Successful action" };
     render(<Toast toast={toast} />);
     const successAlert = screen.getByRole("toast-notification");
