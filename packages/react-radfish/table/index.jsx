@@ -13,7 +13,7 @@ const TableStructureSortDirectionIcon = ({ columnKey, sortState }) => {
   return sortInfo.direction === "asc" ? <Icon.ArrowUpward /> : <Icon.ArrowDownward />;
 };
 
-const TableStructure = ({ data, columns, handleSort, sortState }) => {
+const TableStructure = ({ data, columns, handleSort, sortState, onRowClick }) => {
   return (
     <>
       <RADFishTableHeader>
@@ -26,7 +26,9 @@ const TableStructure = ({ data, columns, handleSort, sortState }) => {
                   <th
                     key={column.key}
                     onClick={() => column.sortable && handleSort(column.key)}
-                    className={`${column.sortable ? "sortable-column" : ""} ${column.className || ""}`}
+                    className={`${column.sortable ? "sortable-column" : ""} ${
+                      column.className || ""
+                    }`}
                   >
                     <div className="radfish-table-header-cell">
                       {column.label}
@@ -50,7 +52,10 @@ const TableStructure = ({ data, columns, handleSort, sortState }) => {
       </RADFishTableHeader>
       <RADFishTableBody>
         {data.map((row, rowIndex) => (
-          <RADFishTableBodyRow key={rowIndex}>
+          <RADFishTableBodyRow
+            key={rowIndex}
+            onClick={onRowClick ? () => onRowClick(row) : undefined}
+          >
             {columns
               .filter((column) => !column.hidden)
               .map((column) => (
@@ -88,6 +93,7 @@ const RADFishTable = ({
   data,
   columns,
   paginationOptions,
+  onRowClick,
   defaultSort,
   className,
   ...props
@@ -125,7 +131,7 @@ const RADFishTable = ({
   });
 
   const totalRows = paginationOptions?.totalRows || data.length;
-  
+
   const totalPages =
     totalRows > 0 && paginationOptions?.pageSize > 0
       ? Math.ceil(totalRows / paginationOptions.pageSize)
@@ -163,6 +169,7 @@ const RADFishTable = ({
             columns={columns}
             handleSort={handleSort}
             sortState={sortState}
+            onRowClick={onRowClick}
           />
         ) : (
           props.children
@@ -248,7 +255,11 @@ const RADFishTableBody = (props) => {
 
 const RADFishTableBodyRow = (props) => {
   return (
-    <tr {...props} className={`radfish-table-row ${props.className || ""}`} onClick={props.onClick}>
+    <tr
+      {...props}
+      className={`${props.onClick ? "radfish-table-row--clickable" : ""} ${props.className || ""}`}
+      onClick={props.onClick}
+    >
       {props.children}
     </tr>
   );

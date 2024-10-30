@@ -125,3 +125,6 @@ useEffect(() => {
   );
 }
 ```
+
+# Multistep Form Example Preview
+![Multistep Form](./src/assets/multistep.png)

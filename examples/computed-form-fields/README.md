@@ -93,3 +93,8 @@ const computeFieldValue = (numberOfFish, species) => {
   return computedPrice.toString();
 };
 ```
+
+
+
+# Computed Form Fields Example Preview
+![Computed Form Fields](./src/assets//computed-form-fields.png)

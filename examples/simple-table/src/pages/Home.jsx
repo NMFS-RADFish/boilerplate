@@ -132,6 +132,9 @@ const HomePage = () => {
           onPageChange: onPageChange,
           totalRows: data.length,
         }}
+        onRowClick={(row) => {
+          console.log("Row clicked:", row);
+        }}
         defaultSort={[
           { key: "price", direction: "asc" },
           { key: "species", direction: "desc" },
