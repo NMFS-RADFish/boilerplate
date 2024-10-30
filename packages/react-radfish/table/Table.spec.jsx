@@ -69,15 +69,6 @@ describe("Table", () => {
       { key: "Age", label: "Age", sortable: true },
     ];
 
-    const onPageChangeMock = vi.fn();
-
-    const paginationOptions = {
-      pageSize: 4,
-      currentPage: 1,
-      onPageChange: onPageChangeMock,
-      totalRows: data.length,
-    };
-
     render(<Table data={data} columns={columns}/>);
 
     // First click on Age sorts by Age ascending
