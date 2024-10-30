@@ -132,6 +132,10 @@ const HomePage = () => {
           onPageChange: onPageChange,
           totalRows: data.length,
         }}
+        defaultSort={[
+          { key: "price", direction: "asc" },
+          { key: "species", direction: "desc" },
+        ]}
         striped
         bordered
       />
