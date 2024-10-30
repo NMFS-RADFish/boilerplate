@@ -89,8 +89,16 @@ const TableStructure = ({ data, columns, handleSort, sortState, onRowClick }) =>
  * @returns {JSX.Element} The rendered table component.
  */
 
-const RADFishTable = ({ data, columns, paginationOptions, className, onRowClick, ...props }) => {
-  const [sortState, setSortState] = useState([]);
+const RADFishTable = ({
+  data,
+  columns,
+  paginationOptions,
+  onRowClick,
+  defaultSort,
+  className,
+  ...props
+}) => {
+  const [sortState, setSortState] = useState(defaultSort || []);
   const [pageIndex, setPageIndex] = useState(
     paginationOptions?.currentPage ? paginationOptions.currentPage - 1 : 0,
   );
