@@ -8,7 +8,7 @@ export const Spinner = ({
 }) => {
   return (
     <div
-      class="loading"
+      className="loading"
       style={{ borderTopColor: color, borderWidth: stroke, width, height }}
     ></div>
   );
