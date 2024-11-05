@@ -7,10 +7,14 @@ const TableStructureSortDirectionIcon = ({ columnKey, sortState }) => {
   const sortInfo = sortState.find((sort) => sort.key === columnKey);
 
   if (!sortInfo) {
-    return <Icon.UnfoldMore />;
+    return <Icon.UnfoldMore aria-label="Unsorted" />;
   }
 
-  return sortInfo.direction === "asc" ? <Icon.ArrowUpward /> : <Icon.ArrowDownward />;
+  return sortInfo.direction === "asc" ? (
+    <Icon.ArrowUpward aria-label="Sorted ascending" />
+  ) : (
+    <Icon.ArrowDownward aria-label="Sorted descending" />
+  );
 };
 
 const TableStructure = ({ data, columns, handleSort, sortState, onRowClick }) => {
@@ -183,14 +187,14 @@ const RADFishTable = ({
             disabled={pageIndex === 0}
             data-testid="first-page"
           >
-            <Icon.FirstPage />
+            <Icon.FirstPage aria-label="Go to first page" />
           </Button>
           <Button
             onClick={() => handlePageChange(pageIndex - 1)}
             disabled={pageIndex === 0}
             data-testid="previous-page"
           >
-            <Icon.ArrowBack />
+            <Icon.ArrowBack aria-label="Go to previous page" />
           </Button>
           <span>
             Page {pageIndex + 1} of {totalPages}
@@ -200,14 +204,14 @@ const RADFishTable = ({
             disabled={pageIndex >= totalPages - 1}
             data-testid="next-page"
           >
-            <Icon.ArrowForward />
+            <Icon.ArrowForward aria-label="Go to next page" />
           </Button>
           <Button
             onClick={() => handlePageChange(totalPages - 1)}
             disabled={pageIndex >= totalPages - 1}
             data-testid="last-page"
           >
-            <Icon.LastPage />
+            <Icon.LastPage aria-label="Go to last page" />
           </Button>
         </div>
       )}
