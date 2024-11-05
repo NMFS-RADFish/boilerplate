@@ -76,7 +76,7 @@
     "puppeteer": "^22.6.5",
     "vite": "^5.1.5",
     "vite-plugin-pwa": "0.20.5",
-    "vitest": "2.1.2"
+    "vitest": "2.1.4"
   },
   "msw": {
     "workerDirectory": "public"
