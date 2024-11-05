@@ -204,7 +204,7 @@ const RADFishTable = ({
             disabled={pageIndex >= totalPages - 1}
             data-testid="next-page"
           >
-            <Icon.ArrowForward aria-label="Go forward a page" />
+            <Icon.ArrowForward aria-label="Go to next page" />
           </Button>
           <Button
             onClick={() => handlePageChange(totalPages - 1)}
