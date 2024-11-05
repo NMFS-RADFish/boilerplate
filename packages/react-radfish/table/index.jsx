@@ -194,7 +194,7 @@ const RADFishTable = ({
             disabled={pageIndex === 0}
             data-testid="previous-page"
           >
-            <Icon.ArrowBack aria-label="Go back a page" />
+            <Icon.ArrowBack aria-label="Go to previous page" />
           </Button>
           <span>
             Page {pageIndex + 1} of {totalPages}
