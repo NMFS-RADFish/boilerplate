@@ -18,6 +18,7 @@ updates:
       - "/examples/simple-table"
     schedule:
       interval: "weekly"
+      day: "thursday"
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major" , "version-update:semver-patch"]
