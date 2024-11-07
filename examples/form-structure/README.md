@@ -95,3 +95,7 @@ The form does include two additional examples.
     setResetToggle(true)
   }
 ```
+
+## Form Structure Example Preview
+
+![Form Structure](./src/assets/form-structure.png)
