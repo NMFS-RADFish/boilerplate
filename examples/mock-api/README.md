@@ -176,5 +176,6 @@ const { data } = await postRequestWithFetch(MSW_ENDPOINT.SPECIES, {
 });
 ```
 
-# Mock API Example Preview
+## Mock API Example Preview
+
 ![Mock API](./src/assets/mock-api.png)

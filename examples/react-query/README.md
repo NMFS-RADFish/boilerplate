@@ -8,5 +8,6 @@ This example does _not_ include any backend persistence via IndexedDB, as this i
 
 `[GET] /species` returns a list of 4 species
 
-# React Query Example Preview
+## React Query Example Preview
+
 ![React Query](./src/assets/react-query.png)
