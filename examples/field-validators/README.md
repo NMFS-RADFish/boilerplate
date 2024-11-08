@@ -67,5 +67,6 @@ import { fullNameValidators } from "../utilities/fieldValidators";
 }
 ```
 
-# Field Validators Example Preview
+## Field Validators Example Preview
+
 ![Field Validators](./src/assets/field-validators.png)

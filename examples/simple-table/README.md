@@ -168,5 +168,6 @@ You can pass these props directly to the `<Table>` component to enhance its styl
 
 For a complete list of available props and detailed descriptions, please refer to the [Trussworks Table Component Documentation](https://trussworks.github.io/react-uswds/?path=/docs/components-table--docs).
 
-# Simple Table Example Preview
+## Simple Table Example Preview
+
 ![Simple Table](./src/assets/simple-table.png)
