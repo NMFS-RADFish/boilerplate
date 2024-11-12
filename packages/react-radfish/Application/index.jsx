@@ -11,12 +11,12 @@ function ApplicationComponent(props) {
 
   useEffect(() => {
     if (prevIsOffline.current === null) {
-        prevIsOffline.current = isOffline;
-      } else if (prevIsOffline.current && !isOffline) {
-        dispatchToast({ message: "Application is online", status: "info", duration: 3000 });
-      }
       prevIsOffline.current = isOffline;
-    }, [isOffline]);
+    } else if (prevIsOffline.current && !isOffline) {
+      dispatchToast({ message: "Application is online", status: "info", duration: 3000 });
+    }
+    prevIsOffline.current = isOffline;
+  }, [isOffline]);
 
   return (
     <div className="radfish__application">
