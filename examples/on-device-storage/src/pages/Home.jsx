@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { useApplication } from "@nmfs-radfish/react-radfish";
 import { Button, Alert, Link } from "@trussworks/react-uswds";
 
 const HomePage = () => {
@@ -10,7 +10,7 @@ const HomePage = () => {
       createOfflineData,
       updateOfflineData,
       deleteOfflineData,
-    } = useOfflineStorage();
+    } = useApplication();
   
     useEffect(() => {
       const getFormData = async () => {
