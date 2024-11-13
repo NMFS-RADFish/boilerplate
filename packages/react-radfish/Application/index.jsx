@@ -1,7 +1,7 @@
 import { Toast } from "../alerts";
 import { createContext, useEffect, useContext } from "react";
 import { useOfflineStatus, useToasts, dispatchToast } from "../hooks";
-import { StorageModelFactory } from "@nmfs-radfish/radfish";
+import { OfflineStorageWrapper } from "../OfflineStorage";
 
 const ApplicationContext = createContext();
 
@@ -29,20 +29,21 @@ function ApplicationComponent(props) {
 }
 
 export function Application({ application, children }) {
-    const storageModel = StorageModelFactory.createModel(application._options.storage);
-
-    const contextValue = {
-      createOfflineData: storageModel.create.bind(storageModel),
-      findOfflineData: storageModel.find.bind(storageModel),
-      updateOfflineData: storageModel.update.bind(storageModel),
-      deleteOfflineData: storageModel.delete.bind(storageModel),
-      storageMethod: application._options.storage,
-    };
-  return (
-    <ApplicationContext.Provider value={contextValue}>
-      <ApplicationComponent>{children}</ApplicationComponent>
-    </ApplicationContext.Provider>
-  );
+  if (application._options.storage) {
+    return (
+      <OfflineStorageWrapper config={application._options.storage}>
+        <ApplicationContext.Provider value={application}>
+        <ApplicationComponent>{children}</ApplicationComponent>
+        </ApplicationContext.Provider>
+      </OfflineStorageWrapper>
+    );
+  } else {
+    return (
+      <ApplicationContext.Provider value={application}>
+       <ApplicationComponent>{children}</ApplicationComponent>
+      </ApplicationContext.Provider>
+    );
+  }
 }
 
 export const useApplication = () => {
