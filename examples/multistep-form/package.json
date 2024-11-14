@@ -75,7 +75,7 @@
     "prettier": "^3.1.0",
     "puppeteer": "^22.6.5",
     "vite": "^5.1.5",
-    "vite-plugin-pwa": "0.20.5",
+    "vite-plugin-pwa": "0.21.0",
     "vitest": "2.1.2"
   },
   "msw": {
