@@ -8,6 +8,7 @@ updates:
       - "/examples/computed-form-fields"
       - "/examples/conditional-form-fields"
       - "/examples/field-validators"
+      - "/examples/form-structure"
       - "/examples/mock-api"
       - "/examples/multistep-form"
       - "/examples/network-status"
