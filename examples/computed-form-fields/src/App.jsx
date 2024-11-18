@@ -26,9 +26,9 @@ function App() {
 const FormInfoAnnotation = () => {
   return (
     <Alert type="info" headingLevel={"h2"} heading="Information">
-      In this example, the “Computed Price” is calculated by taking “Number of Fish” and multiplying
-      it by the price for the selected “Species”. The price for each species is a mapping defined in
-      the mock server response
+      In this example, the <strong>Computed Price</strong> is calculated by taking{" "}
+      <strong>Number of Fish</strong> and multiplying it by the price for the selected <strong>Species</strong>. The
+      price for each species is a defined in <strong>speciesPriceMap</strong> object and calculated in the <strong>computeFieldValue</strong> function.
       <br />
       <br />
       <Link
