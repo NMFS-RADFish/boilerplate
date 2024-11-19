@@ -54,7 +54,7 @@ const HomePage = () => {
         {formData[FULL_NAME] && ( // Render the "Nickname" field only if "Full Name" is not empty
           <>
             <Label className="text-bold" htmlFor={NICKNAME}>
-              NICKNAME
+              Nickname
             </Label>
             <TextInput
               id={NICKNAME}
