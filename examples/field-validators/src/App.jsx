@@ -24,12 +24,13 @@ function App() {
 function FormInfoAnnotation() {
   return (
     <Alert type="info" headingLevel={"h2"} heading="Information">
-      This is an example of a form with form inputs that handle input validation. If the Full Name
-      input includes a number, the validator will return false and display the error
+      This is an example of a form with form inputs that handle input validation. If the{" "}
+      <strong>Full Name </strong>
+      input includes a number, the validator will return `false` and display an error.
       <br />
       <br />
       To see where the validators are defined, you can visit{" "}
-      <code>/utilities/fieldValidators.js</code>. Note that you can handle several different
+      <strong>/utilities/fieldValidators.js</strong>. Note that you can handle several different
       validation test cases within each validation array.
       <br />
       <br />
