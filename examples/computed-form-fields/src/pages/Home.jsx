@@ -86,7 +86,7 @@ const HomePage = () => {
         <Alert type="info" slim={true}>
           The current implementation is using our mock server which can be found at /directory.
           Documentation for the mock service worker can be found at{" "}
-          <a href="https://nmfs-radfish.github.io/radfish/docs/front-end-developlement-guide/mock-api">
+          <a href="https://nmfs-radfish.github.io/radfish/developer-documentation/building-your-application/patterns/mock-api">
             this link
           </a>
         </Alert>

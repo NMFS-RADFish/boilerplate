@@ -153,7 +153,7 @@ function InfoAnnotation() {
     <Alert type="info" headingLevel={"h2"} heading="Information">
       Below is an example of a table that's populated by mock data and uses the{" "}
       <Link
-        href="https://nmfs-radfish.github.io/radfish/docs/design-system/custom-components/table"
+        href="https://nmfs-radfish.github.io/radfish/design-system/custom-components/table"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -185,7 +185,7 @@ function InfoAnnotation() {
       <br />
       <br />
       <Link
-        href="https://nmfs-radfish.github.io/radfish/docs/design-system/custom-components/table"
+        href="https://nmfs-radfish.github.io/radfish/design-system/custom-components/table"
         target="_blank"
         rel="noopener noreferrer"
       >
