@@ -24,7 +24,7 @@ In this example, we will build a form with three inputs. The values from the fir
 
 Next, we'll define the main form component. To manage the data entered in the form, we initialize it with a `formData` state variable, which is an empty object. This state will dynamically store the values of the form fields as users interact with the form.
 
-The setFormData function allows us to update the state whenever an input changes, ensuring the form data is kept in sync.
+The `setFormData` function allows us to update the state whenever an input changes, ensuring the form data is kept in sync.
 
 ```jsx
 const ComputedForm = () => {
