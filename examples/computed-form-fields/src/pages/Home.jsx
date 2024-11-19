@@ -76,6 +76,7 @@ const HomePage = () => {
           name={NUMBER_OF_FISH}
           type="number"
           placeholder="0"
+          min="0"
           value={formData[NUMBER_OF_FISH] || ""} // Display the current state value
           onChange={(event) => handleNumberFishChange(event, formData)} // Trigger the handler on change
         />
