@@ -4,7 +4,7 @@
 
 This example demonstrates how to enforce field validation logic on certain fields within your form. The validator ensures that no numbers should be allowed within the **Full Name** input field.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples).
 
 ## Steps
 
@@ -22,7 +22,7 @@ const handleBlur = (event, validators) => {
 };
 ```
 
-This helper function loops through the provided validators and checks if the input value passes the validation criteria. If not, it returns the appropriate error message.
+This helper function loops through the provided validators and checks if the input value passes the validation criteria. If not, it returns the appropriate error message:
 ```jsx
 const handleInputValidationLogic = (name, value, validators) => {
   if (validators && validators.length > 0) {
@@ -36,7 +36,7 @@ const handleInputValidationLogic = (name, value, validators) => {
 };
 ```
 
-Here’s how to use the onBlur handler in the TextInput component. The input dynamically sets its validation status and ARIA attributes based on validation errors.
+Here’s how to use the onBlur handler in the TextInput component. The input dynamically sets its validation status and ARIA attributes based on validation errors:
 ```jsx
 <TextInput
     id={FULL_NAME}
