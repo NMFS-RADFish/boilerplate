@@ -27,11 +27,20 @@ const FormInfoAnnotation = () => {
   return (
     <Alert type="info" headingLevel={"h2"} heading="Information">
       This is an example of a form with form inputs that control the visibility of other fields. In
-      this example, the "Nickname" field appears whenever "Full Name" contains a value.
+      this example, the <strong>Nickname</strong> field appears whenever <strong>Full Name</strong>{" "}
+      contains a value.
       <br />
       <br />
       Note, that this does not check if the name is valid or not (only that it exists). For form
-      field validators, please see the <code>field-validators</code> example.
+      field validators, please see the{" "}
+      <Link
+        href="https://github.com/NMFS-RADFish/boilerplate/tree/main/examples/field-validators"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        field-validators example{" "}
+      </Link>
+      .
       <br />
       <br />
       <Link href="https://nmfs-radfish.github.io/radfish" target="_blank" rel="noopener noreferrer">

@@ -1,14 +1,32 @@
 import "../styles/theme.css";
 import React, { useState } from "react";
-import { FormGroup, Grid } from "@trussworks/react-uswds";
-import { TextInput, Button, Label, Form } from "@trussworks/react-uswds";
 import { dispatchToast } from "@nmfs-radfish/react-radfish";
+import { Button, Form, FormGroup, Grid, Label, TextInput } from "@trussworks/react-uswds";
 
-const fullName = "fullName";
-const nickname = "nickname";
+const FULL_NAME = "fullName";
+const NICKNAME = "nickname";
 
 const HomePage = () => {
   const [formData, setFormData] = useState({});
+
+  // Function to handle changes in the "Full Name" input field
+  // Updates the fullName value in the formData state
+  const handleFullNameChange = (event, formData) => {
+    const { value } = event.target;
+    setFormData({
+      ...formData, // Preserve existing form data
+      [FULL_NAME]: value, // Update the "Full Name" field
+      [NICKNAME]: value === "" ? "" : formData[NICKNAME], // Clear the "Nickname" field if "Full Name" is empty
+    });
+  };
+
+  const handleNickNameChange = (event, formData) => {
+    const { value } = event.target;
+    setFormData({
+      ...formData,
+      [NICKNAME]: value,
+    });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -21,41 +39,29 @@ const HomePage = () => {
       className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
     >
       <FormGroup>
-        <Label className="text-bold" htmlFor={fullName}>
+        <Label className="text-bold" htmlFor={FULL_NAME}>
           Full Name
         </Label>
         <TextInput
-          id={fullName}
-          name={fullName}
+          id={FULL_NAME}
+          name={FULL_NAME}
           type="text"
           placeholder="Full Name"
-          value={formData[fullName] || ""}
-          onChange={(event) => {
-            const { value } = event.target;
-            setFormData({
-              ...formData,
-              [fullName]: value,
-              [nickname]: value === "" ? "" : formData[nickname],
-            });
-          }}
+          value={formData[FULL_NAME] || ""}
+          onChange={(event) => handleFullNameChange(event, formData)} // Call the handleFullNameChange function to update the "Full Name" field
         />
-        {formData[fullName] && (
+        {formData[FULL_NAME] && ( // Render the "Nickname" field only if "Full Name" is not empty
           <>
-            <Label className="text-bold" htmlFor={nickname}>
+            <Label className="text-bold" htmlFor={NICKNAME}>
               Nickname
             </Label>
             <TextInput
-              id={nickname}
-              name={nickname}
+              id={NICKNAME}
+              name={NICKNAME}
               type="text"
               placeholder="Nickname"
-              onChange={(event) => {
-                const { value } = event.target;
-                setFormData({
-                  ...formData,
-                  [nickname]: value,
-                });
-              }}
+              value={formData[NICKNAME] || ""}
+              onChange={(event) => handleNickNameChange(event, formData)} // Call the handleNickNameChange function to update the "Nickname" field
             />
           </>
         )}
@@ -69,4 +75,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage ;
+export default HomePage;
