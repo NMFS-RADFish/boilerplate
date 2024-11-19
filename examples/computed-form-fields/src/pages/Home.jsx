@@ -33,7 +33,7 @@ const HomePage = () => {
   const [formData, setFormData] = useState({});
 
   // Function to handle changes in the "Number of Fish" input field
-  // Updates the numberOfFish value in the formData state
+  // Updates the NUMBER_OF_FISH value in the formData state
   const handleNumberFishChange = (event, formData) => {
     const { value } = event.target;
     setFormData({
