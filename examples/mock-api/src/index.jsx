@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./styles/theme.css";
-import App from "./App";
 import { ErrorBoundary } from "@nmfs-radfish/react-radfish";
+import App from "./App";
+import "./styles/theme.css";
+
 
 async function enableMocking() {
   const { worker } = await import("./mocks/browser");

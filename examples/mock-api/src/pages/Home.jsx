@@ -94,7 +94,7 @@ const HomePage = () => {
             <br />
             Price: {data?.price}
             <br />
-            <img src={data?.src} />
+            <img src={data?.src} alt="sample" />
             <hr />
           </div>
         );
