@@ -14,9 +14,6 @@
 }
 
 body {
-  font-family:
-    Arial Narrow,
-    sans-serif;
   color: var(--noaa-text-color);
   background-color: #f4f4f4;
   line-height: 1.6;

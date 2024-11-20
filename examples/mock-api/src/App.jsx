@@ -26,8 +26,12 @@ const App = () => {
 const InfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
-      This is an example of how to use the <code>native fetch API</code> along
-      with <code>mock service worker</code> in order to create a mock API to
+      This is an example of how to use the <strong>native fetch API</strong> along
+      with       <Link
+        href="https://mswjs.io/"
+        target="_blank"
+        rel="noopener noreferrer"
+      ><strong>Mock Service Worker</strong></Link> in order to create a mock API to
       serve data to your client. Requests to this mock API will be intercepted
       by mock service worker API methods and respond with expected data, which
       simulates a REST API to consume.

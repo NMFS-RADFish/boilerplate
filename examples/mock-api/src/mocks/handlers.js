@@ -12,7 +12,7 @@ export const species = [
 ];
 
 export const handlers = [
-  // Returns an array of fish species. This is currently being used to demonstrate populating a dropdown form component with "data" from a server
+  // GET endpoint: Fetch list of species
   // Note that this implementation can/should change depending on your needs
   http.get(MSW_ENDPOINT.SPECIES, () => {
     return HttpResponse.json(
@@ -22,7 +22,8 @@ export const handlers = [
       { status: 200 }
     );
   }),
-  // This endpoint simply returns the data that is submitted to from a form
+  // POST endpoint: Add a new species
+
   // In a full stack implementation, there will likely be some logic on the server to handle/store persistent data
   http.post(MSW_ENDPOINT.SPECIES, async ({ request }) => {
     const requestData = await request.json();
