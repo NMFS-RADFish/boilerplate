@@ -1,15 +1,15 @@
-import { defineConfig, loadEnv } from "vite";
-import path from "path";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-export default defineConfig({
+export default defineConfig((env) => ({
   base: "/",
   plugins: [
     react(),
     VitePWA({
       devOptions: {
         enabled: process.env.NODE_ENV === "development",
+        type: "module",
       },
       registerType: "autoUpdate",
       injectRegister: null,
@@ -84,4 +84,4 @@ export default defineConfig({
     setupFiles: "./src/__tests__/setup.js",
     environment: "jsdom",
   },
-});
+}));
