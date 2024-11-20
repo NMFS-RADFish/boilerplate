@@ -1,5 +1,5 @@
 const CONSTANTS = {
-  fullName: "fullName",
+  FULL_NAME: "fullName",
 };
 
 export { CONSTANTS };
