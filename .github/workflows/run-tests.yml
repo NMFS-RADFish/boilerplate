@@ -39,13 +39,13 @@ jobs:
         working-directory: templates/react-javascript
 
       - name: lighthouse mobile audit
-        run: npm run lhci:mobile
+        run: npm run lhci:mobile && npx lhci upload --target=temporary-public-storage
         working-directory: templates/react-javascript
         env:
-            LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
       - name: lighthouse desktop audit
-        run: npm run lhci:desktop
+        run: npm run lhci:desktop && npx lhci upload --target=temporary-public-storage
         working-directory: templates/react-javascript
         env:
-            LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
