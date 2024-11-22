@@ -125,7 +125,7 @@ useEffect(() => {
   );
 }
 ```
-
-## Multistep Form Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Multistep Form](./src/assets/multistep.png)

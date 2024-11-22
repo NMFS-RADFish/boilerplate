@@ -121,7 +121,7 @@ const handleFullNameChange = (event, formData) => {
     });
 };
 ```
-
-## Conditional Form Fields Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Conditional Form Fields](./src/assets/conditional-form-fields.png)

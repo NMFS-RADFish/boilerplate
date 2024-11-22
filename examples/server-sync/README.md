@@ -187,6 +187,7 @@ export const ServerSync = () => {
 };
 ```
 
-## Server Sync Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Server Sync](./src/assets/server-sync.png)

@@ -116,7 +116,7 @@ const handleSubmit = (event) => {
     setResetToggle(true)
 }
 ```
-
-## Form Structure Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Form Structure](./src/assets/form-structure.png)
