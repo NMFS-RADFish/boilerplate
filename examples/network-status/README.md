@@ -29,6 +29,7 @@ Learn more about RADFish examples at the official [documentation](https://nmfs-r
    }, [isOffline]);
    ```
 
-## Network Status Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Network Status](./src/assets/network-status.png)

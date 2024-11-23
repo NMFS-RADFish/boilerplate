@@ -79,6 +79,7 @@ The `useOfflineStorage` hook returns an object with the following methods:
   - Returns a promise that resolves to the updated data as an object:
     `{ numberOfFish: 10, species: salmon }`
 
-## On-Device Storage Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![On-Device Storage](./src/assets/on-device-storage.png)
