@@ -1,65 +1,11 @@
 import "../styles/theme.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { Toast, useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { FormGroup, Grid, TextInput, Button, Label, Form, Select } from "@trussworks/react-uswds";
-import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
-
-import { CONSTANTS } from "../config/form";
+import { CONSTANTS, STATES, TOTAL_STEPS } from "../config/form";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
-import { Toast } from "@nmfs-radfish/react-radfish";
-const states = [
-  "Alabama",
-  "Alaska",
-  "Arizona",
-  "Arkansas",
-  "California",
-  "Colorado",
-  "Connecticut",
-  "Delaware",
-  "Florida",
-  "Georgia",
-  "Hawaii",
-  "Idaho",
-  "Illinois",
-  "Indiana",
-  "Iowa",
-  "Kansas",
-  "Kentucky",
-  "Louisiana",
-  "Maine",
-  "Maryland",
-  "Massachusetts",
-  "Michigan",
-  "Minnesota",
-  "Mississippi",
-  "Missouri",
-  "Montana",
-  "Nebraska",
-  "Nevada",
-  "New Hampshire",
-  "New Jersey",
-  "New Mexico",
-  "New York",
-  "North Carolina",
-  "North Dakota",
-  "Ohio",
-  "Oklahoma",
-  "Oregon",
-  "Pennsylvania",
-  "Rhode Island",
-  "South Carolina",
-  "South Dakota",
-  "Tennessee",
-  "Texas",
-  "Utah",
-  "Vermont",
-  "Virginia",
-  "Washington",
-  "West Virginia",
-  "Wisconsin",
-  "Wyoming",
-];
-const TOTAL_STEPS = 2;
+
 const { fullName, email, city, state, zipcode } = CONSTANTS;
 
 const HomePage = () => {
@@ -306,7 +252,7 @@ const HomePage = () => {
             aria-label="Select a state"
           >
             <option value="">Select a state</option>
-            {states.map((state) => (
+            {STATES.map((state) => (
               <option key={state} value={state}>
                 {state}
               </option>
