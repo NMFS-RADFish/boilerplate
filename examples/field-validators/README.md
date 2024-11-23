@@ -88,7 +88,7 @@ Then, we can update the properties on our input to ensure that the validation lo
   validationErrors[FULL_NAME] && <ErrorMessage>{validationErrors[FULL_NAME]}</ErrorMessage>;
 }
 ```
-
-## Field Validators Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Field Validators](./src/assets/field-validators.png)

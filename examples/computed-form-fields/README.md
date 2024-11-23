@@ -123,7 +123,7 @@ const handleNumberFishChange = (event, formData) => {
     });
 };
 ```
-
-## Computed Form Fields Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Computed Form Fields](./src/assets/computed-form-fields.png)

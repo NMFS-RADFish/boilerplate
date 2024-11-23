@@ -144,10 +144,11 @@ Use the `formData.currentStep` value to conditionally render the correct form st
 ```
 Key Details:
 
-- `stepForward` moves to the next step, while `stepBackward goes to the previous step.
+- `stepForward` moves to the next step, while `stepBackward` goes to the previous step.
 - The "Prev Step" button is disabled on the first step to prevent invalid navigation.
 - The form dynamically updates based on the `currentStep` value.
 
-## Multistep Form Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Multistep Form](./src/assets/multistep.png)
