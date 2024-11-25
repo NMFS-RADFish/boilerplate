@@ -10,14 +10,16 @@ Learn more about RADFish examples at the official [documentation](https://nmfs-r
 
 ## Steps
 
-1. Import the following in the `App.jsx` file:
+### 1. Import Required Dependencies
+Import the following in the `App.jsx` file:
    ```jsx
    import React, { useEffect } from "react";
    import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "./hooks/useToast";
    import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
    import { Alert } from "@trussworks/react-uswds";
    ```
-2. Within the `App` component create a `useEffect` to handle displaying the toast:
+### 2. Add useEffect for Toast Notifications
+Within the `App` component create a `useEffect` to handle displaying the toast:
    ```jsx
    useEffect(() => {
      if (isOffline) {
