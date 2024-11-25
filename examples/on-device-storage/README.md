@@ -11,7 +11,8 @@ Learn more about RADFish examples at the official [documentation](https://nmfs-r
 
 ## Steps
 
-1. In the `index.jsx` file, import the `OfflineStorageWrapper`, then create a configuration object:
+### 1. Configure Offline Storage 
+In the `index.jsx` file, import the `OfflineStorageWrapper`, then create a configuration object:
 
 ```jsx
 import { OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
@@ -33,7 +34,8 @@ const offlineStorageConfig = {
 };
 ```
 
-2. In the `index.jsx` file, wrap the `App` component with `OfflineStorageWrapper` and pass the config object:
+### 2. Wrap the App Component 
+In the `index.jsx` file, wrap the `App` component with `OfflineStorageWrapper` and pass the config object:
 
 ```jsx
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -49,7 +51,7 @@ root.render(
 
 ## `useOfflineStorage` Hook API
 
-1. Use the `useOfflineStorage` context hook in any child components. See the `App.jsx` file for examples of how to use the provided hooks.
+Use the `useOfflineStorage` context hook in any child components. See the `App.jsx` file for examples of how to use the provided hooks.
 
 The `useOfflineStorage` hook returns an object with the following methods:
 

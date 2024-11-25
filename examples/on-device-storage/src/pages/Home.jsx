@@ -42,7 +42,6 @@ const HomePage = () => {
     const updateData = async (e, data) => {
       e.preventDefault();
   
-      // const dataToUpdate = formData.find((data) => data.uuid === uuid);
       const updatedData = {
         ...data,
         numberOfFish: Number((data.numberOfFish += 1)),
@@ -75,19 +74,19 @@ const HomePage = () => {
       <div className="grid-container">
         <h1>On Device Storage Example</h1>
         <Alert type="info" heading="Information" headingLevel="h2">
-          This is an example of how to use the <code>OfflineStorageWrapper</code>{" "}
-          context and the provided <code>useOfflineStorage</code> hook to interact
+          This is an example of how to use the <strong>OfflineStorageWrapper</strong>{" "}
+          context and the provided <strong>useOfflineStorage</strong> hook to interact
           with on-device storage. This example demonstrates how to create, read,
           update, and delete data from IndexedDB. The{" "}
-          <code>useOfflineStorage</code> hooks uses Dexie.js under the hood.
+          <strong>useOfflineStorage</strong> hooks uses Dexie.js under the hood.
           <br />
           <br />
           Please note that if you choose to test this example with the network
           connection offline, you won’t be able to refresh the page. To do this,
           you must ensure that Service Worker is registered, which requires the
           example to be served as a production build using{" "}
-          <code>npm run build</code> and serving that output using a basic HTTP
-          server such as <code>serve build</code>
+          <strong>npm run build</strong> and serving that output using a basic HTTP
+          server such as <strong>serve build</strong>.
           <br />
           <br />
           <Link
