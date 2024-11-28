@@ -118,7 +118,7 @@ return (
 );
 ```
 
-4. Build the Form
+### 4. Build the Form
 Construct your form using the `react-radfish` components. See the `/src/pages/Form.jsx` file to see how to construct the form and use the methods available from `FormWrapper`.
 
 ## Preview
