@@ -90,7 +90,7 @@ const columns = [
 ];
 ```
 
-### 4. Custom Rendering with render
+### 3. Custom Rendering with render
 
 Use the `render` function to customize how data is displayed in a column. This is useful for rendering components like buttons or images.
 
@@ -125,7 +125,7 @@ Use the `render` function to customize how data is displayed in a column. This i
   },
   ```
 
-### 5. Pagination
+### 4. Pagination
 
 Control table pagination using the `paginationOptions` prop.
 
@@ -145,7 +145,7 @@ const paginationOptions = {
 };
 ```
 
-### 6. Additional Props and Styling
+### 5. Additional Props and Styling
 
 Our `<Table>` component is built upon the Trussworks `<Table>` component from the `@trussworks/react-uswds` library. This integration allows you to leverage additional props to customize the appearance and behavior of the table.
 
