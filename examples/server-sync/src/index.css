@@ -25,9 +25,9 @@ body {
 
 .server-sync {
   display: flex;
-  flex-direction: column; /* Adjust this if you want items to be in a row */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center; /* Ensure text is centered */
-  margin-top: 200px;
+  text-align: center; 
+  margin-top: 100px;
 }

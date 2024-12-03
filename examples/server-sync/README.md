@@ -1,193 +1,257 @@
-# ServerSync Component Example
+# Server Sync Example
 
 [Official Documentation](https://nmfs-radfish.github.io/radfish/)
 
-The `ServerSync` component is responsible for synchronizing data between a client application and a remote server. It handles offline status, provides feedback on the synchronization process, and manages local offline storage.
+This example is responsible for synchronizing data between a client application and a remote server. It handles offline status, provides feedback on the synchronization process, and manages local offline storage.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples).
 
 ## Features
 
 - Synchronizes data with a remote server.
 - Handles offline status and provides appropriate messages.
-- Stores and retrieves synchronization data from offline storage.
 - Provides a loading state during synchronization.
 - Displays the last synchronization time.
 
-## Dependencies
+## Steps
 
-- `react` for managing component state and lifecycle.
-- `radfish-react` for UI components like `Button`.
-- Custom hooks: `useOfflineStatus` and `useOfflineStorage`.
+### 1. Initialize Offline Utilities
 
-## Installation
-
-1. Ensure you have the required dependencies installed:
-
-   ```bash
-   npm install react radfish-react
-   ```
-
-2. Import the component and required hooks in your project:
-
-   ```javascript
-   import { ServerSync } from "./components/ServerSync";
-   ```
-
-## Usage
-
-To use the ServerSync component, simply import it and include it in your JSX:
-
-```javascript
-function App() {
-  import { ServerSync } from "./components/ServerSync";
-  return (
-    <div className="App">
-      <ServerSync />
-    </div>
-  );
-}
-
-export default App;
+```jsx
+import { Spinner, Table, useOfflineStatus, useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { MSW_ENDPOINT } from "../mocks/handlers";
 ```
 
-## Adding Network Requests and Updating Offline Storage
+To handle offline functionality, extract the necessary utilities from `react-radfish`:
 
-To add network requests and update the offline storage in the syncToHomebase function, follow the steps below:
+```jsx
+const { isOffline } = useOfflineStatus();
+const { updateOfflineData, findOfflineData } = useOfflineStorage();
+```
 
-#### Add Network Request Logic:
- 
+#### Explanation:
+
+- `useOfflineStatus`:
+
+  - Provides the current online/offline status of the application.
+  - `isOffline`: A boolean value that indicates whether the application is offline (`true`) or online (`false`).
+
+- `useOfflineStorage`:
+  - Offers utility methods for interacting with IndexedDB or other offline storage mechanisms.
+  - `updateOfflineData`:
+    - Updates data in offline storage.
+    - Requires the name of the storage table and the data to be updated.
+    - Example:
+      ```jsx
+      await updateOfflineData("tableName", [{ uuid: "123", dataKey: "value" }]);
+      ```
+  - `findOfflineData`:
+    - Retrieves data from offline storage.
+    - Takes the name of the storage table and an optional filter criteria.
+    - Example:
+      ```jsx
+      const data = await findOfflineData("tableName", { uuid: "123" });
+      ```
+
+### 2. Define Helper Functions
+
+Create helper functions for making network requests and fetching data from an API endpoint.
+
 For making network requests, please use a network request library of your choice. For example, you can use the native [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) or any other library that fits your needs.
 
-```javascript
-async function fetchData() {
+#### `getRequestWithFetch`
+
+This function performs GET requests and handles errors.
+
+```jsx
+const getRequestWithFetch = async (endpoint) => {
   try {
-    const response = await fetch('https://api.example.com/data', {
-        headers: { "Content-Type": "application/json", "X-Access-Token": "your-access-token" },
+    const response = await fetch(`${endpoint}`, {
+      // Example header for token-based authentication
+      // Replace or extend with required headers for your API
+      headers: { "X-Access-Token": "your-access-token" },
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      // Set error with the JSON response
+      const error = await response.json();
+      return error;
     }
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
 
-fetchData();
+    return await response.json();
+  } catch (err) {
+    // Set error in case of an exception
+    return { error: `[GET]: Error fetching data: ${err}` };
+  }
+};
 ```
 
+### 3. Sync Data with the Server
 
-#### Update Offline Storage:
+The `syncToServer` function is responsible for synchronizing data between IndexedDB and the server. It also updates the last synchronization time.
 
-Once the data is fetched, store it in the offline storage using the updateOfflineData function.
+```jsx
+const syncToServer = async () => {
+  if (isOffline) {
+    // Show an error if the app is offline
+    setSyncStatus({ message: SERVER_SYNC_FAILED, lastSynced: syncStatus.lastSynced });
+    return;
+  }
 
-Here is an example of how to integrate these steps into the syncToHomebase function:
+  setIsLoading(true);
+  try {
+    // Fetch data from the mock server
+    const { data: serverData } = await getRequestWithFetch(MSW_ENDPOINT.GET);
 
-```javascript
-import { useState } from "react";
-import { Button, useOfflineStatus } from "@nmfs-radfish/react-radfish";
-import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+    // Retrieve existing data from IndexedDB
+    const offlineData = await findOfflineData(LOCAL_DATA);
 
-const offlineErrorMsg = "No network connection, unable to sync with server";
-const noSyncMsg = "Application has not yet been synced with homebase";
-const dataNotSyncedMsg = "Data not synced, try resyncing";
-const dataIsSyncedMsg = "All data cached, ready to launch!";
+    // Compare offline data with server data
+    if (JSON.stringify(offlineData) !== JSON.stringify(serverData)) {
+      // Update IndexedDB with the latest server data
+      await updateOfflineData(LOCAL_DATA, serverData);
 
-const HOME_BASE_DATA = "homebaseData";
-const LAST_HOMEBASE_SYNC = "lastHomebaseSync";
+      // Save the current timestamp as the last sync time
+      const currentTimestamp = Date.now();
+      await updateOfflineData(LAST_SERVER_SYNC, [{ uuid: "lastSynced", time: currentTimestamp }]);
 
-export const ServerSync = () => {
+      const lastSyncTime = new Date(currentTimestamp).toLocaleString();
+      setSyncStatus({ message: SERVER_SYNC_SUCCESS, lastSynced: lastSyncTime });
+      setData(serverData); // Update table data with the latest server data
+    } else {
+      // If data is already up-to-date, show a relevant message
+      setSyncStatus({ message: OFFLINE_ALREADY_SYNCED, lastSynced: syncStatus.lastSynced });
+    }
+  } catch (error) {
+    console.error("An error occurred during sync:", error);
+    setSyncStatus({ message: "Sync failed due to an error.", lastSynced: syncStatus.lastSynced });
+  } finally {
+    setIsLoading(false);
+  }
+};
+```
+
+**Key Steps**:
+
+- Fetch data from the server.
+- Compare it with offline data.
+- If the data differs, update the offline data and record the last sync time in IndexedDB.
+
+### 4. Display Synchronization State
+
+Load and display the last synchronization time. Use the following logic to manage synchronization state.
+
+```jsx
+useEffect(() => {
+  setMockOfflineState(isOffline);
+
+  const loadLastSyncedTime = async () => {
+    const [lastSyncRecord] = await findOfflineData(LAST_SERVER_SYNC);
+    if (lastSyncRecord?.time) {
+      const lastSyncTime = new Date(lastSyncRecord.time).toLocaleString();
+      setSyncStatus((prev) => ({
+        ...prev,
+        lastSynced: lastSyncTime,
+      }));
+    }
+  };
+
+  loadLastSyncedTime();
+}, [isOffline]);
+```
+
+### 5. Render the component
+
+Render the UI to display the current data, sync status, and the last synchronization time.
+
+```jsx
+export const HomePage = () => {
   const { isOffline } = useOfflineStatus();
   const { updateOfflineData, findOfflineData } = useOfflineStorage();
   const [isLoading, setIsLoading] = useState(false);
-  const [syncStatus, setSyncStatus] = useState("");
-
-
-  const getRequestWithFetch = async (endpoint) => {
-    try {
-      const response = await fetch(`${endpoint}`, {
-        headers: {"X-Access-Token": "your-access-token" },
-      });
-
-      if (!response.ok) {
-        // Set error with the JSON response
-        const error = await response.json();
-        return error;
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      // Set error in case of an exception
-      const error = `[GET]: Error fetching data: ${err}`;
-      return error;
-    }
-  };
-
-  const syncToHomebase = async () => {
-    const lastSync = await findOfflineData(HOME_BASE_DATA);
-    const lastSyncMsg = `Last sync at: ${await findOfflineData("lastHomebaseSync")}`;
-
-    if (!isOffline) {
-      setIsLoading(true);
-
-      try {
-        // Fetch data from the server
-        const { data: homebaseData } = await getRequestWithFetch.MSW_ENDPOINT.HOMEBASE);
-
-        // Update offline storage with the fetched data
-        await updateOfflineData(HOME_BASE_DATA, homebaseData);
-        await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
-
-        initializeLaunchSequence();
-      } catch (error) {
-        console.error("Failed to sync data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      console.log(offlineErrorMsg);
-      console.log(`${lastSync ? lastSyncMsg : noSyncMsg}`);
-      setIsLoading(false);
-    }
-  };
-
-  const initializeLaunchSequence = async () => {
-    const homebaseData = await findOfflineData(HOME_BASE_DATA);
-
-    if (!homebaseData.length) {
-      setSyncStatus({ status: false, message: dataNotSyncedMsg });
-    }
-    // 7 is the amount of data expected from homebase response, but this can be any check
-    if (homebaseData.length === 7) {
-      setSyncStatus({ status: true, message: dataIsSyncedMsg });
-    }
-    setTimeout(() => {
-      setSyncStatus({ status: null, message: "" });
-    }, 1200);
-  };
-
-  if (isLoading) {
-    return <Button onClick={syncToHomebase}>Syncing to Server...</Button>;
-  }
+  const [syncStatus, setSyncStatus] = useState({ message: "" });
+  const [lastSynced, setLastSynced] = useState("");
 
   return (
-    <div className="server-sync">
-      <Button onClick={syncToHomebase}>Sync from Server</Button>
-      <span
-        className={`${syncStatus.status ? "text-green" : "text-red"} margin-left-2 margin-top-2`}
-      >
-        {syncStatus.message}
-      </span>
-    </div>
+    <>
+      <h1>Server Sync Example</h1>
+      <Alert type="info">
+        Test this example by syncing data with the server. Use DevTools to toggle offline/online
+        mode.
+      </Alert>
+      <div className="server-sync">
+        <Button onClick={syncToServer} disabled={isLoading}>
+          {isLoading ? <Spinner width={20} height={20} stroke={2} /> : "Sync with Server"}
+        </Button>
+        <div
+          className={`${
+            syncStatus.message.includes("offline") ? "text-red" : "text-green"
+          } margin-left-2 margin-top-2`}
+        >
+          {syncStatus.message}
+        </div>
+        <div className="margin-left-2">
+          {syncStatus.lastSynced && (
+            <strong>
+              <span>Last Synced: {syncStatus.lastSynced}</span>
+            </strong>
+          )}
+        </div>
+        <Table
+          data={data}
+          columns={[
+            { key: "uuid", label: "UUID", sortable: true },
+            { key: "value", label: "Value", sortable: true },
+            { key: "isSynced", label: "Synced with Server", sortable: false },
+          ]}
+        />
+      </div>
+    </>
   );
 };
 ```
 
+### 6. Test the App in Offline Mode
+
+To ensure the application handles offline functionality correctly, follow these steps to simulate offline behavior and verify the sync process:
+
+#### Step 6.1: Enable Offline Mode in DevTools
+
+1. Open your browser's **Developer Tools** (usually accessible via `F12` or `Ctrl+Shift+I` / `Cmd+Option+I`).
+2. Navigate to the **Network** tab in DevTools.
+3. Find the **Throttling** dropdown menu (usually in the top bar of the Network tab).
+4. Select **Offline** from the dropdown. This simulates a network disconnection for the application.
+
+#### Step 6.2: Test the "Sync with Server" Button
+
+1. In your application, click the **Sync with Server** button.
+2. Observe the UI response:
+   - The app should detect that it is offline.
+   - A message `"App is offline. Unable to sync with the server."` should appear.
+3. Verify that the last synced time remains unchanged.
+
+#### Step 6.3: Return to Online Mode and Sync Again
+
+1. In DevTools, change the **Throttling** dropdown back to **No throttling** to restore network connectivity.
+2. Click the **Sync with Server** button again.
+3. Observe the following:
+   - If the server data is different from the offline data, it should update the offline data in IndexedDB.
+    - The sync status should display `"Data synced with the server."`
+    - The last synced time should update to the current time.
+
+#### Step 6.4: Verify Offline Data
+
+1. Open **Application** > **IndexedDB** in DevTools.
+2. Select the database and table (`indexedDBData` or `lastHomebaseSync`).
+3. Verify that the offline data matches the server data after syncing.
+
+---
+
+This testing step ensures that the app handles offline and online states correctly, providing appropriate feedback to the user and updating offline storage as expected.
+
+
 ## Preview
+
 This example will render as shown in this screenshot:
 
 ![Server Sync](./src/assets/server-sync.png)
