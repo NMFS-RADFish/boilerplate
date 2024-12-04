@@ -61,7 +61,7 @@
     "@lhci/cli": "^0.14.0",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "^16.0.1",
-    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-react": "^4.3.4",
     "@vitest/eslint-plugin": "^1.1.7",
     "concurrently": "^8.2.2",
     "eslint": "^9.13.0",
@@ -74,9 +74,9 @@
     "pptr-testing-library": "^0.8.0",
     "prettier": "^3.1.0",
     "puppeteer": "^23.9.0",
-    "vite": "^5.1.5",
-    "vite-plugin-pwa": "0.21.0",
-    "vitest": "2.1.2"
+    "vite": "^6.0.2",
+    "vite-plugin-pwa": "0.21.1",
+    "vitest": "2.1.8"
   },
   "msw": {
     "workerDirectory": "public"
