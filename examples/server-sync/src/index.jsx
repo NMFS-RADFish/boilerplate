@@ -32,8 +32,8 @@ const offlineStorageConfig = {
   name: import.meta.env.VITE_INDEXED_DB_NAME,
   version: import.meta.env.VITE_INDEXED_DB_VERSION,
   stores: {
-    homebaseData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
-    lastHomebaseSync: "uuid, time",
+    localData: "value, isSynced",
+    lastSyncFromServer: "uuid, time",
   },
 };
 

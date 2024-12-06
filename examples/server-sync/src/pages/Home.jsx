@@ -1,81 +1,117 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Alert, Link } from "@trussworks/react-uswds";
-import { Spinner, useOfflineStatus } from "@nmfs-radfish/react-radfish";
+import { Spinner, Table, useOfflineStatus, useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { MSW_ENDPOINT } from "../mocks/handlers";
-import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
-const offlineErrorMsg = "No network conection, unable to sync with server";
-const noSyncMsg = "Application has not yet been synced with homebase";
-const dataNotSyncedMsg = "Data not synced, try resyncing";
-const dataIsSyncedMsg = "All data cached, ready to launch!";
+// Constants for status messages
+const OFFLINE_ALREADY_SYNCED = "Offline data is already up-to-date.";
+const SERVER_SYNC_FAILED = "App is offline. Unable to sync with the server.";
+const SERVER_SYNC_SUCCESS = "Data synced with the server.";
 
-const HOME_BASE_DATA = "homebaseData";
+// IndexedDB table names
+const LOCAL_DATA = "localData";
+const LAST_SERVER_SYNC = "lastSyncFromServer";
 
 export const HomePage = () => {
+  // Check if the app is offline using the `useOfflineStatus` hook
   const { isOffline } = useOfflineStatus();
-  const { updateOfflineData, findOfflineData } = useOfflineStorage();
-  const [isLoading, setIsLoading] = useState(false);
-  const [syncStatus, setSyncStatus] = useState({ message: "" });
-  const [lastSynced, setLastSynced] = useState("");
 
+  // Hooks to interact with offline storage (IndexedDB)
+  const { updateOfflineData, findOfflineData } = useOfflineStorage();
+
+  // State for loading spinner, sync status, and data to display in the table
+  const [isLoading, setIsLoading] = useState(false);
+  const [syncStatus, setSyncStatus] = useState({ message: "", lastSynced: "" });
+  const [data, setData] = useState([]);
+
+  // Effect to set up the mock server's offline state and load the last synced time
+  useEffect(() => {
+
+    // Load the last synced time from IndexedDB on component mount
+    const loadLastSyncedTime = async () => {
+      const [lastSyncRecord] = await findOfflineData(LAST_SERVER_SYNC);
+      if (lastSyncRecord?.time) {
+        const lastSyncTime = new Date(lastSyncRecord.time).toLocaleString();
+        setSyncStatus((prev) => ({
+          ...prev,
+          lastSynced: lastSyncTime,
+        }));
+      }
+    };
+
+    loadLastSyncedTime();
+  }, [isOffline]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await findOfflineData(LOCAL_DATA);
+      setData(data);
+    }
+    fetchData();
+  }, [data]);
+
+  // Helper function to make a GET request using the Fetch API
   const getRequestWithFetch = async (endpoint) => {
     try {
       const response = await fetch(`${endpoint}`, {
+        // Example header for token-based authentication
+        // Replace or extend with required headers for your API
         headers: { "X-Access-Token": "your-access-token" },
       });
-
+  
       if (!response.ok) {
         // Set error with the JSON response
         const error = await response.json();
         return error;
       }
-
-      const data = await response.json();
-      return data;
+  
+      return await response.json();
     } catch (err) {
       // Set error in case of an exception
-      const error = `[GET]: Error fetching data: ${err}`;
-      return error;
+      return { error: `[GET]: Error fetching data: ${err}` };
     }
   };
 
-  const syncToHomebase = async () => {
-    const lastSync = await findOfflineData(HOME_BASE_DATA);
-    const lastSyncMsg = `Last sync at: ${findOfflineData("lastHomebaseSync")}`;
-    const { data: homebaseData } = await getRequestWithFetch(MSW_ENDPOINT.HOMEBASE);
-    await updateOfflineData(HOME_BASE_DATA, homebaseData);
+  // Function to sync data with the server
+  const syncToServer = async () => {
+    if (isOffline) {
+      // Show an error if the app is offline
+      setSyncStatus({ message: SERVER_SYNC_FAILED, lastSynced: syncStatus.lastSynced });
+      return;
+    }
 
-    await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
+    setIsLoading(true);
+    try {
+      // Fetch data from the mock server
+      const { data: serverData } = await getRequestWithFetch(MSW_ENDPOINT.GET);
 
-    if (!isOffline) {
-      setIsLoading(true);
-      setTimeout(async () => {
-        await updateOfflineData("lastHomebaseSync", [{ uuid: "lastSynced", time: Date.now() }]);
-        initializeLaunchSequence();
-        setIsLoading(false);
-      }, 2000);
-    } else {
-      console.log(offlineErrorMsg);
-      console.log(`${lastSync ? lastSyncMsg : noSyncMsg}`);
+      // Retrieve existing data from IndexedDB
+      const offlineData = await findOfflineData(LOCAL_DATA);
+
+      // Compare offline data with server data
+      if (JSON.stringify(offlineData) !== JSON.stringify(serverData)) {
+        // Update IndexedDB with the latest server data
+        await updateOfflineData(LOCAL_DATA, serverData);
+
+        // Save the current timestamp as the last sync time
+        const currentTimestamp = Date.now();
+        await updateOfflineData(LAST_SERVER_SYNC, [
+          { uuid: "lastSynced", time: currentTimestamp },
+        ]);
+
+        const lastSyncTime = new Date(currentTimestamp).toLocaleString();
+        setSyncStatus({ message: SERVER_SYNC_SUCCESS, lastSynced: lastSyncTime });
+        setData(serverData); // Update table data with the latest server data
+      } else {
+        // If data is already up-to-date, show a relevant message
+        setSyncStatus({ message: OFFLINE_ALREADY_SYNCED, lastSynced: syncStatus.lastSynced });
+      }
+    } catch (error) {
+      console.error("An error occurred during sync:", error);
+      setSyncStatus({ message: "Sync failed due to an error.", lastSynced: syncStatus.lastSynced });
+    } finally {
       setIsLoading(false);
     }
-  };
-
-  const initializeLaunchSequence = async () => {
-    const homebaseData = await findOfflineData(HOME_BASE_DATA);
-    const lastSynced = await findOfflineData("lastHomebaseSync");
-    if (!homebaseData.length) {
-      setSyncStatus({ status: false, message: dataNotSyncedMsg });
-    }
-    // 7 is the amount of data expected from homebase response, but this can be any check
-    if (homebaseData.length === 7) {
-      setSyncStatus({ status: true, message: dataIsSyncedMsg });
-      setLastSynced(new Date(lastSynced[0].time).toLocaleString());
-    }
-    setTimeout(() => {
-      setSyncStatus({ status: null, message: "" });
-      setLastSynced("");
-    }, 2200);
   };
 
   return (
@@ -83,16 +119,31 @@ export const HomePage = () => {
       <h1>Server Sync Example</h1>
       <InfoAnnotation />
       <div className="server-sync">
-        {isLoading ? (
-          <Spinner width={50} height={50} stroke={8} />
-        ) : (
-          <Button onClick={syncToHomebase}>Sync from Server</Button>
-        )}
-        <span
-          className={`${syncStatus.status ? "text-green" : "text-red"} margin-left-2 margin-top-2`}
+        <Button onClick={syncToServer} disabled={isLoading}>
+          {isLoading ? <Spinner width={20} height={20} stroke={2} /> : "Sync with Server"}
+        </Button>
+        <div
+          className={`${
+            syncStatus.message.includes("offline") ? "text-red" : "text-green"
+          } margin-left-2 margin-top-2`}
         >
-          {syncStatus.message + " " + lastSynced}
-        </span>
+          {syncStatus.message}
+        </div>
+        <div className="margin-left-2">
+          {syncStatus.lastSynced && (
+            <strong>
+              <span>Last Synced: {syncStatus.lastSynced}</span>
+            </strong>
+          )}
+        </div>
+        <Table
+          data={data}
+          columns={[
+            { key: "uuid", label: "UUID", sortable: true },
+            { key: "value", label: "Value", sortable: true },
+            { key: "isSynced", label: "Synced with Server", sortable: false },
+          ]}
+        />
       </div>
     </>
   );
@@ -102,7 +153,7 @@ const InfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
       This is an example that demonstrates a design pattern for syncing data from an API endpoint
-      into IndexedDB. The idea is that the application with fetch from the API, and store the
+      into IndexedDB. The idea is that the application will fetch from the API, and store the
       persistent data in IndexedDB for offline storage.
       <br />
       <br />
@@ -112,6 +163,8 @@ const InfoAnnotation = () => {
       <br />
       The data is cached in index db and you can view it by opening the application tab in the
       browser developer tools.
+      <br />
+      <br />
       <Link href="https://nmfs-radfish.github.io/radfish" target="_blank" rel="noopener noreferrer">
         <Button type="button">Go To Documentation</Button>
       </Link>
