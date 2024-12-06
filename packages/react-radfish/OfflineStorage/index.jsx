@@ -5,7 +5,9 @@ export const OfflineStorageContext = createContext();
 
 export const OfflineStorageWrapper = ({ children, config }) => {
   const storageMethod =
-    config.type === "indexedDB"
+    config instanceof IndexedDBMethod || config instanceof LocalStorageMethod
+      ? config
+      : config.type === "indexedDB"
       ? new IndexedDBMethod(config.name, config.version, config.stores)
       : new LocalStorageMethod(config.name);
 
