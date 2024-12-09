@@ -25,7 +25,7 @@ const FormInfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
       This is an example of a live form with data populated from IndexDB. The form data is stored in
-      the browser's IndexedDB using methods from the <code>useOfflineStorage</code> hook, which uses
+      the browser's IndexedDB using methods from the <strong>useOfflineStorage</strong> hook, which uses
       Dexie.js behind the scenes.
       <br />
       <br />
