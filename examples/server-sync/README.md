@@ -1,10 +1,8 @@
 # Server Sync Example
 
-[Official Documentation](https://nmfs-radfish.github.io/radfish/)
+This example shows how to synchronize data between a client application and a remote server. It handles offline status, provides feedback on the synchronization process, and manages local offline storage.
 
-This example is responsible for synchronizing data between a client application and a remote server. It handles offline status, provides feedback on the synchronization process, and manages local offline storage.
-
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples).
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples). Refer to the [RADFish GitHub repo](https://nmfs-radfish.github.io/radfish/) for more information and code samples.
 
 ## Features
 
@@ -13,9 +11,16 @@ Learn more about RADFish examples at the official [documentation](https://nmfs-r
 - Provides a loading state during synchronization.
 - Displays the last synchronization time.
 
+## Preview
+
+This example will render as shown in this screenshot:
+
+![Server Sync](./src/assets/server-sync.png)
+
 ## Steps
 
 ### 1. Initialize Offline Utilities
+First, import these libraries:
 
 ```jsx
 import { Spinner, Table, useOfflineStatus, useOfflineStorage } from "@nmfs-radfish/react-radfish";
@@ -55,9 +60,9 @@ const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
 ### 2. Define Helper Functions
 
-Create helper functions for making network requests and fetching data from an API endpoint.
+Create helper functions to make network requests and fetch data from an API endpoint.
 
-For making network requests, please use a network request library of your choice. For example, you can use the native [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) or any other library that fits your needs.
+For making network requests, use any network request library of your choice. For example, you can use the native [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) or any other library that fits your needs.
 
 #### `getRequestWithFetch`
 
@@ -139,7 +144,7 @@ const syncToServer = async () => {
 
 ### 4. Display Synchronization State
 
-Load and display the last synchronization time. Use the following logic to manage synchronization state.
+Load and display the last synchronization time. Use this logic to manage synchronization state:
 
 ```jsx
 useEffect(() => {
@@ -213,7 +218,7 @@ export const HomePage = () => {
 
 ### 6. Test the App in Offline Mode
 
-To ensure the application handles offline functionality correctly, follow these steps to simulate offline behavior and verify the sync process:
+To make sure the application handles offline functionality correctly, simulate offline behavior. Then, verify the sync process works as expected. 
 
 #### Step 6.1: Enable Offline Mode in DevTools
 
@@ -245,13 +250,4 @@ To ensure the application handles offline functionality correctly, follow these 
 2. Select the database and table (`indexedDBData` or `lastHomebaseSync`).
 3. Verify that the offline data matches the server data after syncing.
 
----
-
-This testing step ensures that the app handles offline and online states correctly, providing appropriate feedback to the user and updating offline storage as expected.
-
-
-## Preview
-
-This example will render as shown in this screenshot:
-
-![Server Sync](./src/assets/server-sync.png)
+This testing step ensures that the app handles offline and online states correctly. It also makes sure the app provides appropriate feedback to the user and updates offline storage as expected.

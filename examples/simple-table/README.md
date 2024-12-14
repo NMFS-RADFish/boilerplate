@@ -1,13 +1,12 @@
 # Simple Table Example
-[Official Documentation](https://nmfs-radfish.github.io/radfish/)
 
-This example demonstrates how to use the `<Table>` component to display tabular data.
+This example shows you how to use the `<Table>` component to display tabular data.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples). Refer to the [RADFish GitHub repo](https://nmfs-radfish.github.io/radfish/) for more information and code samples.
 
 ## Table Overview
 
-The `<Table>` component is flexible and customizable, allowing you to define column configurations, enable sorting, and paginate large datasets. In this example, we use mock data representing different fish species with attributes such as status (draft/submitted), UUID, species name, image, and price.
+The `<Table>` component is flexible and customizable. It lets you define column configurations, enable sorting, and paginate large datasets. In this example, we use mock data representing different fish species with attributes such as status (draft/submitted), UUID, species name, image, and price.
 
 ## Features
 
@@ -16,6 +15,11 @@ The `<Table>` component is flexible and customizable, allowing you to define col
 - **Pagination**: Use the pagination controls below the table to navigate through multiple pages of data. You can move between the first, previous, next, and last page, and see the current page number and total pages.
 - **Custom Rendering**: Certain columns (like the image and price) use custom render functions to display data in a more user-friendly way.
 - **Status Submission**: Rows with a "Draft" status display a "Submit" button, which updates the status to "Submitted" when clicked.
+
+## Preview
+This example will render as shown in this screenshot:
+
+![Simple Table](./src/assets/simple-table.png)
 
 ## Steps
 
@@ -147,7 +151,7 @@ const paginationOptions = {
 
 ### 5. Additional Props and Styling
 
-Our `<Table>` component is built upon the Trussworks `<Table>` component from the `@trussworks/react-uswds` library. This integration allows you to leverage additional props to customize the appearance and behavior of the table.
+Our `<Table>` component is built on the Trussworks `<Table>` component from the `@trussworks/react-uswds` library. This integration lets you use additional props to customize its appearance and behavior.
 
 #### Using Trussworks Props
 
@@ -166,9 +170,4 @@ You can pass these props directly to the `<Table>` component to enhance its styl
 
 #### Referencing Trussworks Documentation
 
-For a complete list of available props and detailed descriptions, please refer to the [Trussworks Table Component Documentation](https://trussworks.github.io/react-uswds/?path=/docs/components-table--docs).
-
-## Preview
-This example will render as shown in this screenshot:
-
-![Simple Table](./src/assets/simple-table.png)
+For a complete list of available props and detailed descriptions, refer to the [Trussworks Table Component Documentation](https://trussworks.github.io/react-uswds/?path=/docs/components-table--docs).
