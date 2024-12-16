@@ -13,9 +13,11 @@ export class LocalStorageMethod extends StorageMethod {
   constructor(key) {
     super();
     this.key = key;
-    this.store =
-      localStorage.getItem(this.key) ||
+    if (!localStorage.hasOwnProperty(this.key)) {
+      console.warn(`Initializing local storage for key: ${this.key}`);
       localStorage.setItem(this.key, JSON.stringify([]));
+    };
+    this.store = localStorage.getItem(this.key);
   }
 
   /**
