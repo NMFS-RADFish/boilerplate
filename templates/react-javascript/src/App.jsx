@@ -12,17 +12,17 @@ import {
 
 import HomePage from "./pages/Home";
 
-function App() {
+function App({ application }) {
   const [isExpanded, setExpanded] = useState(false);
   return (
-    <Application>
+    <Application application={application}>
       <a className="usa-skipnav" href="#main-content">
         Skip to main content
       </a>
       <main id="main-content">
         <BrowserRouter>
           <Header
-            basic={true}
+            basic
             showMobileOverlay={isExpanded}
             className="header-container"
           >
