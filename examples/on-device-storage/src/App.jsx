@@ -4,9 +4,10 @@ import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { Application } from "@nmfs-radfish/react-radfish";
 import HomePage from "./pages/Home";
 
-const App = () => {
+const App = ({application}) => {
+
   return (
-    <Application>
+    <Application application={application}>
       <div className="App grid-container">
         <Router>
           <Routes>

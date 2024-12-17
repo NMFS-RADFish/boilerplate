@@ -1,6 +1,7 @@
 import { Toast } from "../alerts";
 import { createContext, useEffect, useContext, useRef } from "react";
 import { useOfflineStatus, useToasts, dispatchToast } from "../hooks";
+import { OfflineStorageWrapper } from "../OfflineStorage";
 
 const ApplicationContext = createContext();
 
@@ -31,12 +32,22 @@ function ApplicationComponent(props) {
   );
 }
 
-export function Application({ application, children }) {
-  return (
-    <ApplicationContext.Provider value={application}>
-      <ApplicationComponent>{children}</ApplicationComponent>
-    </ApplicationContext.Provider>
-  );
+export function Application({ application = null, children }) {
+  if (application?.storage) {
+    return (
+      <ApplicationContext.Provider value={application}>
+        <OfflineStorageWrapper>
+          <ApplicationComponent>{children}</ApplicationComponent>
+        </OfflineStorageWrapper>
+      </ApplicationContext.Provider>
+    );
+  } else {
+    return (
+      <ApplicationContext.Provider value={application}>
+        <ApplicationComponent>{children}</ApplicationComponent>
+      </ApplicationContext.Provider>
+    );
+  }
 }
 
 export const useApplication = () => {

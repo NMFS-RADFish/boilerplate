@@ -1,14 +1,19 @@
 import { createContext, useContext } from "react";
-import { IndexedDBMethod, LocalStorageMethod, StorageModelFactory } from "@nmfs-radfish/radfish";
+import { StorageModelFactory } from "@nmfs-radfish/radfish";
+import { useApplication } from "../Application";
 
 export const OfflineStorageContext = createContext();
 
-export const OfflineStorageWrapper = ({ children, config }) => {
-  const storageMethod =
-    config.type === "indexedDB"
-      ? new IndexedDBMethod(config.name, config.version, config.stores)
-      : new LocalStorageMethod(config.name);
+export const OfflineStorageWrapper = ({ children }) => {
+  const application = useApplication();
 
+  if (!application?.storage) {
+    throw new Error(
+      "OfflineStorageWrapper must be used within an Application component with a storage method configured.",
+    );
+  }
+
+  const storageMethod = application.storage;
   const storageModel = StorageModelFactory.createModel(storageMethod);
 
   function createOfflineData(tableName, data) {
@@ -43,7 +48,9 @@ export const OfflineStorageWrapper = ({ children, config }) => {
 export const useOfflineStorage = () => {
   const context = useContext(OfflineStorageContext);
   if (!context) {
-    throw new Error("useOfflineStorage must be used within an OfflineStorageWrapper");
+    throw new Error(
+      "useOfflineStorage must be used within an OfflineStorageWrapper. Please make sure a storage method has been configured.",
+    );
   }
   return context;
 };

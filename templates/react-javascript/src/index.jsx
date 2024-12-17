@@ -18,10 +18,10 @@ const app = new Application({
   },
 });
 
-app.on("ready", () => {
+app.on("ready", async () => {
   root.render(
     <React.StrictMode>
-      <App />
+      <App application={app} />
     </React.StrictMode>,
   );
 });

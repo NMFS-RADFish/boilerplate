@@ -1,4 +1,5 @@
 import { setupWorker } from "msw/browser";
+import { StorageMethod, IndexedDBMethod, LocalStorageMethod } from "./on-device-storage/storage";
 
 class EventEmitter extends EventTarget {}
 
@@ -12,6 +13,34 @@ export class Application {
     this._registerEventListeners();
 
     this._dispatch("init");
+  }
+
+  get storage() {
+    if (!this._options.storage) {
+      return null;
+    }
+
+    if (!(this._options.storage instanceof StorageMethod)) {
+      console.warn('Please update the storage method to be an instance of StorageMethod');
+      
+      switch (this._options.storage?.type) {
+        case "indexedDB": {
+          return new IndexedDBMethod(
+            this._options.storage.name,
+            this._options.storage.version,
+            this._options.storage.stores
+          );
+        }
+        case "localStorage": {
+          return new LocalStorageMethod(this._options.storage.name);
+        }
+        default: {
+          throw new Error(`Invalid storage method type: ${this._options.storage.type}`);
+        }
+      }
+    }
+
+    return this._options.storage;
   }
 
   on(event, callback) {

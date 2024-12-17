@@ -5,9 +5,9 @@ import HomePage from "./pages/Home";
 import { Alert, Button, Link, GridContainer } from "@trussworks/react-uswds";
 import { Application } from "@nmfs-radfish/react-radfish";
 
-function App() {
+function App({ application }) {
   return (
-    <Application>
+    <Application application={application}>
       <GridContainer>
         <h1>Multi-Step</h1>
         <FormInfoAnnotation />
