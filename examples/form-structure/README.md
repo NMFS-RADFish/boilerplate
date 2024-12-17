@@ -1,18 +1,19 @@
 # Form Structure Example
 
-[Official Documentation](https://nmfs-radfish.github.io/radfish/)
+This example shows you how to build a non-trivial form. It uses core components provided by [Trussworks react-uswds](https://github.com/trussworks/react-uswds). It is __not__ intended to show a full form implementation, such as sending a request on submit.
 
-This example demonstrates building a non-trivial form using core components provided by [Trussworks react-uswds](https://github.com/trussworks/react-uswds).
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples). Refer to the [RADFish GitHub repo](https://nmfs-radfish.github.io/radfish/) for more information and code samples.
 
-This example is __NOT__ intended to show a full form implementation, such as sending a request on submit.
+## Preview
+This example will render as shown in this screenshot:
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples).
+![Form Structure](./src/assets/form-structure.png)
 
 ## Steps
 
 ### 1. Define the Page Structure
 
-Utilize Trussworks `Grid` components to define the layout of your page in `src/pages/Home.jsx`. This approach helps organize content effectively while maintaining a clean and responsive design.
+Use Trussworks `Grid` components to define the layout of your page in `src/pages/Home.jsx`. This approach helps organize content while maintaining a clean and responsive design.
 
 #### Page structure with a single column:
 ```jsx
@@ -28,7 +29,7 @@ Utilize Trussworks `Grid` components to define the layout of your page in `src/p
 ```
 
 #### Aligning two inputs in a single row:
-To place two input components side by side, use the Grid components with the gap property to add spacing between columns.
+To place two input components side by side, use the `Grid` components. The `gap` property adds spacing between columns.
 
 ```jsx
 <Grid row gap>
@@ -44,10 +45,10 @@ To place two input components side by side, use the Grid components with the gap
 ```
 
 ### 2. Applying CSS Styles with `classNames`
-To achieve the desired layout and styling, you can apply CSS through multiple approaches, including component props, USWDS utility classes, and custom CSS classes.
+For customized layout and styling, you can apply CSS through several approaches. Add CSS through component props, USWDS utility classes, and custom CSS classes.
 
 #### Using Component Props
-Many Trussworks components support built-in props for styling. For instance, the gap prop can control spacing between grid elements:
+Many Trussworks components support built-in props for styling. For instance, the `gap` prop can control spacing between grid elements:
 
 ```jsx
 <Grid row gap="md">
@@ -74,7 +75,7 @@ For advanced or project-specific styles, define custom CSS classes and apply the
 ```
 
 ### 3. Setting Focus on Load and Reset
-To enhance usability, the form sets focus on a specific input field both when the form loads and after it resets. This can be achieved by using the useRef hook and React's useEffect to programmatically focus on the desired field.
+To enhance usability, the form sets focus on a specific input field both when the form loads and after it resets. To achieve this, use the `useRef` hook and React's `useEffect` to programmatically focus on the desired field.
 
 ```jsx
 const inputFocus = useRef(null);
@@ -95,7 +96,7 @@ useEffect(() => {
 
 ### 4. Display `FormData` Values on `Submit` and Reset the Form
 
-When the form is submitted, the values of all fields are displayed, and the form is reset. This ensures that users receive feedback on their input while the form state is cleared for a new submission.
+When the form is submitted, the values of all fields are displayed, and the form is reset. This ensures that users receive feedback on their input. And, the form state is cleared for a new submission.
 
 ```jsx
 const handleSubmit = (event) => {
@@ -116,7 +117,3 @@ const handleSubmit = (event) => {
     setResetToggle(true)
 }
 ```
-## Preview
-This example will render as shown in this screenshot:
-
-![Form Structure](./src/assets/form-structure.png)

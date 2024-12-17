@@ -1,21 +1,24 @@
 # Mock API Example
 
-[Official Documentation](https://nmfs-radfish.github.io/radfish/)
+This example shows you how to use [Mock Service Worker](https://mswjs.io/) and the native `fetch` API. It builds out a mock API on the frontend to consume data without needing to rely on a backend system. This allows developers to use mock endpoints for testing while backend APIs are developed. Later, mock endpoints can easily be swapped out for production endpoints.
 
-This example demonstrates how to use [Mock Service Worker](https://mswjs.io/) and the native `fetch` API to build out a mock API on the frontend to consume data without needing to rely on a backend system. The idea is that this can be used during development while backend APIs are worked on, allowing for mock endpoints to be easily swapped out for production endpoints as needed.
+This example does __not__ include any backend persistence via IndexedDB. This is out of scope for this example. Instead, this example provides two simplified endpoints to call:
 
-This example does _not_ include any backend persistence via IndexedDB, as this is out of scope for this example. Instead, this example provides two simplified endpoints to call:
+- `[GET] /species` returns a list of 4 species.
+- `[POST] /species` returns the original list, with an additional species added (this is hard coded for simplicity).
 
-`[GET] /species` returns a list of 4 species
-`[POST] /species` returns the original list, with an additional species added (this is hard coded for simplicity).
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples). Refer to the [RADFish GitHub repo](https://nmfs-radfish.github.io/radfish/) for more information and code samples.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples).
+## Preview
+This example will render as shown in this screenshot:
+
+![Mock API](./src/assets/mock-api.png)
 
 ## Steps
 
 ### 1. Enable Mocking in `index.jsx`
 
-In the `index.jsx` file, be sure to enable mocking from the mock service worker. This will ensure that your mock API is being called while in development.
+In the `index.jsx` file, enable mocking from the mock service worker. This ensures that your mock API is being called while in development.
 
 ```jsx
 import React from "react";
@@ -69,7 +72,7 @@ enableMocking().then(() => {
 
 ### 3. Define Mock Endpoints in `browser.js`
 
-`browser.js` will import the endpoints configured in the `handlers.js` file, and wrap them in a higher order function from the `msw/browser` library to set up these mock endpoints and intercept them when getting called from the client:
+The `browser.js` file will import the endpoints configured in the `handlers.js` file. It wraps them in a higher order function from the `msw/browser` library. This sets up mock endpoints and intercepts them when getting called from the client:
 
 ```js
 // src/mocks/browser.js
@@ -203,7 +206,3 @@ const { data } = await postRequestWithFetch(MSW_ENDPOINT.SPECIES, {
   },
 });
 ```
-## Preview
-This example will render as shown in this screenshot:
-
-![Mock API](./src/assets/mock-api.png)
