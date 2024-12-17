@@ -2,109 +2,126 @@
 
 [Official Documentation](https://nmfs-radfish.github.io/radfish/)
 
-This example includes an example on how to build a form where the values of certain input fields control the visibility of other fields within that form. In this case, filling out `fullName` with make the `nickname` field visible. Removing `fullName` will make `nickname` disappear, as well as remove `nickname` from `formState`
+This example demonstrates how to create a dynamic form where the visibility of certain input fields is controlled by the values of other fields. Specifically, when the `fullName` field is filled out, the `nickname` field becomes visible. If the `fullName` field is cleared, the `nickname` field is hidden and removed from the `formState`.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples).
 
 ## Steps
 
-1. Before building out your form, it's a good idea to define which inputs you want to render, and create constant variables for them, so that you can reference these variables, rather than typing out plain text strings. This reduces the possibility of typos and human error when building out reference logic:
+### 1. Define Constants for Input Fields
+
+Before building out your form, define constants for each input field. Using constants helps reduce the possibility of typos and makes your logic more maintainable.
 
 ```jsx
-const fullName = "fullName";
-const nickname = "nickname";
+const FULL_NAME = "fullName";
+const NICKNAME = "nickname";
 ```
 
-In this example, we will build a form with two inputs. The value from `fullName` inputs will control the visiblity of `nickname`.
+In this example, we will build a form with two inputs. The value from `FULL_NAME` inputs will control the visiblity of `NICKNAME`.
 
-2. Next, let's define our `Form` component, and intialize it with an empty `formState` object:
+### 2. Initialize the Form Component with State
+
+Next, we'll define the main form component. To manage the data entered in the form, we initialize it with a `formData` state variable, which is an empty object. This state will dynamically store the values of the form fields as users interact with the form.
+
+The `setFormData` function allows us to update the state whenever an input changes, ensuring the form data is kept in sync.
 
 ```jsx
 const ConditionalForm = () => {
-  const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({});
 
-  return (
-    // form JSX will go here
-  );
+    return (
+        // form JSX will go here
+    );
 };
 ```
 
-3. In the `Form.jsx` component, you can now build out the jsx inputs form your `Form` within the `return` statement of the component. See the below to see an example of how to build these inputs. Notice how we are referencing the variables defined in step 1, rather than typing out the plain strings to avoid typos, and use the variable to access the `formData` state. It's a good idea to wrap these inputs within a `FormGroup` component provided from the trussworks library.
+### 3. Structuring the Form with Inputs
+
+In the `return` statement of the component, use Trussworks's `Form` component to structure your form. Within the form, include input components such as `TextInput`, referencing the variables defined in step 1 (e.g., `FULL_NAME`) instead of hardcoding strings. This practice helps avoid typos and ensures consistency when accessing the `formData` state. For better organization and styling, wrap your inputs within the `FormGroup` component provided by Trussworks.
 
 ```jsx
-<TextInput
-  id={fullName}
-  name={fullName}
-  type="text"
-  placeholder="Full Name"
-  value={formData[fullName] || ""}
+return (
+    <Form
+        onSubmit={handleSubmit}
+        className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
+        >
+        <FormGroup>
+            <Label className="text-bold" htmlFor={FULL_NAME}>
+                Full Name
+            </Label>
+            <TextInput
+                id={FULL_NAME}
+                name={FULL_NAME}
+                type="text"
+                placeholder="Full Name"
+                value={formData[FULL_NAME] || ""}
 />
 ```
 
-4. Now, for each input, we can create an `onChange` handler, that captures the input's value as it is being typed. We then update state with a copy of the existing `formState`, and update only the field value that we want to update (in this case `numberOfFish`). The value of this input will then re-render with the updated value from `formState`
+### 4. Adding Input Handlers for Form Fields
 
+Now, for each input, we can create an `onChange` handler, that captures the input's value as it is being typed. We will use `handleFullNameChange` to update state with a copy of the existing `formState`, and update only the field value that we want to update (in this case `fullName`). The value of this input will then re-render with the updated value from `formState`.
+
+Function to handle changes in the **Full Name** input field
 ```jsx
-<TextInput
-  id={fullName}
-  name={fullName}
-  type="text"
-  placeholder="Full Name"
-  value={formData[fullName] || ""}
-  onChange={(event) => {
+const handleFullNameChange = (event, formData) => {
     const { value } = event.target;
     setFormData({
-      ...formData,
-      [fullName]: value,
+        ...formData, // Preserve existing form data
+        [FULL_NAME]: value, // Update the "Full Name" field
     });
-  }}
+};
+```
+
+Use the `handleFullNameChange` function to manage the **Full Name** input
+```jsx
+<TextInput
+    id={FULL_NAME}
+    name={FULL_NAME}
+    type="text"
+    placeholder="Full Name"
+    value={formData[FULL_NAME] || ""}
+    onChange={(event) => handleFullNameChange(event, formData)} // Call the handleFullNameChange function to update the "Full Name" field
 />
 ```
 
-5. Additionally, we want to conditionally render the `nickname` component, depending on whether or not the `fullName` value is set in `formState`. This input field will only render if `formData[fullName]` evaluates to `true`
+### 5. Conditionally Render Nickname Field 
+
+Additionally, we want to conditionally render the `nickname` component, depending on whether or not the `fullName` value is set in `formState`. This input field will only render if `formData[FULL_NAME]` evaluates to `true`.
 
 ```jsx
 {
-  formData[fullName] && (
+  formData[FULL_NAME] && (
     <>
-      <Label htmlFor={nickname}>Nickname</Label>
+      <Label htmlFor={NICKNAME}>Nickname</Label>
       <TextInput
-        id={nickname}
-        name={nickname}
+        id={NICKNAME}
+        name={NICKNAME}
         type="text"
         placeholder="Nickname"
-        onChange={(event) => {
-          const { value } = event.target;
-          setFormData({
-            ...formData,
-            [nickname]: value,
-          });
-        }}
+        value={formData[NICKNAME] || ""}
+        onChange={(event) => handleNickNameChange(event, formData)}
       />
     </>
   );
 }
 ```
 
-6. Lastly, we want to make sure that we remove the value of `nickname` whenever the `fullName` component is empty. To do that we can add another form control within the `onChange` handler of the `fullName` input
+### 6. Managing Dependent Field Values  
+
+In this step, we ensure that the value of the **Nickname** field is cleared whenever the **Full Name** field is empty. This can be achieved by adding logic to the `onChange` handler which calls `handleFullNameChange` function.
 
 ```jsx
-<TextInput
-  id={fullName}
-  name={fullName}
-  type="text"
-  placeholder="Full Name"
-  value={formData[fullName] || ""}
-  onChange={(event) => {
+const handleFullNameChange = (event, formData) => {
     const { value } = event.target;
     setFormData({
-      ...formData,
-      [fullName]: value,
-      [nickname]: value === "" ? "" : formData[nickname],
+        ...formData,
+        [FULL_NAME]: value,
+        [NICKNAME]: value === "" ? "" : formData[NICKNAME], // Clear the "Nickname" field if "Full Name" is empty
     });
-  }}
-/>
+};
 ```
-
-## Conditional Form Fields Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Conditional Form Fields](./src/assets/conditional-form-fields.png)

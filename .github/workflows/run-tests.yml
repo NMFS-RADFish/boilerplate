@@ -33,3 +33,23 @@ jobs:
       - name: Install workspace dependencies
         run: npm install
         working-directory: .
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: templates/react-javascript
+
+      - name: Build project
+        run: npm run build
+        working-directory: templates/react-javascript
+
+      - name: lighthouse mobile audit
+        run: npm run lhci:mobile && npx lhci upload --target=temporary-public-storage
+        working-directory: templates/react-javascript
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: lighthouse desktop audit
+        run: npm run lhci:desktop && npx lhci upload --target=temporary-public-storage
+        working-directory: templates/react-javascript
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

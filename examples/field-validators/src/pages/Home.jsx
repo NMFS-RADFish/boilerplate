@@ -1,19 +1,19 @@
 import "../styles/theme.css";
 import React, { useState } from "react";
+import { dispatchToast } from "@nmfs-radfish/react-radfish";
 import {
-  FormGroup,
-  Grid,
-  TextInput,
   Button,
-  Label,
   ErrorMessage,
   Form,
+  FormGroup,
+  Grid,
+  Label,
+  TextInput,
 } from "@trussworks/react-uswds";
 import { CONSTANTS } from "../config/form";
 import { fullNameValidators } from "../utilities/fieldValidators";
-import { dispatchToast } from "@nmfs-radfish/react-radfish";
 
-const { fullName } = CONSTANTS;
+const { FULL_NAME } = CONSTANTS;
 
 const HomePage = () => {
   const [formData, setFormData] = useState({});
@@ -57,24 +57,24 @@ const HomePage = () => {
       className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
     >
       <FormGroup>
-        <Label className="text-bold" htmlFor={fullName}>
+        <Label className="text-bold" htmlFor={FULL_NAME}>
           Full Name
         </Label>
-        {validationErrors[fullName] && <ErrorMessage>{validationErrors[fullName]}</ErrorMessage>}
+        {validationErrors[FULL_NAME] && <ErrorMessage>{validationErrors[FULL_NAME]}</ErrorMessage>}
         <TextInput
-          id={fullName}
-          name={fullName}
+          id={FULL_NAME}
+          name={FULL_NAME}
           type="text"
           placeholder="Full Name"
-          value={formData[fullName] || ""}
-          aria-invalid={validationErrors[fullName] ? "true" : "false"}
-          validationStatus={validationErrors[fullName] ? "error" : undefined}
+          value={formData[FULL_NAME] || ""}
+          aria-invalid={validationErrors[FULL_NAME] ? "true" : "false"}
+          validationStatus={validationErrors[FULL_NAME] ? "error" : undefined}
           onChange={handleChange}
           onBlur={(e) => handleBlur(e, fullNameValidators)}
         />
         <Grid className="display-flex flex-justify">
           <Button
-            disabled={validationErrors[fullName]}
+            disabled={validationErrors[FULL_NAME]}
             type="submit"
             className="margin-top-1 margin-right-0 order-last"
           >

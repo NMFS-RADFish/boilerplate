@@ -17,9 +17,9 @@ The `<Table>` component is flexible and customizable, allowing you to define col
 - **Custom Rendering**: Certain columns (like the image and price) use custom render functions to display data in a more user-friendly way.
 - **Status Submission**: Rows with a "Draft" status display a "Submit" button, which updates the status to "Submitted" when clicked.
 
-## Usage
+## Steps
 
-### Data Structure
+### 1. Data Structure
 
 The `data` prop is an array of objects where each object represents a row in the table. Each object should have keys that correspond to the `key` values defined in your `columns` array.
 
@@ -43,7 +43,7 @@ const mockData = [
 ];
 ```
 
-### Columns Configuration
+### 2. Columns Configuration
 
 The `columns` array defines how the table displays and interacts with the data. Each column object can include:
 
@@ -90,7 +90,7 @@ const columns = [
 ];
 ```
 
-#### Custom Rendering with render
+### 3. Custom Rendering with render
 
 Use the `render` function to customize how data is displayed in a column. This is useful for rendering components like buttons or images.
 
@@ -125,7 +125,7 @@ Use the `render` function to customize how data is displayed in a column. This i
   },
   ```
 
-### Pagination
+### 4. Pagination
 
 Control table pagination using the `paginationOptions` prop.
 
@@ -145,7 +145,7 @@ const paginationOptions = {
 };
 ```
 
-### Additional Props and Styling
+### 5. Additional Props and Styling
 
 Our `<Table>` component is built upon the Trussworks `<Table>` component from the `@trussworks/react-uswds` library. This integration allows you to leverage additional props to customize the appearance and behavior of the table.
 
@@ -168,6 +168,7 @@ You can pass these props directly to the `<Table>` component to enhance its styl
 
 For a complete list of available props and detailed descriptions, please refer to the [Trussworks Table Component Documentation](https://trussworks.github.io/react-uswds/?path=/docs/components-table--docs).
 
-## Simple Table Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Simple Table](./src/assets/simple-table.png)

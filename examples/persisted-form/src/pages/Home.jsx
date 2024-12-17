@@ -2,7 +2,7 @@ import "../index.css";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FormGroup, TextInput, Label, Button, Form } from "@trussworks/react-uswds";
-import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { useOfflineStorage, dispatchToast } from "@nmfs-radfish/react-radfish";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -35,8 +35,10 @@ const HomePage = () => {
     if (!id) {
       const formId = await createOfflineData("formData", values);
       navigate(`${formId}`);
+      dispatchToast({ status: "success", message: "Your form has been successfully saved offline! You can now revisit it anytime." });
     } else {
-      await saveOfflineData("formData", [formData]);
+      await saveOfflineData("formData", [values]);
+      dispatchToast({ status: "success", message: "Your changes have been saved! The form has been updated successfully." });
       // after updating the data in IndexedDB, we can execute any other logic here
       // eg. execute a POST request to an API
     }
@@ -123,4 +125,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage
+export default HomePage;

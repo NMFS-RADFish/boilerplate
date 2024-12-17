@@ -6,7 +6,7 @@ This example shows you how to configure a persisted form that saves the data loc
 
 The `FormWrapper` component is a context provider for form data. It provides a context that contains the current form data, a function to update the form data, and a function to handle form input changes.
 
-Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples)
+Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples).
 
 ### Imports
 
@@ -53,7 +53,8 @@ The `useFormState` hook is a custom hook for accessing the `FormContext`.
 
 ## Steps
 
-1. In the `index.jsx` file, import the `OfflineStorageWrapper`, then create a configuration object:
+### 1. Configure Offline Storage
+In the `index.jsx` file, import the `OfflineStorageWrapper`, then create a configuration object:
 
 ```jsx
 import { OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
@@ -72,7 +73,8 @@ const offlineStorageConfig = {
 };
 ```
 
-2. In the `index.jsx` file, wrap the `App` component with `OfflineStorageWrapper` and pass the config object:
+### 2. Wrap the App Component with OfflineStorageWrapper
+In the `index.jsx` file, wrap the `App` component with `OfflineStorageWrapper` and pass the config object:
 
 ```jsx
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -86,8 +88,10 @@ root.render(
 );
 ```
 
-3. Use the provided `FormWrapper` context provider in this example, located in the `/src/contexts/FormWrapper.jsx` directory, to wrap child form components in a parent component. In this example `App.jsx` is the parent component.
-   1. Create a `handleOnSubmit` handler and pass it to the wrapper:
+### 3. Add FormWrapper Context Provider
+Use the provided `FormWrapper` context provider in this example, located in the `/src/contexts/FormWrapper.jsx` directory, to wrap child form components in a parent component. In this example `App.jsx` is the parent component.
+
+Create a `handleOnSubmit` handler and pass it to the wrapper:
 
 ```jsx
 const { createOfflineData } = useOfflineStorage();
@@ -114,8 +118,10 @@ return (
 );
 ```
 
-4. Construct your form using the `react-radfish` components. See the `/src/pages/Form.jsx` file to see how to construct the form and use the methods available from `FormWrapper`.
+### 4. Build the Form
+Construct your form using the `react-radfish` components. See the `/src/pages/Form.jsx` file to see how to construct the form and use the methods available from `FormWrapper`.
 
-## Persisted Form Example Preview
+## Preview
+This example will render as shown in this screenshot:
 
 ![Persisted Form](./src/assets/persisted-form.png)
