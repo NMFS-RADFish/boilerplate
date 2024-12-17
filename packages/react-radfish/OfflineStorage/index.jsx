@@ -1,11 +1,17 @@
 import { createContext, useContext } from "react";
-import { IndexedDBMethod, LocalStorageMethod, StorageModelFactory } from "@nmfs-radfish/radfish";
+import { StorageModelFactory } from "@nmfs-radfish/radfish";
 import { useApplication } from "../Application";
 
 export const OfflineStorageContext = createContext();
 
 export const OfflineStorageWrapper = ({ children }) => {
   const application = useApplication();
+
+  if (!application?.storage) {
+    throw new Error(
+      "OfflineStorageWrapper must be used within an Application component with a storage method configured.",
+    );
+  }
 
   const storageMethod = application.storage;
   const storageModel = StorageModelFactory.createModel(storageMethod);

@@ -32,8 +32,8 @@ function ApplicationComponent(props) {
   );
 }
 
-export function Application({ application, children }) {
-  if (application.storage) {
+export function Application({ application = null, children }) {
+  if (application?.storage) {
     return (
       <ApplicationContext.Provider value={application}>
         <OfflineStorageWrapper>
