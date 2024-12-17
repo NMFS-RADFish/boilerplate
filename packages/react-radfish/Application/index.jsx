@@ -29,18 +29,18 @@ function ApplicationComponent(props) {
 }
 
 export function Application({ application, children }) {
-  if (application._options.storage) {
+  if (application.storage) {
     return (
-      <OfflineStorageWrapper config={application._options.storage}>
-        <ApplicationContext.Provider value={application}>
-        <ApplicationComponent>{children}</ApplicationComponent>
-        </ApplicationContext.Provider>
-      </OfflineStorageWrapper>
+      <ApplicationContext.Provider value={application}>
+        <OfflineStorageWrapper>
+          <ApplicationComponent>{children}</ApplicationComponent>
+        </OfflineStorageWrapper>
+      </ApplicationContext.Provider>
     );
   } else {
     return (
       <ApplicationContext.Provider value={application}>
-       <ApplicationComponent>{children}</ApplicationComponent>
+        <ApplicationComponent>{children}</ApplicationComponent>
       </ApplicationContext.Provider>
     );
   }
