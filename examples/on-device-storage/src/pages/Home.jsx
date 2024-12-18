@@ -5,16 +5,11 @@ import { Button, Alert, Link } from "@trussworks/react-uswds";
 const HomePage = () => {
     const [formData, setFormData] = useState([]);
 
-    const {
-      findOfflineData,
-      createOfflineData,
-      updateOfflineData,
-      deleteOfflineData,
-    } = useOfflineStorage();
+    const storage = useOfflineStorage();
   
     useEffect(() => {
       const getFormData = async () => {
-        const data = await findOfflineData("formData");
+        const data = await storage.find("formData");
         setFormData(data);
       };
       getFormData();
@@ -32,10 +27,10 @@ const HomePage = () => {
   
       // Create the data in indexedDB
       // Takes a string for the store name and an object to create
-      await createOfflineData("formData", newData);
+      await storage.create("formData", newData);
   
       // Find all the data in indexedDB
-      const allData = await findOfflineData("formData");
+      const allData = await storage.find("formData");
       setFormData(allData);
     };
   
@@ -50,7 +45,7 @@ const HomePage = () => {
   
       // // Update the data in indexedDB
       // // Takes a string for the store name and an array of objects to update
-      await updateOfflineData("formData", [updatedData]);
+      await storage.update("formData", [updatedData]);
   
       // // Update the state
       setFormData((prevData) =>
@@ -63,7 +58,7 @@ const HomePage = () => {
       if (data.uuid) {
         // Delete the data from indexedDB
         // Takes a string for the store name and an array of uuids to delete
-        await deleteOfflineData("formData", [data.uuid]);
+        await storage.delete("formData", [data.uuid]);
         setFormData((prevData) =>
           prevData.filter((item) => item.uuid !== data.uuid)
         );
