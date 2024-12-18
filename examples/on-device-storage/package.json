@@ -1,6 +1,6 @@
 {
   "name": "on-device-storage-example",
-  "version": "0.8.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@nmfs-radfish/radfish": "^1.0.0-rc.1",
