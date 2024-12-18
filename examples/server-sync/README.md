@@ -24,14 +24,13 @@ First, import these libraries:
 
 ```jsx
 import { Spinner, Table, useOfflineStatus, useOfflineStorage } from "@nmfs-radfish/react-radfish";
-import { MSW_ENDPOINT } from "../mocks/handlers";
 ```
 
 To handle offline functionality, extract the necessary utilities from `react-radfish`:
 
 ```jsx
 const { isOffline } = useOfflineStatus();
-const { updateOfflineData, findOfflineData } = useOfflineStorage();
+const storage = useOfflineStorage();
 ```
 
 #### Explanation:
@@ -43,19 +42,19 @@ const { updateOfflineData, findOfflineData } = useOfflineStorage();
 
 - `useOfflineStorage`:
   - Offers utility methods for interacting with IndexedDB or other offline storage mechanisms.
-  - `updateOfflineData`:
+  - `storage.update`:
     - Updates data in offline storage.
     - Requires the name of the storage table and the data to be updated.
     - Example:
       ```jsx
-      await updateOfflineData("tableName", [{ uuid: "123", dataKey: "value" }]);
+      await storage.update("tableName", [{ uuid: "123", dataKey: "value" }]);
       ```
-  - `findOfflineData`:
+  - `storage.find`:
     - Retrieves data from offline storage.
     - Takes the name of the storage table and an optional filter criteria.
     - Example:
       ```jsx
-      const data = await findOfflineData("tableName", { uuid: "123" });
+      const data = await storage.find("tableName", { uuid: "123" });
       ```
 
 ### 2. Define Helper Functions
@@ -109,16 +108,16 @@ const syncToServer = async () => {
     const { data: serverData } = await getRequestWithFetch(MSW_ENDPOINT.GET);
 
     // Retrieve existing data from IndexedDB
-    const offlineData = await findOfflineData(LOCAL_DATA);
+    const offlineData = await storage.find(LOCAL_DATA);
 
     // Compare offline data with server data
     if (JSON.stringify(offlineData) !== JSON.stringify(serverData)) {
       // Update IndexedDB with the latest server data
-      await updateOfflineData(LOCAL_DATA, serverData);
+      await storage.update(LOCAL_DATA, serverData);
 
       // Save the current timestamp as the last sync time
       const currentTimestamp = Date.now();
-      await updateOfflineData(LAST_SERVER_SYNC, [{ uuid: "lastSynced", time: currentTimestamp }]);
+      await storage.update(LAST_SERVER_SYNC, [{ uuid: "lastSynced", time: currentTimestamp }]);
 
       const lastSyncTime = new Date(currentTimestamp).toLocaleString();
       setSyncStatus({ message: SERVER_SYNC_SUCCESS, lastSynced: lastSyncTime });
@@ -151,7 +150,7 @@ useEffect(() => {
   setMockOfflineState(isOffline);
 
   const loadLastSyncedTime = async () => {
-    const [lastSyncRecord] = await findOfflineData(LAST_SERVER_SYNC);
+    const [lastSyncRecord] = await storage.find(LAST_SERVER_SYNC);
     if (lastSyncRecord?.time) {
       const lastSyncTime = new Date(lastSyncRecord.time).toLocaleString();
       setSyncStatus((prev) => ({
@@ -172,7 +171,7 @@ Render the UI to display the current data, sync status, and the last synchroniza
 ```jsx
 export const HomePage = () => {
   const { isOffline } = useOfflineStatus();
-  const { updateOfflineData, findOfflineData } = useOfflineStorage();
+  const storage = useOfflineStorage();
   const [isLoading, setIsLoading] = useState(false);
   const [syncStatus, setSyncStatus] = useState({ message: "" });
   const [lastSynced, setLastSynced] = useState("");

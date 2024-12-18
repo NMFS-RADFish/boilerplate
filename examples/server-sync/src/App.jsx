@@ -5,9 +5,9 @@ import { GridContainer } from "@trussworks/react-uswds";
 import { Application } from "@nmfs-radfish/react-radfish";
 import HomePage from "./pages/Home";
 
-function App() {
+function App({ application }) {
   return (
-    <Application>
+    <Application application={application}>
       <GridContainer>
         <Router>
           <Routes>
