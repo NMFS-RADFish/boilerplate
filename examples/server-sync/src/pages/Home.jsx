@@ -85,12 +85,11 @@ export const HomePage = () => {
       const { data: serverData } = await getRequestWithFetch(MSW_ENDPOINT.GET);
 
       // Retrieve existing data from IndexedDB
-      const offlineData = await find(LOCAL_DATA);
+      const offlineData = await storage.find(LOCAL_DATA);
 
       // Compare offline data with server data
       if (JSON.stringify(offlineData) !== JSON.stringify(serverData)) {
         // Update IndexedDB with the latest server data
-        debugger;
         await storage.update(LOCAL_DATA, serverData);
 
         // Save the current timestamp as the last sync time

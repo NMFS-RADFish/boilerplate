@@ -2,8 +2,31 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
-import { ErrorBoundary, OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
 import { Application, IndexedDBMethod } from "@nmfs-radfish/radfish";
+import { ErrorBoundary, OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
+
+async function enableMocking() {
+  const { worker } = await import("./mocks/browser");
+  const onUnhandledRequest = "bypass";
+
+  if (import.meta.env.MODE === "development") {
+    return worker.start({
+      onUnhandledRequest,
+      serviceWorker: {
+        url: `/mockServiceWorker.js`,
+      },
+    });
+  }
+
+  // `worker.start()` returns a Promise that resolves
+  // once the Service Worker is up and ready to intercept requests.
+  return worker.start({
+    onUnhandledRequest,
+    serviceWorker: {
+      url: `/service-worker.js`,
+    },
+  });
+}
 
 const app = new Application({
   storage: new IndexedDBMethod(
@@ -14,14 +37,11 @@ const app = new Application({
       lastSyncFromServer: "uuid, time",
     },
   ),
-  mocks: {
-    handlers: import("./mocks/browser"),
-  },
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-app.on("ready", () => {
+enableMocking().then(() => {
   root.render(
     <ErrorBoundary>
       <React.StrictMode>
