@@ -44,6 +44,16 @@ export class StorageModel {
   }
 
   /**
+   * Find a single object in the storage.
+   * @param {String} tableNameOrKeyName - The name of the database (indexedDB) or key name to use for creating data (localStorage).
+   * @param {Object} criteria - The criteria to use for finding data, e.g. { where: { uuid: "1234" } }.
+   * @return {Object|Promise<Object>} The found data.
+   */
+  findOne(tableNameOrKeyName, criteria) {
+    return this.storageMethod.findOne(tableNameOrKeyName, criteria)
+  }
+
+  /**
    * Update data in the storage.
    * @param {String} tableNameOrKeyName - The name of the database (indexedDB) or key name to use for creating data (localStorage).
    * @param {Object} data - The new data, e.g. { numberOfFish: 2, species: "Grouper" }.

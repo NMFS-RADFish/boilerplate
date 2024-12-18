@@ -16,27 +16,22 @@ export const OfflineStorageWrapper = ({ children }) => {
   const storageMethod = application.storage;
   const storageModel = StorageModelFactory.createModel(storageMethod);
 
-  function createOfflineData(tableName, data) {
-    return storageModel.create(tableName, data);
-  }
-
-  function findOfflineData(tableName, criteria) {
-    return storageModel.find(tableName, criteria);
-  }
-
-  function updateOfflineData(tableName, data) {
-    return storageModel.update(tableName, data);
-  }
-
-  function deleteOfflineData(tableName, uuid) {
-    return storageModel.delete(tableName, uuid);
-  }
-
   const contextValue = {
-    createOfflineData,
-    findOfflineData,
-    updateOfflineData,
-    deleteOfflineData,
+    create: (tableName, data) => {
+      return storageModel.create(tableName, data);
+    },
+    find: (tableName, criteria) => {
+      return storageModel.find(tableName, criteria);
+    },
+    findOne: (tableName, criteria) => {
+      return storageModel.findOne(tableName, criteria);
+    },
+    update: (tableName, data) => {
+      return storageModel.update(tableName, data);
+    },
+    delete: (tableName, uuid) => {
+      return storageModel.delete(tableName, uuid);
+    },
     storageMethod,
   };
 
