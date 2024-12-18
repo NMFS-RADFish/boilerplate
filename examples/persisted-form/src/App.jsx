@@ -4,9 +4,9 @@ import { Alert, Link, Button, GridContainer } from "@trussworks/react-uswds";
 import { Application } from "@nmfs-radfish/react-radfish";
 import HomePage from "./pages/Home";
 
-function App() {
+function App({ application }) {
   return (
-    <Application>
+    <Application application={application}>
       <GridContainer>
         <h1>Persisted Form Example</h1>
         <FormInfoAnnotation />
@@ -25,8 +25,8 @@ const FormInfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
       This is an example of a live form with data populated from IndexDB. The form data is stored in
-      the browser's IndexedDB using methods from the <strong>useOfflineStorage</strong> hook, which uses
-      Dexie.js behind the scenes.
+      the browser's IndexedDB using methods from the <strong>useOfflineStorage</strong> hook, which
+      uses Dexie.js behind the scenes.
       <br />
       <br />
       Please note that in order to see the form data persist, you must include the form record's

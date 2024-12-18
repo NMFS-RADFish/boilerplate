@@ -8,7 +8,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({});
-  const { findOfflineData, createOfflineData, updateOfflineData } = useOfflineStorage();
+  const storage = useOfflineStorage();
 
   useEffect(() => {
     findExistingForm();
@@ -33,12 +33,18 @@ const HomePage = () => {
     }
 
     if (!id) {
-      const formId = await createOfflineData("formData", values);
+      const formId = await storage.create("formData", values);
       navigate(`${formId}`);
-      dispatchToast({ status: "success", message: "Your form has been successfully saved offline! You can now revisit it anytime." });
+      dispatchToast({
+        status: "success",
+        message: "Your form has been successfully saved offline! You can now revisit it anytime.",
+      });
     } else {
       await saveOfflineData("formData", [values]);
-      dispatchToast({ status: "success", message: "Your changes have been saved! The form has been updated successfully." });
+      dispatchToast({
+        status: "success",
+        message: "Your changes have been saved! The form has been updated successfully.",
+      });
       // after updating the data in IndexedDB, we can execute any other logic here
       // eg. execute a POST request to an API
     }
@@ -49,13 +55,13 @@ const HomePage = () => {
   // we only want to update this data on existing forms, else Dexie will throw a "weakMap" error due to uuid not existing in the table
   const saveOfflineData = async (tableName, data) => {
     if (id) {
-      await updateOfflineData(tableName, [{ uuid: id, ...data }]);
+      await storage.update(tableName, [{ uuid: id, ...data }]);
     }
   };
 
   const findExistingForm = async () => {
     if (id) {
-      const [found] = await findOfflineData("formData", {
+      const [found] = await storage.find("formData", {
         uuid: id,
       });
 
