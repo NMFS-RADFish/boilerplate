@@ -17,10 +17,12 @@ const app = new Application({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(
-  <ErrorBoundary>
-    <React.StrictMode>
-      <MultiStepFormApplication application={app} />
-    </React.StrictMode>
-  </ErrorBoundary>,
-);
+app.on("ready", async () => {
+  root.render(
+    <ErrorBoundary>
+      <React.StrictMode>
+        <MultiStepFormApplication application={app} />
+      </React.StrictMode>
+    </ErrorBoundary>,
+  );
+});
