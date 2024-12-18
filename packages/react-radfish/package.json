@@ -1,6 +1,6 @@
 {
   "name": "@nmfs-radfish/react-radfish",
-  "version": "0.5.6",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
@@ -25,7 +25,7 @@
     "@trussworks/react-uswds": "^9.0.0"
   },
   "peerDependencies": {
-    "@nmfs-radfish/radfish": "0.x"
+    "@nmfs-radfish/radfish": "^1.0.0"
   },
   "devDependencies": {
     "@testing-library/dom": "10.4.0",
