@@ -14,30 +14,28 @@ This example will render as shown in this screenshot:
 
 ## Steps
 
-### 1. Configure Offline Storage 
-In the `index.jsx` file, import the `OfflineStorageWrapper`. Then, create a configuration object:
+### 1. Configure RADFish Application Storage
+In the `index.jsx` file, import the `Application`. Then, configure it with an instance of `IndexedDBMethod`:
 
 ```jsx
-import { OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
+import { Application, IndexedDBMethod } from "@nmfs-radfish/radfish";
 
-const offlineStorageConfig = {
-  // Type is either `indexedDB` or `localStorage`
-  type: "indexedDB",
-  // Database name
-  name: import.meta.env.VITE_INDEXED_DB_NAME,
-  // Database version number
-  version: import.meta.env.VITE_INDEXED_DB_VERSION,
-  // Table schema object must include the table name as the object key and a comma-separated string as the value. Please note `uuid` must be the first value in `formData` table.
-  stores: {
-    formData:
-      "uuid, fullName, email, phoneNumber, numberOfFish, species, computedPrice, isDraft",
-    species: "name, price",
-    homebaseData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
-  },
-};
+const app = new Application({
+  storage: new IndexedDBMethod(
+    import.meta.env.VITE_INDEXED_DB_NAME,
+    import.meta.env.VITE_INDEXED_DB_VERSION,
+    {
+      formData:
+        "uuid, fullName, email, phoneNumber, numberOfFish, species, computedPrice, isDraft",
+      species: "name, price",
+      homebaseData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
+    },
+  ),
+});
+
 ```
 
-### 2. Wrap the App Component 
+### 2. Provide the Application instance 
 In the `index.jsx` file, wrap the `App` component with `OfflineStorageWrapper` and pass the config object:
 
 ```jsx
@@ -45,9 +43,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <OfflineStorageWrapper config={offlineStorageConfig}>
-      <App />
-    </OfflineStorageWrapper>
+    <App application={app} />
   </React.StrictMode>
 );
 ```
