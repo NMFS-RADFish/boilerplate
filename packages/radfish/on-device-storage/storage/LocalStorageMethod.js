@@ -54,12 +54,33 @@ export class LocalStorageMethod extends StorageMethod {
         const result = parsedData
           ?.map((item) => [item[0], item[1]])
           .filter(([uuid, entry]) =>
-            Object.keys(criteria).every(
+            Object.keys(criteria.where).every(
               (key) => criteria[key] === entry[key] || uuid === criteria[key]
             )
           );
         return result;
       }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Find a single object in local storage.
+   * @param {Object} criteria - The criteria to use for finding data, e.g. { uuid: "1234" }.
+   * @return {Object} The found data, e.g. { numberOfFish: "1", species: "Grouper" }.
+   * @throws {Error} If an error occurs while parsing the data.
+   */
+  findOne(criteria) {
+    try {
+      const parsedData = JSON.parse(this.store);
+      const result = parsedData.find(
+        (item) =>
+          Object.keys(criteria.where).every(
+            (key) => criteria[key] === item[1][key] || item[0] === criteria[key]
+          )
+      );
+      return result;
     } catch (error) {
       throw error;
     }

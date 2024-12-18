@@ -56,38 +56,33 @@ The `useFormState` hook is a custom hook for accessing the `FormContext`.
 
 ## Steps
 
-### 1. Configure Offline Storage
-In the `index.jsx` file, import the `OfflineStorageWrapper`. Then, create a configuration object:
+### 1. Configure RADFish Application Storage
+In the `index.jsx` file, import the `Application`. Then, configure it with an instance of `IndexedDBMethod`:
 
 ```jsx
-import { OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
+import { Application, IndexedDBMethod } from "@nmfs-radfish/radfish";
 
-const offlineStorageConfig = {
-  // Type is either `indexedDB` or `localStorage`
-  type: "indexedDB",
-  // Database name
-  name: import.meta.env.VITE_INDEXED_DB_NAME,
-  // Database version number
-  version: import.meta.env.VITE_INDEXED_DB_VERSION,
-  // Table schema object must include the table name as the object key and a comma-separated string as the value. Please note `uuid` must be the first value in `formData` table.
-  stores: {
-    formData: "uuid, fullName, email, phoneNumber, numberOfFish, species, computedPrice, isDraft",
+const app = new Application({
+  serviceWorker: {
+    url: import.meta.env.MODE === "development" ? "/mockServiceWorker.js" : "/service-worker.js",
   },
-};
-```
+  storage: new IndexedDBMethod(
+    import.meta.env.VITE_INDEXED_DB_NAME,
+    import.meta.env.VITE_INDEXED_DB_VERSION,
+    {
+      formData: "uuid, fullName, numberOfFish, species, computedPrice, isDraft",
+    },
+  ),
+});
 
-### 2. Wrap the App Component with OfflineStorageWrapper
-In the `index.jsx` file, wrap the `App` component with `OfflineStorageWrapper` and pass the config object:
-
-```jsx
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
-    <OfflineStorageWrapper config={offlineStorageConfig}>
-      <App />
-    </OfflineStorageWrapper>
-  </React.StrictMode>,
+  <ErrorBoundary>
+    <React.StrictMode>
+      <App application={app} />
+    </React.StrictMode>
+  </ErrorBoundary>,
 );
 ```
 

@@ -17,7 +17,7 @@ export const HomePage = () => {
   const { isOffline } = useOfflineStatus();
 
   // Hooks to interact with offline storage (IndexedDB)
-  const { updateOfflineData, findOfflineData } = useOfflineStorage();
+  const storage = useOfflineStorage();
 
   // State for loading spinner, sync status, and data to display in the table
   const [isLoading, setIsLoading] = useState(false);
@@ -26,10 +26,9 @@ export const HomePage = () => {
 
   // Effect to set up the mock server's offline state and load the last synced time
   useEffect(() => {
-
     // Load the last synced time from IndexedDB on component mount
     const loadLastSyncedTime = async () => {
-      const [lastSyncRecord] = await findOfflineData(LAST_SERVER_SYNC);
+      const [lastSyncRecord] = await storage.find(LAST_SERVER_SYNC);
       if (lastSyncRecord?.time) {
         const lastSyncTime = new Date(lastSyncRecord.time).toLocaleString();
         setSyncStatus((prev) => ({
@@ -44,7 +43,7 @@ export const HomePage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await findOfflineData(LOCAL_DATA);
+      const data = await storage.find(LOCAL_DATA);
       setData(data);
     }
     fetchData();
@@ -58,13 +57,13 @@ export const HomePage = () => {
         // Replace or extend with required headers for your API
         headers: { "X-Access-Token": "your-access-token" },
       });
-  
+
       if (!response.ok) {
         // Set error with the JSON response
         const error = await response.json();
         return error;
       }
-  
+
       return await response.json();
     } catch (err) {
       // Set error in case of an exception
@@ -86,18 +85,16 @@ export const HomePage = () => {
       const { data: serverData } = await getRequestWithFetch(MSW_ENDPOINT.GET);
 
       // Retrieve existing data from IndexedDB
-      const offlineData = await findOfflineData(LOCAL_DATA);
+      const offlineData = await storage.find(LOCAL_DATA);
 
       // Compare offline data with server data
       if (JSON.stringify(offlineData) !== JSON.stringify(serverData)) {
         // Update IndexedDB with the latest server data
-        await updateOfflineData(LOCAL_DATA, serverData);
+        await storage.update(LOCAL_DATA, serverData);
 
         // Save the current timestamp as the last sync time
         const currentTimestamp = Date.now();
-        await updateOfflineData(LAST_SERVER_SYNC, [
-          { uuid: "lastSynced", time: currentTimestamp },
-        ]);
+        await storage.update(LAST_SERVER_SYNC, [{ uuid: "lastSynced", time: currentTimestamp }]);
 
         const lastSyncTime = new Date(currentTimestamp).toLocaleString();
         setSyncStatus({ message: SERVER_SYNC_SUCCESS, lastSynced: lastSyncTime });

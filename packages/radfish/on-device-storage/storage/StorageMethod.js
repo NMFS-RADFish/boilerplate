@@ -18,9 +18,22 @@ export class StorageMethod {
    * This method should be overridden by subclasses.
    * @param {String} _tableNameOrKeyName - The name of the database (indexedDB) or key name to use for creating data (localStorage).
    * @param {Object} _criteria - The criteria to use for finding data.
+   * @returns {Array} The found data.
    * @throws {Error} If the method is not implemented.
    */
   find(_tableNameOrKeyName, _criteria) {
+    throw new Error("Method not implemented.");
+  }
+
+  /**
+    * Finds a single object in the storage.
+    * This method should be overridden by subclasses.
+    * @param {String} _tableNameOrKeyName - The name of the database (indexedDB) or key name to use for creating data (localStorage).
+    * @param {Object} _criteria - The criteria to use for finding data.
+    * @return {Object} The found data.
+    * @throws {Error} If the method is not implemented.
+   */
+  findOne(_tableNameOrKeyName, _criteria) {
     throw new Error("Method not implemented.");
   }
 

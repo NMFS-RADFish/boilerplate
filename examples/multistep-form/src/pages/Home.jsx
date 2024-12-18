@@ -21,7 +21,7 @@ const HomePage = () => {
     state: "",
     zipcode: "",
   });
-  const { createOfflineData, findOfflineData, updateOfflineData } = useOfflineStorage();
+  const storage = useOfflineStorage();
   const validateForm = () => {
     const newErrors = { email: "", fullName: "", city: "", state: "", zipcode: "" };
     // Check each field for content, add errors for empty required fields
@@ -39,7 +39,7 @@ const HomePage = () => {
   useEffect(() => {
     const loadData = async () => {
       if (id) {
-        const [found] = await findOfflineData("formData", {
+        const [found] = await storage.find("formData", {
           uuid: id,
         });
 
@@ -73,9 +73,7 @@ const HomePage = () => {
     event.preventDefault();
     try {
       if (validateForm()) {
-        await updateOfflineData("formData", [
-          { uuid: formData.uuid, ...formData, submitted: true },
-        ]);
+        await storage.update("formData", [{ uuid: formData.uuid, ...formData, submitted: true }]);
         navigate("/", { replace: true, state: { showToast: true } });
         showToast(TOAST_CONFIG.SUCCESS);
       }
@@ -102,7 +100,7 @@ const HomePage = () => {
   const saveOfflineData = async (tableName, data) => {
     try {
       if (id) {
-        await updateOfflineData(tableName, [{ uuid: id, ...data }]);
+        await storage.update(tableName, [{ uuid: id, ...data }]);
       }
     } catch (error) {
       return error;
@@ -114,7 +112,7 @@ const HomePage = () => {
     if (formData.currentStep < TOTAL_STEPS) {
       const nextStep = formData.currentStep + 1;
       setFormData({ ...formData, currentStep: nextStep });
-      updateOfflineData("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
+      storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
     }
   };
 
@@ -123,13 +121,13 @@ const HomePage = () => {
     if (formData.currentStep > 1) {
       const prevStep = formData.currentStep - 1;
       setFormData({ ...formData, currentStep: prevStep });
-      updateOfflineData("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
+      storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
     }
   };
 
   // initialize new multistep form in IndexedDB, and navigate to new form id
   const handleInit = async () => {
-    const formId = await createOfflineData("formData", {
+    const formId = await storage.create("formData", {
       ...formData,
       currentStep: 1,
       totalSteps: TOTAL_STEPS,

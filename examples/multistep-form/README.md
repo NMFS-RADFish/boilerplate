@@ -28,7 +28,7 @@ We need to create an entry in IndexedDB so the form is properly initialized with
 
 ```jsx
 const handleInit = async () => {
-  const formId = await createOfflineData("formData", {
+  const formId = await storage.update("formData", {
     ...formData,
     currentStep: 1,
     totalSteps: TOTAL_STEPS,
@@ -51,7 +51,7 @@ const stepForward = () => {
   if (formData.currentStep < TOTAL_STEPS) {
     const nextStep = formData.currentStep + 1;
     setFormData({ ...formData, currentStep: nextStep });
-    updateOfflineData("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
+    storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
   }
 };
 
@@ -60,7 +60,7 @@ const stepBackward = () => {
   if (formData.currentStep > 1) {
     const prevStep = formData.currentStep - 1;
     setFormData({ ...formData, currentStep: prevStep });
-    updateOfflineData("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
+    storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
   }
 };
 ```
@@ -76,7 +76,7 @@ const { id } = useParams();
 useEffect(() => {
   const loadData = async () => {
     if (id) {
-      const [found] = await findOfflineData("formData", {
+      const [found] = await storage.find("formData", {
         uuid: id, // Query IndexedDB using the `uuid`
       });
 

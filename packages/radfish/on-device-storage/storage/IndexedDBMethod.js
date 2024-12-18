@@ -1,6 +1,7 @@
 import Dexie from "dexie";
 import { generateUUID } from "../utilities/cryptoWrapper";
 import { StorageMethod } from "./StorageMethod";
+import { compareBy } from "./utils";
 
 /**
  * Class representing an IndexedDB method.
@@ -49,24 +50,51 @@ export class IndexedDBMethod extends StorageMethod {
    * @return {Promise<Array>} A promise that resolves to the found data.
    * @throws {Error} If an error occurs while retrieving the data from IndexedDB.
    */
-  async find(tableName, criteria) {
+  async find(tableName, criteria={}) {
     if ((criteria && typeof criteria !== "object") || Array.isArray(criteria)) {
       throw new Error(
-        "IndexedDB find: The `criteria` parameter must be an Object: { bar: 'foo' }."
-      );
-    }
-    if (criteria && !criteria.uuid) {
-      throw new Error(
-        "The `uuid` key must be included in the `criteria` object, e.g. { uuid: '1234' }."
+        "IndexedDB find: The `criteria` parameter must be an Object: { where: { bar: 'foo' } }."
       );
     }
 
+    let results = [];
     try {
-      if (!criteria) {
-        return await this.db[tableName].toArray();
+      if (criteria.where) {
+        const entries = Object.entries(criteria.where);
+        let query = this.db.table(tableName);
+        for (const [key, value] of entries) {
+          if (query instanceof this.db.Table) {
+            query = query.where(key).equals(value);
+          }
+          if (query instanceof this.db.Collection) {
+            query = query.and((item) => item[key] === value);
+          }
+        }
+        results = query;
+      
       } else {
-        return await this.db[tableName].where(criteria).toArray();
+        results = this.db.table(tableName).toCollection();
       }
+
+      results = await results.toArray();
+
+      if (criteria.sortBy) {
+        for (let i = criteria.sortBy.length - 1; i >= 0; i--) {
+          results.sort((a, b) => {
+            return compareBy(a[criteria.sortBy[i].key], b[criteria.sortBy[i].key], criteria.sortBy[i].order)
+          });
+        }
+      }
+    } catch (error) {
+      throw error;
+    }
+    return results;
+  }
+
+  async findOne(tableName, criteria={}) {
+    try {
+      const result =  await this.find(tableName, criteria);
+      return result[0]
     } catch (error) {
       throw error;
     }
@@ -93,7 +121,7 @@ export class IndexedDBMethod extends StorageMethod {
     }
 
     try {
-      return await this.db[tableName].bulkPut(data, { allKeys: true });
+      return await this.db.table(tableName).bulkPut(data, { allKeys: true });
     } catch (error) {
       throw error;
     }
@@ -113,7 +141,7 @@ export class IndexedDBMethod extends StorageMethod {
       );
     }
     try {
-      await this.db[tableName].bulkDelete(uuids);
+      await this.db.table(tableName).bulkDelete(uuids);
       return true;
     } catch (error) {
       throw error;
