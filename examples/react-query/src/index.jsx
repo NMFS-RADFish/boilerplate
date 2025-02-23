@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { ErrorBoundary } from "@nmfs-radfish/react-radfish";
+import { ErrorBoundary, ApplicationContext } from "@nmfs-radfish/react-radfish";
 import "./styles/theme.css";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -33,10 +33,12 @@ app.on("ready", () => {
   root.render(
     <ErrorBoundary>
       <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-          <App />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        <ApplicationContext.Provider value={app}>
+          <QueryClientProvider client={queryClient}>
+            <App />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </ApplicationContext.Provider>
       </React.StrictMode>
     </ErrorBoundary>,
   );
