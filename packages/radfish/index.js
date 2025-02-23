@@ -83,6 +83,7 @@ export class Application {
   async _installServiceWorker(handlers, url) {
     if (!url) return null;
     console.info("Installing service worker");
+    console.log("something");
     const worker = setupWorker(...((await handlers)?.default || []));
     const onUnhandledRequest = "bypass";
 
