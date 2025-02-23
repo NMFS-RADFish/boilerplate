@@ -9,10 +9,19 @@ export class Application {
     this.serviceWorker = null;
     this.isOnline = navigator.onLine;
     this._options = options;
+    this._networkHandler = options.network?.setIsOnline;
 
     this._registerEventListeners();
 
     this._dispatch("init");
+  }
+
+  addEventListener(event, callback) {
+    return this.emitter.addEventListener(event, callback);
+  }
+
+  removeEventListener(event, callback) {
+    return this.emitter.removeEventListener(event, callback);
   }
 
   get storage() {
@@ -67,15 +76,29 @@ export class Application {
       this._dispatch("ready", { worker });
     });
 
-    const handleOnline = (event) => {
-      this.isOnline = true;
-      this._dispatch("online", { event });
+    const handleOnline = async (event) => {
+      if (this._networkHandler) {
+        await this._networkHandler(navigator.connection, (status) => {
+          this.isOnline = status;
+          this._dispatch("online", { event });
+        });
+      } else {
+        this.isOnline = true;
+        this._dispatch("online", { event });
+      }
     };
     window.addEventListener("online", handleOnline, true);
 
-    const handleOffline = (event) => {
-      this.isOnline = false;
-      this._dispatch("offline", { event });
+    const handleOffline = async (event) => {
+      if (this._networkHandler) {
+        await this._networkHandler(navigator.connection, (status) => {
+          this.isOnline = status;
+          this._dispatch("offline", { event });
+        });
+      } else {
+        this.isOnline = false;
+        this._dispatch("offline", { event });
+      }
     };
     window.addEventListener("offline", handleOffline, true);
   }
