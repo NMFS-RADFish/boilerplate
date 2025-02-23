@@ -17,6 +17,12 @@ const app = new Application({
   mocks: {
     handlers: import("../mocks/handlers.js"),
   },
+  network: {
+    setIsOnline: async (networkInformation, callback) => {
+      const response = await fetch("https://example.com")
+      return callback(response.status === 200);
+    }
+  }
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
