@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Alert, Label, Link, TextInput } from "@trussworks/react-uswds";
-import { dispatchToast } from "@nmfs-radfish/react-radfish";
+import { dispatchToast, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { Table } from "@nmfs-radfish/react-radfish";
 
 const HomePage = () => {
