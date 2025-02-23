@@ -5,6 +5,7 @@ import { dispatchToast, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { Table } from "@nmfs-radfish/react-radfish";
 
 const HomePage = () => {
+  const { isOffline } = useOfflineStatus();
   const queryClient = useQueryClient();
 
   /**
@@ -44,6 +45,11 @@ const HomePage = () => {
   return (
     <>
       <h1>React Query Example</h1>
+      {isOffline && (
+        <Alert type="warning" heading="Offline Mode" headingLevel="h4">
+          You are currently offline. Some features may be limited.
+        </Alert>
+      )}
       <InfoAnnotation />
       <br />
       <Button
