@@ -21,6 +21,7 @@ const app = new Application({
     setIsOnline: async (networkInformation, callback) => {
       try {
         // First check basic connection status
+        console.log('navigator.onLine:', !navigator.onLine);
         if (!navigator.onLine) {
           return callback(false);
         }
@@ -30,7 +31,7 @@ const app = new Application({
           method: 'HEAD',
           timeout: 3000 
         });
-        
+
         return callback(response.ok);
       } catch (error) {
         console.warn('Network check failed:', error);
