@@ -19,8 +19,23 @@ const app = new Application({
   },
   network: {
     setIsOnline: async (networkInformation, callback) => {
-      const response = await fetch("https://example.com")
-      return callback(response.status === 200);
+      try {
+        // First check basic connection status
+        if (!navigator.onLine) {
+          return callback(false);
+        }
+
+        // Simple ping test to verify actual connectivity
+        const response = await fetch('https://api.github.com/zen', { 
+          method: 'HEAD',
+          timeout: 3000 
+        });
+        
+        return callback(response.ok);
+      } catch (error) {
+        console.warn('Network check failed:', error);
+        return callback(false);
+      }
     }
   }
 });
