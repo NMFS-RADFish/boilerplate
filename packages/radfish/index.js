@@ -12,6 +12,13 @@ export class Application {
     this._networkHandler = options.network?.setIsOnline;
 
     this._registerEventListeners();
+    
+    // Check initial network status if handler provided
+    if (this._networkHandler) {
+      this._networkHandler(navigator.connection, (status) => {
+        this.isOnline = status;
+      });
+    }
 
     this._dispatch("init");
   }
