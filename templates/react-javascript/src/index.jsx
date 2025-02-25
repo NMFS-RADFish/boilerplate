@@ -20,7 +20,6 @@ const app = new Application({
     setIsOnline: async (networkInformation, callback) => {
       try {
         // First check basic connection status
-        console.log('navigator.onLine:', !navigator.onLine);
         if (!navigator.onLine) {
           return callback(false);
         }
