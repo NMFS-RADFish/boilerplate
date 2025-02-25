@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useApplication } from "../useApplication";
+import { useApplication } from "../../Application";
 
 export const useOfflineStatus = () => {
   const application = useApplication();

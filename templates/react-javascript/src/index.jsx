@@ -16,6 +16,28 @@ const app = new Application({
   mocks: {
     handlers: import("../mocks/browser.js"),
   },
+  network: {
+    setIsOnline: async (networkInformation, callback) => {
+      try {
+        // First check basic connection status
+        console.log('navigator.onLine:', !navigator.onLine);
+        if (!navigator.onLine) {
+          return callback(false);
+        }
+
+        // Simple ping test to verify actual connectivity
+        const response = await fetch('https://api.github.com/zen', { 
+          method: 'HEAD',
+          timeout: 3000 
+        });
+
+        return callback(response.ok);
+      } catch (error) {
+        console.warn('Network check failed:', error);
+        return callback(false);
+      }
+    }
+  }
 });
 
 app.on("ready", async () => {
