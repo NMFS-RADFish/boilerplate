@@ -30,3 +30,39 @@ body {
 .padding-4 {
   padding: 16px;
 }
+
+/* Remove bullet points from cards and grid items */
+.usa-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.grid-col {
+  list-style-type: none;
+}
+
+.grid-row {
+  list-style: none;
+  padding-left: 0;
+  padding-top: 10px;
+}
+
+/* Equal height cards and layout fixes */
+.usa-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.usa-card .usa-card__body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1 1 auto;
+}
+
+.usa-card .usa-button {
+  height: auto;
+  min-height: 40px;
+  margin-bottom: 0.5rem;
+}

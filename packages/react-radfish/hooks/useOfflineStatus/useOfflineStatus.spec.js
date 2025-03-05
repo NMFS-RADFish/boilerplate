@@ -1,11 +1,31 @@
 import { renderHook, act } from "@testing-library/react";
 import { useOfflineStatus } from "./useOfflineStatus";
+import { useApplication } from "../../Application";
 
-describe("useToast", () => {
-  it("should trigger when naviagator online switches", async () => {
-    let dispatchEventSpy = vi.spyOn(window, "dispatchEvent");
+// Mock the useApplication hook
+vi.mock("../../Application", () => ({
+  useApplication: vi.fn()
+}));
+
+describe("useOfflineStatus", () => {
+  // Setup mock application
+  const mockApplication = {
+    isOnline: true,
+    _networkTimeout: 5000,
+    fetch: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn()
+  };
+  
+  beforeEach(() => {
+    vi.resetAllMocks();
+    mockApplication.isOnline = true;
+    mockApplication.fetch.mockReset();
+    useApplication.mockReturnValue(mockApplication);
+  });
+  
+  it("should trigger when navigator online switches", async () => {
     const onLineSpy = vi.spyOn(window.navigator, "onLine", "get");
-
     const { result, rerender } = renderHook(() => useOfflineStatus());
 
     onLineSpy.mockReturnValue(true);
@@ -19,5 +39,114 @@ describe("useToast", () => {
     rerender();
 
     expect(result.current.isOffline).toBe(true);
+  });
+  
+  it("should add event listeners for network events", () => {
+    renderHook(() => useOfflineStatus());
+    
+    expect(mockApplication.addEventListener).toHaveBeenCalledWith(
+      "online", 
+      expect.any(Function)
+    );
+    expect(mockApplication.addEventListener).toHaveBeenCalledWith(
+      "offline", 
+      expect.any(Function)
+    );
+    expect(mockApplication.addEventListener).toHaveBeenCalledWith(
+      "networkFlapping", 
+      expect.any(Function)
+    );
+  });
+  
+  it("should cleanup event listeners on unmount", () => {
+    const { unmount } = renderHook(() => useOfflineStatus());
+    unmount();
+    
+    expect(mockApplication.removeEventListener).toHaveBeenCalledWith(
+      "online", 
+      expect.any(Function)
+    );
+    expect(mockApplication.removeEventListener).toHaveBeenCalledWith(
+      "offline", 
+      expect.any(Function)
+    );
+    expect(mockApplication.removeEventListener).toHaveBeenCalledWith(
+      "networkFlapping", 
+      expect.any(Function)
+    );
+  });
+  
+  it("should handle network flapping events", async () => {
+    const { result } = renderHook(() => useOfflineStatus());
+    
+    // Initially not flapping
+    expect(result.current.isFlapping).toBe(false);
+    
+    // Simulate flapping event
+    const flappingHandler = mockApplication.addEventListener.mock.calls.find(
+      call => call[0] === "networkFlapping"
+    )[1];
+    
+    await act(async () => {
+      flappingHandler({ detail: { flappingCount: 3, timeSinceLastChange: 1000 } });
+    });
+    
+    // Now should be flapping
+    expect(result.current.isFlapping).toBe(true);
+    expect(result.current.flappingDetails).toEqual({ 
+      flappingCount: 3, 
+      timeSinceLastChange: 1000 
+    });
+  });
+  
+  it("should correctly check endpoint connectivity", async () => {
+    const { result } = renderHook(() => useOfflineStatus());
+    
+    // Test successful fetch
+    mockApplication.fetch.mockResolvedValueOnce({});
+    
+    let isReachable = await result.current.checkEndpoint("https://example.com");
+    expect(isReachable).toBe(true);
+    expect(mockApplication.fetch).toHaveBeenCalledWith(
+      "https://example.com", 
+      { method: "HEAD" }
+    );
+    
+    // Test failed fetch
+    mockApplication.fetch.mockRejectedValueOnce(new Error("Network error"));
+    
+    isReachable = await result.current.checkEndpoint("https://example.com");
+    expect(isReachable).toBe(false);
+  });
+  
+  it("should check multiple endpoints correctly", async () => {
+    const { result } = renderHook(() => useOfflineStatus());
+    
+    // Setup different responses for different endpoints
+    mockApplication.fetch
+      .mockImplementationOnce((url) => {
+        if (url === "https://working.example.com") {
+          return Promise.resolve({});
+        }
+        return Promise.reject(new Error("Failed"));
+      })
+      .mockImplementationOnce((url) => {
+        if (url === "https://api.example.com") {
+          return Promise.resolve({});
+        }
+        return Promise.reject(new Error("Failed"));
+      });
+    
+    const endpoints = [
+      "https://working.example.com",
+      "https://down.example.com"
+    ];
+    
+    const results = await result.current.checkMultipleEndpoints(endpoints);
+    
+    expect(results).toEqual({
+      "https://working.example.com": true,
+      "https://down.example.com": false
+    });
   });
 });
