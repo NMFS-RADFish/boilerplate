@@ -20,3 +20,9 @@ html,
 body {
   width: 100%;
 }
+
+@media (min-width: 64em) {
+  .usa-nav__primary button[aria-expanded=false] span:after {
+      background: white;
+  }
+}
