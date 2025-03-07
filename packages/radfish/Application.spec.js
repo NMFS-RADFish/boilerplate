@@ -89,7 +89,6 @@ describe ('Application',  () => {
       const app = new Application();
       expect(app._networkTimeout).toBe(30000);
       expect(app._fallbackUrls).toEqual({});
-      expect(app._networkFlappingThreshold).toBe(3);
     });
     
     it('should initialize with custom network settings', () => {
@@ -98,8 +97,7 @@ describe ('Application',  () => {
           timeout: 5000,
           fallbackUrls: {
             "https://primary.com": "https://fallback.com"
-          },
-          flappingThreshold: 5
+          }
         }
       });
       
@@ -107,35 +105,22 @@ describe ('Application',  () => {
       expect(app._fallbackUrls).toEqual({
         "https://primary.com": "https://fallback.com"
       });
-      expect(app._networkFlappingThreshold).toBe(5);
     });
     
-    it('should detect network flapping', () => {
-      const app = new Application({
-        network: {
-          flappingThreshold: 2
-        }
-      });
+    it('should handle network status changes', () => {
+      const app = new Application();
       
       const dispatchSpy = vi.spyOn(app, '_dispatch');
       
       // First status change
       app._handleNetworkStatusChange(false);
       expect(app.isOnline).toBe(false);
-      expect(dispatchSpy).toHaveBeenCalledWith("offline", { isFlapping: false });
+      expect(dispatchSpy).toHaveBeenCalledWith("offline");
       
-      // Fast status change (within 5000ms) - count: 1
-      vi.advanceTimersByTime(1000);
+      // Change to online
       app._handleNetworkStatusChange(true);
       expect(app.isOnline).toBe(true);
-      expect(dispatchSpy).toHaveBeenCalledWith("online", { isFlapping: false });
-      
-      // Another fast status change - count: 2, should trigger flapping
-      vi.advanceTimersByTime(1000);
-      app._handleNetworkStatusChange(false);
-      
-      // Now we hit the threshold (2), so should emit flapping event
-      expect(dispatchSpy).toHaveBeenCalledWith("networkFlapping", expect.any(Object));
+      expect(dispatchSpy).toHaveBeenCalledWith("online");
     });
     
     it('should handle fetch with timeout', async () => {

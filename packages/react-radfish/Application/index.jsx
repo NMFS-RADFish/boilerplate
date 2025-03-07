@@ -7,42 +7,22 @@ const ApplicationContext = createContext();
 
 function ApplicationComponent(props) {
   const { toasts } = useToasts();
-  const { isOffline, isFlapping } = useOfflineStatus();
+  const { isOffline } = useOfflineStatus();
   const prevIsOffline = useRef(null);
-  const prevIsFlapping = useRef(false);
 
   useEffect(() => {
     if (prevIsOffline.current === null) {
       prevIsOffline.current = isOffline;
-    } else if (prevIsOffline.current && !isOffline && !isFlapping) {
+    } else if (prevIsOffline.current && !isOffline) {
       dispatchToast({ message: "Application is online", status: "info", duration: 3000 });
     }
     prevIsOffline.current = isOffline;
-  }, [isOffline, isFlapping]);
-
-  useEffect(() => {
-    if (!prevIsFlapping.current && isFlapping) {
-      dispatchToast({ 
-        message: "Network connection is unstable", 
-        status: "warning", 
-        duration: 5000 
-      });
-    }
-    prevIsFlapping.current = isFlapping;
-  }, [isFlapping]);
+  }, [isOffline]);
 
   return (
     <div className="radfish__application">
       <div style={{ position: "sticky", width: "100%", top: 0, zIndex: 999 }}>
-        {isFlapping && (
-          <Toast 
-            toast={{ 
-              message: "Network connection is unstable", 
-              status: "warning",
-            }} 
-          />
-        )}
-        {isOffline && !isFlapping && (
+        {isOffline && (
           <Toast 
             toast={{ 
               message: "Application is offline", 

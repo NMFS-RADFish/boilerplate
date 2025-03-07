@@ -12,9 +12,6 @@ export class Application {
     this._networkHandler = options.network?.setIsOnline;
     this._networkTimeout = options.network?.timeout || 30000; // Default 30s timeout
     this._fallbackUrls = options.network?.fallbackUrls || {};
-    this._networkFlappingThreshold = options.network?.flappingThreshold || 3; // Default count for flapping detection
-    this._flappingCounter = 0;
-    this._lastStatusChange = Date.now();
 
     this._registerEventListeners();
     
@@ -240,35 +237,15 @@ export class Application {
   }
   
   /**
-   * Handle network status changes with flapping detection
+   * Handle network status changes
    * @param {boolean} isOnline - Current network status
    * @private
    */
   _handleNetworkStatusChange(isOnline) {
-    const now = Date.now();
-    const timeSinceLastChange = now - this._lastStatusChange;
+    this.isOnline = isOnline;
     
-    // If status changed rapidly, increment flapping counter
-    if (timeSinceLastChange < 5000 && this.isOnline !== isOnline) {
-      this._flappingCounter++;
-    } else {
-      this._flappingCounter = 0;
-    }
-    
-    // Only update status if not flapping or if forced by threshold
-    if (this._flappingCounter < this._networkFlappingThreshold) {
-      this._lastStatusChange = now;
-      this.isOnline = isOnline;
-      
-      // Dispatch appropriate event
-      this._dispatch(isOnline ? "online" : "offline", { isFlapping: false });
-    } else if (this._flappingCounter === this._networkFlappingThreshold) {
-      // Dispatch flapping event when threshold is reached
-      this._dispatch("networkFlapping", { 
-        flappingCount: this._flappingCounter,
-        timeSinceLastChange
-      });
-    }
+    // Dispatch appropriate event
+    this._dispatch(isOnline ? "online" : "offline");
   }
 }
 

@@ -12,7 +12,7 @@ import {
 import { useOfflineStatus, useApplication } from "@nmfs-radfish/react-radfish";
 
 const HomePage = () => {
-  const { isOffline, isFlapping, flappingDetails } = useOfflineStatus();
+  const { isOffline } = useOfflineStatus();
   const app = useApplication();
   const [loading, setLoading] = useState(false);
 
@@ -55,9 +55,7 @@ const HomePage = () => {
   };
 
   const getNetworkStatusTag = () => {
-    if (isFlapping) {
-      return <Tag className="bg-warning">Unstable</Tag>;
-    } else if (isOffline) {
+    if (isOffline) {
       return <Tag className="bg-error">Offline</Tag>;
     } else {
       return <Tag className="bg-success">Online</Tag>;
@@ -69,8 +67,7 @@ const HomePage = () => {
       <h1>Network Status Example</h1>
 
       <Alert type="info" headingLevel={"h2"} heading="Information">
-        This example demonstrates network status handling with support for network flapping
-        detection, request retries with exponential backoff, and request timeouts and fallback URLs.
+        This example demonstrates network status handling with support for request retries with exponential backoff, and request timeouts and fallback URLs.
         <Link
           href="https://nmfs-radfish.github.io/radfish/"
           target="_blank"
@@ -96,25 +93,17 @@ const HomePage = () => {
                 <strong>Current Status:</strong> {getNetworkStatusTag()}
               </div>
 
-              {isFlapping && flappingDetails && (
-                <Alert type="warning" slim>
-                  Network is flapping! Changed {flappingDetails.flappingCount} times in the last{" "}
-                  {Math.round(flappingDetails.timeSinceLastChange / 1000)} seconds.
-                </Alert>
-              )}
-
               <p>
-                The application automatically detects unstable network connections where the status
-                rapidly fluctuates between online and offline.
+                The application automatically detects network connection status based on the browser's online/offline events.
               </p>
             </CardBody>
           </Card>
         </Grid>
       </Grid>
 
-      {/* Bottom row - Resilient Network Features and Network Flapping */}
+      {/* Bottom row - Resilient Network Features */}
       <Grid row gap>
-        <Grid col={12} tablet={{ col: 6 }}>
+        <Grid col={12}>
           <Card>
             <CardHeader>
               <h2 className="margin-0">Resilient Network Features</h2>
@@ -130,42 +119,6 @@ const HomePage = () => {
                   className="margin-bottom-2"
                 >
                   Test Fetch with Retry
-                </Button>
-              </div>
-            </CardBody>
-          </Card>
-        </Grid>
-
-        <Grid col={12} tablet={{ col: 6 }}>
-          <Card>
-            <CardHeader>
-              <h2 className="margin-0">Network Flapping</h2>
-            </CardHeader>
-            <CardBody>
-              <p>
-                Simulate network flapping to test the application's ability to detect unstable 190
-                connections. Flapping threshold is set to {app._networkFlappingThreshold}.
-              </p>
-              <div className="display-flex flex-column flex-fill" />
-              <div className="display-flex flex-column flex-fill">
-                <Button
-                  type="button"
-                  onClick={() => {
-                    // Directly call the internal network status handler
-                    app._handleNetworkStatusChange(false);
-                    setTimeout(() => app._handleNetworkStatusChange(true), 500);
-                    setTimeout(() => app._handleNetworkStatusChange(false), 1000);
-                    setTimeout(() => app._handleNetworkStatusChange(true), 1500);
-
-                    // Also dispatch native events for completeness
-                    window.dispatchEvent(new Event("offline"));
-                    setTimeout(() => window.dispatchEvent(new Event("online")), 500);
-                    setTimeout(() => window.dispatchEvent(new Event("offline")), 1000);
-                    setTimeout(() => window.dispatchEvent(new Event("online")), 1500);
-                  }}
-                  className="margin-bottom-2"
-                >
-                  Simulate Network Flapping
                 </Button>
               </div>
             </CardBody>

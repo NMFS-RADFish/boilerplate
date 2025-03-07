@@ -1,11 +1,10 @@
-# Enhanced Network Status Example
+# Network Status Example
 
-This example demonstrates advanced network status handling with sophisticated features for modern web applications that need to be resilient to network issues.
+This example demonstrates network status handling with sophisticated features for modern web applications that need to be resilient to network issues.
 
 ## Key Features
 
 - **Real-time Network Status Detection**: Monitors online/offline state using browser APIs and custom network checks
-- **Network Flapping Detection**: Identifies unstable connections that rapidly switch between online and offline states
 - **Resilient Fetching**: Implements automatic retries with exponential backoff for failed network requests
 - **Request Timeout Control**: Configurable timeout settings to prevent hanging requests
 - **Fallback URLs**: Automatic redirection to alternative endpoints when primary endpoints fail
@@ -17,13 +16,13 @@ Learn more about RADFish examples at the official [documentation](https://nmfs-r
 
 This example renders as shown in this screenshot:
 
-![Enhanced Network Status](./src/assets/network-status.png)
+![Network Status](./src/assets/network-status.png)
 
 ## Implementation
 
-### 1. Configuring Enhanced Network Features
+### 1. Configuring Network Features
 
-Set up the Application with advanced network handling options:
+Set up the Application with network handling options:
 
 ```jsx
 const app = new Application({
@@ -35,9 +34,6 @@ const app = new Application({
     fallbackUrls: {
       "https://nonexistent-endpoint.example.com": "https://jsonplaceholder.typicode.com/users"
     },
-    
-    // Threshold for detecting network flapping (default is 3)
-    flappingThreshold: 2,
     
     // Optional custom network status handler
     setIsOnline: async (networkInfo, callback) => {
@@ -56,20 +52,18 @@ const app = new Application({
 });
 ```
 
-### 2. Using Enhanced Network Status Features
+### 2. Using Network Status Features
 
-Access the enhanced network status features through hooks:
+Access the network status features through hooks:
 
 ```jsx
 const HomePage = () => {
-  const { isOffline, isFlapping, flappingDetails } = useOfflineStatus();
+  const { isOffline } = useOfflineStatus();
   const app = useApplication();
   
-  // Network status tag with flapping detection
+  // Network status tag
   const getNetworkStatusTag = () => {
-    if (isFlapping) {
-      return <Tag className="bg-warning">Unstable</Tag>;
-    } else if (isOffline) {
+    if (isOffline) {
       return <Tag className="bg-error">Offline</Tag>;
     } else {
       return <Tag className="bg-success">Online</Tag>;
@@ -98,14 +92,6 @@ const HomePage = () => {
   return (
     <div>
       <div>Current Status: {getNetworkStatusTag()}</div>
-      
-      {isFlapping && flappingDetails && (
-        <Alert type="warning">
-          Network is flapping! Changed {flappingDetails.flappingCount} times 
-          in the last {Math.round(flappingDetails.timeSinceLastChange/1000)} seconds.
-        </Alert>
-      )}
-      
       <Button onClick={fetchWithRetry}>Test Fetch with Retry</Button>
     </div>
   );
@@ -125,7 +111,6 @@ To fully test the network resilience features, you can use browser DevTools:
 
 2. Go to the "Console" tab to view logs:
    - Network status changes appear as color-coded logs
-   - Network flapping events are highlighted with yellow backgrounds
    - Retry attempts are logged with blue backgrounds
 
 ### Simulating Offline/Online States
@@ -134,10 +119,6 @@ To fully test the network resilience features, you can use browser DevTools:
 2. Look for the "Online" dropdown (may appear as "No throttling" in some browsers)
 3. Select "Offline" to simulate a disconnected state
 4. Return to "Online" or "No throttling" to restore connectivity
-
-### Testing Network Flapping
-
-Instead of manually toggling network state, you can use the "Simulate Network Flapping" button in the example interface to trigger a rapid sequence of online/offline state changes.
 
 ### Testing Fetch with Retry and Fallbacks
 

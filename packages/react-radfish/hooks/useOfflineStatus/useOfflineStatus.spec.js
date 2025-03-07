@@ -52,10 +52,6 @@ describe("useOfflineStatus", () => {
       "offline", 
       expect.any(Function)
     );
-    expect(mockApplication.addEventListener).toHaveBeenCalledWith(
-      "networkFlapping", 
-      expect.any(Function)
-    );
   });
   
   it("should cleanup event listeners on unmount", () => {
@@ -70,33 +66,6 @@ describe("useOfflineStatus", () => {
       "offline", 
       expect.any(Function)
     );
-    expect(mockApplication.removeEventListener).toHaveBeenCalledWith(
-      "networkFlapping", 
-      expect.any(Function)
-    );
-  });
-  
-  it("should handle network flapping events", async () => {
-    const { result } = renderHook(() => useOfflineStatus());
-    
-    // Initially not flapping
-    expect(result.current.isFlapping).toBe(false);
-    
-    // Simulate flapping event
-    const flappingHandler = mockApplication.addEventListener.mock.calls.find(
-      call => call[0] === "networkFlapping"
-    )[1];
-    
-    await act(async () => {
-      flappingHandler({ detail: { flappingCount: 3, timeSinceLastChange: 1000 } });
-    });
-    
-    // Now should be flapping
-    expect(result.current.isFlapping).toBe(true);
-    expect(result.current.flappingDetails).toEqual({ 
-      flappingCount: 3, 
-      timeSinceLastChange: 1000 
-    });
   });
   
   it("should correctly check endpoint connectivity", async () => {
