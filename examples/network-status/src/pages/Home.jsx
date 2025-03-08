@@ -16,16 +16,16 @@ const HomePage = () => {
   const app = useApplication();
   const [loading, setLoading] = useState(false);
 
-  const testFetchWithRetry = async () => {
+  const testRequestWithRetry = async () => {
     setLoading(true);
     console.log(
-      "%c STARTING FETCH WITH RETRY TEST ",
+      "%c STARTING REQUEST WITH RETRY TEST ",
       "background: #4CAF50; color: #fff; font-weight: bold; padding: 4px;",
     );
 
     try {
       // Simulate an endpoint that will fail initially but succeed on retry
-      const response = await app.fetchWithRetry(
+      const response = await app.requestWithRetry(
         "https://nonexistent-endpoint.example.com",
         {},
         {
@@ -37,18 +37,18 @@ const HomePage = () => {
 
       const data = await response.json();
       console.log(
-        "%c FETCH SUCCESSFUL ",
+        "%c REQUEST SUCCESSFUL ",
         "background: #4CAF50; color: #fff; font-weight: bold; padding: 4px;",
         data,
       );
-      alert(`Fetch successful with retry! Retrieved ${data.length} users.`);
+      alert(`Request successful with retry! Retrieved ${data.length} users.`);
     } catch (error) {
       console.error(
-        "%c FETCH FAILED ",
+        "%c REQUEST FAILED ",
         "background: #F44336; color: #fff; font-weight: bold; padding: 4px;",
         error,
       );
-      alert(`Fetch failed after all retries: ${error.message}`);
+      alert(`Request failed after all retries: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -114,11 +114,11 @@ const HomePage = () => {
                 <div className="flex-fill"></div>
                 <Button
                   type="button"
-                  onClick={testFetchWithRetry}
+                  onClick={testRequestWithRetry}
                   disabled={loading || isOffline}
                   className="margin-bottom-2"
                 >
-                  Test Fetch with Retry
+                  Test Request with Retry
                 </Button>
               </div>
             </CardBody>

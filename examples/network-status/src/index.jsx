@@ -14,16 +14,18 @@ const app = new Application({
   },
   
   network: {
-    // Custom timeout in milliseconds (default is 30000)
-    timeout: 5000,
+    // Health check configuration
+    health: {
+      // Endpoint URL for health checks
+      endpointUrl: "https://api.github.com/users",
+      // Custom timeout in milliseconds (default is 30000)
+      timeout: 5000
+    },
     
     // Fallback URLs to use when primary endpoints fail
     fallbackUrls: {
       "https://nonexistent-endpoint.example.com": "https://jsonplaceholder.typicode.com/users"
     },
-    
-    // Threshold for detecting network flapping (default is 3)
-    flappingThreshold: 2,
     
     // Optional custom network status handler
     setIsOnline: async (networkInfo, callback) => {
@@ -59,11 +61,6 @@ app.addEventListener("online", (event) => {
 
 app.addEventListener("offline", (event) => {
   console.log("%c NETWORK OFFLINE ", "background: #F44336; color: #fff; font-weight: bold; padding: 4px;");
-});
-
-// Listen for flapping and retry events with more prominent logging
-app.addEventListener("networkFlapping", (event) => {
-  console.warn("%c NETWORK FLAPPING DETECTED ", "background: #FFC107; color: #000; font-weight: bold; padding: 4px;", event.detail);
 });
 
 app.addEventListener("networkRetry", (event) => {

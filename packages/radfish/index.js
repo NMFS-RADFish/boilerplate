@@ -10,7 +10,14 @@ export class Application {
     this.isOnline = navigator.onLine;
     this._options = options;
     this._networkHandler = options.network?.setIsOnline;
-    this._networkTimeout = options.network?.timeout || 30000; // Default 30s timeout
+    
+    // Network health check configuration
+    this._networkHealth = {
+      timeout: options.network?.health?.timeout || 30000, // Default 30s timeout
+      endpointUrl: options.network?.health?.endpointUrl || null
+    };
+    
+    // Fallback URLs configuration
     this._fallbackUrls = options.network?.fallbackUrls || {};
 
     this._registerEventListeners();
@@ -129,16 +136,16 @@ export class Application {
   }
 
   /**
-   * Fetch with fallback and timeout support
+   * Make HTTP request with fallback and timeout support
    * @param {string|Request} resource - The URL or Request object
-   * @param {Object} [options] - Fetch options
+   * @param {Object} [options] - Request options
    * @returns {Promise<Response>} - Response from primary or fallback URL
    */
-  async fetch(resource, options = {}) {
+  async request(resource, options = {}) {
     const url = resource instanceof Request ? resource.url : resource;
     const fallbackUrl = this._fallbackUrls[url];
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this._networkTimeout);
+    const timeoutId = setTimeout(() => controller.abort(), this._networkHealth.timeout);
     
     // Clone options and add abort signal
     const fetchOptions = {
@@ -164,7 +171,7 @@ export class Application {
       try {
         // Create a new controller for the fallback request
         const fallbackController = new AbortController();
-        const fallbackTimeoutId = setTimeout(() => fallbackController.abort(), this._networkTimeout);
+        const fallbackTimeoutId = setTimeout(() => fallbackController.abort(), this._networkHealth.timeout);
         
         const fallbackOptions = {
           ...options,
@@ -188,16 +195,16 @@ export class Application {
   }
   
   /**
-   * Fetch with automatic retry capability
+   * Make HTTP request with automatic retry capability
    * @param {string|Request} resource - The URL or Request object
-   * @param {Object} [options] - Fetch options
+   * @param {Object} [options] - Request options
    * @param {Object} [retryOptions] - Retry configuration
    * @param {number} [retryOptions.retries=3] - Maximum number of retries
    * @param {number} [retryOptions.retryDelay=1000] - Delay between retries in ms
    * @param {boolean} [retryOptions.exponentialBackoff=true] - Whether to use exponential backoff
    * @returns {Promise<Response>} - Response from successful request
    */
-  async fetchWithRetry(resource, options = {}, retryOptions = {}) {
+  async requestWithRetry(resource, options = {}, retryOptions = {}) {
     const { 
       retries = 3, 
       retryDelay = 1000, 
@@ -208,7 +215,7 @@ export class Application {
     
     for (let attempt = 0; attempt <= retries; attempt++) {
       try {
-        return await this.fetch(resource, options);
+        return await this.request(resource, options);
       } catch (error) {
         lastError = error;
         
@@ -234,6 +241,21 @@ export class Application {
     
     // All retries failed
     throw lastError;
+  }
+  
+  /**
+   * Check network health by making a request to the configured health endpoint
+   * @returns {Promise<boolean>} - True if the health check succeeds, false otherwise
+   */
+  async checkNetworkHealth() {
+    const url = this._networkHealth.endpointUrl || 'https://api.github.com/users';
+    
+    try {
+      const response = await this.request(url, { method: 'HEAD' });
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
   }
   
   /**
