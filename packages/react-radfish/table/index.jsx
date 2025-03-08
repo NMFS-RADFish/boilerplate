@@ -159,10 +159,12 @@ const RADFishTable = ({
     : sortedData;
 
   useEffect(() => {
-    if (paginationOptions?.currentPage) {
-      setPageIndex(paginationOptions.currentPage - 1);
+    if (paginationOptions?.currentPage && paginationOptions?.pageSize) {
+      const maxPage = Math.ceil(totalRows / paginationOptions.pageSize);
+      const newPageIndex = Math.min(Math.max(paginationOptions.currentPage - 1, 0), maxPage - 1);
+      setPageIndex(newPageIndex);
     }
-  }, [paginationOptions?.currentPage]);
+  }, [paginationOptions?.currentPage, paginationOptions?.pageSize, totalRows]);
 
   return (
     <>
