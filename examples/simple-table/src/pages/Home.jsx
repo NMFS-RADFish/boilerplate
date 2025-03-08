@@ -175,9 +175,9 @@ const HomePage = () => {
         </Button>
         <Button 
           type="button" 
-          onClick={() => setTestData(generateMockData(Math.floor(Math.random() * 10) + 1))}
+          onClick={() => setTestData([...testData, ...generateMockData(3)])}
         >
-          Generate Data
+          Add 3 Rows
         </Button>
       </div>
       <Table
