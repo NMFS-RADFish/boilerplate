@@ -118,11 +118,32 @@ const HomePage = () => {
     console.log("onPageChange called");
   };
 
+  // Function to generate random mock data
+  const generateMockData = (count = 5) => {
+    const species = ['Tuna', 'Cod', 'Halibut', 'Snapper', 'Bass'];
+    const newData = [];
+    
+    for (let i = 0; i < count; i++) {
+      newData.push({
+        uuid: crypto.randomUUID(),
+        isDraft: Math.random() > 0.5,
+        species: species[Math.floor(Math.random() * species.length)],
+        price: Math.floor(Math.random() * 100) + 10,
+        image: "./sample-img.webp"
+      });
+    }
+    return newData;
+  };
+
+  // State for the second table
+  const [testData, setTestData] = React.useState(generateMockData());
+
   return (
     <div className="grid-container">
       <h1>Simple Table Example</h1>
       <InfoAnnotation />
       <br />
+      <h2>Original Table</h2>
       <Table
         data={data}
         columns={columns}
@@ -139,6 +160,38 @@ const HomePage = () => {
           { key: "price", direction: "asc" },
           { key: "species", direction: "desc" },
         ]}
+        striped
+        bordered
+      />
+
+      <h2 className="margin-top-4">Test Table</h2>
+      <div className="margin-bottom-2">
+        <Button 
+          type="button" 
+          onClick={() => setTestData([])}
+          className="margin-right-1"
+        >
+          Clear Data
+        </Button>
+        <Button 
+          type="button" 
+          onClick={() => setTestData(generateMockData(Math.floor(Math.random() * 10) + 1))}
+        >
+          Generate Data
+        </Button>
+      </div>
+      <Table
+        data={testData}
+        columns={columns}
+        paginationOptions={{
+          pageSize: 3,
+          currentPage: 1,
+          onPageChange: onPageChange,
+          totalRows: testData.length,
+        }}
+        onRowClick={(row) => {
+          console.log("Test table row clicked:", row);
+        }}
         striped
         bordered
       />
