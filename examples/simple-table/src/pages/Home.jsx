@@ -118,13 +118,11 @@ const HomePage = () => {
     console.log("onPageChange called");
   };
 
-
   return (
     <div className="grid-container">
       <h1>Simple Table Example</h1>
       <InfoAnnotation />
       <br />
-      <h2>Table</h2>
       <Table
         data={data}
         columns={columns}
@@ -144,7 +142,6 @@ const HomePage = () => {
         striped
         bordered
       />
-
     </div>
   );
 };
