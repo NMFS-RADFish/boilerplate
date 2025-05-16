@@ -21,6 +21,11 @@ export default defineConfig((env) => ({
         name: "RADFish React Boilerplate",
         icons: [
           {
+            src: "icons/radfish.ico",
+            sizes: "512x512 256x256 144x144 64x64 32x32 24x24 16x16",
+            type: "image/x-icon",
+          },
+          {
             src: "icons/radfish-144.ico",
             sizes: "144x144 64x64 32x32 24x24 16x16",
             type: "image/x-icon",
