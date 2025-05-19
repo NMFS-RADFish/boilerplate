@@ -98,8 +98,6 @@ export class Application {
       
       // Wait for all stores to be initialized
       await Promise.all(storeInitPromises);
-      console.log(storeInitPromises[0])
-      console.log(this.stores.weatherSurvey.connector.collections);
     }
 
     // Dispatch the init event
