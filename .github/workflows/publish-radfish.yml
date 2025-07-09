@@ -92,7 +92,11 @@ jobs:
         id: npm-publish
         run: |
           set -e
-          npm publish
+          if [[ "${{ inputs.prerelease }}" == "true" ]]; then
+            npm publish --tag beta
+          else
+            npm publish
+          fi
         working-directory: packages/radfish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
