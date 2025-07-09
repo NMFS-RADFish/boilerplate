@@ -115,10 +115,16 @@ jobs:
         run: |
           set -e
           git tag "react-radfish@${{ steps.bump-version.outputs.new_version }}"
-          git tag -f "react-radfish@latest"
           git push origin main
-          git push origin "react-radfish@${{ steps.bump-version.outputs.new_version }}"
-          git push origin "react-radfish@latest" --force
+          if [[ "${{ inputs.prerelease }}" == "true" ]]; then
+            # For prereleases, only tag and push beta
+            git tag -f "react-radfish@beta"
+            git push origin "react-radfish@${{ steps.bump-version.outputs.new_version }}" "react-radfish@beta" --force
+          else
+            # For regular releases, only tag and push latest
+            git tag -f "react-radfish@latest"
+            git push origin "react-radfish@${{ steps.bump-version.outputs.new_version }}" "react-radfish@latest" --force
+          fi
           
       - name: Create GitHub Release
         if: success()
