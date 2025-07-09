@@ -114,9 +114,9 @@ jobs:
         if: success()
         run: |
           set -e
-          git tag "@nmfs-radfish/react-radfish@${{ steps.bump-version.outputs.new_version }}"
+          git tag "react-radfish@${{ steps.bump-version.outputs.new_version }}"
           git push origin main
-          git push origin "@nmfs-radfish/react-radfish@${{ steps.bump-version.outputs.new_version }}"
+          git push origin "react-radfish@${{ steps.bump-version.outputs.new_version }}"
           
       - name: Create GitHub Release
         if: success()
@@ -124,13 +124,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "@nmfs-radfish/react-radfish@${{ steps.bump-version.outputs.new_version }}"
-          release_name: "@nmfs-radfish/react-radfish@${{ steps.bump-version.outputs.new_version }}"
+          tag_name: "react-radfish@${{ steps.bump-version.outputs.new_version }}"
+          release_name: "react-radfish@${{ steps.bump-version.outputs.new_version }}"
           body: |
             Release of @nmfs-radfish/react-radfish version ${{ steps.bump-version.outputs.new_version }}
             
             ## Changes
-            See [commit history](https://github.com/${{ github.repository }}/commits/@nmfs-radfish/react-radfish@${{ steps.bump-version.outputs.new_version }}) for detailed changes.
+            See [commit history](https://github.com/${{ github.repository }}/commits/react-radfish@${{ steps.bump-version.outputs.new_version }}) for detailed changes.
           draft: false
           prerelease: ${{ inputs.prerelease }}
           
