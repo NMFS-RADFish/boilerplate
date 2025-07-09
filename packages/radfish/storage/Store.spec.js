@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import Store from './Store';
 import Schema from './Schema';
 import Collection from './Collection';
@@ -10,7 +11,7 @@ describe('Store', () => {
   beforeEach(() => {
     // Create a mock connector
     mockConnector = new Connector({
-      initialize: jest.fn().mockResolvedValue(undefined)
+      initialize: vi.fn().mockResolvedValue(undefined)
     });
     
     // Mock collections property
@@ -39,7 +40,7 @@ describe('Store', () => {
   
   describe('open', () => {
     it('should log a warning', async () => {
-      console.warn = jest.fn();
+      console.warn = vi.fn();
       
       await store.open();
       
@@ -49,7 +50,7 @@ describe('Store', () => {
   
   describe('close', () => {
     it('should log a warning', async () => {
-      console.warn = jest.fn();
+      console.warn = vi.fn();
       
       await store.close();
       
