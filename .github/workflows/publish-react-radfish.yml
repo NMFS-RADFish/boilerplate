@@ -1,0 +1,143 @@
+name: Publish @nmfs-radfish/react-radfish to NPM
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version type to bump'
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+      prerelease:
+        description: 'Is this a prerelease?'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check admin permissions
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: { permission } } = await github.rest.repos.getCollaboratorPermissionLevel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: context.actor
+            });
+            
+            if (permission !== 'admin') {
+              core.setFailed(`User ${context.actor} does not have admin permissions. Current permission: ${permission}`);
+            }
+            
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Navigate to package directory
+        run: cd packages/react-radfish
+        
+      - name: Run tests
+        run: |
+          set -e
+          npm test -- --run
+        working-directory: packages/react-radfish
+        
+      - name: Determine version bump type
+        id: version-type
+        run: |
+          set -e
+          if [[ "${{ inputs.prerelease }}" == "true" ]]; then
+            echo "version_command=pre${{ inputs.version }}" >> $GITHUB_OUTPUT
+            echo "version_args=--preid=rc" >> $GITHUB_OUTPUT
+          else
+            echo "version_command=${{ inputs.version }}" >> $GITHUB_OUTPUT
+            echo "version_args=" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Bump version (no git operations)
+        id: bump-version
+        run: |
+          set -e
+          NEW_VERSION=$(npm version ${{ steps.version-type.outputs.version_command }} ${{ steps.version-type.outputs.version_args }} --no-git-tag-version)
+          echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+        working-directory: packages/react-radfish
+        
+      - name: Build package
+        run: |
+          set -e
+          npm run build
+        working-directory: packages/react-radfish
+        
+      - name: Publish to NPM
+        id: npm-publish
+        run: |
+          set -e
+          npm publish
+        working-directory: packages/react-radfish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
+      - name: Commit version bump
+        if: success()
+        run: |
+          set -e
+          git add packages/react-radfish/package.json
+          git commit -m "chore(release): bump @nmfs-radfish/react-radfish to ${{ steps.bump-version.outputs.new_version }}"
+          
+      - name: Create and push tag
+        if: success()
+        run: |
+          set -e
+          git tag "@nmfs-radfish/react-radfish@${{ steps.bump-version.outputs.new_version }}"
+          git push origin main
+          git push origin "@nmfs-radfish/react-radfish@${{ steps.bump-version.outputs.new_version }}"
+          
+      - name: Create GitHub Release
+        if: success()
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "@nmfs-radfish/react-radfish@${{ steps.bump-version.outputs.new_version }}"
+          release_name: "@nmfs-radfish/react-radfish@${{ steps.bump-version.outputs.new_version }}"
+          body: |
+            Release of @nmfs-radfish/react-radfish version ${{ steps.bump-version.outputs.new_version }}
+            
+            ## Changes
+            See [commit history](https://github.com/${{ github.repository }}/commits/@nmfs-radfish/react-radfish@${{ steps.bump-version.outputs.new_version }}) for detailed changes.
+          draft: false
+          prerelease: ${{ inputs.prerelease }}
+          
+      - name: Rollback version on failure
+        if: failure() && steps.bump-version.conclusion == 'success'
+        run: |
+          set -e
+          git checkout -- packages/react-radfish/package.json
+          echo "Version bump rolled back due to publish failure"
+        working-directory: .
