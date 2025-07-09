@@ -104,13 +104,15 @@ jobs:
           git add packages/radfish/package.json
           git commit -m "chore(release): bump @nmfs-radfish/radfish to ${{ steps.bump-version.outputs.new_version }}"
           
-      - name: Create and push tag
+      - name: Create and push tags
         if: success()
         run: |
           set -e
           git tag "radfish@${{ steps.bump-version.outputs.new_version }}"
+          git tag -f "radfish@latest"
           git push origin main
           git push origin "radfish@${{ steps.bump-version.outputs.new_version }}"
+          git push origin "radfish@latest" --force
           
       - name: Create GitHub Release
         if: success()
