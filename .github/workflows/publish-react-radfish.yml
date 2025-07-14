@@ -39,10 +39,10 @@ jobs:
               core.setFailed(`User ${context.actor} does not have admin permissions. Current permission: ${permission}`);
             }
             
-      - name: Checkout main branch
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Configure Git
