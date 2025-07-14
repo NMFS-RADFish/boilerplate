@@ -16,6 +16,7 @@ on:
         required: false
         type: boolean
         default: false
+  push: -- register workflow with GitHub (will be removed)
 
 permissions:
   contents: write
