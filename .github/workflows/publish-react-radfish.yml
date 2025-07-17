@@ -84,7 +84,7 @@ jobs:
         id: bump-version
         run: |
           set -e
-          NEW_VERSION=$(npm version ${{ steps.version-type.outputs.version_command }} ${{ steps.version-type.outputs.version_args }} --no-git-tag-version)
+          NEW_VERSION=$(npm version ${{ steps.version-type.outputs.version_command }} ${{ steps.version-type.outputs.version_args }} --no-git-tag-version --legacy-peer-deps)
           echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
         working-directory: packages/react-radfish
         
