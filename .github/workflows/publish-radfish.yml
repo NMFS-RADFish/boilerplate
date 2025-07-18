@@ -3,19 +3,18 @@ name: Publish @nmfs-radfish/radfish to NPM
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version type to bump'
+      version_type:
+        description: 'Version bump type'
         required: true
         type: choice
         options:
-          - major
-          - minor
-          - patch
-      prerelease:
-        description: 'Is this a prerelease?'
-        required: false
-        type: boolean
-        default: false
+          - patch           # 1.1.2 → 1.1.3
+          - minor           # 1.1.2 → 1.2.0  
+          - major           # 1.1.2 → 2.0.0
+          - prerelease      # 1.1.2-rc.1 → 1.1.2-rc.2
+          - prepatch        # 1.1.2 → 1.1.3-rc.1
+          - preminor        # 1.1.2 → 1.2.0-rc.1
+          - premajor        # 1.1.2 → 2.0.0-rc.1
 
 permissions:
   contents: write
@@ -59,32 +58,17 @@ jobs:
       - name: Install dependencies
         run: npm install
         
-      - name: Navigate to package directory
-        run: cd packages/radfish
-        
       - name: Run tests
         run: |
           set -e
           npm test -- --run
         working-directory: packages/radfish
         
-      - name: Determine version bump type
-        id: version-type
-        run: |
-          set -e
-          if [[ "${{ inputs.prerelease }}" == "true" ]]; then
-            echo "version_command=pre${{ inputs.version }}" >> $GITHUB_OUTPUT
-            echo "version_args=--preid=rc" >> $GITHUB_OUTPUT
-          else
-            echo "version_command=${{ inputs.version }}" >> $GITHUB_OUTPUT
-            echo "version_args=" >> $GITHUB_OUTPUT
-          fi
-          
       - name: Bump version (no git operations)
         id: bump-version
         run: |
           set -e
-          NEW_VERSION=$(npm version ${{ steps.version-type.outputs.version_command }} ${{ steps.version-type.outputs.version_args }} --no-git-tag-version --legacy-peer-deps)
+          NEW_VERSION=$(npm version ${{ inputs.version_type }} --preid=rc --no-git-tag-version --legacy-peer-deps)
           echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
         working-directory: packages/radfish
         
@@ -92,7 +76,7 @@ jobs:
         id: npm-publish
         run: |
           set -e
-          if [[ "${{ inputs.prerelease }}" == "true" ]]; then
+          if [[ "${{ steps.bump-version.outputs.new_version }}" == *"-rc."* ]]; then
             npm publish --tag beta
           else
             npm publish
@@ -114,7 +98,7 @@ jobs:
           set -e
           git tag "radfish@${{ steps.bump-version.outputs.new_version }}"
           git push origin main
-          if [[ "${{ inputs.prerelease }}" == "true" ]]; then
+          if [[ "${{ steps.bump-version.outputs.new_version }}" == *"-rc."* ]]; then
             # For prereleases, only tag and push beta
             git tag -f "radfish@beta"
             git push origin "radfish@${{ steps.bump-version.outputs.new_version }}" "radfish@beta" --force
@@ -138,7 +122,7 @@ jobs:
             ## Changes
             See [commit history](https://github.com/${{ github.repository }}/commits/radfish@${{ steps.bump-version.outputs.new_version }}) for detailed changes.
           draft: false
-          prerelease: ${{ inputs.prerelease }}
+          prerelease: ${{ contains(steps.bump-version.outputs.new_version, '-rc.') }}
           
       - name: Rollback version on failure
         if: failure() && steps.bump-version.conclusion == 'success'
