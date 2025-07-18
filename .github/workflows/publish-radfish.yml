@@ -68,7 +68,10 @@ jobs:
         id: bump-version
         run: |
           set -e
-          NEW_VERSION=$(npm version ${{ inputs.version_type }} --preid=rc --no-git-tag-version --legacy-peer-deps)
+          # Bump version (ignore output)
+          npm version ${{ inputs.version_type }} --preid=rc --no-git-tag-version --legacy-peer-deps
+          # Query the updated package.json for clean version
+          NEW_VERSION=$(jq -r '.version' package.json)
           echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
         working-directory: packages/radfish
         
