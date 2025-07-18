@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import Schema from './Schema';
 import Connector from './Connector';
 import Collection from './Collection';
@@ -8,16 +9,16 @@ describe('Connector', () => {
 
   beforeEach(() => {
     mockEngine = new EventTarget();
-    mockEngine.initialize = jest.fn().mockResolvedValue();
-    mockEngine.create = jest.fn().mockResolvedValue(1);
-    mockEngine.find = jest.fn().mockResolvedValue([{ id: 1, name: 'Alice' }]);
-    mockEngine.delete = jest.fn().mockResolvedValue(true);
+    mockEngine.initialize = vi.fn().mockResolvedValue();
+    mockEngine.create = vi.fn().mockResolvedValue(1);
+    mockEngine.find = vi.fn().mockResolvedValue([{ id: 1, name: 'Alice' }]);
+    mockEngine.delete = vi.fn().mockResolvedValue(true);
 
     connector = new Connector(mockEngine);
   });
 
   it('should initialize and emit init event', async () => {
-    const initCallback = jest.fn();
+    const initCallback = vi.fn();
     connector.addEventListener('init', (event) => initCallback(event.detail));
 
     await connector.initialize(initCallback);
@@ -27,8 +28,8 @@ describe('Connector', () => {
   });
 
   it('should emit error event if initialization fails', async () => {
-    const errorCallback = jest.fn();
-    const initCallback = jest.fn();
+    const errorCallback = vi.fn();
+    const initCallback = vi.fn();
     connector.addEventListener('error', (event) => errorCallback(event.detail));
 
     mockEngine.initialize.mockRejectedValue(new Error('Initialization failed'));
