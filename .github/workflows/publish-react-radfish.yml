@@ -106,7 +106,7 @@ jobs:
         run: |
           set -e
           git tag "react-radfish@${{ steps.bump-version.outputs.new_version }}"
-          git push origin main
+          git push origin HEAD
           if [[ "${{ steps.bump-version.outputs.new_version }}" == *"-rc."* ]]; then
             # For prereleases, only tag and push beta
             git tag -f "react-radfish@beta"
