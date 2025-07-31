@@ -187,6 +187,7 @@ const RADFishTable = ({
       {paginationOptions && (
         <div className="radfish-pagination-controls">
           <Button
+            type="button"
             onClick={() => handlePageChange(0)}
             disabled={pageIndex === 0}
             data-testid="first-page"
@@ -194,6 +195,7 @@ const RADFishTable = ({
             <Icon.FirstPage aria-label="Go to first page" />
           </Button>
           <Button
+            type="button"
             onClick={() => handlePageChange(pageIndex - 1)}
             disabled={pageIndex === 0}
             data-testid="previous-page"
@@ -204,6 +206,7 @@ const RADFishTable = ({
             Page {pageIndex + 1} of {totalPages}
           </span>
           <Button
+            type="button"
             onClick={() => handlePageChange(pageIndex + 1)}
             disabled={pageIndex >= totalPages - 1}
             data-testid="next-page"
@@ -211,6 +214,7 @@ const RADFishTable = ({
             <Icon.ArrowForward aria-label="Go to next page" />
           </Button>
           <Button
+            type="button"
             onClick={() => handlePageChange(totalPages - 1)}
             disabled={pageIndex >= totalPages - 1}
             data-testid="last-page"
