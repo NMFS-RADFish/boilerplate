@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import Collection from './Collection';
 import Schema from './Schema';
 
@@ -18,12 +19,12 @@ describe('Collection', () => {
 
     mockConnector = {
       engine: {
-        create: jest.fn().mockResolvedValue({ id: 1, name: 'Alice', email: 'alice@example.com' }),
-        find: jest.fn().mockResolvedValue([{ id: 1, name: 'Alice', email: 'alice@example.com' }]),
-        update: jest.fn().mockResolvedValue({ id: 1, name: 'Updated Alice', email: 'alice@example.com' }),
-        delete: jest.fn().mockResolvedValue(true)
+        create: vi.fn().mockResolvedValue({ id: 1, name: 'Alice', email: 'alice@example.com' }),
+        find: vi.fn().mockResolvedValue([{ id: 1, name: 'Alice', email: 'alice@example.com' }]),
+        update: vi.fn().mockResolvedValue({ id: 1, name: 'Updated Alice', email: 'alice@example.com' }),
+        delete: vi.fn().mockResolvedValue(true)
       },
-      dispatchEvent: jest.fn()
+      dispatchEvent: vi.fn()
     };
 
     collection = new Collection(mockSchema, mockConnector);
@@ -54,7 +55,7 @@ describe('Collection', () => {
       const data = { id: 1, name: 'Alice', email: 'alice@example.com', createdAt: new Date() };
       
       // Mock the validate method to avoid validation errors
-      jest.spyOn(mockSchema, 'validate').mockReturnValue({ isValid: true, errors: [] });
+      vi.spyOn(mockSchema, 'validate').mockReturnValue({ isValid: true, errors: [] });
       
       const result = await collection.create(data);
 
@@ -66,7 +67,7 @@ describe('Collection', () => {
       const data = { name: 'Alice', email: 'alice@example.com', createdAt: new Date() };
       
       // Mock the validate method to avoid validation errors
-      jest.spyOn(mockSchema, 'validate').mockReturnValue({ isValid: true, errors: [] });
+      vi.spyOn(mockSchema, 'validate').mockReturnValue({ isValid: true, errors: [] });
       
       await collection.create(data);
 
@@ -91,9 +92,9 @@ describe('Collection', () => {
       const data = { name: 'Alice', email: 'alice@example.com', createdAt: new Date() };
       
       // Mock the validate method to avoid validation errors
-      jest.spyOn(mockSchema, 'validate').mockReturnValue({ isValid: true, errors: [] });
+      vi.spyOn(mockSchema, 'validate').mockReturnValue({ isValid: true, errors: [] });
       
-      const dispatchEventSpy = jest.spyOn(collection, 'dispatchEvent');
+      const dispatchEventSpy = vi.spyOn(collection, 'dispatchEvent');
       
       await collection.create(data);
       
@@ -147,7 +148,7 @@ describe('Collection', () => {
       const data = { id: 1, name: 'Updated Alice' };
       
       // Mock validation to pass
-      jest.spyOn(mockSchema, 'validate').mockReturnValue({ isValid: true, errors: [] });
+      vi.spyOn(mockSchema, 'validate').mockReturnValue({ isValid: true, errors: [] });
       
       const result = await collection.update(data);
 
@@ -173,7 +174,7 @@ describe('Collection', () => {
       // Instead of testing validation failure (which is difficult without modifying the source code),
       // let's test that validation was called with the right parameters
       const data = { id: 1, name: 'Updated Alice' };
-      const validateSpy = jest.spyOn(mockSchema, 'validate');
+      const validateSpy = vi.spyOn(mockSchema, 'validate');
       
       await collection.update(data);
       
@@ -192,9 +193,9 @@ describe('Collection', () => {
       const data = { id: 1, name: 'Updated Alice' };
       
       // Mock validation to pass
-      jest.spyOn(mockSchema, 'validate').mockReturnValue({ isValid: true, errors: [] });
+      vi.spyOn(mockSchema, 'validate').mockReturnValue({ isValid: true, errors: [] });
       
-      const dispatchEventSpy = jest.spyOn(collection, 'dispatchEvent');
+      const dispatchEventSpy = vi.spyOn(collection, 'dispatchEvent');
       
       await collection.update(data);
       
@@ -239,7 +240,7 @@ describe('Collection', () => {
 
     it('should emit events when deleting records', async () => {
       const criteria = { id: 1 };
-      const dispatchEventSpy = jest.spyOn(collection, 'dispatchEvent');
+      const dispatchEventSpy = vi.spyOn(collection, 'dispatchEvent');
       
       await collection.delete(criteria);
       
