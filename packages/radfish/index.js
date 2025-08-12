@@ -1,11 +1,29 @@
-import { setupWorker } from "msw/browser";
+import { Store, Schema, LocalStorageConnector, IndexedDBConnector } from './storage';
 import { StorageMethod, IndexedDBMethod, LocalStorageMethod } from "./on-device-storage/storage";
 
-class EventEmitter extends EventTarget {}
+const registerServiceWorker = async (url) => {
+  if ("serviceWorker" in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register(url, {
+        scope: "/",
+      });
+      if (registration.installing) {
+        console.log("Service worker installing");
+      } else if (registration.waiting) {
+        console.log("Service worker installed");
+      } else if (registration.active) {
+        console.log("Service worker active");
+      }
+      return registration;
+    } catch (error) {
+      console.error(`Registration failed with ${error}`);
+    }
+  }
+};
 
 export class Application {
   constructor(options = {}) {
-    this.emitter = new EventEmitter();
+    this.emitter = new EventTarget();
     this.serviceWorker = null;
     this.isOnline = navigator.onLine;
     this._options = options;
@@ -19,7 +37,9 @@ export class Application {
     
     // Fallback URLs configuration
     this._fallbackUrls = options.network?.fallbackUrls || {};
+    this._initializationPromise = null;
 
+    // Register event listeners
     this._registerEventListeners();
     
     // Check initial network status if handler provided
@@ -29,7 +49,78 @@ export class Application {
       });
     }
 
+    // Initialize everything
+    this._initializationPromise = this._initialize();
+  }
+
+  /**
+   * Initialize the application stores and collections
+   * @private
+   */
+  async _initialize() {
+    // Initialize stores
+    this.stores = null;
+    if (this._options.stores && typeof this._options.stores === 'object') {
+      this.stores = {};
+      
+      // Initialize each store and its connector
+      const storeInitPromises = [];
+      
+      for (let storeKey in this._options.stores) {
+        const store = this._options.stores[storeKey]
+        let name = store.name || storeKey;
+        let connector = store.connector;
+        
+        if (!connector) {
+          throw new Error(`Store ${name} is missing a connector`);
+        }
+        
+        // Create the store
+        this.stores[name] = new Store({name, connector});
+        
+        // Initialize the connector
+        const initPromise = this.stores[name].connector.initialize()
+          .then(async () => {
+            // Add collections if they exist
+            if (store.collections) {
+              const collectionPromises = [];
+              
+              for (let collectionKey in store.collections) {
+                let collection = store.collections[collectionKey];
+                let schema = collection.schema;
+                
+                // Handle schema configuration object
+                if (typeof schema === 'object' && !(schema instanceof Schema)) {
+                  // If schema doesn't have a name, use the collectionKey as default
+                  if (!schema.name) {
+                    schema = { ...schema, name: collectionKey };
+                  }
+                  schema = new Schema(schema);
+                }
+                
+                // Add collection (might be async for IndexedDBConnector)
+                const addCollectionPromise = Promise.resolve(
+                  this.stores[name].connector.addCollection(schema)
+                );
+                collectionPromises.push(addCollectionPromise);
+              }
+              
+              // Wait for all collections to be added
+              return Promise.all(collectionPromises);
+            }
+          });
+        
+        storeInitPromises.push(initPromise);
+      }
+      
+      // Wait for all stores to be initialized
+      await Promise.all(storeInitPromises);
+    }
+
+    // Dispatch the init event
     this._dispatch("init");
+    
+    return true;
   }
 
   addEventListener(event, callback) {
@@ -45,9 +136,9 @@ export class Application {
       return null;
     }
 
+    console.warn('Deprecation: Please update to use Connectors instead of StorageMethod: https://nmfs-radfish.github.io/radfish/design-system/storage');
+
     if (!(this._options.storage instanceof StorageMethod)) {
-      console.warn('Please update the storage method to be an instance of StorageMethod');
-      
       switch (this._options.storage?.type) {
         case "indexedDB": {
           return new IndexedDBMethod(
@@ -89,7 +180,11 @@ export class Application {
         this._options?.mocks?.handlers,
         this._options?.serviceWorker?.url
       );
-      this._dispatch("ready", { worker });
+
+      this.serviceWorker = worker;
+
+      // Only dispatch ready event if worker is successfully installed or if no service worker was configured
+      this._dispatch("ready");
     });
 
     const handleOnline = async (event) => {
@@ -118,21 +213,17 @@ export class Application {
   async _installServiceWorker(handlers, url) {
     if (!url) return null;
     console.info("Installing service worker");
-    const worker = setupWorker(...((await handlers)?.default || []));
-    const onUnhandledRequest = "bypass";
-
-    this.serviceWorker = worker;
-
-    worker
-      .start({
-        onUnhandledRequest,
-        serviceWorker: {
-          url: url,
-        },
-      })
-      .then(() => {
-        console.debug("Service worker installed");
-      });
+    
+    try {
+      const registration = await registerServiceWorker(url);
+      
+      console.debug("Service worker installed and started successfully");
+      // return worker;
+      return registration;
+    } catch (error) {
+      console.error("Failed to install service worker:", error);
+      return null;
+    }
   }
 
   /**

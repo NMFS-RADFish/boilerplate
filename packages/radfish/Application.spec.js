@@ -18,6 +18,7 @@ describe ('Application',  () => {
     vi.useRealTimers();
   });
   
+describe('Application',  () => {
   describe('storage',  () => {
     it('should return the storage method',  () => {
       // IndexedDB Storage application

@@ -159,10 +159,14 @@ const RADFishTable = ({
     : sortedData;
 
   useEffect(() => {
-    if (paginationOptions?.currentPage) {
-      setPageIndex(paginationOptions.currentPage - 1);
+    if (totalRows === 0) {
+      setPageIndex(0);
+    } else if (paginationOptions?.currentPage && paginationOptions?.pageSize) {
+      const maxPage = Math.ceil(totalRows / paginationOptions.pageSize);
+      const newPageIndex = Math.min(Math.max(paginationOptions.currentPage - 1, 0), maxPage - 1);
+      setPageIndex(newPageIndex);
     }
-  }, [paginationOptions?.currentPage]);
+  }, [paginationOptions?.currentPage, paginationOptions?.pageSize, totalRows]);
 
   return (
     <>
@@ -183,6 +187,7 @@ const RADFishTable = ({
       {paginationOptions && (
         <div className="radfish-pagination-controls">
           <Button
+            type="button"
             onClick={() => handlePageChange(0)}
             disabled={pageIndex === 0}
             data-testid="first-page"
@@ -190,6 +195,7 @@ const RADFishTable = ({
             <Icon.FirstPage aria-label="Go to first page" />
           </Button>
           <Button
+            type="button"
             onClick={() => handlePageChange(pageIndex - 1)}
             disabled={pageIndex === 0}
             data-testid="previous-page"
@@ -200,6 +206,7 @@ const RADFishTable = ({
             Page {pageIndex + 1} of {totalPages}
           </span>
           <Button
+            type="button"
             onClick={() => handlePageChange(pageIndex + 1)}
             disabled={pageIndex >= totalPages - 1}
             data-testid="next-page"
@@ -207,6 +214,7 @@ const RADFishTable = ({
             <Icon.ArrowForward aria-label="Go to next page" />
           </Button>
           <Button
+            type="button"
             onClick={() => handlePageChange(totalPages - 1)}
             disabled={pageIndex >= totalPages - 1}
             data-testid="last-page"
