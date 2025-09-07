@@ -42,14 +42,14 @@ const handleInputValidationLogic = (name, value, validators) => {
 Here’s how to use the onBlur handler in the TextInput component. The input dynamically sets its validation status and ARIA attributes based on validation errors:
 ```jsx
 <TextInput
-    id={FULL_NAME}
-    name={FULL_NAME}
-    type="text"
-    placeholder="Full Name"
-    value={formData[FULL_NAME] || ""}
-    aria-invalid={validationErrors[FULL_NAME] ? "true" : "false"}
-    validationStatus={validationErrors[FULL_NAME] ? "error" : undefined}
-    onChange={handleChange}
+  id={FULL_NAME}
+  name={FULL_NAME}
+  type="text"
+  placeholder="Full Name"
+  value={formData[FULL_NAME] || ""}
+  aria-invalid={validationErrors[FULL_NAME] ? "true" : "false"}
+  validationStatus={validationErrors[FULL_NAME] ? "error" : undefined}
+  onChange={handleChange}
   onBlur={(e) => handleBlur(e, fullNameValidators)}
 />
 ```
