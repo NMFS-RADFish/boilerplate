@@ -63,26 +63,26 @@ In the `index.jsx` file, import the `Application`. Then, configure it with an in
 import { Application, IndexedDBMethod } from "@nmfs-radfish/radfish";
 
 const app = new Application({
-  serviceWorker: {
-    url: import.meta.env.MODE === "development" ? "/mockServiceWorker.js" : "/service-worker.js",
-  },
-  storage: new IndexedDBMethod(
-    import.meta.env.VITE_INDEXED_DB_NAME,
-    import.meta.env.VITE_INDEXED_DB_VERSION,
-    {
-      formData: "uuid, fullName, numberOfFish, species, computedPrice, isDraft",
+    serviceWorker: {
+        url: import.meta.env.MODE === "development" ? "/mockServiceWorker.js" : "/service-worker.js",
     },
-  ),
+    storage: new IndexedDBMethod(
+        import.meta.env.VITE_INDEXED_DB_NAME,
+        import.meta.env.VITE_INDEXED_DB_VERSION,
+        {
+            formData: "uuid, fullName, numberOfFish, species, computedPrice, isDraft",
+        },
+    ),
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <ErrorBoundary>
-    <React.StrictMode>
-      <App application={app} />
-    </React.StrictMode>
-  </ErrorBoundary>,
+    <ErrorBoundary>
+        <React.StrictMode>
+            <App application={app} />
+        </React.StrictMode>
+    </ErrorBoundary>,
 );
 ```
 
@@ -93,24 +93,24 @@ Use the `FormWrapper` context provider, located in the `/src/contexts/FormWrappe
 const { createOfflineData } = useOfflineStorage();
 
 const handleOnSubmit = (e) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  const values = {};
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const values = {};
 
-  for (let [key, value] of formData.entries()) {
-    values[key] = value;
-  }
+    for (let [key, value] of formData.entries()) {
+        values[key] = value;
+    }
 
-  createOfflineData("formData", values);
-  // Handle form submission, usually by sending a POST request to a server
-  // Example: fetch.post("/api/form", values)
-  console.log("Form submitted");
+    createOfflineData("formData", values);
+    // Handle form submission, usually by sending a POST request to a server
+    // Example: fetch.post("/api/form", values)
+    console.log("Form submitted");
 };
 
 return (
-  <FormWrapper onSubmit={handleOnSubmit}>
-    <PersistedForm />
-  </FormWrapper>
+    <FormWrapper onSubmit={handleOnSubmit}>
+        <PersistedForm />
+    </FormWrapper>
 );
 ```
 

@@ -28,13 +28,13 @@ We need to create an entry in IndexedDB so the form is properly initialized with
 
 ```jsx
 const handleInit = async () => {
-  const formId = await storage.update("formData", {
-    ...formData,
-    currentStep: 1,
-    totalSteps: TOTAL_STEPS,
-  });
-  setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
-  navigate(`${formId}`); // Navigate to the form using its unique ID
+    const formId = await storage.update("formData", {
+        ...formData,
+        currentStep: 1,
+        totalSteps: TOTAL_STEPS,
+    });
+    setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
+    navigate(`${formId}`); // Navigate to the form using its unique ID
 };
 ```
 This function:
@@ -48,20 +48,20 @@ After initializing the form, define two helper functions: `stepForward` and `ste
 ```jsx
 // update form data, and increment currentStep by 1
 const stepForward = () => {
-  if (formData.currentStep < TOTAL_STEPS) {
-    const nextStep = formData.currentStep + 1;
-    setFormData({ ...formData, currentStep: nextStep });
-    storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
-  }
+    if (formData.currentStep < TOTAL_STEPS) {
+        const nextStep = formData.currentStep + 1;
+        setFormData({ ...formData, currentStep: nextStep });
+        storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
+    }
 };
 
 // update form data, and decrement currentStep by 1
 const stepBackward = () => {
-  if (formData.currentStep > 1) {
-    const prevStep = formData.currentStep - 1;
-    setFormData({ ...formData, currentStep: prevStep });
-    storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
-  }
+    if (formData.currentStep > 1) {
+        const prevStep = formData.currentStep - 1;
+        setFormData({ ...formData, currentStep: prevStep });
+        storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
+    }
 };
 ```
 
@@ -74,20 +74,20 @@ We can then subscribe to this `uuid` parameter in the URL string. We can either 
 const { id } = useParams();
 
 useEffect(() => {
-  const loadData = async () => {
-    if (id) {
-      const [found] = await storage.find("formData", {
-        uuid: id, // Query IndexedDB using the `uuid`
-      });
+    const loadData = async () => {
+        if (id) {
+            const [found] = await storage.find("formData", {
+                uuid: id, // Query IndexedDB using the `uuid`
+            });
 
-      if (found) {
-        setFormData({ ...found, totalSteps: TOTAL_STEPS }); // Load the data into state
-      } else {
-        navigate("/"); irect to the root if no data is found
-      }
-    }
-  };
-  loadData();
+            if (found) {
+                setFormData({ ...found, totalSteps: TOTAL_STEPS }); // Load the data into state
+            } else {
+                navigate("/"); // Redirect to the root if no data is found
+            }
+        }
+    };
+    loadData();
 }, [id]);
 ```
 This ensures:
@@ -101,48 +101,48 @@ Use the `formData.currentStep` value to conditionally render the correct form st
 
 ```jsx
 {
-  formData.currentStep === 1 && (
-    <FormGroup>
-      <Label htmlFor={fullName}>Full Name</Label>
-      <TextInput
-        id={fullName}
-        name={fullName}
-        type="text"
-        placeholder="Full Name"
-        value={formData[fullName] || ""}
-        onChange={handleChange}
-      />
-      <Label htmlFor={fullName}>Email</Label>
-      <TextInput
-        id={email}
-        name={email}
-        type="text"
-        placeholder="user@example.com"
-        value={formData[email] || ""}
-        onChange={handleChange}
-      />
+    formData.currentStep === 1 && (
+        <FormGroup>
+            <Label htmlFor={fullName}>Full Name</Label>
+            <TextInput
+                id={fullName}
+                name={fullName}
+                type="text"
+                placeholder="Full Name"
+                value={formData[fullName] || ""}
+                onChange={handleChange}
+            />
+            <Label htmlFor={fullName}>Email</Label>
+            <TextInput
+                id={email}
+                name={email}
+                type="text"
+                placeholder="user@example.com"
+                value={formData[email] || ""}
+                onChange={handleChange}
+            />
 
-      <Grid className="display-flex flex-justify">
-        <Button
-          type="button"
-          className="margin-top-1 margin-right-0 order-last"
-          onClick={stepForward}
-        >
-          Next Step
-        </Button>
-        <Button
-          disabled
-          type="button"
-          className="margin-top-1"
-          onClick={stepBackward}
-          data-testid="step-backward"
-          id="step-backward"
-        >
-          Prev Step
-        </Button>
-      </Grid>
-    </FormGroup>
-  );
+            <Grid className="display-flex flex-justify">
+                <Button
+                    type="button"
+                    className="margin-top-1 margin-right-0 order-last"
+                    onClick={stepForward}
+                >
+                    Next Step
+                </Button>
+                <Button
+                    disabled
+                    type="button"
+                    className="margin-top-1"
+                    onClick={stepBackward}
+                    data-testid="step-backward"
+                    id="step-backward"
+                >
+                    Prev Step
+                </Button>
+            </Grid>
+        </FormGroup>
+    )
 }
 ```
 **Key Points:**

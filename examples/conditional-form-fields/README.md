@@ -48,7 +48,7 @@ return (
     <Form
         onSubmit={handleSubmit}
         className="maxw-full margin-205 padding-205 bg-white radius-8px shadow-2"
-        >
+    >
         <FormGroup>
             <Label className="text-bold" htmlFor={FULL_NAME}>
                 Full Name
@@ -59,7 +59,7 @@ return (
                 type="text"
                 placeholder="Full Name"
                 value={formData[FULL_NAME] || ""}
-/>
+            />
 ```
 
 ### 4. Adding Input Handlers for Form Fields
@@ -95,19 +95,19 @@ Next, we want to conditionally render the `nickname` component. The condition de
 
 ```jsx
 {
-  formData[FULL_NAME] && (
-    <>
-      <Label htmlFor={NICKNAME}>Nickname</Label>
-      <TextInput
-        id={NICKNAME}
-        name={NICKNAME}
-        type="text"
-        placeholder="Nickname"
-        value={formData[NICKNAME] || ""}
-        onChange={(event) => handleNickNameChange(event, formData)}
-      />
-    </>
-  );
+    formData[FULL_NAME] && (
+        <>
+            <Label htmlFor={NICKNAME}>Nickname</Label>
+            <TextInput
+                id={NICKNAME}
+                name={NICKNAME}
+                type="text"
+                placeholder="Nickname"
+                value={formData[NICKNAME] || ""}
+                onChange={(event) => handleNickNameChange(event, formData)}
+            />
+        </>
+    )
 }
 ```
 

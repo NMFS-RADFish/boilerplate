@@ -69,24 +69,24 @@ This function performs GET requests and handles errors.
 
 ```jsx
 const getRequestWithFetch = async (endpoint) => {
-  try {
-    const response = await fetch(`${endpoint}`, {
-      // Example header for token-based authentication
-      // Replace or extend with required headers for your API
-      headers: { "X-Access-Token": "your-access-token" },
-    });
+    try {
+        const response = await fetch(`${endpoint}`, {
+            // Example header for token-based authentication
+            // Replace or extend with required headers for your API
+            headers: { "X-Access-Token": "your-access-token" },
+        });
 
-    if (!response.ok) {
-      // Set error with the JSON response
-      const error = await response.json();
-      return error;
+        if (!response.ok) {
+            // Set error with the JSON response
+            const error = await response.json();
+            return error;
+        }
+
+        return await response.json();
+    } catch (err) {
+        // Set error in case of an exception
+        return { error: `[GET]: Error fetching data: ${err}` };
     }
-
-    return await response.json();
-  } catch (err) {
-    // Set error in case of an exception
-    return { error: `[GET]: Error fetching data: ${err}` };
-  }
 };
 ```
 
@@ -96,42 +96,42 @@ The `syncToServer` function is responsible for synchronizing data between Indexe
 
 ```jsx
 const syncToServer = async () => {
-  if (isOffline) {
-    // Show an error if the app is offline
-    setSyncStatus({ message: SERVER_SYNC_FAILED, lastSynced: syncStatus.lastSynced });
-    return;
-  }
-
-  setIsLoading(true);
-  try {
-    // Fetch data from the mock server
-    const { data: serverData } = await getRequestWithFetch(MSW_ENDPOINT.GET);
-
-    // Retrieve existing data from IndexedDB
-    const offlineData = await storage.find(LOCAL_DATA);
-
-    // Compare offline data with server data
-    if (JSON.stringify(offlineData) !== JSON.stringify(serverData)) {
-      // Update IndexedDB with the latest server data
-      await storage.update(LOCAL_DATA, serverData);
-
-      // Save the current timestamp as the last sync time
-      const currentTimestamp = Date.now();
-      await storage.update(LAST_SERVER_SYNC, [{ uuid: "lastSynced", time: currentTimestamp }]);
-
-      const lastSyncTime = new Date(currentTimestamp).toLocaleString();
-      setSyncStatus({ message: SERVER_SYNC_SUCCESS, lastSynced: lastSyncTime });
-      setData(serverData); // Update table data with the latest server data
-    } else {
-      // If data is already up-to-date, show a relevant message
-      setSyncStatus({ message: OFFLINE_ALREADY_SYNCED, lastSynced: syncStatus.lastSynced });
+    if (isOffline) {
+        // Show an error if the app is offline
+        setSyncStatus({ message: SERVER_SYNC_FAILED, lastSynced: syncStatus.lastSynced });
+        return;
     }
-  } catch (error) {
-    console.error("An error occurred during sync:", error);
-    setSyncStatus({ message: "Sync failed due to an error.", lastSynced: syncStatus.lastSynced });
-  } finally {
-    setIsLoading(false);
-  }
+
+    setIsLoading(true);
+    try {
+        // Fetch data from the mock server
+        const { data: serverData } = await getRequestWithFetch(MSW_ENDPOINT.GET);
+
+        // Retrieve existing data from IndexedDB
+        const offlineData = await storage.find(LOCAL_DATA);
+
+        // Compare offline data with server data
+        if (JSON.stringify(offlineData) !== JSON.stringify(serverData)) {
+            // Update IndexedDB with the latest server data
+            await storage.update(LOCAL_DATA, serverData);
+
+            // Save the current timestamp as the last sync time
+            const currentTimestamp = Date.now();
+            await storage.update(LAST_SERVER_SYNC, [{ uuid: "lastSynced", time: currentTimestamp }]);
+
+            const lastSyncTime = new Date(currentTimestamp).toLocaleString();
+            setSyncStatus({ message: SERVER_SYNC_SUCCESS, lastSynced: lastSyncTime });
+            setData(serverData); // Update table data with the latest server data
+        } else {
+            // If data is already up-to-date, show a relevant message
+            setSyncStatus({ message: OFFLINE_ALREADY_SYNCED, lastSynced: syncStatus.lastSynced });
+        }
+    } catch (error) {
+        console.error("An error occurred during sync:", error);
+        setSyncStatus({ message: "Sync failed due to an error.", lastSynced: syncStatus.lastSynced });
+    } finally {
+        setIsLoading(false);
+    }
 };
 ```
 
@@ -147,20 +147,20 @@ Load and display the last synchronization time. Use this logic to manage synchro
 
 ```jsx
 useEffect(() => {
-  setMockOfflineState(isOffline);
+    setMockOfflineState(isOffline);
 
-  const loadLastSyncedTime = async () => {
-    const [lastSyncRecord] = await storage.find(LAST_SERVER_SYNC);
-    if (lastSyncRecord?.time) {
-      const lastSyncTime = new Date(lastSyncRecord.time).toLocaleString();
-      setSyncStatus((prev) => ({
-        ...prev,
-        lastSynced: lastSyncTime,
-      }));
-    }
-  };
+    const loadLastSyncedTime = async () => {
+        const [lastSyncRecord] = await storage.find(LAST_SERVER_SYNC);
+        if (lastSyncRecord?.time) {
+            const lastSyncTime = new Date(lastSyncRecord.time).toLocaleString();
+            setSyncStatus((prev) => ({
+                ...prev,
+                lastSynced: lastSyncTime,
+            }));
+        }
+    };
 
-  loadLastSyncedTime();
+    loadLastSyncedTime();
 }, [isOffline]);
 ```
 
@@ -170,48 +170,48 @@ Render the UI to display the current data, sync status, and the last synchroniza
 
 ```jsx
 export const HomePage = () => {
-  const { isOffline } = useOfflineStatus();
-  const storage = useOfflineStorage();
-  const [isLoading, setIsLoading] = useState(false);
-  const [syncStatus, setSyncStatus] = useState({ message: "" });
-  const [lastSynced, setLastSynced] = useState("");
+    const { isOffline } = useOfflineStatus();
+    const storage = useOfflineStorage();
+    const [isLoading, setIsLoading] = useState(false);
+    const [syncStatus, setSyncStatus] = useState({ message: "" });
+    const [lastSynced, setLastSynced] = useState("");
 
-  return (
-    <>
-      <h1>Server Sync Example</h1>
-      <Alert type="info">
-        Test this example by syncing data with the server. Use DevTools to toggle offline/online
-        mode.
-      </Alert>
-      <div className="server-sync">
-        <Button onClick={syncToServer} disabled={isLoading}>
-          {isLoading ? <Spinner width={20} height={20} stroke={2} /> : "Sync with Server"}
-        </Button>
-        <div
-          className={`${
-            syncStatus.message.includes("offline") ? "text-red" : "text-green"
-          } margin-left-2 margin-top-2`}
-        >
-          {syncStatus.message}
-        </div>
-        <div className="margin-left-2">
-          {syncStatus.lastSynced && (
-            <strong>
-              <span>Last Synced: {syncStatus.lastSynced}</span>
-            </strong>
-          )}
-        </div>
-        <Table
-          data={data}
-          columns={[
-            { key: "uuid", label: "UUID", sortable: true },
-            { key: "value", label: "Value", sortable: true },
-            { key: "isSynced", label: "Synced with Server", sortable: false },
-          ]}
-        />
-      </div>
-    </>
-  );
+    return (
+        <>
+            <h1>Server Sync Example</h1>
+            <Alert type="info">
+                Test this example by syncing data with the server. Use DevTools to toggle offline/online
+                mode.
+            </Alert>
+            <div className="server-sync">
+                <Button onClick={syncToServer} disabled={isLoading}>
+                    {isLoading ? <Spinner width={20} height={20} stroke={2} /> : "Sync with Server"}
+                </Button>
+                <div
+                    className={`${
+                        syncStatus.message.includes("offline") ? "text-red" : "text-green"
+                    } margin-left-2 margin-top-2`}
+                >
+                    {syncStatus.message}
+                </div>
+                <div className="margin-left-2">
+                    {syncStatus.lastSynced && (
+                        <strong>
+                            <span>Last Synced: {syncStatus.lastSynced}</span>
+                        </strong>
+                    )}
+                </div>
+                <Table
+                    data={data}
+                    columns={[
+                        { key: "uuid", label: "UUID", sortable: true },
+                        { key: "value", label: "Value", sortable: true },
+                        { key: "isSynced", label: "Synced with Server", sortable: false },
+                    ]}
+                />
+            </div>
+        </>
+    );
 };
 ```
 

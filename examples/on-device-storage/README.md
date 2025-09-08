@@ -21,16 +21,16 @@ In the `index.jsx` file, import the `Application`. Then, configure it with an in
 import { Application, IndexedDBMethod } from "@nmfs-radfish/radfish";
 
 const app = new Application({
-  storage: new IndexedDBMethod(
-    import.meta.env.VITE_INDEXED_DB_NAME,
-    import.meta.env.VITE_INDEXED_DB_VERSION,
-    {
-      formData:
-        "uuid, fullName, email, phoneNumber, numberOfFish, species, computedPrice, isDraft",
-      species: "name, price",
-      homebaseData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
-    },
-  ),
+    storage: new IndexedDBMethod(
+        import.meta.env.VITE_INDEXED_DB_NAME,
+        import.meta.env.VITE_INDEXED_DB_VERSION,
+        {
+            formData:
+                "uuid, fullName, email, phoneNumber, numberOfFish, species, computedPrice, isDraft",
+            species: "name, price",
+            homebaseData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
+        },
+    ),
 });
 
 ```
@@ -42,9 +42,9 @@ In the `index.jsx` file, wrap the `App` component with `OfflineStorageWrapper` a
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
-    <App application={app} />
-  </React.StrictMode>
+    <React.StrictMode>
+        <App application={app} />
+    </React.StrictMode>
 );
 ```
 

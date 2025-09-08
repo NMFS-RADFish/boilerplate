@@ -30,12 +30,13 @@ Within the `HomePage` component, use `useOfflineStatus` to retrieve the `isOffli
 
 ```jsx
 const HomePage = () => {
-const { isOffline } = useOfflineStatus();  // Retrieve the isOffline state
+    const { isOffline } = useOfflineStatus();  // Retrieve the isOffline state
 
-return (
- <div className="grid-container">
-   <h1>Network Status Example</h1>
-   <h3 className="header-body">Network Status: {isOffline ? "Offline ❌" : "Online ✅"}</h3>
- </div>
-);
+    return (
+        <div className="grid-container">
+            <h1>Network Status Example</h1>
+            <h3 className="header-body">Network Status: {isOffline ? "Offline ❌" : "Online ✅"}</h3>
+        </div>
+    );
+};
 ```

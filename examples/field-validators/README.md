@@ -17,40 +17,40 @@ In this step, we add validation logic to our form inputs using an `onBlur` handl
 This function validates the input value. It uses the validation rules and updates the state with any validation errors:
 ```jsx
 const handleBlur = (event, validators) => {
-  const { name, value } = event.target;
-  setValidationErrors((prev) => ({
-    ...prev,
-    ...handleInputValidationLogic(name, value, validators),
-  }));
+    const { name, value } = event.target;
+    setValidationErrors((prev) => ({
+        ...prev,
+        ...handleInputValidationLogic(name, value, validators),
+    }));
 };
 ```
 
 This helper function loops through the provided validators and checks if the input value passes the validation criteria. If not, it returns the appropriate error message:
 ```jsx
 const handleInputValidationLogic = (name, value, validators) => {
-  if (validators && validators.length > 0) {
-    for (let validator of validators) {
-      if (!validator.test(value)) {
-        return { [name]: validator.message };
-      }
+    if (validators && validators.length > 0) {
+        for (let validator of validators) {
+            if (!validator.test(value)) {
+                return { [name]: validator.message };
+            }
+        }
     }
-  }
-  return { [name]: null }; // Clear error if value is valid
+    return { [name]: null }; // Clear error if value is valid
 };
 ```
 
 Here’s how to use the onBlur handler in the TextInput component. The input dynamically sets its validation status and ARIA attributes based on validation errors:
 ```jsx
 <TextInput
-  id={FULL_NAME}
-  name={FULL_NAME}
-  type="text"
-  placeholder="Full Name"
-  value={formData[FULL_NAME] || ""}
-  aria-invalid={validationErrors[FULL_NAME] ? "true" : "false"}
-  validationStatus={validationErrors[FULL_NAME] ? "error" : undefined}
-  onChange={handleChange}
-  onBlur={(e) => handleBlur(e, fullNameValidators)}
+    id={FULL_NAME}
+    name={FULL_NAME}
+    type="text"
+    placeholder="Full Name"
+    value={formData[FULL_NAME] || ""}
+    aria-invalid={validationErrors[FULL_NAME] ? "true" : "false"}
+    validationStatus={validationErrors[FULL_NAME] ? "error" : undefined}
+    onChange={handleChange}
+    onBlur={(e) => handleBlur(e, fullNameValidators)}
 />
 ```
 
@@ -60,10 +60,10 @@ We include the validator needed to check the contents of the field input. In thi
 ```jsx
 // utilities/fieldValidators.js
 const fullNameValidators = [
-  {
-    test: (value) => !/\d/.test(value) || value === "",
-    message: "Full Name should not contain numbers.",
-  },
+    {
+        test: (value) => !/\d/.test(value) || value === "",
+        message: "Full Name should not contain numbers.",
+    },
 ];
 
 export { fullNameValidators };
@@ -77,17 +77,17 @@ We can update the properties on our input so the validation logic gets triggered
 
 ```jsx
 <TextInput
-  id={FULL_NAME}
-  name={FULL_NAME}
-  type="text"
-  placeholder="Full Name"
-  value={formData[FULL_NAME] || ""}
-  aria-invalid={validationErrors[FULL_NAME] ? "true" : "false"}
-  validationStatus={validationErrors[FULL_NAME] ? "error" : undefined}
-  onChange={handleChange}
-  onBlur={(e) => handleBlur(e, fullNameValidators)}
-/>;
+    id={FULL_NAME}
+    name={FULL_NAME}
+    type="text"
+    placeholder="Full Name"
+    value={formData[FULL_NAME] || ""}
+    aria-invalid={validationErrors[FULL_NAME] ? "true" : "false"}
+    validationStatus={validationErrors[FULL_NAME] ? "error" : undefined}
+    onChange={handleChange}
+    onBlur={(e) => handleBlur(e, fullNameValidators)}
+/>
 {
-  validationErrors[FULL_NAME] && <ErrorMessage>{validationErrors[FULL_NAME]}</ErrorMessage>;
+    validationErrors[FULL_NAME] && <ErrorMessage>{validationErrors[FULL_NAME]}</ErrorMessage>
 }
 ```
