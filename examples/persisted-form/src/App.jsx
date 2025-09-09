@@ -24,29 +24,24 @@ function App({ application }) {
 const FormInfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
-      This is an example of a live form with data populated from IndexDB. The form data is stored in
-      the browser's IndexedDB using methods from the <strong>useOfflineStorage</strong> hook, which
-      uses Dexie.js behind the scenes.
+      This example demonstrates RADFish's persistent form capabilities using the Application and Collection
+      patterns. Form data is automatically stored in IndexedDB with schema validation and type safety.
       <br />
       <br />
-      Please note that in order to see the form data persist, you must include the form record's
-      UUID in the browser URL. This will happen automatically when you submit the form from the
-      initial example
+      Key features demonstrated:
+      <ul>
+        <li><strong>Schema-based validation</strong>: Data types are enforced automatically</li>
+        <li><strong>Auto-save on submission</strong>: Form state persists across browser sessions</li>
+        <li><strong>URL-based form loading</strong>: Forms can be bookmarked and shared</li>
+        <li><strong>Type-safe collections</strong>: Consistent API for data operations</li>
+      </ul>
       <br />
-      <br />
-      This example can be helpful when you want to hydrate page state using data from a persistent
-      store like IndexDB or a remote API
+      To see form persistence in action, submit the form to get a unique URL, then bookmark or refresh 
+      the page. Your data will be automatically restored from IndexedDB.
       <br />
       <br />
       <Link href="https://nmfs-radfish.github.io/radfish" target="_blank" rel="noopener noreferrer">
         <Button type="button">Go To Documentation</Button>
-      </Link>
-      <Link
-        href="https://dexie.org/docs/Tutorial/Getting-started"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Button type="button">Dexie Docs</Button>
       </Link>
     </Alert>
   );

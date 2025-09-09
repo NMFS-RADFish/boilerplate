@@ -1,26 +1,42 @@
 import "../index.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FormGroup, TextInput, Label, Button, Form } from "@trussworks/react-uswds";
-import { useOfflineStorage, dispatchToast } from "@nmfs-radfish/react-radfish";
+import { useApplication, dispatchToast } from "@nmfs-radfish/react-radfish";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({});
-  const storage = useOfflineStorage();
+
+  // Access the application instance and formData collection
+  const application = useApplication();
+  const formDataCollection = application.stores.formData.getCollection("formData");
+
+  // Load existing form data from the collection
+  const findExistingForm = useCallback(async () => {
+    if (id) {
+      const [found] = await formDataCollection.find({
+        id: id,
+      });
+
+      if (found) {
+        setFormData({ ...found });
+      } else {
+        navigate("/");
+      }
+    }
+  }, [id, formDataCollection, navigate]);
 
   useEffect(() => {
     findExistingForm();
-  }, [id]);
+  }, [findExistingForm]);
 
+  // Update form data in state as user types (auto-save on form submission)
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prev) => {
-      const updatedForm = { ...prev, [name]: value };
-      saveOfflineData("formData", updatedForm);
-      return updatedForm;
-    });
+    const processedValue = event.target.type === "number" ? Number(value) : value;
+    setFormData((prev) => ({ ...prev, [name]: processedValue }));
   };
 
   const handleSubmit = async (e) => {
@@ -29,47 +45,33 @@ const HomePage = () => {
     const values = {};
 
     for (let [key, value] of formData.entries()) {
-      values[key] = value;
+      values[key] = key === "numberOfFish" || key === "computedPrice" ? Number(value) : value;
     }
 
     if (!id) {
-      const formId = await storage.create("formData", values);
-      navigate(`${formId}`);
+      // Create new form entry
+      const newForm = {
+        id: crypto.randomUUID(),
+        ...values,
+        isDraft: false,
+      };
+      await formDataCollection.create(newForm);
+      navigate(`/${newForm.id}`);
       dispatchToast({
         status: "success",
         message: "Your form has been successfully saved offline! You can now revisit it anytime.",
       });
     } else {
-      await saveOfflineData("formData", [values]);
+      // Update existing form
+      const updatedForm = { id, ...values, isDraft: false };
+      await formDataCollection.update(updatedForm);
+      setFormData(updatedForm);
       dispatchToast({
         status: "success",
         message: "Your changes have been saved! The form has been updated successfully.",
       });
       // after updating the data in IndexedDB, we can execute any other logic here
       // eg. execute a POST request to an API
-    }
-  };
-
-  // helper functions to save and find data in IndexedDB asyncrounously
-  // useEffect is syncronous, so this abstraction is necessary
-  // we only want to update this data on existing forms, else Dexie will throw a "weakMap" error due to uuid not existing in the table
-  const saveOfflineData = async (tableName, data) => {
-    if (id) {
-      await storage.update(tableName, [{ uuid: id, ...data }]);
-    }
-  };
-
-  const findExistingForm = async () => {
-    if (id) {
-      const [found] = await storage.find("formData", {
-        uuid: id,
-      });
-
-      if (found) {
-        setFormData({ ...found });
-      } else {
-        navigate("/");
-      }
     }
   };
 
