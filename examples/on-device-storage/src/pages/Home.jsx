@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { useApplication } from "@nmfs-radfish/react-radfish";
 import { Button, Alert, Link } from "@trussworks/react-uswds";
 
 const HomePage = () => {
     const [formData, setFormData] = useState([]);
 
-    const storage = useOfflineStorage();
+    // Access the application instance and formData collection
+    const application = useApplication();
+    const formDataCollection = application.stores.fishingData.getCollection("formData");
   
     useEffect(() => {
       const getFormData = async () => {
-        const data = await storage.find("formData");
+        // Find all form data entries
+        const data = await formDataCollection.find();
         setFormData(data);
       };
       getFormData();
@@ -18,6 +21,7 @@ const HomePage = () => {
     const createData = async (e) => {
       e.preventDefault();
       const newData = {
+        id: crypto.randomUUID(),
         fullName: "Bilbo Baggins",
         species: "Mahimahi",
         computedPrice: 100,
@@ -25,12 +29,11 @@ const HomePage = () => {
         isDraft: true,
       };
   
-      // Create the data in indexedDB
-      // Takes a string for the store name and an object to create
-      await storage.create("formData", newData);
+      // Create the data in the collection
+      await formDataCollection.create(newData);
   
-      // Find all the data in indexedDB
-      const allData = await storage.find("formData");
+      // Refresh the data display
+      const allData = await formDataCollection.find();
       setFormData(allData);
     };
   
@@ -39,28 +42,26 @@ const HomePage = () => {
   
       const updatedData = {
         ...data,
-        numberOfFish: Number((data.numberOfFish += 1)),
-        computedPrice: Number((data.computedPrice += 10)),
+        numberOfFish: data.numberOfFish + 1,
+        computedPrice: data.computedPrice + 10,
       };
   
-      // // Update the data in indexedDB
-      // // Takes a string for the store name and an array of objects to update
-      await storage.update("formData", [updatedData]);
+      // Update the data in the collection
+      await formDataCollection.update(updatedData);
   
-      // // Update the state
+      // Update the state
       setFormData((prevData) =>
-        prevData.map((item) => (item.uuid === data.uuid ? updatedData : item))
+        prevData.map((item) => (item.id === data.id ? updatedData : item))
       );
     };
   
     const deleteData = async (e, data) => {
       e.preventDefault();
-      if (data.uuid) {
-        // Delete the data from indexedDB
-        // Takes a string for the store name and an array of uuids to delete
-        await storage.delete("formData", [data.uuid]);
+      if (data.id) {
+        // Delete the data from the collection
+        await formDataCollection.delete({id: data.id});
         setFormData((prevData) =>
-          prevData.filter((item) => item.uuid !== data.uuid)
+          prevData.filter((item) => item.id !== data.id)
         );
       }
     };
@@ -69,11 +70,10 @@ const HomePage = () => {
       <div className="grid-container">
         <h1>On Device Storage Example</h1>
         <Alert type="info" heading="Information" headingLevel="h2">
-          This is an example of how to use the <strong>OfflineStorageWrapper</strong>{" "}
-          context and the provided <strong>useOfflineStorage</strong> hook to interact
-          with on-device storage. This example demonstrates how to create, read,
-          update, and delete data from IndexedDB. The{" "}
-          <strong>useOfflineStorage</strong> hooks uses Dexie.js under the hood.
+          This example demonstrates how to use RADFish's <strong>Application</strong> instance
+          and <strong>Collections</strong> to interact with on-device storage. 
+          It shows how to create, read, update, and delete (CRUD) data using IndexedDB 
+          with schema validation and type safety.
           <br />
           <br />
           Please note that if you choose to test this example with the network
@@ -90,13 +90,6 @@ const HomePage = () => {
             rel="noopener noreferrer"
           >
             <Button type="button">Go To Documentation</Button>
-          </Link>
-          <Link
-            href="https://dexie.org/docs/Tutorial/Getting-started"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button type="button">Dexie Docs</Button>
           </Link>
         </Alert>
         <br />
