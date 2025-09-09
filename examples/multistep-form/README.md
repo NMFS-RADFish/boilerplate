@@ -1,8 +1,15 @@
 # Multistep Form Example
 
-This example shows you how to create a multi-step form. Each step in the form is encapsulated within its own `FormGroup`. The form tracks the user's progress. When a user returns to the form, they resume at their last completed step rather than starting from the beginning. For example, if the user left off at Step 2, the form automatically restores them to Step 2 upon their return. To achieve this, we use the `useOfflineStorage` hook to store the current step in **IndexedDB**.
+This example demonstrates how to create a multi-step form with persistent state using RADFish's storage system. Each step in the form is encapsulated within its own `FormGroup`. The form tracks the user's progress through RADFish's Application and Collection patterns.
 
-Additionally, the form data is cached in **IndexedDB** as the user types. This ensures that both the form's progress and its input data persist across sessions. When the user revisits the form, they will see their previously entered data and resume at their saved step.
+## Key RADFish Concepts
+
+- **Application Instance**: Configured in `index.jsx` with stores and collections
+- **Collections**: Provide structured data storage with schema validation
+- **Step-based Persistence**: Form data is saved when navigating between steps
+- **Session Resumption**: Users return to their last step with all data intact
+
+The form uses RADFish's IndexedDB storage to persist both the current step and all form data. When users revisit the form, they see their previously entered data and resume at their saved step.
 
 Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples). Refer to the [RADFish GitHub repo](https://nmfs-radfish.github.io/radfish/) for more information and code samples.
 
@@ -22,66 +29,133 @@ const TOTAL_STEPS = 2;
 
 This declaration ensures the form knows how many steps are included. This helps manage navigation between steps.
 
-### 2. Initialize Multi-Step Form in IndexedDB
+### 2. Configure the Application Schema
+In `index.jsx`, define the schema for your form data. This schema validates and structures your data:
 
-We need to create an entry in IndexedDB so the form is properly initialized with a `uuid` for persistence. This `uuid` will allow us to query the correct `formData` and track the state of the form.
+```jsx
+const app = new Application({
+  stores: {
+    formData: {
+      connector: new IndexedDBConnector("multistep-form-app"),
+      collections: {
+        formData: {
+          schema: {
+            fields: {
+              id: { type: "string", primaryKey: true },
+              fullName: { type: "string" },
+              email: { type: "string" },
+              city: { type: "string" },
+              state: { type: "string" },
+              zipcode: { type: "string" },
+              currentStep: { type: "number" },
+              totalSteps: { type: "number" },
+              submitted: { type: "boolean" },
+            },
+          },
+        },
+      },
+    },
+  },
+});
+```
+
+Key schema concepts:
+- **primaryKey**: The `id` field uniquely identifies each form
+- **Field types**: Define the expected data type for validation
+- **Form state fields**: `currentStep`, `totalSteps`, and `submitted` track form progress
+
+### 3. Access the RADFish Collection
+
+First, in `Home.jsx`, access the formData collection using the RADFish Application pattern:
+
+```jsx
+// Get the application instance and access the formData collection
+const application = useApplication();
+const formDataCollection = application.stores.formData.getCollection("formData");
+```
+
+### 4. Initialize Multi-Step Form
+
+Create a new form entry with a unique ID for persistence:
 
 ```jsx
 const handleInit = async () => {
-    const formId = await storage.update("formData", {
-        ...formData,
+    const newForm = {
+        id: crypto.randomUUID(),
         currentStep: 1,
         totalSteps: TOTAL_STEPS,
-    });
-    setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
-    navigate(`${formId}`); // Navigate to the form using its unique ID
+        submitted: false,
+    };
+    await formDataCollection.create(newForm);
+    setFormData(newForm);
+    navigate(`/${newForm.id}`); // Navigate to the form using its unique ID
 };
 ```
 This function:
-- Initializes the `formData` in IndexedDB with the current step set to 1.
-- Assigns a `uuid` to the form, which is used for querying and tracking.
-- Navigates to the unique `formId` in the URL.
+- Creates a new form with a unique `id` using `crypto.randomUUID()`
+- Initializes the form at step 1 with the total number of steps
+- Uses the collection's `create()` method to persist the form
+- Navigates to the form's unique URL
 
-### 3. Create Navigation Helper Functions
-After initializing the form, define two helper functions: `stepForward` and `stepBackward`. These functions handle the logic to move between steps while updating the form's state and persisting the data to IndexedDB.
+### 5. Create Navigation Helper Functions
+Define helper functions to navigate between steps. These functions save all form data when moving between steps, ensuring data persistence without saving on every keystroke:
 
 ```jsx
-// update form data, and increment currentStep by 1
-const stepForward = () => {
-    if (formData.currentStep < TOTAL_STEPS) {
+// Navigate to next step and persist all form data
+const stepForward = async () => {
+    if (formData.currentStep < TOTAL_STEPS && id) {
         const nextStep = formData.currentStep + 1;
-        setFormData({ ...formData, currentStep: nextStep });
-        storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
+        const updatedData = { ...formData, currentStep: nextStep };
+        setFormData(updatedData);
+        
+        // Save form data when navigating to next step
+        try {
+            await formDataCollection.update({ id: id, ...updatedData });
+        } catch (error) {
+            console.error("Failed to save form progress:", error);
+        }
     }
 };
 
-// update form data, and decrement currentStep by 1
-const stepBackward = () => {
-    if (formData.currentStep > 1) {
+// Navigate to previous step and persist all form data
+const stepBackward = async () => {
+    if (formData.currentStep > 1 && id) {
         const prevStep = formData.currentStep - 1;
-        setFormData({ ...formData, currentStep: prevStep });
-        storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
+        const updatedData = { ...formData, currentStep: prevStep };
+        setFormData(updatedData);
+        
+        // Save form data when navigating to previous step
+        try {
+            await formDataCollection.update({ id: id, ...updatedData });
+        } catch (error) {
+            console.error("Failed to save form progress:", error);
+        }
     }
 };
 ```
 
-These functions will update the form's data in state, along with updating the formData within IndexedDB. We also increment or decrement the `currentStep` of the form. This value can then be used to render the correct step of the form, when returning to the page.
+These functions:
+- Update the current step in the form state
+- Save all form data (including user inputs) when navigating
+- Ensure data persists across sessions without excessive database writes
+- Handle errors gracefully if the save operation fails
 
-### 4. Subscribe to the `uuid` Parameter in the URL
-We can then subscribe to this `uuid` parameter in the URL string. We can either query for the correct `formData`, or navigate to a new form if the `uuid` is not preset.
+### 6. Load Form Data from the URL Parameter
+Subscribe to the `id` parameter in the URL to load the correct form data:
 
 ```jsx
 const { id } = useParams();
 
+// Load existing form data when navigating to a form by ID
 useEffect(() => {
     const loadData = async () => {
         if (id) {
-            const [found] = await storage.find("formData", {
-                uuid: id, // Query IndexedDB using the `uuid`
+            const [found] = await formDataCollection.find({
+                id: id, // Query the collection using the form ID
             });
 
             if (found) {
-                setFormData({ ...found, totalSteps: TOTAL_STEPS }); // Load the data into state
+                setFormData({ ...found, id: id, totalSteps: TOTAL_STEPS }); // Load the data into state
             } else {
                 navigate("/"); // Redirect to the root if no data is found
             }
@@ -92,11 +166,25 @@ useEffect(() => {
 ```
 This ensures:
 
-- The form resumes at the correct step when the user revisits the page.
-- Invalid or missing `uuid` values redirect users to start a new form.
+- The form resumes at the correct step when the user revisits the page
+- Invalid or missing IDs redirect users to start a new form
+- All previously entered data is restored
 
 
-### 5. Render the Current Step Dynamically 
+### 7. Handle Form Input Changes
+Implement a simple change handler to update form state as users type:
+
+```jsx
+// Update form data in state as user types
+const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+};
+```
+
+Note: Form data is persisted when users navigate between steps or submit the form, not on every keystroke. This approach reduces database writes while still ensuring data persistence.
+
+### 8. Render the Current Step Dynamically 
 Use the `formData.currentStep` value to conditionally render the correct form step. This allows you to show only the relevant inputs for the current step while keeping the form flexible.
 
 ```jsx
