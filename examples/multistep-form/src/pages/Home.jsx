@@ -1,7 +1,7 @@
 import "../styles/theme.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { Toast, useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { Toast, useApplication } from "@nmfs-radfish/react-radfish";
 import { FormGroup, Grid, TextInput, Button, Label, Form, Select } from "@trussworks/react-uswds";
 import { CONSTANTS, STATES, TOTAL_STEPS } from "../config/form";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
@@ -21,7 +21,8 @@ const HomePage = () => {
     state: "",
     zipcode: "",
   });
-  const storage = useOfflineStorage();
+  const application = useApplication();
+  const formDataCollection = application.stores.formData.getCollection("formData");
   const validateForm = () => {
     const newErrors = { email: "", fullName: "", city: "", state: "", zipcode: "" };
     // Check each field for content, add errors for empty required fields
@@ -39,12 +40,12 @@ const HomePage = () => {
   useEffect(() => {
     const loadData = async () => {
       if (id) {
-        const [found] = await storage.find("formData", {
-          uuid: id,
+        const [found] = await formDataCollection.find({
+          id: id,
         });
 
         if (found) {
-          setFormData({ ...found, totalSteps: TOTAL_STEPS });
+          setFormData({ ...found, id: id, totalSteps: TOTAL_STEPS });
         } else {
           navigate("/");
         }
@@ -73,7 +74,7 @@ const HomePage = () => {
     event.preventDefault();
     try {
       if (validateForm()) {
-        await storage.update("formData", [{ uuid: formData.uuid, ...formData, submitted: true }]);
+        await formDataCollection.update({ ...formData, id: id, submitted: true });
         navigate("/", { replace: true, state: { showToast: true } });
         showToast(TOAST_CONFIG.SUCCESS);
       }
@@ -100,7 +101,7 @@ const HomePage = () => {
   const saveOfflineData = async (tableName, data) => {
     try {
       if (id) {
-        await storage.update(tableName, [{ uuid: id, ...data }]);
+        await formDataCollection.update([{ id: id, ...data }]);
       }
     } catch (error) {
       return error;
@@ -112,7 +113,7 @@ const HomePage = () => {
     if (formData.currentStep < TOTAL_STEPS) {
       const nextStep = formData.currentStep + 1;
       setFormData({ ...formData, currentStep: nextStep });
-      storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
+      formDataCollection.update({ ...formData, currentStep: nextStep });
     }
   };
 
@@ -121,19 +122,21 @@ const HomePage = () => {
     if (formData.currentStep > 1) {
       const prevStep = formData.currentStep - 1;
       setFormData({ ...formData, currentStep: prevStep });
-      storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
+      formDataCollection.update({ ...formData, currentStep: prevStep });
     }
   };
 
   // initialize new multistep form in IndexedDB, and navigate to new form id
   const handleInit = async () => {
-    const formId = await storage.create("formData", {
-      ...formData,
+    const newForm = {
+      id: crypto.randomUUID(),
       currentStep: 1,
       totalSteps: TOTAL_STEPS,
-    });
-    setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
-    navigate(`${formId}`);
+      submitted: false,
+    };
+    await formDataCollection.create(newForm);
+    setFormData(newForm);
+    navigate(`/${newForm.id}`);
   };
 
   if (!id) {
