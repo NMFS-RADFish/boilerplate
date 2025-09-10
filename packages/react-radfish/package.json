@@ -29,7 +29,7 @@
     "@trussworks/react-uswds": "^9.0.0"
   },
   "peerDependencies": {
-    "@nmfs-radfish/radfish": "^1.0.0",
+    "@nmfs-radfish/radfish": "^1.1.0",
     "react": "^18.2.0"
   },
   "devDependencies": {
