@@ -43,7 +43,7 @@ export class Application {
     this._registerEventListeners();
     
     // Check initial network status if handler provided
-    if (this._networkHandler) {
+    if (typeof this._networkHandler === 'function') {
       this._networkHandler(navigator.connection, (status) => {
         this._handleNetworkStatusChange(status);
       });
