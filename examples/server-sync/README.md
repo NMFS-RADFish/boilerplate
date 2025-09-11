@@ -1,6 +1,19 @@
 # Server Sync Example
 
-This example shows how to synchronize data between a client application and a remote server. It handles offline status, provides feedback on the synchronization process, and manages local offline storage.
+This example demonstrates server-to-client data synchronization using RADFish's Application and Collection patterns. It shows how to fetch data from an API, compare it with local data, and persist updates in IndexedDB with schema validation.
+
+## Key RADFish Concepts
+
+- **Application Instance**: Configured with stores and collections for data management
+- **Schema Validation**: Type-safe collections ensure data integrity
+- **Offline Detection**: Built-in network status monitoring and appropriate user feedback
+- **Smart Synchronization**: Only updates local data when server data differs
+
+Use cases include:
+- Periodic data synchronization from APIs
+- Offline-first applications with server backup
+- Data caching for improved performance
+- Background sync processes
 
 Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples). Refer to the [RADFish GitHub repo](https://nmfs-radfish.github.io/radfish/) for more information and code samples.
 
@@ -19,115 +32,147 @@ This example will render as shown in this screenshot:
 
 ## Steps
 
-### 1. Initialize Offline Utilities
-First, import these libraries:
+### 1. Configure Application Schema
+In `index.jsx`, define your Application with stores and collections for sync data:
 
 ```jsx
-import { Spinner, Table, useOfflineStatus, useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { Application } from "@nmfs-radfish/radfish";
+import { IndexedDBConnector } from "@nmfs-radfish/radfish/storage";
+
+const app = new Application({
+  stores: {
+    syncData: {
+      connector: new IndexedDBConnector("server-sync-app"),
+      collections: {
+        localData: {
+          schema: {
+            fields: {
+              id: { type: "string", primaryKey: true },
+              value: { type: "string" },
+              isSynced: { type: "boolean" },
+            },
+          },
+        },
+        lastSyncFromServer: {
+          schema: {
+            fields: {
+              id: { type: "string", primaryKey: true },
+              time: { type: "number" },
+            },
+          },
+        },
+      },
+    },
+  },
+});
 ```
 
-To handle offline functionality, extract the necessary utilities from `react-radfish`:
+Key schema design:
+- **localData**: Stores the actual data synchronized from the server
+- **lastSyncFromServer**: Tracks synchronization timestamps
+- **Primary Keys**: Each collection uses `id` as the unique identifier
+
+### 2. Access Collections and Status
+Import RADFish utilities and access your collections:
 
 ```jsx
+import { useOfflineStatus, useApplication } from "@nmfs-radfish/react-radfish";
+
 const { isOffline } = useOfflineStatus();
-const storage = useOfflineStorage();
+const application = useApplication();
+const localDataCollection = application.stores.syncData.getCollection("localData");
+const lastSyncCollection = application.stores.syncData.getCollection("lastSyncFromServer");
 ```
 
-#### Explanation:
+#### Key utilities:
+- **useOfflineStatus**: Provides real-time network connectivity status
+- **useApplication**: Accesses the Application instance and its collections
+- **Collections**: Type-safe interfaces for data operations
 
-- `useOfflineStatus`:
-
-  - Provides the current online/offline status of the application.
-  - `isOffline`: A boolean value that indicates whether the application is offline (`true`) or online (`false`).
-
-- `useOfflineStorage`:
-  - Offers utility methods for interacting with IndexedDB or other offline storage mechanisms.
-  - `storage.update`:
-    - Updates data in offline storage.
-    - Requires the name of the storage table and the data to be updated.
-    - Example:
-      ```jsx
-      await storage.update("tableName", [{ uuid: "123", dataKey: "value" }]);
-      ```
-  - `storage.find`:
-    - Retrieves data from offline storage.
-    - Takes the name of the storage table and an optional filter criteria.
-    - Example:
-      ```jsx
-      const data = await storage.find("tableName", { uuid: "123" });
-      ```
-
-### 2. Define Helper Functions
+### 3. Define Helper Functions
 
 Create helper functions to make network requests and fetch data from an API endpoint.
 
-For making network requests, use any network request library of your choice. For example, you can use the native [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) or any other library that fits your needs.
-
 #### `getRequestWithFetch`
 
-This function performs GET requests and handles errors.
+This function performs GET requests and handles errors:
 
 ```jsx
 const getRequestWithFetch = async (endpoint) => {
   try {
     const response = await fetch(`${endpoint}`, {
-      // Example header for token-based authentication
-      // Replace or extend with required headers for your API
       headers: { "X-Access-Token": "your-access-token" },
     });
 
     if (!response.ok) {
-      // Set error with the JSON response
       const error = await response.json();
       return error;
     }
 
     return await response.json();
   } catch (err) {
-    // Set error in case of an exception
     return { error: `[GET]: Error fetching data: ${err}` };
   }
 };
 ```
 
-### 3. Sync Data with the Server
+### 4. Implement Server Synchronization
 
-The `syncToServer` function is responsible for synchronizing data between IndexedDB and the server. It also updates the last synchronization time.
+The `syncToServer` function demonstrates complete server-to-client synchronization using Collections:
 
 ```jsx
 const syncToServer = async () => {
   if (isOffline) {
-    // Show an error if the app is offline
     setSyncStatus({ message: SERVER_SYNC_FAILED, lastSynced: syncStatus.lastSynced });
     return;
   }
 
   setIsLoading(true);
   try {
-    // Fetch data from the mock server
+    // Fetch data from the server
     const { data: serverData } = await getRequestWithFetch(MSW_ENDPOINT.GET);
 
-    // Retrieve existing data from IndexedDB
-    const offlineData = await storage.find(LOCAL_DATA);
+    // Retrieve existing local data
+    const offlineData = await localDataCollection.find();
 
-    // Compare offline data with server data
+    // Compare server data with local data
     if (JSON.stringify(offlineData) !== JSON.stringify(serverData)) {
-      // Update IndexedDB with the latest server data
-      await storage.update(LOCAL_DATA, serverData);
+      // Clear existing local data
+      const existingData = await localDataCollection.find();
+      for (const item of existingData) {
+        await localDataCollection.delete({ id: item.id });
+      }
+      
+      // Insert new server data with proper schema mapping
+      for (const item of serverData) {
+        await localDataCollection.create({
+          id: item.uuid || crypto.randomUUID(),
+          value: item.value,
+          isSynced: item.isSynced || true,
+        });
+      }
 
-      // Save the current timestamp as the last sync time
+      // Update sync timestamp
       const currentTimestamp = Date.now();
-      await storage.update(LAST_SERVER_SYNC, [{ uuid: "lastSynced", time: currentTimestamp }]);
+      const existingSync = await lastSyncCollection.find({ id: "lastSynced" });
+      
+      if (existingSync.length > 0) {
+        await lastSyncCollection.update({ id: "lastSynced", time: currentTimestamp });
+      } else {
+        await lastSyncCollection.create({ id: "lastSynced", time: currentTimestamp });
+      }
 
       const lastSyncTime = new Date(currentTimestamp).toLocaleString();
       setSyncStatus({ message: SERVER_SYNC_SUCCESS, lastSynced: lastSyncTime });
-      setData(serverData); // Update table data with the latest server data
+      
+      // Refresh UI data
+      const updatedData = await localDataCollection.find();
+      setData(updatedData);
     } else {
-      // If data is already up-to-date, show a relevant message
       setSyncStatus({ message: OFFLINE_ALREADY_SYNCED, lastSynced: syncStatus.lastSynced });
     }
   } catch (error) {
-    console.error("An error occurred during sync:", error);
+    console.error("Sync error:", error);
     setSyncStatus({ message: "Sync failed due to an error.", lastSynced: syncStatus.lastSynced });
   } finally {
     setIsLoading(false);
@@ -135,22 +180,20 @@ const syncToServer = async () => {
 };
 ```
 
-**Key Steps**:
+**Key synchronization steps**:
+- **Offline Check**: Prevents sync attempts when network is unavailable
+- **Data Comparison**: Only updates when server data differs from local data
+- **Schema Mapping**: Transforms server data to match local collection schema
+- **Timestamp Tracking**: Records successful sync times for user feedback
 
-- Fetch data from the server.
-- Compare it with offline data.
-- If the data differs, update the offline data and record the last sync time in IndexedDB.
+### 5. Load and Display Sync Status
 
-### 4. Display Synchronization State
-
-Load and display the last synchronization time. Use this logic to manage synchronization state:
+Load the last synchronization time from the collection and update the UI:
 
 ```jsx
 useEffect(() => {
-  setMockOfflineState(isOffline);
-
   const loadLastSyncedTime = async () => {
-    const [lastSyncRecord] = await storage.find(LAST_SERVER_SYNC);
+    const [lastSyncRecord] = await lastSyncCollection.find({ id: "lastSynced" });
     if (lastSyncRecord?.time) {
       const lastSyncTime = new Date(lastSyncRecord.time).toLocaleString();
       setSyncStatus((prev) => ({
@@ -161,50 +204,51 @@ useEffect(() => {
   };
 
   loadLastSyncedTime();
-}, [isOffline]);
+}, [isOffline, lastSyncCollection]);
 ```
 
-### 5. Render the component
+### 6. Render the Component
 
-Render the UI to display the current data, sync status, and the last synchronization time.
+The complete component demonstrates sync functionality with user feedback:
 
 ```jsx
 export const HomePage = () => {
   const { isOffline } = useOfflineStatus();
-  const storage = useOfflineStorage();
+  const application = useApplication();
+  const localDataCollection = application.stores.syncData.getCollection("localData");
+  const lastSyncCollection = application.stores.syncData.getCollection("lastSyncFromServer");
+  
   const [isLoading, setIsLoading] = useState(false);
-  const [syncStatus, setSyncStatus] = useState({ message: "" });
-  const [lastSynced, setLastSynced] = useState("");
+  const [syncStatus, setSyncStatus] = useState({ message: "", lastSynced: "" });
+  const [data, setData] = useState([]);
 
   return (
     <>
       <h1>Server Sync Example</h1>
       <Alert type="info">
-        Test this example by syncing data with the server. Use DevTools to toggle offline/online
-        mode.
+        This example demonstrates server synchronization with offline detection.
+        Use DevTools Network tab to toggle offline mode and test sync behavior.
       </Alert>
+      
       <div className="server-sync">
         <Button onClick={syncToServer} disabled={isLoading}>
           {isLoading ? <Spinner width={20} height={20} stroke={2} /> : "Sync with Server"}
         </Button>
-        <div
-          className={`${
-            syncStatus.message.includes("offline") ? "text-red" : "text-green"
-          } margin-left-2 margin-top-2`}
-        >
+        
+        <div className={`${syncStatus.message.includes("offline") ? "text-red" : "text-green"} margin-left-2 margin-top-2`}>
           {syncStatus.message}
         </div>
+        
         <div className="margin-left-2">
           {syncStatus.lastSynced && (
-            <strong>
-              <span>Last Synced: {syncStatus.lastSynced}</span>
-            </strong>
+            <strong>Last Synced: {syncStatus.lastSynced}</strong>
           )}
         </div>
+        
         <Table
           data={data}
           columns={[
-            { key: "uuid", label: "UUID", sortable: true },
+            { key: "id", label: "ID", sortable: true },
             { key: "value", label: "Value", sortable: true },
             { key: "isSynced", label: "Synced with Server", sortable: false },
           ]}
@@ -215,38 +259,27 @@ export const HomePage = () => {
 };
 ```
 
-### 6. Test the App in Offline Mode
+Note that the table now uses `id` instead of `uuid` to match the new schema.
 
-To make sure the application handles offline functionality correctly, simulate offline behavior. Then, verify the sync process works as expected. 
+### 7. Test Offline/Online Behavior
 
-#### Step 6.1: Enable Offline Mode in DevTools
+Verify that the application handles network connectivity changes correctly:
 
-1. Open your browser's **Developer Tools** (usually accessible via `F12` or `Ctrl+Shift+I` / `Cmd+Option+I`).
-2. Navigate to the **Network** tab in DevTools.
-3. Find the **Throttling** dropdown menu (usually in the top bar of the Network tab).
-4. Select **Offline** from the dropdown. This simulates a network disconnection for the application.
+#### Enable Offline Mode
+1. Open browser **Developer Tools** (`F12`)
+2. Navigate to the **Network** tab
+3. Find the **Throttling** dropdown
+4. Select **Offline** to simulate network disconnection
 
-#### Step 6.2: Test the "Sync with Server" Button
+#### Test Sync Behavior
+1. **Offline Test**: Click "Sync with Server" - should show error message
+2. **Online Test**: Change throttling back to "No throttling" and sync again
+3. **Data Verification**: Check Application > IndexedDB in DevTools to see stored data
 
-1. In your application, click the **Sync with Server** button.
-2. Observe the UI response:
-   - The app should detect that it is offline.
-   - A message `"App is offline. Unable to sync with the server."` should appear.
-3. Verify that the last synced time remains unchanged.
+#### Expected Results
+- **Offline**: Error message appears, no data changes
+- **Online**: Success message, data updates if different from server
+- **Data Persistence**: All synchronized data persists in IndexedDB collections
+- **Schema Validation**: Data follows the defined collection schemas
 
-#### Step 6.3: Return to Online Mode and Sync Again
-
-1. In DevTools, change the **Throttling** dropdown back to **No throttling** to restore network connectivity.
-2. Click the **Sync with Server** button again.
-3. Observe the following:
-   - If the server data is different from the offline data, it should update the offline data in IndexedDB.
-    - The sync status should display `"Data synced with the server."`
-    - The last synced time should update to the current time.
-
-#### Step 6.4: Verify Offline Data
-
-1. Open **Application** > **IndexedDB** in DevTools.
-2. Select the database and table (`indexedDBData` or `lastHomebaseSync`).
-3. Verify that the offline data matches the server data after syncing.
-
-This testing step ensures that the app handles offline and online states correctly. It also makes sure the app provides appropriate feedback to the user and updates offline storage as expected.
+This example demonstrates how RADFish's Collections provide a robust foundation for building offline-first applications with server synchronization capabilities.
