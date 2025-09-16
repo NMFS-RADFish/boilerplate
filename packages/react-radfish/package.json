@@ -20,12 +20,17 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "@tanstack/react-table": "^8.16.0",
     "@trussworks/react-uswds": "^9.0.0"
   },
   "peerDependencies": {
-    "@nmfs-radfish/radfish": "^1.0.0"
+    "@nmfs-radfish/radfish": "^1.1.0",
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@testing-library/dom": "10.4.0",
