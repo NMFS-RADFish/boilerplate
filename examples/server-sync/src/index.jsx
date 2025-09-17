@@ -2,8 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
-import { Application, IndexedDBMethod } from "@nmfs-radfish/radfish";
-import { ErrorBoundary, OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
+import { Application } from "@nmfs-radfish/radfish";
+import { IndexedDBConnector } from "@nmfs-radfish/radfish/storage";
+import { ErrorBoundary } from "@nmfs-radfish/react-radfish";
 
 async function enableMocking() {
   const { worker } = await import("./mocks/browser");
@@ -29,14 +30,32 @@ async function enableMocking() {
 }
 
 const app = new Application({
-  storage: new IndexedDBMethod(
-    import.meta.env.VITE_INDEXED_DB_NAME,
-    import.meta.env.VITE_INDEXED_DB_VERSION,
-    {
-      localData: "value, isSynced",
-      lastSyncFromServer: "uuid, time",
+  stores: {
+    syncData: {
+      connector: new IndexedDBConnector(
+        import.meta.env.VITE_INDEXED_DB_NAME || "server-sync-app",
+      ),
+      collections: {
+        localData: {
+          schema: {
+            fields: {
+              id: { type: "string", primaryKey: true },
+              value: { type: "string" },
+              isSynced: { type: "boolean" },
+            },
+          },
+        },
+        lastSyncFromServer: {
+          schema: {
+            fields: {
+              id: { type: "string", primaryKey: true },
+              time: { type: "number" },
+            },
+          },
+        },
+      },
     },
-  ),
+  },
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

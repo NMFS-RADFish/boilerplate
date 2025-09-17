@@ -2,17 +2,33 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import MultiStepFormApplication from "./App";
-import { Application, IndexedDBMethod } from "@nmfs-radfish/radfish";
+import { Application } from "@nmfs-radfish/radfish";
+import { IndexedDBConnector } from "@nmfs-radfish/radfish/storage";
 import { ErrorBoundary } from "@nmfs-radfish/react-radfish";
 
 const app = new Application({
-  storage: new IndexedDBMethod(
-    import.meta.env.VITE_INDEXED_DB_NAME,
-    import.meta.env.VITE_INDEXED_DB_VERSION,
-    {
-      formData: "uuid, fullName, email, city, state, zipcode",
+  stores: {
+    formData: {
+      connector: new IndexedDBConnector("multistep-form-app"),
+      collections: {
+        formData: {
+          schema: {
+            fields: {
+              id: { type: "string", primaryKey: true },
+              fullName: { type: "string" },
+              email: { type: "string" },
+              city: { type: "string" },
+              state: { type: "string" },
+              zipcode: { type: "string" },
+              currentStep: { type: "number" },
+              totalSteps: { type: "number" },
+              submitted: { type: "boolean" },
+            },
+          },
+        },
+      },
     },
-  ),
+  },
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

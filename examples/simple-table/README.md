@@ -29,21 +29,21 @@ The `data` prop is an array of objects where each object represents a row in the
 
 ```jsx
 const mockData = [
-  {
-    uuid: "1",
-    isDraft: true,
-    species: "Marlin",
-    price: 50,
-    image: "./sample-img.webp",
-  },
-  {
-    uuid: "2",
-    isDraft: false,
-    species: "Mahimahi",
-    price: 100,
-    image: "./sample-img.webp",
-  },
-  // More data...
+    {
+        uuid: "1",
+        isDraft: true,
+        species: "Marlin",
+        price: 50,
+        image: "./sample-img.webp",
+    },
+    {
+        uuid: "2",
+        isDraft: false,
+        species: "Mahimahi",
+        price: 100,
+        image: "./sample-img.webp",
+    },
+    // More data...
 ];
 ```
 
@@ -59,38 +59,38 @@ The `columns` array defines how the table displays and interacts with the data. 
 
 ```jsx
 const columns = [
-  {
-    key: "isDraft",
-    label: "Status",
-    sortable: true,
-    render: (row) => (
-      <span>
-        {row.isDraft ? "Draft" : "Submitted"}
-        {row.isDraft && <Button onClick={(e) => handleSubmit(e, row)}>Submit</Button>}
-      </span>
-    ),
-  },
-  {
-    key: "uuid",
-    label: "ID",
-    sortable: true,
-  },
-  {
-    key: "species",
-    label: "Species",
-    sortable: true,
-  },
-  {
-    key: "price",
-    label: "Price",
-    sortable: true,
-    render: (row) => <strong>${row.price}</strong>,
-  },
-  {
-    key: "image",
-    label: "Image",
-    render: (row) => <img src={row.image} alt={row.species} height={75} width={150} />,
-  },
+    {
+        key: "isDraft",
+        label: "Status",
+        sortable: true,
+        render: (row) => (
+            <span>
+                {row.isDraft ? "Draft" : "Submitted"}
+                {row.isDraft && <Button onClick={(e) => handleSubmit(e, row)}>Submit</Button>}
+            </span>
+        ),
+    },
+    {
+        key: "uuid",
+        label: "ID",
+        sortable: true,
+    },
+    {
+        key: "species",
+        label: "Species",
+        sortable: true,
+    },
+    {
+        key: "price",
+        label: "Price",
+        sortable: true,
+        render: (row) => <strong>${row.price}</strong>,
+    },
+    {
+        key: "image",
+        label: "Image",
+        render: (row) => <img src={row.image} alt={row.species} height={75} width={150} />,
+    },
 ];
 ```
 
@@ -108,9 +108,9 @@ Use the `render` function to customize how data is displayed in a column. This i
           <span>
               {row.isDraft ? "Draft" : "Submitted"}
               {row.isDraft && (
-              <Button onClick={(e) => handleSubmit(e, row)}>
-                  Submit
-              </Button>
+                  <Button onClick={(e) => handleSubmit(e, row)}>
+                      Submit
+                  </Button>
               )}
           </span>
       ),
@@ -142,10 +142,10 @@ Pagination Options:
 
 ```jsx
 const paginationOptions = {
-  pageSize: 5,
-  currentPage: 1,
-  onPageChange: onPageChange,
-  totalRows: data.length,
+    pageSize: 5,
+    currentPage: 1,
+    onPageChange: onPageChange,
+    totalRows: data.length,
 };
 ```
 
@@ -159,12 +159,12 @@ You can pass these props directly to the `<Table>` component to enhance its styl
 
 ```jsx
 <Table
-  data={data}
-  columns={columns}
-  paginationOptions={paginationOptions}
-  className="my-custom-table"
-  striped
-  bordered
+    data={data}
+    columns={columns}
+    paginationOptions={paginationOptions}
+    className="my-custom-table"
+    striped
+    bordered
 />
 ```
 

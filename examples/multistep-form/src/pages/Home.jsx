@@ -1,7 +1,7 @@
 import "../styles/theme.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { Toast, useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { Toast, useApplication } from "@nmfs-radfish/react-radfish";
 import { FormGroup, Grid, TextInput, Button, Label, Form, Select } from "@trussworks/react-uswds";
 import { CONSTANTS, STATES, TOTAL_STEPS } from "../config/form";
 import { TOAST_CONFIG, TOAST_LIFESPAN, useToast } from "../hooks/useToast";
@@ -21,10 +21,16 @@ const HomePage = () => {
     state: "",
     zipcode: "",
   });
-  const storage = useOfflineStorage();
+
+  // RADFish Application provides centralized storage management
+  // Access the formData collection to persist form state across sessions
+  const application = useApplication();
+  const formDataCollection = application.stores.formData.getCollection("formData");
+  // Validate required fields based on current step
   const validateForm = () => {
     const newErrors = { email: "", fullName: "", city: "", state: "", zipcode: "" };
-    // Check each field for content, add errors for empty required fields
+
+    // Step 1 validations
     if (!formData[fullName]) newErrors[fullName] = "Full name is required";
     if (!formData[email]) newErrors[email] = "Email is required";
     if (formData.currentStep === 2) {
@@ -35,16 +41,17 @@ const HomePage = () => {
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
   };
-  // checks if uuid exists in IndexedDB. If it does, load that formData, else start new multistep form
+  // Load existing form data when navigating to a form by ID
+  // This ensures users can resume where they left off
   useEffect(() => {
     const loadData = async () => {
       if (id) {
-        const [found] = await storage.find("formData", {
-          uuid: id,
+        const [found] = await formDataCollection.find({
+          id: id,
         });
 
         if (found) {
-          setFormData({ ...found, totalSteps: TOTAL_STEPS });
+          setFormData({ ...found, id: id, totalSteps: TOTAL_STEPS });
         } else {
           navigate("/");
         }
@@ -53,16 +60,16 @@ const HomePage = () => {
     loadData();
   }, [id]);
 
+  // Handle success toast after form submission
   useEffect(() => {
     if (location.state?.showToast) {
       showToast(TOAST_CONFIG.SUCCESS);
+      setFormData({}); // Clear form after successful submission
+
+      // Clean up the location state after showing toast
       setTimeout(() => {
         dismissToast();
-        navigate(location.pathname, {
-          state: { ...location.state, showToast: false },
-          replace: true,
-        });
-        setFormData({});
+        navigate(location.pathname, { replace: true });
       }, TOAST_LIFESPAN);
     }
   }, [location.state]);
@@ -73,7 +80,7 @@ const HomePage = () => {
     event.preventDefault();
     try {
       if (validateForm()) {
-        await storage.update("formData", [{ uuid: formData.uuid, ...formData, submitted: true }]);
+        await formDataCollection.update({ ...formData, id: id, submitted: true });
         navigate("/", { replace: true, state: { showToast: true } });
         showToast(TOAST_CONFIG.SUCCESS);
       }
@@ -86,54 +93,56 @@ const HomePage = () => {
     }
   };
 
-  // whenever an input field changes, update the formData state in IndexedDB so that is is cached as the user types
+  // Update form data in state as user types
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prev) => {
-      const updatedForm = { ...prev, [name]: value };
-      saveOfflineData("formData", updatedForm);
-      return updatedForm;
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // helper function to allow for async/await in IndexedDB operations within setFormData state handler
-  const saveOfflineData = async (tableName, data) => {
-    try {
-      if (id) {
-        await storage.update(tableName, [{ uuid: id, ...data }]);
-      }
-    } catch (error) {
-      return error;
-    }
-  };
-
-  // update form data, and increment currentStep by 1
-  const stepForward = () => {
-    if (formData.currentStep < TOTAL_STEPS) {
+  // Navigate to next step and persist all form data
+  const stepForward = async () => {
+    if (formData.currentStep < TOTAL_STEPS && id) {
       const nextStep = formData.currentStep + 1;
-      setFormData({ ...formData, currentStep: nextStep });
-      storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: nextStep }]);
+      const updatedData = { ...formData, currentStep: nextStep };
+      setFormData(updatedData);
+
+      // Save form data when navigating to next step
+      try {
+        await formDataCollection.update({ id: id, ...updatedData });
+      } catch (error) {
+        console.error("Failed to save form progress:", error);
+      }
     }
   };
 
-  // update form data, and decrement currentStep by 1
-  const stepBackward = () => {
-    if (formData.currentStep > 1) {
+  // Navigate to previous step and persist all form data
+  const stepBackward = async () => {
+    if (formData.currentStep > 1 && id) {
       const prevStep = formData.currentStep - 1;
-      setFormData({ ...formData, currentStep: prevStep });
-      storage.update("formData", [{ ...formData, uuid: formData.uuid, currentStep: prevStep }]);
+      const updatedData = { ...formData, currentStep: prevStep };
+      setFormData(updatedData);
+
+      // Save form data when navigating to previous step
+      try {
+        await formDataCollection.update({ id: id, ...updatedData });
+      } catch (error) {
+        console.error("Failed to save form progress:", error);
+      }
     }
   };
 
-  // initialize new multistep form in IndexedDB, and navigate to new form id
+  // Create a new form instance with a unique ID
+  // Demonstrates RADFish collection.create() method
   const handleInit = async () => {
-    const formId = await storage.create("formData", {
-      ...formData,
+    const newForm = {
+      id: crypto.randomUUID(),
       currentStep: 1,
       totalSteps: TOTAL_STEPS,
-    });
-    setFormData({ ...formData, currentStep: 1, totalSteps: TOTAL_STEPS });
-    navigate(`${formId}`);
+      submitted: false,
+    };
+    await formDataCollection.create(newForm);
+    setFormData(newForm);
+    navigate(`/${newForm.id}`);
   };
 
   if (!id) {
@@ -156,14 +165,9 @@ const HomePage = () => {
       </div>
     );
   }
-  const errorMessages = [
-    errors[fullName],
-    errors[email],
-    errors[city],
-    errors[state],
-    errors[zipcode],
-  ]
-    .filter(Boolean) // Filters out empty or undefined error messages
+  // Combine all error messages for display
+  const errorMessages = Object.values(errors)
+    .filter(Boolean) // Remove empty error messages
     .join(", ");
 
   return (

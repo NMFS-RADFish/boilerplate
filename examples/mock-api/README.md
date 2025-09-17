@@ -28,35 +28,35 @@ import App from "./App";
 
 // Enable the mock service worker
 async function enableMocking() {
-  const { worker } = await import("./mocks/browser");
-  const onUnhandledRequest = "bypass"; // Ignore unhandled requests to prevent errors in development
+    const { worker } = await import("./mocks/browser");
+    const onUnhandledRequest = "bypass"; // Ignore unhandled requests to prevent errors in development
 
-  if (import.meta.env.MODE === "development") {
+    if (import.meta.env.MODE === "development") {
+        return worker.start({
+            onUnhandledRequest,
+            serviceWorker: {
+                url: `/mockServiceWorker.js`, // Path to the mock service worker
+            },
+        });
+    }
+
+    // For non-development environments, fallback to a different service worker
     return worker.start({
-      onUnhandledRequest,
-      serviceWorker: {
-        url: `/mockServiceWorker.js`, // Path to the mock service worker
-      },
+        onUnhandledRequest,
+        serviceWorker: {
+            url: `/service-worker.js`,
+        },
     });
-  }
-
-  // For non-development environments, fallback to a different service worker
-  return worker.start({
-    onUnhandledRequest,
-    serviceWorker: {
-      url: `/service-worker.js`,
-    },
-  });
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 enableMocking().then(() => {
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-  );
+    root.render(
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>,
+    );
 });
 ```
 
@@ -96,37 +96,37 @@ You can setup any endpoints that you want to mock within `handlers.js`. Be sure 
 import { http, HttpResponse } from "msw";
 
 export const MSW_ENDPOINT = {
-  SPECIES: "/species", // Endpoint for fetching fish species
+    SPECIES: "/species", // Endpoint for fetching fish species
 };
 
 export const species = [
-  { name: "grouper", price: 25.0, src: "./sample-img.jpg" },
-  { name: "salmon", price: 58.0, src: "./sample-img.jpg" },
-  { name: "marlin", price: 100.0, src: "./sample-img.jpg" },
-  { name: "mahimahi", price: 44.0, src: "./sample-img.jpg" },
+    { name: "grouper", price: 25.0, src: "./sample-img.jpg" },
+    { name: "salmon", price: 58.0, src: "./sample-img.jpg" },
+    { name: "marlin", price: 100.0, src: "./sample-img.jpg" },
+    { name: "mahimahi", price: 44.0, src: "./sample-img.jpg" },
 ];
 
 // Mock API handlers
 export const handlers = [
-  // GET endpoint: Fetch list of species
-  // This implementation can/should change depending on your needs
-  http.get(MSW_ENDPOINT.SPECIES, () => {
-    return HttpResponse.json(
-      {
-        data: species,
-      },
-      { status: 200 },
-    );
-  }),
+    // GET endpoint: Fetch list of species
+    // This implementation can/should change depending on your needs
+    http.get(MSW_ENDPOINT.SPECIES, () => {
+        return HttpResponse.json(
+            {
+                data: species,
+            },
+            { status: 200 },
+        );
+    }),
 
-  // POST endpoint: Add a new species
-  // In a full stack implementation, there will likely be some logic on the server to handle/store persistent data
-  http.post(MSW_ENDPOINT.SPECIES, async ({ request }) => {
-    const requestData = await request.json();
-    const response = [requestData.data, ...species];
+    // POST endpoint: Add a new species
+    // In a full stack implementation, there will likely be some logic on the server to handle/store persistent data
+    http.post(MSW_ENDPOINT.SPECIES, async ({ request }) => {
+        const requestData = await request.json();
+        const response = [requestData.data, ...species];
 
-    return HttpResponse.json({ data: response }, { status: 201 });
-  }),
+        return HttpResponse.json({ data: response }, { status: 201 });
+    }),
 ];
 ```
 
@@ -142,24 +142,24 @@ Fetch the list of fish species:
 import { MSW_ENDPOINT } from "./mocks/handlers";
 
 const getRequestWithFetch = async (endpoint) => {
-  try {
-    const response = await fetch(`${endpoint}`, {
-      headers: {
-        "X-Access-Token": "your-access-token",
-      },
-    });
+    try {
+        const response = await fetch(`${endpoint}`, {
+            headers: {
+                "X-Access-Token": "your-access-token",
+            },
+        });
 
-    if (!response.ok) {
-      const error = await response.json();
-      return error;
+        if (!response.ok) {
+            const error = await response.json();
+            return error;
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (err) {
+        const error = `[GET]: Error fetching data: ${err}`;
+        return error;
     }
-
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    const error = `[GET]: Error fetching data: ${err}`;
-    return error;
-  }
 };
 
 // [GET] /species
@@ -172,37 +172,37 @@ Add a new species to the mock database:
 
 ```jsx
 const postRequestWithFetch = async (endpoint, submittedData) => {
-  try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Access-Token": "your-access-token",
-      },
-      body: JSON.stringify({
-        ...submittedData,
-      }),
-    });
+    try {
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Access-Token": "your-access-token",
+            },
+            body: JSON.stringify({
+                ...submittedData,
+            }),
+        });
 
-    if (!response.ok) {
-      const error = await response.json();
-      return error;
+        if (!response.ok) {
+            const error = await response.json();
+            return error;
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (err) {
+        const error = `[GET]: Error fetching data: ${err}`;
+        return error;
     }
-
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    const error = `[GET]: Error fetching data: ${err}`;
-    return error;
-  }
 };
 
 // [POST] /species
 const { data } = await postRequestWithFetch(MSW_ENDPOINT.SPECIES, {
-  data: {
-    name: "tuna",
-    price: 75,
-    src: "./sample-img.jpg",
-  },
+    data: {
+        name: "tuna",
+        price: 75,
+        src: "./sample-img.jpg",
+    },
 });
 ```

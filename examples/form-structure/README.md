@@ -21,7 +21,7 @@ Use Trussworks `Grid` components to define the layout of your page in `src/pages
     <Grid row>
         <Grid col>
             <p className="text-bold text-center">
-            Private Recreational Tilefish
+                Private Recreational Tilefish
             </p>
         </Grid>
     </Grid>
@@ -83,7 +83,7 @@ const inputFocus = useRef(null);
 useEffect(() => {
     if (inputFocus.current) {
         inputFocus.current.focus(); // Set focus on the input field
-    };
+    }
     setResetToggle(false); // Reset the toggle state
 }, [resetToggle]);
 
@@ -114,6 +114,6 @@ const handleSubmit = (event) => {
     // Reset for after triggering Submit
     event.target.reset();
     // Set focus on first input after form is submitted.
-    setResetToggle(true)
-}
+    setResetToggle(true);
+};
 ```

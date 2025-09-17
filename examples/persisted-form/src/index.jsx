@@ -2,28 +2,45 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
-import { Application, IndexedDBMethod } from "@nmfs-radfish/radfish";
-import { ErrorBoundary, OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
+import { Application } from "@nmfs-radfish/radfish";
+import { IndexedDBConnector } from "@nmfs-radfish/radfish/storage";
+import { ErrorBoundary } from "@nmfs-radfish/react-radfish";
 
 const app = new Application({
   serviceWorker: {
     url: import.meta.env.MODE === "development" ? "/mockServiceWorker.js" : "/service-worker.js",
   },
-  storage: new IndexedDBMethod(
-    import.meta.env.VITE_INDEXED_DB_NAME,
-    import.meta.env.VITE_INDEXED_DB_VERSION,
-    {
-      formData: "uuid, fullName, numberOfFish, species, computedPrice, isDraft",
+  stores: {
+    formData: {
+      connector: new IndexedDBConnector(
+        import.meta.env.VITE_INDEXED_DB_NAME || "persisted-form-app",
+      ),
+      collections: {
+        formData: {
+          schema: {
+            fields: {
+              id: { type: "string", primaryKey: true },
+              fullName: { type: "string" },
+              numberOfFish: { type: "number" },
+              species: { type: "string" },
+              computedPrice: { type: "number" },
+              isDraft: { type: "boolean" },
+            },
+          },
+        },
+      },
     },
-  ),
+  },
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(
-  <ErrorBoundary>
-    <React.StrictMode>
-      <App application={app} />
-    </React.StrictMode>
-  </ErrorBoundary>,
-);
+app.on("ready", async () => {
+  root.render(
+    <ErrorBoundary>
+      <React.StrictMode>
+        <App application={app} />
+      </React.StrictMode>
+    </ErrorBoundary>,
+  );
+});

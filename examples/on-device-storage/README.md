@@ -1,9 +1,19 @@
 # On-Device Storage Example
 
-This example shows you how to setup and use on-device storage. It uses IndexedDB and [Dexie.js](https://dexie.org/docs/Tutorial/Getting-started). Use cases include:
+This example demonstrates how to use RADFish's storage system with IndexedDB for on-device data persistence. It showcases the Application and Collection patterns for managing structured data with schema validation.
 
+## Key RADFish Concepts
+
+- **Application Instance**: Configured with stores and collections
+- **Schema-based Storage**: Type-safe data validation
+- **Collection API**: Consistent CRUD operations
+- **IndexedDB Integration**: Automatic persistence with offline support
+
+Use cases include:
 - Offline on-device data storage (most cases)
 - Local non-relational database (online or offline use)
+- Form data persistence across sessions
+- Structured data with validation
 
 Learn more about RADFish examples at the official [documentation](https://nmfs-radfish.github.io/radfish/developer-documentation/examples-and-templates#examples). Refer to the [RADFish GitHub repo](https://nmfs-radfish.github.io/radfish/) for more information and code samples.
 
@@ -14,69 +24,148 @@ This example will render as shown in this screenshot:
 
 ## Steps
 
-### 1. Configure RADFish Application Storage
-In the `index.jsx` file, import the `Application`. Then, configure it with an instance of `IndexedDBMethod`:
+### 1. Configure RADFish Application with Schema
+In the `index.jsx` file, define your Application with stores and schemas:
 
 ```jsx
-import { Application, IndexedDBMethod } from "@nmfs-radfish/radfish";
+import { Application } from "@nmfs-radfish/radfish";
+import { IndexedDBConnector } from "@nmfs-radfish/radfish/storage";
 
 const app = new Application({
-  storage: new IndexedDBMethod(
-    import.meta.env.VITE_INDEXED_DB_NAME,
-    import.meta.env.VITE_INDEXED_DB_VERSION,
-    {
-      formData:
-        "uuid, fullName, email, phoneNumber, numberOfFish, species, computedPrice, isDraft",
-      species: "name, price",
-      homebaseData: "KEY, REPORT_TYPE, SORT_KEY, TRIP_TYPE, VALUE",
+  stores: {
+    fishingData: {
+      connector: new IndexedDBConnector("on-device-storage-app"),
+      collections: {
+        formData: {
+          schema: {
+            fields: {
+              id: { type: "string", primaryKey: true },
+              fullName: { type: "string" },
+              email: { type: "string" },
+              phoneNumber: { type: "string" },
+              numberOfFish: { type: "number" },
+              species: { type: "string" },
+              computedPrice: { type: "number" },
+              isDraft: { type: "boolean" },
+            },
+          },
+        },
+        species: {
+          schema: {
+            fields: {
+              id: { type: "string", primaryKey: true },
+              name: { type: "string" },
+              price: { type: "number" },
+            },
+          },
+        },
+      },
     },
-  ),
+  },
 });
-
 ```
 
-### 2. Provide the Application instance 
-In the `index.jsx` file, wrap the `App` component with `OfflineStorageWrapper` and pass the config object:
+Key schema concepts:
+- **Primary Key**: Each collection must have a field marked as `primaryKey: true`
+- **Field Types**: Ensures data validation (string, number, boolean)
+- **Multiple Collections**: Organize related data in separate collections
+
+### 2. Initialize and Provide the Application Instance
+The Application waits for stores to be ready before rendering:
 
 ```jsx
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(
-  <React.StrictMode>
-    <App application={app} />
-  </React.StrictMode>
-);
+app.on("ready", () => {
+  root.render(
+    <ErrorBoundary>
+      <React.StrictMode>
+        <App application={app} />
+      </React.StrictMode>
+    </ErrorBoundary>,
+  );
+});
 ```
 
-## `useOfflineStorage` Hook API
+The `App` component wraps children with the `Application` context provider:
 
-Use the `useOfflineStorage` context hook in any child components. See the `App.jsx` file for examples of how to use the provided hooks.
+```jsx
+const App = ({ application }) => {
+  return (
+    <Application application={application}>
+      <div className="App grid-container">
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+        </Router>
+      </div>
+    </Application>
+  );
+};
+```
 
-The `useOfflineStorage` hook returns an object with these methods:
+## Using Collections in Components
 
-- `createOfflineDataEntry(tableName, data)` — Creates a new data entry in the storage.
+### Access Collections with `useApplication` Hook
 
-  - `tableName`: Name of the IndexedDB name.
-  - `data`: The data object to create.
-  - Returns a promise that resolves when the data is created.
+In any component within the Application context, access collections using the `useApplication` hook:
 
-- `findOfflineData(tableName, criteria)` — Finds data in the storage based on the given criteria. Returns all data if not criteria parameter is passed.
+```jsx
+import { useApplication } from "@nmfs-radfish/react-radfish";
 
-  - `tableName`: Name of the IndexedDB name.
-  - `criteria`: The criteria object to use for finding data, eg `{uuid: 123}`.
-  - Returns a promise that resolves to an array of tuples:
-    `[ [ uuid, { key: value } ], [ uuid2, { key: value } ] ]`
+const HomePage = () => {
+  const application = useApplication();
+  const formDataCollection = application.stores.fishingData.getCollection("formData");
+  
+  // Use collection methods...
+};
+```
 
-- `updateOfflineDataEntry(tableName, data)` — Updates data in the storage.
+### Collection API Methods
 
-  - `tableName`: Name of the IndexedDB name.
-  - `data`: The updated data object.
-  - Returns a promise that resolves to the updated data as an object:
-    `{ numberOfFish: 10, species: salmon }`
+Collections provide the following methods for data operations:
 
-- `deleteOfflineDataEntry(tableName, uuids)` — Deletes data by UUID.
-  - `tableName`: Name of the IndexedDB name.
-  - `uuids`: An array of UUIDs to delete.
-  - Returns a promise that resolves to the updated data as an object:
-    `{ numberOfFish: 10, species: salmon }`
+#### Create
+```jsx
+const newData = {
+  id: crypto.randomUUID(),
+  fullName: "John Doe",
+  species: "Tuna",
+  numberOfFish: 3,
+  computedPrice: 150,
+  isDraft: false
+};
+
+await formDataCollection.create(newData);
+```
+
+#### Find
+```jsx
+// Find all records
+const allData = await formDataCollection.find();
+
+// Find with criteria
+const draftRecords = await formDataCollection.find({ isDraft: true });
+```
+
+#### Update
+```jsx
+const updatedData = {
+  id: "existing-id",
+  fullName: "Jane Doe",
+  numberOfFish: 5,
+  // ... other fields
+};
+
+await formDataCollection.update(updatedData);
+```
+
+#### Delete
+```jsx
+// Delete by ID
+await formDataCollection.delete({ id: "record-id" });
+```
+
+All methods are type-safe and validate data against the schema defined in your Application configuration.
 

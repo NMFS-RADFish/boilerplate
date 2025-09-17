@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Alert, Link } from "@trussworks/react-uswds";
-import { Spinner, Table, useOfflineStatus, useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { Spinner, Table, useOfflineStatus, useApplication } from "@nmfs-radfish/react-radfish";
 import { MSW_ENDPOINT } from "../mocks/handlers";
 
 // Constants for status messages
@@ -8,27 +8,26 @@ const OFFLINE_ALREADY_SYNCED = "Offline data is already up-to-date.";
 const SERVER_SYNC_FAILED = "App is offline. Unable to sync with the server.";
 const SERVER_SYNC_SUCCESS = "Data synced with the server.";
 
-// IndexedDB table names
-const LOCAL_DATA = "localData";
-const LAST_SERVER_SYNC = "lastSyncFromServer";
-
 export const HomePage = () => {
   // Check if the app is offline using the `useOfflineStatus` hook
   const { isOffline } = useOfflineStatus();
 
-  // Hooks to interact with offline storage (IndexedDB)
-  const storage = useOfflineStorage();
+  // Access the application instance and collections
+  const application = useApplication();
+  const localDataCollection = application.stores.syncData.getCollection("localData");
+  const lastSyncCollection = application.stores.syncData.getCollection("lastSyncFromServer");
 
   // State for loading spinner, sync status, and data to display in the table
   const [isLoading, setIsLoading] = useState(false);
   const [syncStatus, setSyncStatus] = useState({ message: "", lastSynced: "" });
   const [data, setData] = useState([]);
 
-  // Effect to set up the mock server's offline state and load the last synced time
+  // Effect to load the last synced time from IndexedDB
   useEffect(() => {
-    // Load the last synced time from IndexedDB on component mount
     const loadLastSyncedTime = async () => {
-      const [lastSyncRecord] = await storage.find(LAST_SERVER_SYNC);
+      if (!lastSyncCollection) return; // Wait for collection to be ready
+      
+      const [lastSyncRecord] = await lastSyncCollection.find({ id: "lastSynced" });
       if (lastSyncRecord?.time) {
         const lastSyncTime = new Date(lastSyncRecord.time).toLocaleString();
         setSyncStatus((prev) => ({
@@ -39,15 +38,19 @@ export const HomePage = () => {
     };
 
     loadLastSyncedTime();
-  }, [isOffline]);
+  }, [isOffline, lastSyncCollection]);
 
+  // Load existing synced data on page load
   useEffect(() => {
-    async function fetchData() {
-      const data = await storage.find(LOCAL_DATA);
-      setData(data);
-    }
-    fetchData();
-  }, [data]);
+    const loadExistingData = async () => {
+      if (!localDataCollection) return; // Wait for collection to be ready
+      
+      const existingData = await localDataCollection.find();
+      setData(existingData);
+    };
+
+    loadExistingData();
+  }, [localDataCollection]);
 
   // Helper function to make a GET request using the Fetch API
   const getRequestWithFetch = async (endpoint) => {
@@ -79,26 +82,48 @@ export const HomePage = () => {
       return;
     }
 
+
     setIsLoading(true);
     try {
       // Fetch data from the mock server
       const { data: serverData } = await getRequestWithFetch(MSW_ENDPOINT.GET);
 
       // Retrieve existing data from IndexedDB
-      const offlineData = await storage.find(LOCAL_DATA);
+      const offlineData = await localDataCollection.find();
 
       // Compare offline data with server data
       if (JSON.stringify(offlineData) !== JSON.stringify(serverData)) {
-        // Update IndexedDB with the latest server data
-        await storage.update(LOCAL_DATA, serverData);
+        // Clear existing data and insert new server data
+        const existingData = await localDataCollection.find();
+        for (const item of existingData) {
+          await localDataCollection.delete({ id: item.id });
+        }
+        
+        // Insert new server data with proper schema mapping
+        for (const item of serverData) {
+          await localDataCollection.create({
+            id: item.uuid || crypto.randomUUID(),
+            value: item.value,
+            isSynced: item.isSynced,
+          });
+        }
 
         // Save the current timestamp as the last sync time
         const currentTimestamp = Date.now();
-        await storage.update(LAST_SERVER_SYNC, [{ uuid: "lastSynced", time: currentTimestamp }]);
+        const existingSync = await lastSyncCollection.find({ id: "lastSynced" });
+        
+        if (existingSync.length > 0) {
+          await lastSyncCollection.update({ id: "lastSynced", time: currentTimestamp });
+        } else {
+          await lastSyncCollection.create({ id: "lastSynced", time: currentTimestamp });
+        }
 
         const lastSyncTime = new Date(currentTimestamp).toLocaleString();
         setSyncStatus({ message: SERVER_SYNC_SUCCESS, lastSynced: lastSyncTime });
-        setData(serverData); // Update table data with the latest server data
+        
+        // Refresh local data display
+        const updatedData = await localDataCollection.find();
+        setData(updatedData);
       } else {
         // If data is already up-to-date, show a relevant message
         setSyncStatus({ message: OFFLINE_ALREADY_SYNCED, lastSynced: syncStatus.lastSynced });
@@ -136,7 +161,7 @@ export const HomePage = () => {
         <Table
           data={data}
           columns={[
-            { key: "uuid", label: "UUID", sortable: true },
+            { key: "id", label: "ID", sortable: true },
             { key: "value", label: "Value", sortable: true },
             { key: "isSynced", label: "Synced with Server", sortable: false },
           ]}
@@ -149,17 +174,25 @@ export const HomePage = () => {
 const InfoAnnotation = () => {
   return (
     <Alert type="info" heading="Information" headingLevel="h2">
-      This is an example that demonstrates a design pattern for syncing data from an API endpoint
-      into IndexedDB. The idea is that the application will fetch from the API, and store the
-      persistent data in IndexedDB for offline storage.
+      This example demonstrates server-to-client data synchronization using RADFish's Application 
+      and Collection patterns. It shows how to fetch data from an API and persist it in IndexedDB 
+      with schema validation for offline access.
       <br />
       <br />
-      Please note that this is utilizing Mock Service Worker to intercept these API requests. In
-      production this would integrate with an external API.
+      Key features demonstrated:
+      <ul>
+        <li><strong>Schema-based Collections</strong>: Type-safe data storage with validation</li>
+        <li><strong>Offline Detection</strong>: Automatic handling of network state changes</li>
+        <li><strong>Data Comparison</strong>: Smart sync that only updates when data differs</li>
+        <li><strong>Timestamp Tracking</strong>: Records and displays last successful sync time</li>
+      </ul>
+      <br />
+      This example uses Mock Service Worker to simulate API responses. In production, 
+      this would integrate with your actual API endpoints.
       <br />
       <br />
-      The data is cached in index db and you can view it by opening the application tab in the
-      browser developer tools.
+      <strong>Test instructions:</strong> Use browser DevTools Network tab to toggle offline mode 
+      and observe how the sync behavior changes.
       <br />
       <br />
       <Link href="https://nmfs-radfish.github.io/radfish" target="_blank" rel="noopener noreferrer">
