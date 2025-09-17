@@ -22,7 +22,14 @@ function ApplicationComponent(props) {
   return (
     <div className="radfish__application">
       <div style={{ position: "sticky", width: "100%", top: 0, zIndex: 999 }}>
-        {isOffline && <Toast toast={{ message: "Application is offline", status: "warning" }} />}
+        {isOffline && (
+          <Toast 
+            toast={{ 
+              message: "Application is offline", 
+              status: "warning",
+            }} 
+          />
+        )}
         {toasts.map((toast, i) => (
           <Toast toast={toast} key={i} />
         ))}
