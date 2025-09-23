@@ -8,37 +8,77 @@ vi.mock("../../Application", () => ({
 }));
 
 describe("useOfflineStatus", () => {
-  // Setup mock application
-  const mockApplication = {
-    isOnline: true,
-    _networkTimeout: 5000,
-    fetch: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn()
-  };
-  
+  let mockApplication;
   beforeEach(() => {
     vi.resetAllMocks();
-    mockApplication.isOnline = true;
-    mockApplication.fetch.mockReset();
+    const emitter = new EventTarget();
+    mockApplication = {
+      isOnline: false,
+      emitter,
+      _networkTimeout: 5000,
+      fetch: vi.fn(),
+      addEventListener: vi.fn((event, callback) => {
+        emitter.addEventListener(event, callback);
+      }),
+      dispatchEvent: vi.fn((event) => {
+        emitter.dispatchEvent(event);
+      }),
+      removeEventListener: vi.fn((event, callback) => {
+        emitter.removeEventListener(event, callback);
+      })
+    };
     useApplication.mockReturnValue(mockApplication);
   });
   
-  it("should trigger when navigator online switches", async () => {
-    const onLineSpy = vi.spyOn(window.navigator, "onLine", "get");
-    const { result, rerender } = renderHook(() => useOfflineStatus());
+  it("should initialize with offline status", () => {
+    const { result } = renderHook(() => useOfflineStatus());
+    expect(result.current.isOffline).toBe(true);
+  });
 
-    onLineSpy.mockReturnValue(true);
-    window.dispatchEvent(new window.Event("online"));
-    rerender();
+  it('should mount and unmount handlers', () => {
+    const {unmount } = renderHook(() => useOfflineStatus());
+
+    expect(mockApplication.addEventListener).toHaveBeenCalledWith(
+      "online", 
+      expect.any(Function)
+    );
+    expect(mockApplication.addEventListener).toHaveBeenCalledWith(
+      "offline", 
+      expect.any(Function)
+    );
+
+    unmount();
+
+    expect(mockApplication.removeEventListener).toHaveBeenCalledWith(
+      "online", 
+      expect.any(Function)
+    );
+    expect(mockApplication.removeEventListener).toHaveBeenCalledWith(
+      "offline", 
+      expect.any(Function)
+    );
+
+  });
+
+  it("should trigger when navigator online switches", async () => {
+    const { result } = renderHook(() => useOfflineStatus());
+
+    // Must be wrapped in act callback to allow callstack to resolve
+    // before asserting value
+    act(() => {
+      mockApplication.dispatchEvent(new CustomEvent("online"));
+    });
 
     expect(result.current.isOffline).toBe(false);
 
-    onLineSpy.mockReturnValue(false);
-    window.dispatchEvent(new window.Event("offline"));
-    rerender();
+    // Must be wrapped in act callback to allow callstack to resolve
+    // before asserting value
+    act(() => {
+      mockApplication.dispatchEvent(new CustomEvent("offline"));
+    });
 
     expect(result.current.isOffline).toBe(true);
+
   });
   
   it("should add event listeners for network events", () => {
@@ -78,7 +118,7 @@ describe("useOfflineStatus", () => {
     expect(isReachable).toBe(true);
     expect(mockApplication.fetch).toHaveBeenCalledWith(
       "https://example.com", 
-      { method: "HEAD" }
+      { method: "HEAD", timeout: 5000 }
     );
     
     // Test failed fetch

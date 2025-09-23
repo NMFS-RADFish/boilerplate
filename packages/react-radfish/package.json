@@ -25,11 +25,11 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@tanstack/react-table": "^8.16.0",
-    "@trussworks/react-uswds": "^9.0.0"
+    "@tanstack/react-table": "^8.16.0"
   },
   "peerDependencies": {
     "@nmfs-radfish/radfish": "^1.1.0",
+    "@trussworks/react-uswds": "^9.0.0",
     "react": "^18.2.0"
   },
   "devDependencies": {
@@ -38,6 +38,7 @@
     "@testing-library/react": "16.0.0",
     "@vitejs/plugin-react": "^4.3.1",
     "jsdom": "25.0.1",
+    "react-dom": "^18.3.1",
     "vite-plugin-css-injected-by-js": "^3.5.1",
     "vitest": "2.1.2"
   }

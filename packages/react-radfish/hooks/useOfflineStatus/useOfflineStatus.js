@@ -12,12 +12,15 @@ export const useOfflineStatus = () => {
   useEffect(() => {
     updateOnlineStatus();
 
-    application.addEventListener("online", updateOnlineStatus);
-    application.addEventListener("offline", updateOnlineStatus);
+    const setIsOfflineTrue = () => setIsOffline(true);
+    const setIsOfflineFalse = () => setIsOffline(false);
+
+    application.addEventListener("online", setIsOfflineFalse);
+    application.addEventListener("offline", setIsOfflineTrue);
 
     return () => {
-      application.removeEventListener("online", updateOnlineStatus);
-      application.removeEventListener("offline", updateOnlineStatus);
+      application.removeEventListener("online", setIsOfflineFalse);
+      application.removeEventListener("offline", setIsOfflineTrue);
     };
   }, [application]);
 
