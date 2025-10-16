@@ -1,5 +1,5 @@
-import Collection from "./Collection";
-import Schema from "./Schema";
+import Collection from "./Collection.js";
+import Schema from "./Schema.js";
 class Connector extends EventTarget {
   constructor(engine) {
     super();

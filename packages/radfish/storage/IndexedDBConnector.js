@@ -1,6 +1,6 @@
 import Dexie from "dexie";
-import Connector from "./Connector";
-import Engine from "./Engine";
+import Connector from "./Connector.js";
+import Engine from "./Engine.js";
 
 /**
  * IndexedDBEngine - A storage engine that uses IndexedDB (via Dexie) for persistence

@@ -1,4 +1,4 @@
-import Schema from "./Schema";
+import Schema from "./Schema.js";
 
 class Collection extends EventTarget {
   constructor(schema, connector) {
