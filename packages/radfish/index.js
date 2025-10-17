@@ -27,10 +27,27 @@ export class Application {
     this.serviceWorker = null;
     this.isOnline = navigator.onLine;
     this._options = options;
+    this._networkHandler = options.network?.setIsOnline;
+    
+    // Network health check configuration
+    this._networkHealth = {
+      timeout: options.network?.health?.timeout || 30000, // Default 30s timeout
+      endpointUrl: options.network?.health?.endpointUrl || null
+    };
+    
+    // Fallback URLs configuration
+    this._fallbackUrls = options.network?.fallbackUrls || {};
     this._initializationPromise = null;
 
     // Register event listeners
     this._registerEventListeners();
+    
+    // Check initial network status if handler provided
+    if (typeof this._networkHandler === 'function') {
+      this._networkHandler(navigator.connection, (status) => {
+        this._handleNetworkStatusChange(status);
+      });
+    }
 
     // Initialize everything
     this._initializationPromise = this._initialize();
@@ -106,6 +123,14 @@ export class Application {
     return true;
   }
 
+  addEventListener(event, callback) {
+    return this.emitter.addEventListener(event, callback);
+  }
+
+  removeEventListener(event, callback) {
+    return this.emitter.removeEventListener(event, callback);
+  }
+
   get storage() {
     if (!this._options.storage) {
       return null;
@@ -162,15 +187,25 @@ export class Application {
       this._dispatch("ready");
     });
 
-    const handleOnline = (event) => {
-      this.isOnline = true;
-      this._dispatch("online", { event });
+    const handleOnline = async (event) => {
+      if (this._networkHandler) {
+        await this._networkHandler(navigator.connection, (status) => {
+          this._handleNetworkStatusChange(status);
+        });
+      } else {
+        this._handleNetworkStatusChange(true);
+      }
     };
     window.addEventListener("online", handleOnline, true);
 
-    const handleOffline = (event) => {
-      this.isOnline = false;
-      this._dispatch("offline", { event });
+    const handleOffline = async (event) => {
+      if (this._networkHandler) {
+        await this._networkHandler(navigator.connection, (status) => {
+          this._handleNetworkStatusChange(status);
+        });
+      } else {
+        this._handleNetworkStatusChange(false);
+      }
     };
     window.addEventListener("offline", handleOffline, true);
   }
@@ -189,6 +224,141 @@ export class Application {
       console.error("Failed to install service worker:", error);
       return null;
     }
+  }
+
+  /**
+   * Make HTTP request with fallback and timeout support
+   * @param {string|Request} resource - The URL or Request object
+   * @param {Object} [options] - Request options
+   * @returns {Promise<Response>} - Response from primary or fallback URL
+   */
+  async request(resource, options = {}) {
+    const url = resource instanceof Request ? resource.url : resource;
+    const fallbackUrl = this._fallbackUrls[url];
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this._networkHealth.timeout);
+    
+    // Clone options and add abort signal
+    const fetchOptions = {
+      ...options,
+      signal: controller.signal
+    };
+    
+    try {
+      // Try primary URL
+      const response = await fetch(resource, fetchOptions);
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      
+      if (!fallbackUrl) {
+        // No fallback available, update network status and throw error
+        this._handleNetworkStatusChange(false);
+        throw error;
+      }
+      
+      // Try fallback URL
+      try {
+        // Create a new controller for the fallback request
+        const fallbackController = new AbortController();
+        const fallbackTimeoutId = setTimeout(() => fallbackController.abort(), this._networkHealth.timeout);
+        
+        const fallbackOptions = {
+          ...options,
+          signal: fallbackController.signal
+        };
+        
+        // Build fallback resource
+        const fallbackResource = resource instanceof Request 
+          ? new Request(fallbackUrl, resource) 
+          : fallbackUrl;
+        
+        const response = await fetch(fallbackResource, fallbackOptions);
+        clearTimeout(fallbackTimeoutId);
+        return response;
+      } catch (fallbackError) {
+        // Both primary and fallback failed, update network status
+        this._handleNetworkStatusChange(false);
+        throw fallbackError;
+      }
+    }
+  }
+  
+  /**
+   * Make HTTP request with automatic retry capability
+   * @param {string|Request} resource - The URL or Request object
+   * @param {Object} [options] - Request options
+   * @param {Object} [retryOptions] - Retry configuration
+   * @param {number} [retryOptions.retries=3] - Maximum number of retries
+   * @param {number} [retryOptions.retryDelay=1000] - Delay between retries in ms
+   * @param {boolean} [retryOptions.exponentialBackoff=true] - Whether to use exponential backoff
+   * @returns {Promise<Response>} - Response from successful request
+   */
+  async requestWithRetry(resource, options = {}, retryOptions = {}) {
+    const { 
+      retries = 3, 
+      retryDelay = 1000, 
+      exponentialBackoff = true 
+    } = retryOptions;
+    
+    let lastError;
+    
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await this.request(resource, options);
+      } catch (error) {
+        lastError = error;
+        
+        if (attempt < retries) {
+          // Calculate delay - use exponential backoff if enabled
+          const delay = exponentialBackoff 
+            ? retryDelay * Math.pow(2, attempt)
+            : retryDelay;
+            
+          // Emit event about retry
+          this._dispatch("networkRetry", {
+            resource: resource instanceof Request ? resource.url : resource,
+            attempt: attempt + 1,
+            maxRetries: retries,
+            delay
+          });
+          
+          // Wait before next attempt
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      }
+    }
+    
+    // All retries failed
+    throw lastError;
+  }
+  
+  /**
+   * Check network health by making a request to the configured health endpoint
+   * @returns {Promise<boolean>} - True if the health check succeeds, false otherwise
+   */
+  async checkNetworkHealth() {
+    const url = this._networkHealth.endpointUrl || 'https://api.github.com/users';
+    
+    try {
+      const response = await this.request(url, { method: 'HEAD' });
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
+  }
+  
+  /**
+   * Handle network status changes
+   * @param {boolean} isOnline - Current network status
+   * @private
+   */
+  _handleNetworkStatusChange(isOnline) {
+    this.isOnline = isOnline;
+    
+    // Dispatch appropriate event
+    this._dispatch(isOnline ? "online" : "offline");
   }
 }
 
