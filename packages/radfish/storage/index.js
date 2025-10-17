@@ -1,5 +1,5 @@
-export { default as Schema } from "./Schema";
-export { default as Connector } from "./Connector";
-export { default as Store } from "./Store";
-export { default as LocalStorageConnector } from "./LocalStorageConnector";
-export { default as IndexedDBConnector } from "./IndexedDBConnector";
+export { default as Schema } from "./Schema.js";
+export { default as Connector } from "./Connector.js";
+export { default as Store } from "./Store.js";
+export { default as LocalStorageConnector } from "./LocalStorageConnector.js";
+export { default as IndexedDBConnector } from "./IndexedDBConnector.js";

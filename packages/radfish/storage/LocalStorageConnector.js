@@ -1,5 +1,5 @@
-import Connector from "./Connector";
-import Engine from "./Engine";
+import Connector from "./Connector.js";
+import Engine from "./Engine.js";
 
 /**
  * LocalStorageEngine - A storage engine that uses localStorage for persistence
