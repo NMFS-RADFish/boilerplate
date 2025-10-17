@@ -1,5 +1,5 @@
-import { generateUUID } from "../utilities/cryptoWrapper";
-import { StorageMethod } from "./StorageMethod";
+import { generateUUID } from "../utilities/cryptoWrapper.js";
+import { StorageMethod } from "./StorageMethod.js";
 
 /**
  * Class representing a local storage method.

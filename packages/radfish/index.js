@@ -1,5 +1,5 @@
-import { Store, Schema, LocalStorageConnector, IndexedDBConnector } from './storage';
-import { StorageMethod, IndexedDBMethod, LocalStorageMethod } from "./on-device-storage/storage";
+import { Store, Schema, LocalStorageConnector, IndexedDBConnector } from './storage/index.js';
+import { StorageMethod, IndexedDBMethod, LocalStorageMethod } from "./on-device-storage/storage/index.js";
 
 const registerServiceWorker = async (url) => {
   if ("serviceWorker" in navigator) {
@@ -192,4 +192,4 @@ export class Application {
   }
 }
 
-export * from "./on-device-storage/storage";
+export * from "./on-device-storage/storage/index.js";

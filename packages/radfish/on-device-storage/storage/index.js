@@ -1,6 +1,6 @@
-import { StorageModelFactory } from "./StorageModel";
-import { StorageMethod } from "./StorageMethod";
-import { IndexedDBMethod } from "./IndexedDBMethod";
-import { LocalStorageMethod } from "./LocalStorageMethod";
+import { StorageModelFactory } from "./StorageModel.js";
+import { StorageMethod } from "./StorageMethod.js";
+import { IndexedDBMethod } from "./IndexedDBMethod.js";
+import { LocalStorageMethod } from "./LocalStorageMethod.js";
 
 export { StorageModelFactory, StorageMethod, IndexedDBMethod, LocalStorageMethod };

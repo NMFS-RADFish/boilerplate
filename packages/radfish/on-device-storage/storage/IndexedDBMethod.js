@@ -1,7 +1,7 @@
 import Dexie from "dexie";
-import { generateUUID } from "../utilities/cryptoWrapper";
-import { StorageMethod } from "./StorageMethod";
-import { compareBy } from "./utils";
+import { generateUUID } from "../utilities/cryptoWrapper.js";
+import { StorageMethod } from "./StorageMethod.js";
+import { compareBy } from "./utils.js";
 
 /**
  * Class representing an IndexedDB method.
