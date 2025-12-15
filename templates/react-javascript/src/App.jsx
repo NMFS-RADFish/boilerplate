@@ -9,11 +9,14 @@ import {
   PrimaryNav,
   Header,
 } from "@trussworks/react-uswds";
+import { useRadFishConfig } from "./hooks/useRadFishConfig.jsx";
 
 import HomePage from "./pages/Home";
 
 function App({ application }) {
   const [isExpanded, setExpanded] = useState(false);
+  const config = useRadFishConfig();
+
   return (
     <Application application={application}>
       <a className="usa-skipnav" href="#main-content">
@@ -28,7 +31,7 @@ function App({ application }) {
           >
             <div className="usa-nav-container">
               <div className="usa-navbar">
-                <Title className="header-title">RADFish Application</Title>
+                <Title className="header-title">{config.app.name}</Title>
                 <NavMenuButton
                   onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
                   label="Menu"

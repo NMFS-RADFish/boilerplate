@@ -1,30 +1,47 @@
+/*
+ * RADFish Theme Styles
+ *
+ * These are default/fallback values. To customize your theme,
+ * edit radfish.config.js in the project root instead of this file.
+ *
+ * The Vite plugin will override these variables based on your config.
+ */
+
 :root {
+  /* Primary colors - customize via radfish.config.js colors.primary/secondary */
   --noaa-dark-blue: #0054a4;
   --noaa-light-blue: #0093d0;
+  --noaa-accent-color: #00467f;
+
+  /* Warning/alert colors - customize via radfish.config.js colors.warningLight/Medium/Dark */
   --noaa-yellow-one: #fff3cd;
   --noaa-yellow-two: #ffeeba;
   --noaa-yellow-three: #856404;
-  --noaa-accent-color: #00467f;
+
+  /* UI colors - customize via radfish.config.js colors section */
   --noaa-text-color: #333;
   --noaa-error-color: #af292e;
   --noaa-button-hover: #0073b6;
   --noaa-label-color: #0054a4;
   --noaa-border-dark: #565c65;
   --noaa-border-light: #ddd;
+
+  /* RADFish-specific variables (mapped from config) */
+  --radfish-background: #f4f4f4;
+  --radfish-header-bg: var(--noaa-dark-blue);
+  --radfish-font-family: Arial Narrow, sans-serif;
 }
 
 body {
-  font-family:
-    Arial Narrow,
-    sans-serif;
+  font-family: var(--radfish-font-family);
   color: var(--noaa-text-color);
-  background-color: #f4f4f4;
+  background-color: var(--radfish-background);
   line-height: 1.6;
   border-radius: 4px;
 }
 
 .header-container {
-  background: var(--noaa-dark-blue);
+  background: var(--radfish-header-bg);
 }
 
 .header-title {
