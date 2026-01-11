@@ -10,8 +10,13 @@ import radFishConfig from "./radfish.config.js";
 export default defineConfig((env) => ({
   base: "/",
   plugins: [
+    // RADFish theme plugin - provides:
+    // - import.meta.env.RADFISH_* constants (via define)
+    // - CSS variable injection
+    // - manifest.json generation (via closeBundle on build)
     radFishThemePlugin(),
     react(),
+    // VitePWA still needed for service worker and dev mode manifest
     VitePWA({
       devOptions: {
         enabled: process.env.NODE_ENV === "development",

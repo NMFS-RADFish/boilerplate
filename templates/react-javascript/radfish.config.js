@@ -31,7 +31,7 @@ export default {
   // Color Theme
   // These values generate CSS custom properties (e.g., --noaa-dark-blue)
   colors: {
-    primary: "#0054a4", // Main brand color (header, buttons)
+    primary: "green", // Main brand color (header, buttons)
     secondary: "#0093d0", // Secondary actions
     accent: "#00467f", // Accent elements
     text: "#333", // Body text color
