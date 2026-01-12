@@ -2,6 +2,9 @@
 @import "@trussworks/react-uswds/lib/uswds.css";
 @import "@trussworks/react-uswds/lib/index.css";
 
+/* RADFish theme styles - must come AFTER uswds to override */
+@import "./styles/theme.css";
+
 /* normalize css */
 body {
   margin: 0;

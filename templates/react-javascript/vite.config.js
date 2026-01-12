@@ -1,3 +1,4 @@
+import fs from "fs";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
@@ -5,7 +6,14 @@ import {
   radFishThemePlugin,
   getManifestFromConfig,
 } from "./plugins/vite-plugin-radfish-theme.js";
-import radFishConfig from "./radfish.config.js";
+
+// Load config from theme/ directory if it exists, otherwise use root config
+const themeConfigPath = "./theme/radfish.config.js";
+const rootConfigPath = "./radfish.config.js";
+const configPath = fs.existsSync("./theme") && fs.existsSync(themeConfigPath)
+  ? themeConfigPath
+  : rootConfigPath;
+const radFishConfig = (await import(configPath)).default;
 
 export default defineConfig((env) => ({
   base: "/",

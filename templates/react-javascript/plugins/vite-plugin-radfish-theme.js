@@ -3,14 +3,114 @@
  *
  * This plugin connects radfish.config.js to your application:
  * - Exposes config values via import.meta.env.RADFISH_* constants
- * - Injects CSS variables into HTML
+ * - Injects CSS variables into HTML <head>
  * - Transforms index.html with config values (title, meta tags, favicon)
  * - Writes manifest.json after build via closeBundle
+ * - Auto-restarts dev server when config file changes
+ *
+ * Theme Directory Auto-Detection:
+ * - If a `theme/` folder exists in project root, it will be used automatically
+ * - Place radfish.config.js and icons/ in the theme/ folder
+ * - No manual copying required - Vite serves theme assets automatically
  */
 
 import fs from "fs";
 import path from "path";
 import { pathToFileURL } from "url";
+
+/**
+ * Copy directory recursively
+ */
+function copyDirSync(src, dest) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      copyDirSync(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
+/**
+ * Get content type for file extension
+ */
+function getContentType(ext) {
+  const types = {
+    ".png": "image/png",
+    ".ico": "image/x-icon",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".svg": "image/svg+xml",
+    ".webp": "image/webp",
+  };
+  return types[ext] || "application/octet-stream";
+}
+
+/**
+ * Generate manifest icon array from config
+ */
+function getManifestIcons(config) {
+  return [
+    {
+      src: "icons/radfish.ico",
+      sizes: "512x512 256x256 144x144 64x64 32x32 24x24 16x16",
+      type: "image/x-icon",
+    },
+    {
+      src: "icons/radfish-144.ico",
+      sizes: "144x144 64x64 32x32 24x24 16x16",
+      type: "image/x-icon",
+    },
+    {
+      src: "icons/radfish-144.ico",
+      type: "image/icon",
+      sizes: "144x144",
+      purpose: "any",
+    },
+    {
+      src: "icons/radfish-192.ico",
+      type: "image/icon",
+      sizes: "192x192",
+      purpose: "any",
+    },
+    {
+      src: "icons/radfish-512.ico",
+      type: "image/icon",
+      sizes: "512x512",
+      purpose: "any",
+    },
+    {
+      src: config.icons.pwa.icon144.replace(/^\//, ""),
+      type: "image/png",
+      sizes: "144x144",
+      purpose: "any",
+    },
+    {
+      src: config.icons.pwa.icon144.replace(/^\//, ""),
+      type: "image/png",
+      sizes: "144x144",
+      purpose: "maskable",
+    },
+    {
+      src: config.icons.pwa.icon192.replace(/^\//, ""),
+      type: "image/png",
+      sizes: "192x192",
+      purpose: "maskable",
+    },
+    {
+      src: config.icons.pwa.icon512.replace(/^\//, ""),
+      type: "image/png",
+      sizes: "512x512",
+      purpose: "maskable",
+    },
+  ];
+}
 
 /**
  * Default configuration values (used if radfish.config.js is missing)
@@ -64,18 +164,37 @@ function getDefaultConfig() {
 export function radFishThemePlugin() {
   let config = null;
   let resolvedViteConfig = null;
+  let themeDir = null; // Path to theme/ directory if it exists
 
   return {
     name: "vite-plugin-radfish-theme",
 
     // Load config and return define values
-    async config(viteConfig, { command }) {
+    async config(viteConfig) {
       // Determine root directory
       const root = viteConfig.root || process.cwd();
-      const configPath = path.resolve(root, "radfish.config.js");
+
+      // Check for theme/ directory first (auto-detection)
+      const themeDirPath = path.resolve(root, "theme");
+      const themeConfigPath = path.resolve(themeDirPath, "radfish.config.js");
+      const rootConfigPath = path.resolve(root, "radfish.config.js");
+
+      // Determine which config to load
+      let configPath;
+      if (fs.existsSync(themeDirPath) && fs.existsSync(themeConfigPath)) {
+        // Use theme directory
+        themeDir = themeDirPath;
+        configPath = themeConfigPath;
+        console.log("[radfish-theme] Using theme directory:", themeDirPath);
+      } else if (fs.existsSync(rootConfigPath)) {
+        // Use root config
+        configPath = rootConfigPath;
+      } else {
+        configPath = null;
+      }
 
       // Load config
-      if (fs.existsSync(configPath)) {
+      if (configPath) {
         try {
           const configUrl = pathToFileURL(configPath).href;
           const module = await import(`${configUrl}?update=${Date.now()}`);
@@ -108,9 +227,6 @@ export function radFishThemePlugin() {
           "import.meta.env.RADFISH_FAVICON": JSON.stringify(
             config.icons.favicon,
           ),
-          "import.meta.env.RADFISH_APPLE_TOUCH_ICON": JSON.stringify(
-            config.icons.appleTouchIcon,
-          ),
           "import.meta.env.RADFISH_PRIMARY_COLOR": JSON.stringify(
             config.colors.primary,
           ),
@@ -130,6 +246,52 @@ export function radFishThemePlugin() {
     // Store resolved config
     configResolved(viteConfig) {
       resolvedViteConfig = viteConfig;
+    },
+
+    // Serve theme icons in dev mode and watch config for changes
+    configureServer(server) {
+      const root = server.config.root || process.cwd();
+
+      // Watch config file for changes and auto-restart
+      const configPaths = [
+        path.resolve(root, "theme", "radfish.config.js"),
+        path.resolve(root, "radfish.config.js"),
+      ];
+
+      for (const configPath of configPaths) {
+        if (fs.existsSync(configPath)) {
+          server.watcher.add(configPath);
+        }
+      }
+
+      server.watcher.on("change", (changedPath) => {
+        if (configPaths.some((p) => changedPath === p)) {
+          console.log("[radfish-theme] Config changed, restarting server...");
+          server.restart();
+        }
+      });
+
+      // Serve theme icons if theme directory exists
+      if (!themeDir) return;
+
+      const themeIconsDir = path.join(themeDir, "icons");
+      if (!fs.existsSync(themeIconsDir)) return;
+
+      // Serve /icons/* from theme/icons/ directory
+      server.middlewares.use("/icons", (req, res, next) => {
+        const filePath = path.join(themeIconsDir, req.url || "");
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+          res.setHeader(
+            "Content-Type",
+            getContentType(path.extname(filePath)),
+          );
+          fs.createReadStream(filePath).pipe(res);
+        } else {
+          next();
+        }
+      });
+
+      console.log("[radfish-theme] Serving icons from:", themeIconsDir);
     },
 
     // Transform index.html - inject CSS variables and update meta tags
@@ -188,76 +350,29 @@ export function radFishThemePlugin() {
 
       // Only write manifest for build, not serve
       const outDir = resolvedViteConfig.build?.outDir || "dist";
-      const manifestPath = path.resolve(
-        resolvedViteConfig.root,
-        outDir,
-        "manifest.json",
-      );
+      const outDirPath = path.resolve(resolvedViteConfig.root, outDir);
+      const manifestPath = path.resolve(outDirPath, "manifest.json");
 
       // Ensure output directory exists
-      const outDirPath = path.dirname(manifestPath);
       if (!fs.existsSync(outDirPath)) {
         return; // Build hasn't created output dir yet
+      }
+
+      // Copy theme icons to dist if using theme directory
+      if (themeDir) {
+        const themeIconsDir = path.join(themeDir, "icons");
+        const distIconsDir = path.join(outDirPath, "icons");
+        if (fs.existsSync(themeIconsDir)) {
+          copyDirSync(themeIconsDir, distIconsDir);
+          console.log("[radfish-theme] Copied theme icons to:", distIconsDir);
+        }
       }
 
       const manifest = {
         short_name: config.app.shortName,
         name: config.app.name,
         description: config.app.description,
-        icons: [
-          {
-            src: "icons/radfish.ico",
-            sizes: "512x512 256x256 144x144 64x64 32x32 24x24 16x16",
-            type: "image/x-icon",
-          },
-          {
-            src: "icons/radfish-144.ico",
-            sizes: "144x144 64x64 32x32 24x24 16x16",
-            type: "image/x-icon",
-          },
-          {
-            src: "icons/radfish-144.ico",
-            type: "image/icon",
-            sizes: "144x144",
-            purpose: "any",
-          },
-          {
-            src: "icons/radfish-192.ico",
-            type: "image/icon",
-            sizes: "192x192",
-            purpose: "any",
-          },
-          {
-            src: "icons/radfish-512.ico",
-            type: "image/icon",
-            sizes: "512x512",
-            purpose: "any",
-          },
-          {
-            src: config.icons.pwa.icon144.replace(/^\//, ""),
-            type: "image/png",
-            sizes: "144x144",
-            purpose: "any",
-          },
-          {
-            src: config.icons.pwa.icon144.replace(/^\//, ""),
-            type: "image/png",
-            sizes: "144x144",
-            purpose: "maskable",
-          },
-          {
-            src: config.icons.pwa.icon192.replace(/^\//, ""),
-            type: "image/png",
-            sizes: "192x192",
-            purpose: "maskable",
-          },
-          {
-            src: config.icons.pwa.icon512.replace(/^\//, ""),
-            type: "image/png",
-            sizes: "512x512",
-            purpose: "maskable",
-          },
-        ],
+        icons: getManifestIcons(config),
         start_url: ".",
         display: "standalone",
         theme_color: config.pwa.themeColor,
@@ -272,66 +387,13 @@ export function radFishThemePlugin() {
 
 /**
  * Generate VitePWA manifest configuration from radfish.config.js
- * (Kept for backwards compatibility, but closeBundle now handles this)
+ * Used by VitePWA plugin for dev mode manifest serving
  */
 export function getManifestFromConfig(config) {
   return {
     short_name: config.app.shortName,
     name: config.app.name,
-    icons: [
-      {
-        src: "icons/radfish.ico",
-        sizes: "512x512 256x256 144x144 64x64 32x32 24x24 16x16",
-        type: "image/x-icon",
-      },
-      {
-        src: "icons/radfish-144.ico",
-        sizes: "144x144 64x64 32x32 24x24 16x16",
-        type: "image/x-icon",
-      },
-      {
-        src: "icons/radfish-144.ico",
-        type: "image/icon",
-        sizes: "144x144",
-        purpose: "any",
-      },
-      {
-        src: "icons/radfish-192.ico",
-        type: "image/icon",
-        sizes: "192x192",
-        purpose: "any",
-      },
-      {
-        src: "icons/radfish-512.ico",
-        type: "image/icon",
-        sizes: "512x512",
-        purpose: "any",
-      },
-      {
-        src: config.icons.pwa.icon144.replace(/^\//, ""),
-        type: "image/png",
-        sizes: "144x144",
-        purpose: "any",
-      },
-      {
-        src: config.icons.pwa.icon144.replace(/^\//, ""),
-        type: "image/png",
-        sizes: "144x144",
-        purpose: "maskable",
-      },
-      {
-        src: config.icons.pwa.icon192.replace(/^\//, ""),
-        type: "image/png",
-        sizes: "192x192",
-        purpose: "maskable",
-      },
-      {
-        src: config.icons.pwa.icon512.replace(/^\//, ""),
-        type: "image/png",
-        sizes: "512x512",
-        purpose: "maskable",
-      },
-    ],
+    icons: getManifestIcons(config),
     start_url: ".",
     display: "standalone",
     theme_color: config.pwa.themeColor,

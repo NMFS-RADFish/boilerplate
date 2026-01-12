@@ -1,36 +1,10 @@
 /*
  * RADFish Theme Styles
  *
- * These are default/fallback values. To customize your theme,
- * edit radfish.config.js in the project root instead of this file.
- *
- * The Vite plugin will override these variables based on your config.
+ * CSS variables are injected by the Vite plugin from radfish.config.js
+ * This file only contains the styles that USE those variables.
+ * Do NOT define :root CSS variables here - they will override the config values!
  */
-
-:root {
-  /* Primary colors - customize via radfish.config.js colors.primary/secondary */
-  --noaa-dark-blue: #0054a4;
-  --noaa-light-blue: #0093d0;
-  --noaa-accent-color: #00467f;
-
-  /* Warning/alert colors - customize via radfish.config.js colors.warningLight/Medium/Dark */
-  --noaa-yellow-one: #fff3cd;
-  --noaa-yellow-two: #ffeeba;
-  --noaa-yellow-three: #856404;
-
-  /* UI colors - customize via radfish.config.js colors section */
-  --noaa-text-color: #333;
-  --noaa-error-color: #af292e;
-  --noaa-button-hover: #0073b6;
-  --noaa-label-color: #0054a4;
-  --noaa-border-dark: #565c65;
-  --noaa-border-light: #ddd;
-
-  /* RADFish-specific variables (mapped from config) */
-  --radfish-background: #f4f4f4;
-  --radfish-header-bg: var(--noaa-dark-blue);
-  --radfish-font-family: Arial Narrow, sans-serif;
-}
 
 body {
   font-family: var(--radfish-font-family);
@@ -40,8 +14,19 @@ body {
   border-radius: 4px;
 }
 
-.header-container {
-  background: var(--radfish-header-bg);
+/* Header styles - override USWDS compiled styles */
+.usa-header.usa-header--basic.header-container,
+.usa-header.header-container,
+header.usa-header {
+  background-color: var(--radfish-header-bg) !important;
+  background: var(--radfish-header-bg) !important;
+}
+
+.usa-header .usa-navbar,
+.usa-header--basic .usa-navbar,
+.usa-nav-container {
+  background-color: var(--radfish-header-bg) !important;
+  background: var(--radfish-header-bg) !important;
 }
 
 .header-title {
