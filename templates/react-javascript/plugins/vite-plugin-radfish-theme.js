@@ -1,22 +1,61 @@
 /**
  * RADFish Theme Vite Plugin
  *
- * This plugin connects radfish.config.js to your application:
+ * This plugin provides theming capabilities for RADFish applications:
+ * - Reads theme colors from SCSS files (themes/<theme-name>/styles/_colors.scss)
  * - Exposes config values via import.meta.env.RADFISH_* constants
  * - Injects CSS variables into HTML <head>
  * - Transforms index.html with config values (title, meta tags, favicon)
  * - Writes manifest.json after build via closeBundle
- * - Auto-restarts dev server when config file changes
  *
- * Theme Directory Auto-Detection:
- * - If a `theme/` folder exists in project root, it will be used automatically
- * - Place radfish.config.js and icons/ in the theme/ folder
- * - No manual copying required - Vite serves theme assets automatically
+ * Usage:
+ *   radFishThemePlugin("noaa-theme")                    // Use noaa-theme from themes/noaa-theme/
+ *   radFishThemePlugin("noaa-theme", { app: {...} })    // With config overrides (non-color)
+ *
+ * Theme Structure:
+ *   themes/<theme-name>/
+ *     assets/              - Theme icons (served in dev, copied on build)
+ *     styles/_colors.scss  - SCSS file with color variables (e.g., $primary: #0054a4;)
  */
 
 import fs from "fs";
 import path from "path";
-import { pathToFileURL } from "url";
+
+/**
+ * Parse SCSS file and extract variable definitions
+ * Supports simple variable definitions like: $variable-name: #hex;
+ * @param {string} filePath - Path to the SCSS file
+ * @returns {Object} Object mapping variable names (without $) to values
+ */
+function parseScssVariables(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return {};
+  }
+
+  const content = fs.readFileSync(filePath, "utf-8");
+  const variables = {};
+
+  // Match SCSS variable definitions: $variable-name: value;
+  // Captures: variable name (without $) and value (without semicolon)
+  const variableRegex = /^\s*\$([a-zA-Z_][\w-]*)\s*:\s*([^;]+);/gm;
+
+  let match;
+  while ((match = variableRegex.exec(content)) !== null) {
+    const name = match[1].trim();
+    let value = match[2].trim();
+
+    // Remove !default flag if present
+    value = value.replace(/\s*!default\s*$/, "").trim();
+
+    // Convert kebab-case to camelCase for config compatibility
+    const camelName = name.replace(/-([a-z])/g, (_, letter) =>
+      letter.toUpperCase(),
+    );
+    variables[camelName] = value;
+  }
+
+  return variables;
+}
 
 /**
  * Copy directory recursively
@@ -159,12 +198,29 @@ function getDefaultConfig() {
 }
 
 /**
- * Main Vite plugin for RADFish theming
+ * Deep merge two objects (target values override source)
  */
-export function radFishThemePlugin() {
+function deepMerge(source, target) {
+  const result = { ...source };
+  for (const key of Object.keys(target)) {
+    if (target[key] && typeof target[key] === "object" && !Array.isArray(target[key])) {
+      result[key] = deepMerge(source[key] || {}, target[key]);
+    } else {
+      result[key] = target[key];
+    }
+  }
+  return result;
+}
+
+/**
+ * Main Vite plugin for RADFish theming
+ * @param {string} themeName - Name of the theme folder in themes/ directory
+ * @param {Object} configOverrides - Optional config overrides (colors, app name, etc.)
+ */
+export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {}) {
   let config = null;
   let resolvedViteConfig = null;
-  let themeDir = null; // Path to theme/ directory if it exists
+  let themeDir = null; // Path to themes/<themeName>/ directory
 
   return {
     name: "vite-plugin-radfish-theme",
@@ -174,43 +230,25 @@ export function radFishThemePlugin() {
       // Determine root directory
       const root = viteConfig.root || process.cwd();
 
-      // Check for theme/ directory first (auto-detection)
-      const themeDirPath = path.resolve(root, "theme");
-      const themeConfigPath = path.resolve(themeDirPath, "radfish.config.js");
-      const rootConfigPath = path.resolve(root, "radfish.config.js");
+      // Start with defaults, then merge provided overrides
+      config = deepMerge(getDefaultConfig(), configOverrides);
 
-      // Determine which config to load
-      let configPath;
-      if (fs.existsSync(themeDirPath) && fs.existsSync(themeConfigPath)) {
-        // Use theme directory
+      // Set theme directory based on theme name
+      const themeDirPath = path.resolve(root, "themes", themeName);
+      if (fs.existsSync(themeDirPath)) {
         themeDir = themeDirPath;
-        configPath = themeConfigPath;
-        console.log("[radfish-theme] Using theme directory:", themeDirPath);
-      } else if (fs.existsSync(rootConfigPath)) {
-        // Use root config
-        configPath = rootConfigPath;
-      } else {
-        configPath = null;
-      }
+        console.log("[radfish-theme] Using theme:", themeName);
 
-      // Load config
-      if (configPath) {
-        try {
-          const configUrl = pathToFileURL(configPath).href;
-          const module = await import(`${configUrl}?update=${Date.now()}`);
-          config = module.default;
-        } catch (error) {
-          console.warn(
-            "[radfish-theme] Error loading radfish.config.js:",
-            error.message,
-          );
-          config = getDefaultConfig();
+        // Read colors from theme's SCSS file
+        const colorsScssPath = path.join(themeDirPath, "styles", "_colors.scss");
+        if (fs.existsSync(colorsScssPath)) {
+          const scssColors = parseScssVariables(colorsScssPath);
+          // Merge SCSS colors into config (SCSS takes precedence over defaults)
+          config.colors = deepMerge(config.colors, scssColors);
+          console.log("[radfish-theme] Loaded colors from:", colorsScssPath);
         }
       } else {
-        console.warn(
-          "[radfish-theme] No radfish.config.js found, using defaults",
-        );
-        config = getDefaultConfig();
+        console.warn(`[radfish-theme] Theme "${themeName}" not found at ${themeDirPath}`);
       }
 
       // Return define values for import.meta.env.RADFISH_*
@@ -248,38 +286,45 @@ export function radFishThemePlugin() {
       resolvedViteConfig = viteConfig;
     },
 
-    // Serve theme icons in dev mode and watch config for changes
+    // Serve theme assets in dev mode and watch SCSS for changes
     configureServer(server) {
-      const root = server.config.root || process.cwd();
-
-      // Watch config file for changes and auto-restart
-      const configPaths = [
-        path.resolve(root, "theme", "radfish.config.js"),
-        path.resolve(root, "radfish.config.js"),
-      ];
-
-      for (const configPath of configPaths) {
-        if (fs.existsSync(configPath)) {
-          server.watcher.add(configPath);
-        }
-      }
-
-      server.watcher.on("change", (changedPath) => {
-        if (configPaths.some((p) => changedPath === p)) {
-          console.log("[radfish-theme] Config changed, restarting server...");
-          server.restart();
-        }
+      // Serve manifest.json in dev mode
+      server.middlewares.use("/manifest.json", (_req, res) => {
+        const manifest = {
+          short_name: config.app.shortName,
+          name: config.app.name,
+          description: config.app.description,
+          icons: getManifestIcons(config),
+          start_url: ".",
+          display: "standalone",
+          theme_color: config.pwa.themeColor,
+          background_color: config.pwa.backgroundColor,
+        };
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify(manifest, null, 2));
       });
 
-      // Serve theme icons if theme directory exists
+      // Serve theme assets if theme directory exists
       if (!themeDir) return;
 
-      const themeIconsDir = path.join(themeDir, "icons");
-      if (!fs.existsSync(themeIconsDir)) return;
+      // Watch _colors.scss for changes and trigger full reload
+      const colorsScssPath = path.join(themeDir, "styles", "_colors.scss");
+      if (fs.existsSync(colorsScssPath)) {
+        server.watcher.add(colorsScssPath);
+        server.watcher.on("change", (changedPath) => {
+          if (changedPath === colorsScssPath) {
+            console.log("[radfish-theme] Colors changed, restarting server...");
+            server.restart();
+          }
+        });
+      }
 
-      // Serve /icons/* from theme/icons/ directory
+      const themeAssetsDir = path.join(themeDir, "assets");
+      if (!fs.existsSync(themeAssetsDir)) return;
+
+      // Serve /icons/* from themes/<themeName>/assets/ directory
       server.middlewares.use("/icons", (req, res, next) => {
-        const filePath = path.join(themeIconsDir, req.url || "");
+        const filePath = path.join(themeAssetsDir, req.url || "");
         if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
           res.setHeader(
             "Content-Type",
@@ -291,7 +336,7 @@ export function radFishThemePlugin() {
         }
       });
 
-      console.log("[radfish-theme] Serving icons from:", themeIconsDir);
+      console.log("[radfish-theme] Serving assets from:", themeAssetsDir);
     },
 
     // Transform index.html - inject CSS variables and update meta tags
@@ -358,13 +403,13 @@ export function radFishThemePlugin() {
         return; // Build hasn't created output dir yet
       }
 
-      // Copy theme icons to dist if using theme directory
+      // Copy theme assets to dist/icons if using theme directory
       if (themeDir) {
-        const themeIconsDir = path.join(themeDir, "icons");
+        const themeAssetsDir = path.join(themeDir, "assets");
         const distIconsDir = path.join(outDirPath, "icons");
-        if (fs.existsSync(themeIconsDir)) {
-          copyDirSync(themeIconsDir, distIconsDir);
-          console.log("[radfish-theme] Copied theme icons to:", distIconsDir);
+        if (fs.existsSync(themeAssetsDir)) {
+          copyDirSync(themeAssetsDir, distIconsDir);
+          console.log("[radfish-theme] Copied theme assets to:", distIconsDir);
         }
       }
 

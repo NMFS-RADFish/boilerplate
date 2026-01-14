@@ -1,0 +1,33 @@
+/**
+ * NOAA Theme Colors
+ *
+ * Define theme colors as SCSS variables.
+ * These variables are parsed by the RADFish theme plugin and injected as CSS variables.
+ *
+ * Variable names use kebab-case and are automatically converted to camelCase
+ * for config compatibility (e.g., $button-hover becomes buttonHover).
+ */
+
+// Primary colors
+$primary: purple;
+$secondary: #0093d0;
+$accent: #00467f;
+
+// Text and UI colors
+$text: #333;
+$error: #af292e;
+$button-hover: #0073b6;
+$label: #0054a4;
+
+// Border colors
+$border-dark: #565c65;
+$border-light: #ddd;
+
+// Background colors
+$background: #f4f4f4;
+$header-background: purple;
+
+// Warning/status colors
+$warning-light: #fff3cd;
+$warning-medium: #ffeeba;
+$warning-dark: #856404;

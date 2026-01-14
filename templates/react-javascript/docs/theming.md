@@ -4,128 +4,113 @@ This guide explains how to customize the look and feel of your RADFish applicati
 
 ## Quick Start
 
-**Option 1: Auto-Detect Theme (Recommended)**
-1. Copy an example theme to a `theme/` folder in your project root:
-   ```bash
-   cp -r example-themes/custom-agency theme
-   ```
-2. Restart the development server (`npm run start`)
-3. Done - Vite automatically detects and uses the theme!
-
-**Option 2: Edit Config Directly**
-1. Open `radfish.config.js` in your project root
-2. Modify the values you want to customize
-3. Restart the development server (`npm run start`)
-
-## Using Theme Directories
-
-Theme directories provide a complete, portable theme package. The Vite plugin automatically detects themes.
-
-### Auto-Detection (Easiest)
-
-Simply place your theme in a `theme/` folder at your project root:
-
-```bash
-# Copy an example theme
-cp -r example-themes/custom-agency theme
-
-# Start the dev server - theme is automatically applied
-npm run start
-```
-
-The plugin will:
-- Load config from `theme/radfish.config.js`
-- Serve icons from `theme/icons/` (no copying needed!)
-- Copy icons to `dist/icons/` during build
-
-### Theme Directory Structure
-
-```
-theme/                      # <-- Auto-detected by Vite
-├── radfish.config.js       # App name, colors, icon paths
-├── icons/
-│   ├── radfish.png         # Main logo (home page)
-│   ├── radfish.ico         # Favicon (browser tab)
-│   ├── 144.png             # PWA icon
-│   ├── 192.png             # PWA icon
-│   └── 512.png             # PWA icon
-└── styles/
-    └── custom.css          # Custom CSS overrides (optional)
-```
-
-### Example Themes
-
-See `example-themes/` for ready-to-use themes:
-
-- `noaa-default/` - Default NOAA blue theme
-- `custom-agency/` - Green theme example showing customization
-
-### Manual Theme Application (Alternative)
-
-If you prefer not to use the `theme/` folder, you can manually copy files:
-
-1. **Copy icons** to your project:
-   ```bash
-   cp example-themes/custom-agency/icons/* public/icons/
-   ```
-
-2. **Copy config** to project root:
-   ```bash
-   cp example-themes/custom-agency/radfish.config.js ./
-   ```
-
-3. **Copy custom CSS** (optional):
-   ```bash
-   cp example-themes/custom-agency/styles/custom.css src/styles/
-   ```
-   Then import in `src/index.css`:
-   ```css
-   @import "./styles/custom.css";
-   ```
-
-4. **Restart** the development server
-
-### Creating Your Own Theme
-
-1. Copy an existing theme directory as a starting point:
-   ```bash
-   cp -r example-themes/noaa-default my-agency-theme
-   ```
-
-2. Edit `my-agency-theme/radfish.config.js` with your colors and app name
-
-3. Replace icons in `my-agency-theme/icons/` with your agency's branding
-
-4. Add custom CSS in `my-agency-theme/styles/custom.css`
-
-5. To use your theme:
-   ```bash
-   # Option A: Auto-detect (recommended)
-   cp -r my-agency-theme theme
-
-   # Option B: Manual copy
-   cp my-agency-theme/radfish.config.js ./
-   cp my-agency-theme/icons/* public/icons/
-   ```
-
-## Configuration File
-
-All theme settings are centralized in `radfish.config.js`:
+In `vite.config.js`, specify your theme:
 
 ```javascript
-export default {
+radFishThemePlugin("noaa-theme", {
+  app: {
+    name: "My Agency App",
+    shortName: "MyApp",
+  },
+})
+```
+
+Colors are defined in your theme's SCSS file at `themes/<theme-name>/styles/_colors.scss`.
+
+## How It Works
+
+The plugin accepts two arguments:
+
+1. **Theme name** (string) - Name of folder in `themes/` directory containing assets and colors
+2. **Config overrides** (object, optional) - Customize app name, icons, etc.
+
+```javascript
+// Use NOAA theme with defaults
+radFishThemePlugin("noaa-theme")
+
+// Use NOAA theme with custom app name
+radFishThemePlugin("noaa-theme", {
+  app: { name: "My Agency App" }
+})
+```
+
+## Theme Structure
+
+Themes contain assets and color definitions:
+
+```
+themes/
+└── noaa-theme/
+    ├── assets/
+    │   ├── radfish.png         # Main logo
+    │   ├── radfish.ico         # Favicon
+    │   ├── 144.png             # PWA icon
+    │   ├── 192.png             # PWA icon
+    │   └── 512.png             # PWA icon
+    └── styles/
+        └── _colors.scss        # Theme color variables
+```
+
+The plugin:
+- Reads color variables from `themes/<theme-name>/styles/_colors.scss`
+- Serves assets from `themes/<theme-name>/assets/` as `/icons/*` in dev mode
+- Copies assets to `dist/icons/` on build
+- Generates `manifest.json` on build
+
+## Configuration Options
+
+### Colors (SCSS File)
+
+Colors are defined in the theme's `_colors.scss` file:
+
+```scss
+// themes/noaa-theme/styles/_colors.scss
+
+// Primary colors
+$primary: #0054a4;
+$secondary: #0093d0;
+$accent: #00467f;
+
+// Text and UI colors
+$text: #333;
+$error: #af292e;
+$button-hover: #0073b6;
+$label: #0054a4;
+
+// Border colors
+$border-dark: #565c65;
+$border-light: #ddd;
+
+// Background colors
+$background: #f4f4f4;
+$header-background: #0054a4;
+
+// Warning/status colors
+$warning-light: #fff3cd;
+$warning-medium: #ffeeba;
+$warning-dark: #856404;
+```
+
+Variable names use kebab-case (e.g., `$button-hover`) and are automatically converted to camelCase (e.g., `buttonHover`) for internal config compatibility.
+
+### Plugin Config Overrides
+
+Non-color configuration is passed as the second argument to `radFishThemePlugin()`:
+
+```javascript
+radFishThemePlugin("noaa-theme", {
   // Application Identity
   app: {
-    name: "My App Name",           // Header title
-    shortName: "MyApp",            // Browser tab, PWA name
-    description: "App description", // SEO meta description
+    name: "My Agency App",
+    shortName: "MyApp",
+    description: "Description for PWA",
   },
 
-  // Logo and Icon Paths (relative to public directory)
+  // Icon Paths (relative to /icons/)
   icons: {
-    logo: "/icons/my-logo.png",           // Home page logo
-    favicon: "/icons/my-favicon.ico",     // Browser tab icon
-    appleTouchIcon: "/icons/my-touch.png", // iOS home screen
+    logo: "/icons/radfish.png",
+    favicon: "/icons/radfish.ico",
+    appleTouchIcon: "/icons/radfish.png",
     pwa: {
       icon144: "/icons/144.png",
       icon192: "/icons/192.png",
@@ -133,48 +118,30 @@ export default {
     },
   },
 
-  // Color Theme
-  colors: {
-    primary: "#0054a4",        // Main brand color
-    secondary: "#0093d0",      // Secondary color
-    accent: "#00467f",         // Accent elements
-    text: "#333",              // Body text
-    error: "#af292e",          // Error messages
-    buttonHover: "#0073b6",    // Button hover state
-    label: "#0054a4",          // Form labels
-    borderDark: "#565c65",     // Dark borders
-    borderLight: "#ddd",       // Light borders
-    background: "#f4f4f4",     // Page background
-    headerBackground: "#0054a4", // Header background
-    warningLight: "#fff3cd",   // Warning backgrounds
-    warningMedium: "#ffeeba",  // Warning borders
-    warningDark: "#856404",    // Warning text
-  },
-
-  // PWA Configuration
+  // PWA
   pwa: {
-    themeColor: "#0054a4",      // Browser chrome color (mobile)
-    backgroundColor: "#ffffff", // Splash screen background
+    themeColor: "#0054a4",
+    backgroundColor: "#ffffff",
   },
 
   // Typography
   typography: {
     fontFamily: "Arial Narrow, sans-serif",
   },
-};
+})
 ```
 
-## Using Config Values in Components
+## Accessing Config in Components
 
-Config values are available as `import.meta.env.RADFISH_*` constants:
+Use `import.meta.env.RADFISH_*` constants:
 
 ```jsx
-function MyComponent() {
+function HomePage() {
   return (
-    <div>
-      <h1>{import.meta.env.RADFISH_APP_NAME}</h1>
-      <img src={import.meta.env.RADFISH_LOGO} alt="Logo" />
-    </div>
+    <img
+      src={import.meta.env.RADFISH_LOGO}
+      alt={`${import.meta.env.RADFISH_SHORT_NAME} logo`}
+    />
   );
 }
 ```
@@ -195,122 +162,89 @@ function MyComponent() {
 
 ## CSS Variables
 
-The config automatically generates CSS custom properties injected into your HTML:
-
-| CSS Variable | Config Source |
-|--------------|---------------|
-| `--noaa-dark-blue` | `colors.primary` |
-| `--noaa-light-blue` | `colors.secondary` |
-| `--noaa-accent-color` | `colors.accent` |
-| `--noaa-text-color` | `colors.text` |
-| `--noaa-error-color` | `colors.error` |
-| `--noaa-button-hover` | `colors.buttonHover` |
-| `--noaa-label-color` | `colors.label` |
-| `--noaa-border-dark` | `colors.borderDark` |
-| `--noaa-border-light` | `colors.borderLight` |
-| `--noaa-yellow-one` | `colors.warningLight` |
-| `--noaa-yellow-two` | `colors.warningMedium` |
-| `--noaa-yellow-three` | `colors.warningDark` |
-| `--radfish-background` | `colors.background` |
-| `--radfish-header-bg` | `colors.headerBackground` |
-| `--radfish-font-family` | `typography.fontFamily` |
-
-Example usage in CSS:
+The plugin injects CSS custom properties into `<head>`:
 
 ```css
-.my-element {
-  background-color: var(--noaa-dark-blue);
-  color: var(--noaa-text-color);
-  font-family: var(--radfish-font-family);
+:root {
+  --noaa-dark-blue: #0054a4;
+  --radfish-header-bg: #0054a4;
+  --radfish-secondary: #0093d0;
+  --radfish-accent: #00467f;
+  --noaa-text-color: #333333;
+  --radfish-error: #af292e;
+  --radfish-btn-hover: #0073b6;
+  --radfish-label: #0054a4;
+  --radfish-border-dark: #565c65;
+  --radfish-border-light: #dddddd;
+  --radfish-background: #f4f4f4;
+  --radfish-font-family: Arial Narrow, sans-serif;
 }
 ```
 
-## Customization Examples
+Use these in your CSS:
 
-### Change App Name
-
-```javascript
-app: {
-  name: "NOAA Fish Tracker",
-  shortName: "FishTracker",
-  description: "Track and manage fish catch data",
-},
+```css
+.my-button {
+  background-color: var(--noaa-dark-blue);
+  color: white;
+}
 ```
 
-### Change Brand Colors
+## Creating a New Theme
 
-```javascript
-colors: {
-  primary: "#2e7d32",           // Green theme
-  secondary: "#4caf50",
-  headerBackground: "#2e7d32",
-},
-pwa: {
-  themeColor: "#2e7d32",        // Match your primary color
-},
-```
+1. Create a theme folder structure:
+   ```bash
+   mkdir -p themes/my-agency/assets themes/my-agency/styles
+   ```
 
-### Use Custom Logo
+2. Add your icons to `themes/my-agency/assets/`:
+   - `radfish.png` - Main logo
+   - `radfish.ico` - Favicon
+   - `144.png`, `192.png`, `512.png` - PWA icons
 
-1. Add your logo to `public/icons/`
-2. Update the config:
+3. Create `themes/my-agency/styles/_colors.scss` with your colors:
+   ```scss
+   $primary: #2e7d32;
+   $secondary: #4caf50;
+   $accent: #1b5e20;
+   $header-background: #2e7d32;
+   // ... add other color variables as needed
+   ```
 
-```javascript
-icons: {
-  logo: "/icons/my-agency-logo.png",
-  favicon: "/icons/my-agency.ico",
-},
-```
-
-## How It Works
-
-The RADFish theme system uses a Vite plugin that:
-
-1. **Reads `radfish.config.js`** at build/dev time
-2. **Injects CSS variables** into `<head>` via `<style>` tag
-3. **Provides constants** via Vite's `define` option (`import.meta.env.RADFISH_*`)
-4. **Transforms HTML** - updates title, meta tags, favicon links
-5. **Writes manifest.json** after build for PWA
+4. Update `vite.config.js`:
+   ```javascript
+   radFishThemePlugin("my-agency", {
+     app: { name: "My Agency App" },
+   })
+   ```
 
 ## File Structure
 
 ```
 your-project/
-├── theme/                      # Auto-detected theme folder (recommended)
-│   ├── radfish.config.js       # Theme config
-│   └── icons/                  # Theme icons (served automatically)
-├── radfish.config.js           # Or place config here (if no theme/ folder)
-├── example-themes/             # Ready-to-use theme packages
-│   ├── noaa-default/           # Default NOAA blue theme
-│   └── custom-agency/          # Example customized theme
+├── vite.config.js              # Theme plugin config here
+├── themes/
+│   └── noaa-theme/
+│       ├── assets/             # Theme icons
+│       └── styles/
+│           └── _colors.scss    # Theme color variables
 ├── plugins/
-│   └── vite-plugin-radfish-theme.js  # Theme processing
+│   └── vite-plugin-radfish-theme.js
 ├── src/
 │   └── styles/
-│       ├── theme.css           # Styles that use CSS variables (header, body)
-│       └── custom.css          # Your custom overrides (optional)
+│       └── theme.css           # Styles using CSS variables
 └── public/
-    └── icons/                  # Fallback icons (if no theme/ folder)
+    └── icons/                  # Fallback icons
 ```
 
 ## Troubleshooting
 
 ### Changes not appearing?
 
-- Restart the dev server after editing `radfish.config.js`
+- Restart the dev server after changing `vite.config.js`
 - Clear browser cache (Ctrl+Shift+R or Cmd+Shift+R)
 
 ### PWA icons not updating?
 
 - Unregister the service worker in DevTools → Application → Service Workers
 - Clear application data and reload
-
-### Build errors?
-
-- Ensure `radfish.config.js` uses valid JavaScript syntax
-- Check that icon paths exist in the `public/` directory
-
-### CSS variables not working?
-
-- The variables are injected into `<head>` - check the HTML source
-- Make sure you're using the correct variable names (see table above)
