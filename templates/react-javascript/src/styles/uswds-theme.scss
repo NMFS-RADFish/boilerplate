@@ -1,0 +1,22 @@
+/**
+ * USWDS Custom Theme
+ *
+ * This file configures USWDS theme settings and compiles the design system
+ * with custom colors. Changes here affect all USWDS components (buttons, links, etc.)
+ *
+ * Color tokens reference: https://designsystem.digital.gov/design-tokens/color/system-tokens/
+ */
+
+// Configure USWDS with custom theme settings
+@use "uswds-core" with (
+  // Primary color - used for buttons, links, focus states
+  $theme-color-primary: "green-60v",
+
+  // Add more theme settings as needed:
+  // $theme-color-secondary: "cyan-30v",
+  // $theme-color-accent-cool: "blue-cool-60v",
+  // $theme-color-accent-warm: "orange-40v",
+);
+
+// Import full USWDS styles
+@forward "uswds";

@@ -1,5 +1,7 @@
-/* trussworks component styles */
-@import "@trussworks/react-uswds/lib/uswds.css";
+/* Custom USWDS with theme settings - replaces pre-compiled CSS */
+@import "./styles/uswds-theme.scss";
+
+/* Trussworks component-specific styles */
 @import "@trussworks/react-uswds/lib/index.css";
 
 /* RADFish theme styles - must come AFTER uswds to override */

@@ -6,7 +6,11 @@ import { Application } from "@nmfs-radfish/radfish";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-const app = new Application();
+const app = new Application({
+  serviceWorker: {
+    url: "/service-worker.js",
+  },
+});
 
 app.on("ready", async () => {
   root.render(
