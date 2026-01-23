@@ -153,8 +153,9 @@ function getManifestIcons(config) {
 
 /**
  * Default configuration values (used if radfish.config.js is missing)
+ * Exported so vite.config.js can import and use default colors
  */
-function getDefaultConfig() {
+export function getDefaultConfig() {
   return {
     app: {
       name: "RADFish Application",
@@ -307,17 +308,23 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
       // Serve theme assets if theme directory exists
       if (!themeDir) return;
 
-      // Watch _colors.scss for changes and trigger full reload
-      const colorsScssPath = path.join(themeDir, "styles", "_colors.scss");
-      if (fs.existsSync(colorsScssPath)) {
-        server.watcher.add(colorsScssPath);
-        server.watcher.on("change", (changedPath) => {
-          if (changedPath === colorsScssPath) {
-            console.log("[radfish-theme] Colors changed, restarting server...");
-            server.restart();
-          }
-        });
-      }
+      // Watch SCSS files for changes and trigger full reload
+      const scssFilesToWatch = [
+        path.join(themeDir, "styles", "_colors.scss"),
+        path.resolve(resolvedViteConfig.root, "src/styles/uswds-theme.scss"),
+      ];
+
+      scssFilesToWatch.forEach((scssPath) => {
+        if (fs.existsSync(scssPath)) {
+          server.watcher.add(scssPath);
+          server.watcher.on("change", (changedPath) => {
+            if (changedPath === scssPath) {
+              console.log(`[radfish-theme] SCSS changed (${path.basename(scssPath)}), restarting server...`);
+              server.restart();
+            }
+          });
+        }
+      });
 
       const themeAssetsDir = path.join(themeDir, "assets");
       if (!fs.existsSync(themeAssetsDir)) return;
@@ -347,18 +354,18 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
       const cssVariables = `
     <style id="radfish-theme-variables">
       :root {
-        --noaa-dark-blue: ${config.colors.primary};
-        --noaa-light-blue: ${config.colors.secondary};
-        --noaa-accent-color: ${config.colors.accent};
-        --noaa-text-color: ${config.colors.text};
-        --noaa-error-color: ${config.colors.error};
-        --noaa-button-hover: ${config.colors.buttonHover};
-        --noaa-label-color: ${config.colors.label};
-        --noaa-border-dark: ${config.colors.borderDark};
-        --noaa-border-light: ${config.colors.borderLight};
-        --noaa-yellow-one: ${config.colors.warningLight};
-        --noaa-yellow-two: ${config.colors.warningMedium};
-        --noaa-yellow-three: ${config.colors.warningDark};
+        --radfish-primary: ${config.colors.primary};
+        --radfish-secondary: ${config.colors.secondary};
+        --radfish-accent: ${config.colors.accent};
+        --radfish-text: ${config.colors.text};
+        --radfish-error: ${config.colors.error};
+        --radfish-button-hover: ${config.colors.buttonHover};
+        --radfish-label: ${config.colors.label};
+        --radfish-border-dark: ${config.colors.borderDark};
+        --radfish-border-light: ${config.colors.borderLight};
+        --radfish-warning-light: ${config.colors.warningLight};
+        --radfish-warning-medium: ${config.colors.warningMedium};
+        --radfish-warning-dark: ${config.colors.warningDark};
         --radfish-background: ${config.colors.background};
         --radfish-header-bg: ${config.colors.headerBackground};
         --radfish-font-family: ${config.typography.fontFamily};

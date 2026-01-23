@@ -1,10 +1,20 @@
 /**
- * USWDS Custom Theme
+ * USWDS Custom Theme Configuration
  *
- * This file configures USWDS theme settings and compiles the design system
- * with custom colors. Changes here affect all USWDS components (buttons, links, etc.)
+ * This file configures USWDS component colors (buttons, forms, navigation, etc.)
+ * USWDS uses named color tokens like "gold-60v", "blue-60v", etc.
  *
- * Color tokens reference: https://designsystem.digital.gov/design-tokens/color/system-tokens/
+ * NOTE: This is SEPARATE from themes/noaa-theme/styles/_colors.scss
+ *
+ * Color system architecture:
+ *   - themes/noaa-theme/styles/_colors.scss  → RADFish app branding (hex colors)
+ *   - src/styles/uswds-theme.scss             → USWDS component colors (named tokens)
+ *   - vite.config.js                          → PWA theme (synced from _colors.scss)
+ *
+ * To make them visually consistent, choose an USWDS token that matches your
+ * primary brand color from _colors.scss.
+ *
+ * Available USWDS tokens: https://designsystem.digital.gov/design-tokens/color/system-tokens/
  */
 
 // Configure USWDS with custom theme settings
@@ -13,7 +23,7 @@
   $theme-color-primary: "green-60v",
 
   // Add more theme settings as needed:
-  // $theme-color-secondary: "cyan-30v",
+  $theme-color-secondary: "cyan-30v",
   // $theme-color-accent-cool: "blue-cool-60v",
   // $theme-color-accent-warm: "orange-40v",
 );

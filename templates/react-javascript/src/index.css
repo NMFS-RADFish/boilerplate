@@ -1,3 +1,5 @@
+/*import here first- might need out put file */
+
 /* Custom USWDS with theme settings - replaces pre-compiled CSS */
 @import "./styles/uswds-theme.scss";
 
@@ -5,7 +7,7 @@
 @import "@trussworks/react-uswds/lib/index.css";
 
 /* RADFish theme styles - must come AFTER uswds to override */
-@import "./styles/theme.css";
+@import "./styles/styles.css";
 
 /* normalize css */
 body {

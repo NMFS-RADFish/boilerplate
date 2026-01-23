@@ -11,7 +11,7 @@
 /* Example: Custom button styles */
 /*
 .my-custom-button {
-  background-color: var(--noaa-dark-blue);
+  background-color: var(--radfish-primary);
   color: white;
   border-radius: 4px;
 }
