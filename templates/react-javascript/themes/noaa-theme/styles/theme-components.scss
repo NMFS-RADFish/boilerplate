@@ -1,0 +1,45 @@
+/**
+ * RADFish Component Variables
+ *
+ * Set values for RADFish framework components.
+ * These variables are used by the plugin to generate component CSS.
+ *
+ * Available RADFish components:
+ *   - $header-background: Background color for header
+ *   - $header-logo-width: Width of logo in header
+ *   - $header-title-color: Color of header title text
+ *   - $header-menu-btn-color: Color of mobile menu button (displays at tablet size and below)
+ *
+ * Values can reference Section 1 tokens or use direct colors:
+ *   $header-background: 'primary';        // References token from theme-tokens.scss
+ *   $header-background: 'blue-60v';       // USWDS token name
+ *   $header-background: '#0054a4';        // Hex color
+ */
+
+// Header
+$header-background: 'secondary';        // References theme-tokens.scss token
+$header-logo-width: 72px;            // Minimum for agency logos
+$header-title-color: 'white';
+$header-menu-btn-color: 'secondary';    // Menu button color (mobile/tablet, displays at < 1024px width)
+
+// ============================================
+// Adding Custom Component Variables
+// ============================================
+// To add a new component variable:
+// 1. Add the variable definition here (e.g., $footer-background: 'primary';)
+// 2. Update the plugin's generateComponentsCSS() function to handle the new variable
+//
+// Example:
+//   $footer-background: 'base-lightest';
+//
+// Then in plugins/vite-plugin-radfish-theme.js, add a handler like:
+//
+//   if (radfishVars['footer-background']) {
+//     const bgValue = radfishVars['footer-background'];
+//     const normalizedBg = normalizeColorValue(bgValue);
+//     const bgExpression = normalizedBg.match(/^[a-z-]+$/) ? `color('${normalizedBg}')` : `'${normalizedBg}'`;
+//     css.push(`/* Footer Background */
+// footer.usa-footer {
+//   background-color: ${bgExpression} !important;
+// }`);
+//   }

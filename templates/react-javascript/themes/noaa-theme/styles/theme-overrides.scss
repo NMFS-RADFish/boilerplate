@@ -1,0 +1,29 @@
+/**
+ * Custom Component Overrides
+ *
+ * Write your own CSS rules to customize react-uswds components.
+ *
+ * You can use:
+ *   - USWDS utility functions: color("primary"), u-bg("base-lightest"), u-text("secondary")
+ *   - Standard CSS rules
+ *
+ * Available react-uswds components to override:
+ *   Layout & Navigation: usa-header, usa-footer, usa-sidenav, usa-breadcrumb, usa-in-page-nav
+ *   Forms & Inputs: usa-button, usa-input, usa-checkbox, usa-radio, usa-select, usa-form
+ *   Content & Display: usa-card, usa-alert, usa-table, usa-list, usa-accordion, usa-tag
+ *   Interactive: usa-modal, usa-tooltip, usa-pagination, usa-language-selector
+ *
+ * See: https://designsystem.digital.gov/components/overview/
+ */
+
+/* Example: Custom button styles */
+/* .usa-button {
+  border-radius: 8px;
+  font-weight: 600;
+} */
+
+/* Example: Custom card styles */
+/* .usa-card {
+  border-color: color("base-light");
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+} */

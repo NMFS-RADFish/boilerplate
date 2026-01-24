@@ -1,250 +1,354 @@
-# Theming Guide
+# RADFish Theming Guide
 
-This guide explains how to customize the look and feel of your RADFish application.
+This guide explains how to customize the look and feel of your RADFish application using USWDS, react-uswds, and RADFish component styling.
 
 ## Quick Start
 
-In `vite.config.js`, specify your theme:
+Theme customization is split across 3 files in the theme folder:
 
-```javascript
-radFishThemePlugin("noaa-theme", {
-  app: {
-    name: "My Agency App",
-    shortName: "MyApp",
-  },
-})
+```
+themes/noaa-theme/styles/
+├── theme-tokens.scss           # USWDS theme color tokens
+├── theme-components.scss       # RADFish component variables
+└── theme-overrides.scss        # Custom react-uswds component CSS
 ```
 
-Colors are defined in your theme's SCSS file at `themes/<theme-name>/styles/_colors.scss`.
+1. **theme-tokens.scss** - Set design system colors
+2. **theme-components.scss** - Configure framework components
+3. **theme-overrides.scss** - Style react-uswds components
 
 ## How It Works
 
-The plugin accepts two arguments:
+The RADFish theme plugin:
 
-1. **Theme name** (string) - Name of folder in `themes/` directory containing assets and colors
-2. **Config overrides** (object, optional) - Customize app name, icons, etc.
+1. **Reads 3 theme files** from `themes/noaa-theme/styles/`
+2. **Generates `_uswds-generated.scss`** from theme-tokens.scss with:
+   - USWDS configuration (@use "uswds-core" with theme color tokens)
+3. **Generates `_theme-components-generated.scss`** from theme-components.scss with:
+   - RADFish component CSS rules using the defined variables
+4. **Watches all theme files** for changes and regenerates on save
+5. **Injects CSS variables** from tokens into index.html
+
+### Architecture
+
+```
+themes/noaa-theme/styles/
+├── theme-tokens.scss (developer edits)
+│   └── USWDS Theme Color Tokens
+│                   ↓
+├── theme-components.scss (developer edits)
+│   └── RADFish Component Variables
+│                   ↓
+├── theme-overrides.scss (developer edits)
+│   └── Custom react-uswds Component CSS
+│                   ↓
+└── _uswds-generated.scss (auto-generated, don't edit)
+    └── USWDS @use statement (from theme-tokens.scss)
+```
+
+## Section 1: USWDS Theme Color Tokens
+
+Edit **`theme-tokens.scss`** to set design system color tokens. You can use:
+
+- **USWDS token names**: `'blue-60v'`, `'red-50v'`, `'gray-cool-30'`, etc.
+- **Hex colors**: `'#0054a4'`, `'#ffffff'`, etc.
+
+### Example
+
+```scss
+/* themes/noaa-theme/styles/theme-tokens.scss */
+
+// Base Colors
+$base-lightest: 'gray-5';
+$base-lighter: 'gray-cool-10';
+$primary: 'blue-60v';
+$secondary: 'red-50v';
+
+// Or use hex colors
+$primary: '#0054a4';
+```
+
+### Available USWDS Tokens
+
+- **Base**: `base-lightest`, `base-lighter`, `base-light`, `base`, `base-dark`, `base-darker`, `base-darkest`
+- **Primary**: `primary`, `primary-lighter`, `primary-light`, `primary-vivid`, `primary-dark`, `primary-darker`
+- **Secondary**: `secondary`, `secondary-lighter`, `secondary-light`, `secondary-vivid`, `secondary-dark`, `secondary-darker`
+- **Accent Cool**: `accent-cool-lighter`, `accent-cool-light`, `accent-cool`, `accent-cool-dark`, `accent-cool-darker`
+- **Accent Warm**: `accent-warm-lighter`, `accent-warm-light`, `accent-warm`, `accent-warm-dark`, `accent-warm-darker`
+- **State**: `info`, `error`, `warning`, `success` (with `-lighter`, `-light`, `-dark`, `-darker` variants)
+- **Disabled**: `disabled-light`, `disabled`, `disabled-dark`
+
+See [USWDS Design Tokens](https://designsystem.digital.gov/design-tokens/color/theme-tokens/) for complete list.
+
+## Section 2: RADFish Component Variables
+
+Edit **`theme-components.scss`** to configure RADFish framework components. The plugin automatically generates CSS rules from these variables and includes them in the CSS import chain via `_theme-components-generated.scss`.
+
+Currently supports:
+
+### Header Variables
+
+```scss
+/* themes/noaa-theme/styles/theme-components.scss */
+
+$header-background: 'primary';          // References theme-tokens.scss token or hex color
+$header-logo-width: 72px;              // Width of logo element in header
+$header-title-color: 'white';          // Color name or hex
+$header-menu-btn-color: 'primary';     // Menu button color (mobile/tablet size)
+```
+
+**How it works:**
+- Plugin reads variables from `theme-components.scss`
+- Generates `_theme-components-generated.scss` with CSS rules
+- Token references like `'primary'` become `color('primary')` (USWDS function)
+- Direct colors like `'white'` or `'#0054a4'` are used as-is
+- USWDS module is imported automatically for utility functions
+
+### Adding Custom Component Variables
+
+You can extend RADFish with your own component variables. This requires a 2-step process:
+
+**Step 1: Add variable to `theme-components.scss`**
+
+```scss
+/* themes/noaa-theme/styles/theme-components.scss */
+
+$footer-background: 'base-lightest';   // Your custom footer variable
+$nav-link-color: 'primary';            // Your custom nav link color
+```
+
+**Step 2: Add handler to the plugin**
+
+Edit `plugins/vite-plugin-radfish-theme.js` and add a handler in the `generateComponentsCSS()` function:
 
 ```javascript
-// Use NOAA theme with defaults
-radFishThemePlugin("noaa-theme")
+// In plugins/vite-plugin-radfish-theme.js
+// Inside the generateComponentsCSS() function, add:
 
-// Use NOAA theme with custom app name
-radFishThemePlugin("noaa-theme", {
-  app: { name: "My Agency App" }
-})
+if (radfishVars.footerBackground || radfishVars['footer-background']) {
+  const bgValue = radfishVars.footerBackground || radfishVars['footer-background'];
+  const normalizedBg = normalizeColorValue(bgValue);
+  // Check if it's a token reference (from theme-tokens) or direct color
+  const bgExpression = normalizedBg.match(/^[a-z-]+$/) ? `color('${normalizedBg}')` : `'${normalizedBg}'`;
+
+  css.push(`/* Footer Background */
+footer.usa-footer {
+  background-color: ${bgExpression} !important;
+}`);
+}
+
+if (radfishVars.navLinkColor || radfishVars['nav-link-color']) {
+  const linkColor = radfishVars.navLinkColor || radfishVars['nav-link-color'];
+  const normalizedColor = normalizeColorValue(linkColor);
+  const colorExpression = normalizedColor.match(/^[a-z-]+$/) ? `color('${normalizedColor}')` : `'${normalizedColor}'`;
+
+  css.push(`/* Navigation Link Color */
+.usa-nav__link {
+  color: ${colorExpression} !important;
+}`);
+}
+```
+
+**Pattern explanation:**
+- Check both kebab-case (`'footer-background'`) and camelCase (`footerBackground`) variable names for compatibility
+- Normalize the color value by stripping quotes
+- Detect token references using regex: if value matches `^[a-z-]+$`, it's a USWDS token
+- For tokens, use `color()` function; for hex/names, use directly
+- Add `!important` to override any conflicting styles
+- Push the CSS rule to the `css` array
+
+**Tips for finding CSS selectors:**
+- Inspect element in browser DevTools to find the exact class
+- Check [USWDS component documentation](https://designsystem.digital.gov/components/) for official class names
+- Common USWDS selectors: `.usa-footer`, `.usa-nav__link`, `.usa-button`, `.usa-card`, `.usa-alert`
+
+## Section 3: Custom Component Overrides
+
+Edit **`theme-overrides.scss`** to write your own CSS customizing react-uswds components. You can use:
+
+- USWDS utility functions: `color()`, `u-bg()`, `u-text()`
+- USWDS utility classes: `.bg-primary`, `.text-base-lightest`, etc.
+- Standard CSS
+
+### Available react-uswds Components
+
+You can override any USWDS component class:
+
+**Layout & Navigation**: `usa-header`, `usa-footer`, `usa-sidenav`, `usa-breadcrumb`, `usa-in-page-nav`, `usa-banner`, `usa-identifier`
+
+**Forms & Inputs**: `usa-button`, `usa-input`, `usa-checkbox`, `usa-radio`, `usa-select`, `usa-combo-box`, `usa-form`, `usa-validation`, and more
+
+**Content & Display**: `usa-card`, `usa-alert`, `usa-table`, `usa-list`, `usa-accordion`, `usa-tag`, `usa-collection`, and more
+
+**Interactive**: `usa-modal`, `usa-tooltip`, `usa-pagination`, `usa-language-selector`
+
+### Example
+
+```scss
+/* themes/noaa-theme/styles/theme-overrides.scss */
+
+/* Custom button styles */
+.usa-button {
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* Custom card styles using USWDS utilities */
+.usa-card {
+  border-color: color('base-light');
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom alert styling */
+.usa-alert--info {
+  background-color: color('info');
+}
 ```
 
 ## Theme Structure
 
-Themes contain assets and color definitions:
-
 ```
-themes/
-└── noaa-theme/
-    ├── assets/
-    │   ├── radfish.png         # Main logo
-    │   ├── radfish.ico         # Favicon
-    │   ├── 144.png             # PWA icon
-    │   ├── 192.png             # PWA icon
-    │   └── 512.png             # PWA icon
-    └── styles/
-        └── _colors.scss        # Theme color variables
-```
-
-The plugin:
-- Reads color variables from `themes/<theme-name>/styles/_colors.scss`
-- Serves assets from `themes/<theme-name>/assets/` as `/icons/*` in dev mode
-- Copies assets to `dist/icons/` on build
-- Generates `manifest.json` on build
-
-## Configuration Options
-
-### Colors (SCSS File)
-
-Colors are defined in the theme's `_colors.scss` file:
-
-```scss
-// themes/noaa-theme/styles/_colors.scss
-
-// Primary colors
-$primary: #0054a4;
-$secondary: #0093d0;
-$accent: #00467f;
-
-// Text and UI colors
-$text: #333;
-$error: #af292e;
-$button-hover: #0073b6;
-$label: #0054a4;
-
-// Border colors
-$border-dark: #565c65;
-$border-light: #ddd;
-
-// Background colors
-$background: #f4f4f4;
-$header-background: #0054a4;
-
-// Warning/status colors
-$warning-light: #fff3cd;
-$warning-medium: #ffeeba;
-$warning-dark: #856404;
+themes/noaa-theme/
+├── assets/                         # Theme icons and logos
+│   ├── radfish.png                # Main logo
+│   ├── radfish.ico                # Favicon
+│   ├── 144.png                    # PWA icon
+│   ├── 192.png                    # PWA icon
+│   └── 512.png                    # PWA icon
+└── styles/
+    ├── theme-tokens.scss          # USWDS color tokens (edit this)
+    ├── theme-components.scss      # RADFish component variables (edit this)
+    ├── theme-overrides.scss       # Custom react-uswds CSS (edit this)
+    └── .generated/                # Auto-generated files (do not edit)
+        ├── _uswds-generated.scss           # From theme-tokens.scss
+        └── _theme-components-generated.scss # From theme-components.scss
 ```
 
-Variable names use kebab-case (e.g., `$button-hover`) and are automatically converted to camelCase (e.g., `buttonHover`) for internal config compatibility.
+**Note:** The `.generated/` folder is auto-generated and should not be committed to git. It's included in `.gitignore`.
 
-### Plugin Config Overrides
+## Developer Styles
 
-Non-color configuration is passed as the second argument to `radFishThemePlugin()`:
+Add application-specific page and layout styles in:
+
+```
+src/styles/custom.css
+```
+
+This file is loaded **after** all theme styles, so you can override anything.
+
+### Example
+
+```css
+/* src/styles/custom.css */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.fish-data-card {
+  background: var(--radfish-background);
+  border: 1px solid var(--radfish-border-light);
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+```
+
+### Available CSS Variables
+
+The plugin injects these CSS variables from Section 1:
+
+- `--radfish-primary` - Primary brand color
+- `--radfish-secondary` - Secondary color
+- `--radfish-accent` - Accent color
+- `--radfish-text` - Text color
+- `--radfish-error` - Error color
+- `--radfish-background` - Background color
+- `--radfish-border-light` - Light border color
+- `--radfish-border-dark` - Dark border color
+- And others based on your Section 1 variables...
+
+## CSS Import Order
+
+The styles are loaded in this order (in `src/index.css`):
+
+1. **_uswds-generated.scss** - Auto-generated USWDS configuration from theme-tokens.scss
+2. **@trussworks/react-uswds** - Trussworks component base styles
+3. **_theme-components-generated.scss** - Auto-generated RADFish component styles from theme-components.scss
+4. **theme-overrides.scss** - Your custom react-uswds component overrides
+5. **src/styles/custom.css** - Your page-level application styles
+
+This order ensures correct CSS cascade: USWDS base → Trussworks components → RADFish components → Your overrides → Your app styles
+
+## Configuration
+
+In `vite.config.js`:
 
 ```javascript
 radFishThemePlugin("noaa-theme", {
-  // Application Identity
   app: {
-    name: "My Agency App",
+    name: "My App Name",
     shortName: "MyApp",
-    description: "Description for PWA",
+    description: "App description for PWA",
   },
-
-  // Icon Paths (relative to /icons/)
-  icons: {
-    logo: "/icons/radfish.png",
-    favicon: "/icons/radfish.ico",
-    appleTouchIcon: "/icons/radfish.png",
-    pwa: {
-      icon144: "/icons/144.png",
-      icon192: "/icons/192.png",
-      icon512: "/icons/512.png",
-    },
-  },
-
-  // PWA
   pwa: {
     themeColor: "#0054a4",
     backgroundColor: "#ffffff",
   },
-
-  // Typography
-  typography: {
-    fontFamily: "Arial Narrow, sans-serif",
-  },
 })
 ```
 
-## Accessing Config in Components
-
-Use `import.meta.env.RADFISH_*` constants:
-
-```jsx
-function HomePage() {
-  return (
-    <img
-      src={import.meta.env.RADFISH_LOGO}
-      alt={`${import.meta.env.RADFISH_SHORT_NAME} logo`}
-    />
-  );
-}
-```
-
-### Available Constants
-
-| Constant | Config Source |
-|----------|---------------|
-| `import.meta.env.RADFISH_APP_NAME` | `app.name` |
-| `import.meta.env.RADFISH_SHORT_NAME` | `app.shortName` |
-| `import.meta.env.RADFISH_DESCRIPTION` | `app.description` |
-| `import.meta.env.RADFISH_LOGO` | `icons.logo` |
-| `import.meta.env.RADFISH_FAVICON` | `icons.favicon` |
-| `import.meta.env.RADFISH_PRIMARY_COLOR` | `colors.primary` |
-| `import.meta.env.RADFISH_SECONDARY_COLOR` | `colors.secondary` |
-| `import.meta.env.RADFISH_THEME_COLOR` | `pwa.themeColor` |
-| `import.meta.env.RADFISH_BG_COLOR` | `pwa.backgroundColor` |
-
-## CSS Variables
-
-The plugin injects CSS custom properties into `<head>`:
-
-```css
-:root {
-  --noaa-dark-blue: #0054a4;
-  --radfish-header-bg: #0054a4;
-  --radfish-secondary: #0093d0;
-  --radfish-accent: #00467f;
-  --noaa-text-color: #333333;
-  --radfish-error: #af292e;
-  --radfish-btn-hover: #0073b6;
-  --radfish-label: #0054a4;
-  --radfish-border-dark: #565c65;
-  --radfish-border-light: #dddddd;
-  --radfish-background: #f4f4f4;
-  --radfish-font-family: Arial Narrow, sans-serif;
-}
-```
-
-Use these in your CSS:
-
-```css
-.my-button {
-  background-color: var(--noaa-dark-blue);
-  color: white;
-}
-```
+The theme name matches the folder in `themes/` directory.
 
 ## Creating a New Theme
 
-1. Create a theme folder structure:
+1. Create theme folder:
    ```bash
    mkdir -p themes/my-agency/assets themes/my-agency/styles
    ```
 
-2. Add your icons to `themes/my-agency/assets/`:
-   - `radfish.png` - Main logo
-   - `radfish.ico` - Favicon
-   - `144.png`, `192.png`, `512.png` - PWA icons
+2. Add assets to `themes/my-agency/assets/`:
+   - `radfish.png` (main logo)
+   - `radfish.ico` (favicon)
+   - `144.png`, `192.png`, `512.png` (PWA icons)
 
-3. Create `themes/my-agency/styles/_colors.scss` with your colors:
-   ```scss
-   $primary: #2e7d32;
-   $secondary: #4caf50;
-   $accent: #1b5e20;
-   $header-background: #2e7d32;
-   // ... add other color variables as needed
-   ```
+3. Create the 3 theme files in `themes/my-agency/styles/`:
+   - Copy `themes/noaa-theme/styles/theme-tokens.scss` → Customize color tokens
+   - Copy `themes/noaa-theme/styles/theme-components.scss` → Customize RADFish component variables
+   - Copy `themes/noaa-theme/styles/theme-overrides.scss` → Customize react-uswds component styles
 
 4. Update `vite.config.js`:
    ```javascript
    radFishThemePlugin("my-agency", {
-     app: { name: "My Agency App" },
+     app: { name: "My Agency App" }
    })
    ```
 
-## File Structure
-
-```
-your-project/
-├── vite.config.js              # Theme plugin config here
-├── themes/
-│   └── noaa-theme/
-│       ├── assets/             # Theme icons
-│       └── styles/
-│           └── _colors.scss    # Theme color variables
-├── plugins/
-│   └── vite-plugin-radfish-theme.js
-├── src/
-│   └── styles/
-│       └── theme.css           # Styles using CSS variables
-└── public/
-    └── icons/                  # Fallback icons
-```
+5. The plugin will auto-generate `_uswds-generated.scss` from your `theme-tokens.scss`
 
 ## Troubleshooting
 
 ### Changes not appearing?
 
-- Restart the dev server after changing `vite.config.js`
-- Clear browser cache (Ctrl+Shift+R or Cmd+Shift+R)
+- **Edit any theme file?** The dev server should auto-restart when you save
+- **Still not working?** Manually restart the server with `npm start`
+- **Browser cache?** Clear cache (Ctrl+Shift+R or Cmd+Shift+R)
 
-### PWA icons not updating?
+### USWDS utilities not working?
 
-- Unregister the service worker in DevTools → Application → Service Workers
-- Clear application data and reload
+Make sure you're using the correct syntax in `theme-overrides.scss`:
+- Function: `color('primary')` (with quotes)
+- Class: `.bg-primary` (with hyphen, no quotes)
+
+### Custom app styles not applying?
+
+Check that you're editing `src/styles/custom.css` for page-level styles.
+Theme styling should happen in the 3 theme files: `theme-tokens.scss`, `theme-components.scss`, and `theme-overrides.scss`.
+
+## Additional Resources
+
+- [USWDS Design System](https://designsystem.digital.gov/)
+- [USWDS Design Tokens](https://designsystem.digital.gov/design-tokens/)
+- [USWDS Components](https://designsystem.digital.gov/components/)
+- [Trussworks react-uswds](https://github.com/trussworks/react-uswds)

@@ -1,13 +1,19 @@
-/*import here first- might need out put file */
+/* Main CSS Entry Point */
 
-/* Custom USWDS with theme settings - replaces pre-compiled CSS */
-@import "./styles/uswds-theme.scss";
+/* 1. Auto-generated USWDS configuration (from theme-tokens.scss) */
+@import "@theme/.generated/_uswds-generated.scss";
 
-/* Trussworks component-specific styles */
+/* 2. Trussworks react-uswds component base styles */
 @import "@trussworks/react-uswds/lib/index.css";
 
-/* RADFish theme styles - must come AFTER uswds to override */
-@import "./styles/styles.css";
+/* 3. Auto-generated RADFish component styles (from theme-components.scss variables) */
+@import "@theme/.generated/_theme-components-generated.scss";
+
+/* 4. Custom component overrides (from theme-overrides.scss) */
+@import "@theme/theme-overrides.scss";
+
+/* 5. Developer's page-level custom styles */
+@import "./styles/custom.css";
 
 /* normalize css */
 body {
