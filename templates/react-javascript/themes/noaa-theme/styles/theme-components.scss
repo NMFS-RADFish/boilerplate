@@ -22,6 +22,12 @@ $header-logo-width: 72px;            // Minimum for agency logos
 $header-title-color: 'white';
 $header-menu-btn-color: 'secondary';    // Menu button color (mobile/tablet, displays at < 1024px width)
 
+// Button Hover States
+$button-primary-hover-bg: 'primary-dark';     // Primary button hover background
+$button-primary-hover-color: 'white';         // Primary button hover text color
+$button-secondary-hover-bg: 'secondary-dark'; // Secondary button hover background
+$button-secondary-hover-color: 'white';       // Secondary button hover text color
+
 // ============================================
 // Adding Custom Component Variables
 // ============================================

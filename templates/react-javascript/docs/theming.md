@@ -86,6 +86,9 @@ Edit **`theme-components.scss`** to configure RADFish framework components. The 
 
 Currently supports:
 
+**Header:** Background color, logo width, title color, mobile menu button color
+**Buttons:** Primary and secondary button hover state colors (background and text)
+
 ### Header Variables
 
 ```scss
@@ -96,6 +99,21 @@ $header-logo-width: 72px;              // Width of logo element in header
 $header-title-color: 'white';          // Color name or hex
 $header-menu-btn-color: 'primary';     // Menu button color (mobile/tablet size)
 ```
+
+### Button Hover State Variables
+
+```scss
+/* themes/noaa-theme/styles/theme-components.scss */
+
+$button-primary-hover-bg: 'primary-dark';     // Primary button hover background color
+$button-primary-hover-color: 'white';         // Primary button hover text color
+$button-secondary-hover-bg: 'secondary-dark'; // Secondary button hover background color
+$button-secondary-hover-color: 'white';       // Secondary button hover text color
+```
+
+**Selectors affected:**
+- Primary button hover: `.usa-button:hover`, `.usa-button:active`, `.usa-button:focus`
+- Secondary button hover: `.usa-button--secondary:hover`, `.usa-button--secondary:active`, `.usa-button--secondary:focus`
 
 **How it works:**
 - Plugin reads variables from `theme-components.scss`
