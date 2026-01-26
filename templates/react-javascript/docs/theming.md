@@ -88,6 +88,7 @@ Currently supports:
 
 **Header:** Background color, logo width, title color, mobile menu button color
 **Buttons:** Primary and secondary button hover state colors (background and text)
+**PWA Manifest:** Theme color for browser chrome, background color for splash screen
 
 ### Header Variables
 
@@ -114,6 +115,39 @@ $button-secondary-hover-color: 'white';       // Secondary button hover text col
 **Selectors affected:**
 - Primary button hover: `.usa-button:hover`, `.usa-button:active`, `.usa-button:focus`
 - Secondary button hover: `.usa-button--secondary:hover`, `.usa-button--secondary:active`, `.usa-button--secondary:focus`
+
+### PWA Manifest Colors (Auto-Mapped)
+
+The manifest colors are **automatically derived** from your theme tokens - no manual setup needed!
+
+**How it works:**
+- `theme_color` (browser chrome) → automatically uses `$primary` from `theme-tokens.scss`
+- `background_color` (splash screen) → automatically uses `$base-lightest` from `theme-tokens.scss`
+
+When you build with `npm run build`, these colors are automatically included in `dist/manifest.json`.
+
+**Example:**
+
+If you set in `theme-tokens.scss`:
+```scss
+$primary: 'blue-60v';           // This becomes the manifest theme color
+$base-lightest: 'gray-5';       // This becomes the manifest background
+```
+
+Your generated `dist/manifest.json` will have:
+```json
+{
+  "theme_color": "#0054a4",
+  "background_color": "#f5f5f5",
+  ...
+}
+```
+
+**Defaults if token is a name (not hex):**
+- If `$primary` is a token name like `'blue-60v'`, defaults to `#0054a4`
+- If `$base-lightest` is a token name, defaults to `#ffffff`
+
+No duplication needed - change your primary color once in `theme-tokens.scss` and everything updates!
 
 **How it works:**
 - Plugin reads variables from `theme-components.scss`

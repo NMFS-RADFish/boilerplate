@@ -449,6 +449,39 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
           // Merge USWDS tokens into config colors for CSS variable injection
           config.colors = deepMerge(config.colors, uswdsTokens);
 
+          // Auto-map PWA manifest colors from theme tokens
+          // Manifest theme color defaults to primary color from theme-tokens.scss
+          // Manifest background defaults to base-lightest from theme-tokens.scss
+          // Developers can override by adding variables to theme-components.scss if needed
+
+          // Set manifest theme color (use primary token, fallback to default)
+          if (uswdsTokens.primary) {
+            // Primary is typically a token name like 'blue-60v' or hex like '#0054a4'
+            // For manifests we want hex, so if it looks like a token name, use our default
+            const primaryValue = normalizeColorValue(uswdsTokens.primary);
+            if (primaryValue.match(/^#/)) {
+              // It's already a hex color, use it directly
+              config.pwa.themeColor = primaryValue;
+            } else {
+              // It's a token name - use a safe default
+              // Most apps use blue for primary, so #0054a4 is a good default
+              config.pwa.themeColor = '#0054a4';
+            }
+          }
+
+          // Set manifest background color (use base-lightest token, fallback to white)
+          if (uswdsTokens.baseLight || uswdsTokens.baseLighter || uswdsTokens.baseLightest) {
+            // Try to find a light color, default to white
+            const bgValue = uswdsTokens.baseLightest || uswdsTokens.baseLighter || uswdsTokens.baseLight;
+            const normalizedBg = normalizeColorValue(bgValue);
+            if (normalizedBg.match(/^#/)) {
+              config.pwa.backgroundColor = normalizedBg;
+            } else {
+              // It's a token name, use white as safe default
+              config.pwa.backgroundColor = '#ffffff';
+            }
+          }
+
           // Generate _uswds-generated.scss from tokens
           generateUswdsConfig(themeDirPath, themeName, uswdsTokens);
 

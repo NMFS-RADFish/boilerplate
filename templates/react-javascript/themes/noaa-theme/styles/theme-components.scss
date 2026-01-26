@@ -10,6 +10,10 @@
  *   - $header-title-color: Color of header title text
  *   - $header-menu-btn-color: Color of mobile menu button (displays at tablet size and below)
  *
+ * PWA Manifest colors are AUTO-MAPPED (no setup needed):
+ *   - manifest theme_color ← automatically uses $primary from theme-tokens.scss
+ *   - manifest background_color ← automatically uses $base-lightest from theme-tokens.scss
+ *
  * Values can reference Section 1 tokens or use direct colors:
  *   $header-background: 'primary';        // References token from theme-tokens.scss
  *   $header-background: 'blue-60v';       // USWDS token name
