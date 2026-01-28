@@ -75,24 +75,44 @@ function normalizeColorValue(value) {
   return value.replace(/['"]/g, '');
 }
 
+/**
+ * Check if a value is a USWDS system color token
+ * Matches patterns like: blue-60v, gray-cool-30, red-warm-50v, green-cool-40v
+ * See: https://designsystem.digital.gov/design-tokens/color/system-tokens/
+ */
+function isUswdsToken(value) {
+  // USWDS token pattern: color-family[-modifier]-grade[v]
+  // Examples: blue-60v, gray-cool-30, red-warm-50v, mint-cool-40v
+  const tokenPattern = /^(black|white|red|orange|gold|yellow|green|mint|cyan|blue|indigo|violet|magenta|gray)(-warm|-cool|-vivid)?(-[0-9]+v?)?$/;
+  return tokenPattern.test(value);
+}
 
 /**
- * Load theme files and extract variables
- * Returns: { uswdsTokens: {}, radfishVars: {} }
+ * Format value for USWDS @use statement
+ * - USWDS tokens: quoted ('blue-60v')
+ * - Custom values (hex, etc.): unquoted (#0093D0)
+ */
+function formatUswdsValue(value) {
+  const normalized = normalizeColorValue(value);
+  if (isUswdsToken(normalized)) {
+    return `'${normalized}'`; // USWDS tokens are quoted
+  }
+  return normalized; // Custom values (hex, etc.) are unquoted
+}
+
+
+/**
+ * Load theme tokens from theme-tokens.scss
+ * Returns: { uswdsTokens: {} }
  */
 function loadThemeFiles(themeDir) {
   const tokensFile = path.join(themeDir, "styles", "theme-tokens.scss");
-  const componentsFile = path.join(themeDir, "styles", "theme-components.scss");
 
   const uswdsTokens = fs.existsSync(tokensFile)
     ? parseScssVariables(tokensFile)
     : {};
 
-  const radfishVars = fs.existsSync(componentsFile)
-    ? parseScssVariables(componentsFile)
-    : {};
-
-  return { uswdsTokens, radfishVars };
+  return { uswdsTokens };
 }
 
 /**
@@ -112,8 +132,9 @@ function generateUswdsConfig(themeDir, themeName, uswdsTokens) {
       const kebabKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
       // Convert kebab-case to USWDS format: base-lightest → theme-color-base-lightest
       const uswdsKey = `theme-color-${kebabKey}`;
-      const normalizedValue = normalizeColorValue(value);
-      return `  $${uswdsKey}: '${normalizedValue}'`;
+      // Format value: hex colors unquoted, token names quoted
+      const formattedValue = formatUswdsValue(value);
+      return `  $${uswdsKey}: ${formattedValue}`;
     })
     .join(',\n');
 
@@ -138,125 +159,6 @@ ${uswdsTokensStr},
 
   fs.writeFileSync(outputPath, content);
   console.log("[radfish-theme] Generated USWDS config:", outputPath);
-}
-
-/**
- * Generate _theme-components-generated.scss from RADFish component variables
- */
-function generateComponentsCSS(themeDir, themeName, radfishVars) {
-  const generatedDir = path.join(themeDir, "styles", ".generated");
-  if (!fs.existsSync(generatedDir)) {
-    fs.mkdirSync(generatedDir, { recursive: true });
-  }
-  const outputPath = path.join(generatedDir, "_theme-components-generated.scss");
-
-  const css = [];
-
-  // Header styles
-  if (radfishVars.headerBackground || radfishVars['header-background']) {
-    const bgValue = radfishVars.headerBackground || radfishVars['header-background'];
-    const normalizedBg = normalizeColorValue(bgValue);
-    // Check if it's a token reference (from theme-tokens) or direct color
-    const bgExpression = normalizedBg.match(/^[a-z-]+$/) ? `color('${normalizedBg}')` : `'${normalizedBg}'`;
-
-    css.push(`/* Header Background */
-.usa-header.usa-header--basic.header-container,
-.usa-header.header-container,
-header.usa-header {
-  background-color: ${bgExpression} !important;
-}
-
-.usa-header .usa-navbar,
-.usa-header--basic .usa-navbar,
-.usa-nav-container {
-  background-color: ${bgExpression} !important;
-}`);
-  }
-
-  if (radfishVars.headerLogoWidth || radfishVars['header-logo-width']) {
-    const width = radfishVars.headerLogoWidth || radfishVars['header-logo-width'];
-    css.push(`/* Header Logo Width */
-.header-logo {
-  width: ${width};
-}`);
-  }
-
-  if (radfishVars.headerTitleColor || radfishVars['header-title-color']) {
-    const color = radfishVars.headerTitleColor || radfishVars['header-title-color'];
-    const normalizedColor = normalizeColorValue(color);
-    css.push(`/* Header Title Color */
-.header-title {
-  color: ${normalizedColor};
-}`);
-  }
-
-  if (radfishVars.headerMenuBtnColor || radfishVars['header-menu-btn-color']) {
-    const btnColor = radfishVars.headerMenuBtnColor || radfishVars['header-menu-btn-color'];
-    const normalizedBtnColor = normalizeColorValue(btnColor);
-    // Check if it's a token reference (from theme-tokens) or direct color
-    const btnColorExpression = normalizedBtnColor.match(/^[a-z-]+$/) ? `color('${normalizedBtnColor}')` : `'${normalizedBtnColor}'`;
-
-    css.push(`/* Header Menu Button Color */
-.usa-menu-btn {
-  background-color: ${btnColorExpression} !important;
-  color: white !important;
-}`);
-  }
-
-  // Button Hover States
-  if (radfishVars.buttonPrimaryHoverBg || radfishVars['button-primary-hover-bg']) {
-    const hoverBg = radfishVars.buttonPrimaryHoverBg || radfishVars['button-primary-hover-bg'];
-    const normalizedHoverBg = normalizeColorValue(hoverBg);
-    const hoverBgExpression = normalizedHoverBg.match(/^[a-z-]+$/) ? `color('${normalizedHoverBg}')` : `'${normalizedHoverBg}'`;
-
-    const hoverColor = radfishVars.buttonPrimaryHoverColor || radfishVars['button-primary-hover-color'] || 'white';
-    const normalizedHoverColor = normalizeColorValue(hoverColor);
-    const hoverColorExpression = normalizedHoverColor.match(/^[a-z-]+$/) ? `color('${normalizedHoverColor}')` : `'${normalizedHoverColor}'`;
-
-    css.push(`/* Primary Button Hover State */
-.usa-button:hover,
-.usa-button:active,
-.usa-button:focus {
-  background-color: ${hoverBgExpression} !important;
-  color: ${hoverColorExpression} !important;
-}`);
-  }
-
-  if (radfishVars.buttonSecondaryHoverBg || radfishVars['button-secondary-hover-bg']) {
-    const hoverBg = radfishVars.buttonSecondaryHoverBg || radfishVars['button-secondary-hover-bg'];
-    const normalizedHoverBg = normalizeColorValue(hoverBg);
-    const hoverBgExpression = normalizedHoverBg.match(/^[a-z-]+$/) ? `color('${normalizedHoverBg}')` : `'${normalizedHoverBg}'`;
-
-    const hoverColor = radfishVars.buttonSecondaryHoverColor || radfishVars['button-secondary-hover-color'] || 'white';
-    const normalizedHoverColor = normalizeColorValue(hoverColor);
-    const hoverColorExpression = normalizedHoverColor.match(/^[a-z-]+$/) ? `color('${normalizedHoverColor}')` : `'${normalizedHoverColor}'`;
-
-    css.push(`/* Secondary Button Hover State */
-.usa-button--secondary:hover,
-.usa-button--secondary:active,
-.usa-button--secondary:focus {
-  background-color: ${hoverBgExpression} !important;
-  color: ${hoverColorExpression} !important;
-}`);
-  }
-
-  const content = `/**
- * AUTO-GENERATED RADFish Component Styles
- * Generated by RADFish theme plugin from themes/${themeName}/styles/theme-components.scss
- *
- * DO NOT EDIT MANUALLY - changes will be overwritten
- * To customize: Edit theme-components.scss
- */
-
-@use "uswds-core" as * with (
-  $theme-show-notifications: false
-);
-
-${css.join('\n\n')}
-`;
-
-  fs.writeFileSync(outputPath, content);
-  console.log("[radfish-theme] Generated component CSS:", outputPath);
 }
 
 /**
@@ -442,8 +344,8 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
         themeDir = themeDirPath;
         console.log("[radfish-theme] Using theme:", themeName);
 
-        // Load theme files: theme-tokens.scss and theme-components.scss
-        const { uswdsTokens, radfishVars } = loadThemeFiles(themeDirPath);
+        // Load theme tokens from theme-tokens.scss
+        const { uswdsTokens } = loadThemeFiles(themeDirPath);
 
         if (Object.keys(uswdsTokens).length > 0) {
           // Merge USWDS tokens into config colors for CSS variable injection
@@ -484,9 +386,6 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
 
           // Generate _uswds-generated.scss from tokens
           generateUswdsConfig(themeDirPath, themeName, uswdsTokens);
-
-          // Generate _theme-components-generated.scss from RADFish variables
-          generateComponentsCSS(themeDirPath, themeName, radfishVars);
 
           console.log("[radfish-theme] Loaded theme from:", themeDirPath);
         } else {
@@ -558,32 +457,22 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
       // Serve theme assets if theme directory exists
       if (!themeDir) return;
 
-      // Watch theme files for changes and regenerate _uswds-generated.scss
+      // Watch theme-tokens.scss for changes and regenerate _uswds-generated.scss
+      // (theme-components.scss and theme-overrides.scss are handled by Vite's hot reload)
       const themeTokensPath = path.join(themeDir, "styles", "theme-tokens.scss");
-      const themeComponentsPath = path.join(themeDir, "styles", "theme-components.scss");
-      const themeOverridesPath = path.join(themeDir, "styles", "theme-overrides.scss");
 
       if (fs.existsSync(themeTokensPath)) {
         server.watcher.add(themeTokensPath);
+        server.watcher.on("change", (changedPath) => {
+          if (changedPath === themeTokensPath) {
+            console.log("[radfish-theme] Theme tokens changed, regenerating USWDS config...");
+            const { uswdsTokens } = loadThemeFiles(themeDir);
+            generateUswdsConfig(themeDir, themeName, uswdsTokens);
+            console.log("[radfish-theme] Restarting server...");
+            server.restart();
+          }
+        });
       }
-      if (fs.existsSync(themeComponentsPath)) {
-        server.watcher.add(themeComponentsPath);
-      }
-      if (fs.existsSync(themeOverridesPath)) {
-        server.watcher.add(themeOverridesPath);
-      }
-
-      server.watcher.on("change", (changedPath) => {
-        if (changedPath === themeTokensPath || changedPath === themeComponentsPath || changedPath === themeOverridesPath) {
-          console.log("[radfish-theme] Theme file changed, regenerating CSS...");
-          const { uswdsTokens, radfishVars } = loadThemeFiles(themeDir);
-          generateUswdsConfig(themeDir, themeName, uswdsTokens);
-          generateComponentsCSS(themeDir, themeName, radfishVars);
-          // Restart server to apply changes
-          console.log("[radfish-theme] Restarting server...");
-          server.restart();
-        }
-      });
 
       const themeAssetsDir = path.join(themeDir, "assets");
       if (!fs.existsSync(themeAssetsDir)) return;

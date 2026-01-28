@@ -6,14 +6,18 @@
 /* 2. Trussworks react-uswds component base styles */
 @import "@trussworks/react-uswds/lib/index.css";
 
-/* 3. Auto-generated RADFish component styles (from theme-components.scss variables) */
-@import "@theme/.generated/_theme-components-generated.scss";
+/* 3. RADFish component styles (header, buttons, etc.) */
+@import "@theme/theme-components.scss";
 
 /* 4. Custom component overrides (from theme-overrides.scss) */
 @import "@theme/theme-overrides.scss";
 
 /* 5. Developer's page-level custom styles */
 @import "./styles/custom.css";
+
+html {
+  background-color: var(--noaa-region-mid-atlantic);
+}
 
 /* normalize css */
 body {

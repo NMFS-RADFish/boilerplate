@@ -1,55 +1,76 @@
 /**
- * RADFish Component Variables
+ * RADFish Component Styles
  *
- * Set values for RADFish framework components.
- * These variables are used by the plugin to generate component CSS.
+ * Customize RADFish framework components here.
+ * Uses USWDS color() function to reference theme-tokens.scss colors.
  *
- * Available RADFish components:
- *   - $header-background: Background color for header
- *   - $header-logo-width: Width of logo in header
- *   - $header-title-color: Color of header title text
- *   - $header-menu-btn-color: Color of mobile menu button (displays at tablet size and below)
+ * Available token references:
+ *   color('primary')         - Primary brand color
+ *   color('primary-dark')    - Darker primary
+ *   color('secondary')       - Secondary color
+ *   color('secondary-dark')  - Darker secondary
+ *   color('accent-cool')     - Cool accent (teal)
+ *   color('accent-warm')     - Warm accent (orange)
+ *   color('base-lightest')   - Lightest gray
+ *   color('error')           - Error red
+ *   color('success')         - Success green
+ *   color('warning')         - Warning orange
  *
- * PWA Manifest colors are AUTO-MAPPED (no setup needed):
- *   - manifest theme_color ← automatically uses $primary from theme-tokens.scss
- *   - manifest background_color ← automatically uses $base-lightest from theme-tokens.scss
- *
- * Values can reference Section 1 tokens or use direct colors:
- *   $header-background: 'primary';        // References token from theme-tokens.scss
- *   $header-background: 'blue-60v';       // USWDS token name
- *   $header-background: '#0054a4';        // Hex color
+ * Or use hex colors directly: #0055A4
  */
 
-// Header
-$header-background: 'secondary';        // References theme-tokens.scss token
-$header-logo-width: 72px;            // Minimum for agency logos
-$header-title-color: 'white';
-$header-menu-btn-color: 'secondary';    // Menu button color (mobile/tablet, displays at < 1024px width)
+// Import the configured USWDS module (with NOAA tokens from theme-tokens.scss)
+@use ".generated/uswds-generated" as *;
 
-// Button Hover States
-$button-primary-hover-bg: 'primary-dark';     // Primary button hover background
-$button-primary-hover-color: 'white';         // Primary button hover text color
-$button-secondary-hover-bg: 'secondary-dark'; // Secondary button hover background
-$button-secondary-hover-color: 'white';       // Secondary button hover text color
+// =============================================================================
+// HEADER
+// =============================================================================
 
-// ============================================
-// Adding Custom Component Variables
-// ============================================
-// To add a new component variable:
-// 1. Add the variable definition here (e.g., $footer-background: 'primary';)
-// 2. Update the plugin's generateComponentsCSS() function to handle the new variable
-//
-// Example:
-//   $footer-background: 'base-lightest';
-//
-// Then in plugins/vite-plugin-radfish-theme.js, add a handler like:
-//
-//   if (radfishVars['footer-background']) {
-//     const bgValue = radfishVars['footer-background'];
-//     const normalizedBg = normalizeColorValue(bgValue);
-//     const bgExpression = normalizedBg.match(/^[a-z-]+$/) ? `color('${normalizedBg}')` : `'${normalizedBg}'`;
-//     css.push(`/* Footer Background */
-// footer.usa-footer {
-//   background-color: ${bgExpression} !important;
-// }`);
-//   }
+/* Header Background */
+.usa-header.usa-header--basic.header-container,
+.usa-header.header-container,
+header.usa-header {
+  background-color: color('primary') !important;
+}
+
+.usa-header .usa-navbar,
+.usa-header--basic .usa-navbar,
+.usa-nav-container {
+  background-color: color('primary') !important;
+}
+
+/* Header Logo Width - Minimum 72px for agency logos */
+.header-logo {
+  width: 72px;
+}
+
+/* Header Title Color */
+.header-title {
+  color: white;
+}
+
+/* Header Menu Button (mobile/tablet) */
+.usa-menu-btn {
+  background-color: color('secondary') !important;
+  color: white !important;
+}
+
+// =============================================================================
+// BUTTONS
+// =============================================================================
+
+// /* Primary Button Hover State */
+// .usa-button:hover,
+// .usa-button:active,
+// .usa-button:focus {
+//   background-color: color('primary-dark') !important;
+//   color: white !important;
+// }
+
+// /* Secondary Button Hover State */
+// .usa-button--secondary:hover,
+// .usa-button--secondary:active,
+// .usa-button--secondary:focus {
+//   background-color: color('secondary-dark') !important;
+//   color: white !important;
+// }

@@ -1,10 +1,11 @@
 /**
- * Custom Component Overrides
+ * NOAA Fisheries Brand - Custom Component Overrides
  *
  * Write your own CSS rules to customize react-uswds components.
  *
  * You can use:
  *   - USWDS utility functions: color("primary"), u-bg("base-lightest"), u-text("secondary")
+ *   - NOAA CSS variables: var(--noaa-urchin), var(--noaa-region-alaska), etc.
  *   - Standard CSS rules
  *
  * Available react-uswds components to override:
@@ -15,6 +16,87 @@
  *
  * See: https://designsystem.digital.gov/components/overview/
  */
+
+// =============================================================================
+// EXTENDED NOAA PALETTES (CSS Custom Properties)
+// These colors extend the USWDS theme tokens for NOAA-specific needs
+// =============================================================================
+
+:root {
+  // =========================================================================
+  // NOAA PRIMARY BRAND COLORS (Direct Access)
+  // For cases where you need exact brand colors
+  // =========================================================================
+  --noaa-process-blue: #0093D0;      // NOAA Light Blue
+  --noaa-reflex-blue: #0055A4;       // NOAA Dark Blue
+  --noaa-navy-blue: #00467F;         // PMS 541
+
+  // =========================================================================
+  // REGIONAL WEB COLORS
+  // For region-specific styling, badges, and indicators
+  // =========================================================================
+  --noaa-region-national: #0055A4;        // Blue (Reflex Blue)
+  --noaa-region-west-coast: #4C9C2E;      // Green (PMS 362)
+  --noaa-region-southeast: #B2292E;       // Red (PMS 1805)
+  --noaa-region-alaska: #FF8300;          // Orange (PMS 151)
+  --noaa-region-pacific-islands: #625BC4; // Purple (PMS 2725)
+  --noaa-region-mid-atlantic: #625BC4;    // Purple (PMS 2725)
+
+  // =========================================================================
+  // THEME PALETTE QUICK ACCESS
+  // All six NOAA theme palettes for easy reference
+  // =========================================================================
+
+  // OCEANS (mapped to primary-*)
+  --noaa-oceans-light: #0093D0;
+  --noaa-oceans: #0055A4;
+  --noaa-oceans-dark: #00467F;
+
+  // WAVES (mapped to accent-cool-*)
+  --noaa-waves-light: #1ECAD3;
+  --noaa-waves: #008998;
+  --noaa-waves-dark: #007078;
+
+  // SEAGRASS (mapped to success-*)
+  --noaa-seagrass-light: #93D500;
+  --noaa-seagrass: #4C9C2E;
+  --noaa-seagrass-dark: #007934;
+
+  // URCHIN (CSS variables only - not in USWDS)
+  // Already defined above
+
+  // CRUSTACEAN (mapped to accent-warm-*)
+  --noaa-crustacean-light: #FF8300;
+  --noaa-crustacean: #D65F00;
+  --noaa-crustacean-dark: #BC4700;
+
+  // CORAL (mapped to secondary-*)
+  --noaa-coral-light: #FF4438;
+  --noaa-coral: #D02C2F;
+  --noaa-coral-dark: #B2292E;
+}
+
+// =============================================================================
+// COMPONENT OVERRIDES
+// =============================================================================
+
+/* Example: Regional badge styling */
+/*
+.region-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+}
+
+.region-badge--national { background-color: var(--noaa-region-national); }
+.region-badge--west-coast { background-color: var(--noaa-region-west-coast); }
+.region-badge--southeast { background-color: var(--noaa-region-southeast); }
+.region-badge--alaska { background-color: var(--noaa-region-alaska); }
+.region-badge--pacific-islands { background-color: var(--noaa-region-pacific-islands); }
+.region-badge--mid-atlantic { background-color: var(--noaa-region-mid-atlantic); }
+*/
 
 /* Example: Custom button styles */
 /* .usa-button {
