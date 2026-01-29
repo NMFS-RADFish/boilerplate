@@ -1,15 +1,12 @@
 /* Main CSS Entry Point */
+/*
+ * Theme CSS imports (USWDS, theme-components, theme-overrides) are
+ * automatically injected by the RADFish Vite plugin into index.html.
+ *
+ * This file is for developer-specific styles only.
+ */
 
-/* 1. Pre-compiled USWDS styles (cached, only recompiles when theme-tokens.scss changes) */
-@import "@theme/.generated/uswds-precompiled.css";
-
-/* 2. RADFish component styles (header, buttons, etc.) */
-@import "@theme/theme-components.scss";
-
-/* 3. Custom component overrides (from theme-overrides.scss) */
-@import "@theme/theme-overrides.scss";
-
-/* 4. Developer's page-level custom styles */
+/* Developer's page-level custom styles */
 @import "./styles/custom.css";
 
 /* normalize css */
