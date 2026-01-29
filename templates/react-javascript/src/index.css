@@ -1,23 +1,16 @@
 /* Main CSS Entry Point */
 
-/* 1. Auto-generated USWDS configuration (from theme-tokens.scss) */
-@import "@theme/.generated/_uswds-generated.scss";
+/* 1. Pre-compiled USWDS styles (cached, only recompiles when theme-tokens.scss changes) */
+@import "@theme/.generated/uswds-precompiled.css";
 
-/* 2. Trussworks react-uswds component base styles */
-@import "@trussworks/react-uswds/lib/index.css";
-
-/* 3. RADFish component styles (header, buttons, etc.) */
+/* 2. RADFish component styles (header, buttons, etc.) */
 @import "@theme/theme-components.scss";
 
-/* 4. Custom component overrides (from theme-overrides.scss) */
+/* 3. Custom component overrides (from theme-overrides.scss) */
 @import "@theme/theme-overrides.scss";
 
-/* 5. Developer's page-level custom styles */
+/* 4. Developer's page-level custom styles */
 @import "./styles/custom.css";
-
-html {
-  background-color: var(--noaa-region-mid-atlantic);
-}
 
 /* normalize css */
 body {

@@ -2,25 +2,22 @@
  * RADFish Component Styles
  *
  * Customize RADFish framework components here.
- * Uses USWDS color() function to reference theme-tokens.scss colors.
+ * Uses CSS variables injected by the RADFish theme plugin.
  *
- * Available token references:
- *   color('primary')         - Primary brand color
- *   color('primary-dark')    - Darker primary
- *   color('secondary')       - Secondary color
- *   color('secondary-dark')  - Darker secondary
- *   color('accent-cool')     - Cool accent (teal)
- *   color('accent-warm')     - Warm accent (orange)
- *   color('base-lightest')   - Lightest gray
- *   color('error')           - Error red
- *   color('success')         - Success green
- *   color('warning')         - Warning orange
+ * Available CSS variables (from theme-tokens.scss):
+ *   var(--radfish-color-primary)         - Primary brand color
+ *   var(--radfish-color-primary-dark)    - Darker primary
+ *   var(--radfish-color-secondary)       - Secondary color
+ *   var(--radfish-color-secondary-dark)  - Darker secondary
+ *   var(--radfish-color-accent-cool)     - Cool accent (teal)
+ *   var(--radfish-color-accent-warm)     - Warm accent (orange)
+ *   var(--radfish-color-base-lightest)   - Lightest gray
+ *   var(--radfish-color-error)           - Error red
+ *   var(--radfish-color-success)         - Success green
+ *   var(--radfish-color-warning)         - Warning orange
  *
  * Or use hex colors directly: #0055A4
  */
-
-// Import the configured USWDS module (with NOAA tokens from theme-tokens.scss)
-@use ".generated/uswds-generated" as *;
 
 // =============================================================================
 // HEADER
@@ -30,13 +27,13 @@
 .usa-header.usa-header--basic.header-container,
 .usa-header.header-container,
 header.usa-header {
-  background-color: color('primary') !important;
+  background-color: var(--radfish-color-primary) !important;
 }
 
 .usa-header .usa-navbar,
 .usa-header--basic .usa-navbar,
 .usa-nav-container {
-  background-color: color('primary') !important;
+  background-color: var(--radfish-color-primary) !important;
 }
 
 /* Header Logo Width - Minimum 72px for agency logos */
@@ -51,7 +48,7 @@ header.usa-header {
 
 /* Header Menu Button (mobile/tablet) */
 .usa-menu-btn {
-  background-color: color('secondary') !important;
+  background-color: var(--radfish-color-secondary) !important;
   color: white !important;
 }
 
@@ -63,7 +60,7 @@ header.usa-header {
 // .usa-button:hover,
 // .usa-button:active,
 // .usa-button:focus {
-//   background-color: color('primary-dark') !important;
+//   background-color: var(--radfish-color-primary-dark) !important;
 //   color: white !important;
 // }
 
@@ -71,6 +68,6 @@ header.usa-header {
 // .usa-button--secondary:hover,
 // .usa-button--secondary:active,
 // .usa-button--secondary:focus {
-//   background-color: color('secondary-dark') !important;
+//   background-color: var(--radfish-color-secondary-dark) !important;
 //   color: white !important;
 // }
