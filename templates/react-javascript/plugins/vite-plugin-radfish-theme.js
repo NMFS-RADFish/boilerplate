@@ -2,7 +2,7 @@
  * RADFish Theme Vite Plugin
  *
  * This plugin provides theming capabilities for RADFish applications:
- * - Reads theme colors from SCSS files (themes/<theme-name>/styles/_colors.scss)
+ * - Reads theme colors from SCSS files (themes/<theme-name>/styles/theme.scss)
  * - Exposes config values via import.meta.env.RADFISH_* constants
  * - Injects CSS variables into HTML <head>
  * - Transforms index.html with config values (title, meta tags, favicon)
@@ -15,13 +15,21 @@
  * Theme Structure:
  *   themes/<theme-name>/
  *     assets/              - Theme icons (served in dev, copied on build)
- *     styles/_colors.scss  - SCSS file with color variables (e.g., $primary: #0054a4;)
+ *     styles/theme.scss    - Combined file with USWDS tokens, CSS variables, and component overrides
  */
 
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import * as sass from "sass";
+
+/**
+ * Get the cache directory path for compiled theme files
+ * Uses node_modules/.cache/radfish-theme/<themeName>/ to keep project clean
+ */
+function getCacheDir(themeName) {
+  return path.join(process.cwd(), "node_modules", ".cache", "radfish-theme", themeName);
+}
 
 /**
  * Parse SCSS content string and extract variable definitions
@@ -113,9 +121,9 @@ function computeFileHash(filePath) {
 /**
  * Check if USWDS needs recompilation based on cache
  */
-function needsRecompilation(generatedDir, tokensPath) {
-  const cachePath = path.join(generatedDir, ".uswds-cache.json");
-  const cssPath = path.join(generatedDir, "uswds-precompiled.css");
+function needsRecompilation(cacheDir, tokensPath) {
+  const cachePath = path.join(cacheDir, ".uswds-cache.json");
+  const cssPath = path.join(cacheDir, "uswds-precompiled.css");
 
   // Need recompilation if cache or CSS doesn't exist
   if (!fs.existsSync(cachePath) || !fs.existsSync(cssPath)) {
@@ -167,14 +175,14 @@ ${uswdsTokensStr},
  * Pre-compile USWDS with theme tokens to a static CSS file
  */
 function precompileUswds(themeDir, themeName, uswdsTokens) {
-  const generatedDir = path.join(themeDir, "styles", ".generated");
-  const entryPath = path.join(generatedDir, "_uswds-entry.scss");
-  const outputPath = path.join(generatedDir, "uswds-precompiled.css");
-  const tokensPath = path.join(themeDir, "styles", "theme-tokens.scss");
+  const cacheDir = getCacheDir(themeName);
+  const entryPath = path.join(cacheDir, "_uswds-entry.scss");
+  const outputPath = path.join(cacheDir, "uswds-precompiled.css");
+  const tokensPath = path.join(themeDir, "styles", "theme.scss");
 
-  // Ensure generated directory exists
-  if (!fs.existsSync(generatedDir)) {
-    fs.mkdirSync(generatedDir, { recursive: true });
+  // Ensure cache directory exists
+  if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir, { recursive: true });
   }
 
   console.log("[radfish-theme] Pre-compiling USWDS...");
@@ -199,7 +207,7 @@ function precompileUswds(themeDir, themeName, uswdsTokens) {
     compiledAt: new Date().toISOString(),
   };
   fs.writeFileSync(
-    path.join(generatedDir, ".uswds-cache.json"),
+    path.join(cacheDir, ".uswds-cache.json"),
     JSON.stringify(cacheData, null, 2)
   );
 
@@ -208,53 +216,49 @@ function precompileUswds(themeDir, themeName, uswdsTokens) {
 }
 
 /**
- * Pre-compile theme SCSS files (theme-components, theme-overrides) to CSS
+ * Pre-compile theme SCSS file (theme.scss) to CSS
  */
-function precompileThemeScss(themeDir) {
-  const generatedDir = path.join(themeDir, "styles", ".generated");
+function precompileThemeScss(themeDir, themeName) {
+  const cacheDir = getCacheDir(themeName);
   const stylesDir = path.join(themeDir, "styles");
 
-  // Ensure generated directory exists
-  if (!fs.existsSync(generatedDir)) {
-    fs.mkdirSync(generatedDir, { recursive: true });
+  // Ensure cache directory exists
+  if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir, { recursive: true });
   }
 
-  const scssFiles = ["theme-components.scss", "theme-overrides.scss"];
+  const inputPath = path.join(stylesDir, "theme.scss");
+  const outputPath = path.join(cacheDir, "theme.css");
 
-  for (const scssFile of scssFiles) {
-    const inputPath = path.join(stylesDir, scssFile);
-    const outputPath = path.join(generatedDir, scssFile.replace(".scss", ".css"));
-
-    if (fs.existsSync(inputPath)) {
-      try {
-        const result = sass.compile(inputPath, {
-          loadPaths: [
-            stylesDir,
-            generatedDir,
-            path.join(process.cwd(), "node_modules/@uswds/uswds/packages"),
-          ],
-          style: "compressed",
-          quietDeps: true,
-        });
-        fs.writeFileSync(outputPath, result.css);
-        console.log(`[radfish-theme] Compiled ${scssFile} -> ${path.basename(outputPath)}`);
-      } catch (err) {
-        console.error(`[radfish-theme] Error compiling ${scssFile}:`, err.message);
-      }
+  if (fs.existsSync(inputPath)) {
+    try {
+      const result = sass.compile(inputPath, {
+        loadPaths: [
+          stylesDir,
+          cacheDir,
+          path.join(process.cwd(), "node_modules/@uswds/uswds/packages"),
+        ],
+        style: "compressed",
+        quietDeps: true,
+      });
+      fs.writeFileSync(outputPath, result.css);
+      console.log(`[radfish-theme] Compiled theme.scss -> theme.css`);
+    } catch (err) {
+      console.error(`[radfish-theme] Error compiling theme.scss:`, err.message);
     }
   }
 }
 
 
 /**
- * Load theme tokens from theme-tokens.scss
+ * Load theme tokens from theme.scss
  * Returns: { uswdsTokens: {} }
  */
 function loadThemeFiles(themeDir) {
-  const tokensFile = path.join(themeDir, "styles", "theme-tokens.scss");
+  const themeFile = path.join(themeDir, "styles", "theme.scss");
 
-  const uswdsTokens = fs.existsSync(tokensFile)
-    ? parseScssVariables(tokensFile)
+  const uswdsTokens = fs.existsSync(themeFile)
+    ? parseScssVariables(themeFile)
     : {};
 
   return { uswdsTokens };
@@ -443,7 +447,7 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
         themeDir = themeDirPath;
         console.log("[radfish-theme] Using theme:", themeName);
 
-        // Load theme tokens from theme-tokens.scss
+        // Load theme tokens from theme.scss
         const { uswdsTokens } = loadThemeFiles(themeDirPath);
 
         if (Object.keys(uswdsTokens).length > 0) {
@@ -451,9 +455,8 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
           config.colors = deepMerge(config.colors, uswdsTokens);
 
           // Auto-map PWA manifest colors from theme tokens
-          // Manifest theme color defaults to primary color from theme-tokens.scss
-          // Manifest background defaults to base-lightest from theme-tokens.scss
-          // Developers can override by adding variables to theme-components.scss if needed
+          // Manifest theme color defaults to primary color from theme.scss
+          // Manifest background defaults to base-lightest from theme.scss
 
           // Set manifest theme color (use primary token, fallback to default)
           if (uswdsTokens.primary) {
@@ -484,17 +487,17 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
           }
 
           // Pre-compile USWDS to static CSS (with caching)
-          const tokensPath = path.join(themeDirPath, "styles", "theme-tokens.scss");
-          const generatedDir = path.join(themeDirPath, "styles", ".generated");
+          const tokensPath = path.join(themeDirPath, "styles", "theme.scss");
+          const cacheDir = getCacheDir(themeName);
 
-          if (needsRecompilation(generatedDir, tokensPath)) {
+          if (needsRecompilation(cacheDir, tokensPath)) {
             precompileUswds(themeDirPath, themeName, uswdsTokens);
           } else {
             console.log("[radfish-theme] Using cached USWDS compilation");
           }
 
-          // Pre-compile theme SCSS files (theme-components, theme-overrides)
-          precompileThemeScss(themeDirPath);
+          // Pre-compile theme SCSS file (theme.scss)
+          precompileThemeScss(themeDirPath, themeName);
 
           console.log("[radfish-theme] Loaded theme from:", themeDirPath);
         } else {
@@ -566,12 +569,12 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
       // Serve theme assets if theme directory exists
       if (!themeDir) return;
 
-      const generatedDir = path.join(themeDir, "styles", ".generated");
+      const cacheDir = getCacheDir(themeName);
 
       // Serve pre-compiled CSS files at /radfish-theme/*
       server.middlewares.use("/radfish-theme", (req, res, next) => {
         const fileName = req.url?.replace(/^\//, "") || "";
-        const filePath = path.join(generatedDir, fileName);
+        const filePath = path.join(cacheDir, fileName);
 
         if (fs.existsSync(filePath) && filePath.endsWith(".css")) {
           res.setHeader("Content-Type", "text/css");
@@ -581,33 +584,23 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
         }
       });
 
-      // Watch theme SCSS files for changes and recompile
-      const themeTokensPath = path.join(themeDir, "styles", "theme-tokens.scss");
-      const themeComponentsPath = path.join(themeDir, "styles", "theme-components.scss");
-      const themeOverridesPath = path.join(themeDir, "styles", "theme-overrides.scss");
+      // Watch theme SCSS file for changes and recompile
+      const themePath = path.join(themeDir, "styles", "theme.scss");
 
-      // Add all theme files to watcher
-      [themeTokensPath, themeComponentsPath, themeOverridesPath].forEach((filePath) => {
-        if (fs.existsSync(filePath)) {
-          server.watcher.add(filePath);
-        }
-      });
+      // Add theme file to watcher
+      if (fs.existsSync(themePath)) {
+        server.watcher.add(themePath);
+      }
 
       server.watcher.on("change", (changedPath) => {
-        if (changedPath === themeTokensPath) {
-          // Theme tokens changed - recompile everything and restart
-          console.log("[radfish-theme] Theme tokens changed, recompiling USWDS...");
+        if (changedPath === themePath) {
+          // Theme file changed - recompile everything and restart
+          console.log("[radfish-theme] theme.scss changed, recompiling...");
           const { uswdsTokens } = loadThemeFiles(themeDir);
           precompileUswds(themeDir, themeName, uswdsTokens);
-          precompileThemeScss(themeDir);
+          precompileThemeScss(themeDir, themeName);
           console.log("[radfish-theme] Restarting server...");
           server.restart();
-        } else if (changedPath === themeComponentsPath || changedPath === themeOverridesPath) {
-          // Theme component/override SCSS changed - just recompile that file
-          console.log(`[radfish-theme] ${path.basename(changedPath)} changed, recompiling...`);
-          precompileThemeScss(themeDir);
-          // Trigger full page reload to pick up CSS changes
-          server.ws.send({ type: "full-reload" });
         }
       });
 
@@ -650,8 +643,7 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
       const cssImports = `
     <!-- RADFish Theme CSS (auto-injected by plugin) -->
     <link rel="stylesheet" href="/radfish-theme/uswds-precompiled.css">
-    <link rel="stylesheet" href="/radfish-theme/theme-components.css">
-    <link rel="stylesheet" href="/radfish-theme/theme-overrides.css">`;
+    <link rel="stylesheet" href="/radfish-theme/theme.css">`;
 
       // Generate CSS variables from config
       const cssVariables = `
@@ -710,15 +702,15 @@ ${colorVariables}
         }
 
         // Copy pre-compiled CSS files to dist/radfish-theme/
-        const generatedDir = path.join(themeDir, "styles", ".generated");
+        const cacheDir = getCacheDir(themeName);
         const distThemeDir = path.join(outDirPath, "radfish-theme");
-        if (fs.existsSync(generatedDir)) {
+        if (fs.existsSync(cacheDir)) {
           if (!fs.existsSync(distThemeDir)) {
             fs.mkdirSync(distThemeDir, { recursive: true });
           }
-          const cssFiles = ["uswds-precompiled.css", "theme-components.css", "theme-overrides.css"];
+          const cssFiles = ["uswds-precompiled.css", "theme.css"];
           for (const cssFile of cssFiles) {
-            const srcPath = path.join(generatedDir, cssFile);
+            const srcPath = path.join(cacheDir, cssFile);
             const destPath = path.join(distThemeDir, cssFile);
             if (fs.existsSync(srcPath)) {
               fs.copyFileSync(srcPath, destPath);
