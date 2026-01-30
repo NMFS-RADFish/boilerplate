@@ -27,47 +27,14 @@
 .usa-header.usa-header--basic.header-container,
 .usa-header.header-container,
 header.usa-header {
-  background-color: var(--radfish-color-primary) !important;
+  background-color: var(--radfish-color-primary);
 }
 
-.usa-header .usa-navbar,
-.usa-header--basic .usa-navbar,
-.usa-nav-container {
-  background-color: var(--radfish-color-primary) !important;
-}
+
+// .usa-header .usa-navbar,
+// .usa-header--basic .usa-navbar,
+// .usa-nav-container {
+//   background-color: var(--radfish-color-primary) !important;
+// }
 
 /* Header Logo Width - Minimum 72px for agency logos */
-.header-logo {
-  width: 72px;
-}
-
-/* Header Title Color */
-.header-title {
-  color: white;
-}
-
-/* Header Menu Button (mobile/tablet) */
-.usa-menu-btn {
-  background-color: var(--radfish-color-secondary) !important;
-  color: white !important;
-}
-
-// =============================================================================
-// BUTTONS
-// =============================================================================
-
-// /* Primary Button Hover State */
-// .usa-button:hover,
-// .usa-button:active,
-// .usa-button:focus {
-//   background-color: var(--radfish-color-primary-dark) !important;
-//   color: white !important;
-// }
-
-// /* Secondary Button Hover State */
-// .usa-button--secondary:hover,
-// .usa-button--secondary:active,
-// .usa-button--secondary:focus {
-//   background-color: var(--radfish-color-secondary-dark) !important;
-//   color: white !important;
-// }
