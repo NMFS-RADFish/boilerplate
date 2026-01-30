@@ -299,10 +299,10 @@ function getContentType(ext) {
 }
 
 /**
- * Generate manifest icon array from config
+ * Generate manifest icon array for PWA manifest
  * Uses generic filenames so developers can simply replace files in themes/<theme>/assets/
  */
-function getManifestIcons(config) {
+function getManifestIcons() {
   return [
     {
       src: "icons/favicon.ico",
@@ -546,7 +546,7 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
           short_name: config.app.shortName,
           name: config.app.name,
           description: config.app.description,
-          icons: getManifestIcons(config),
+          icons: getManifestIcons(),
           start_url: ".",
           display: "standalone",
           theme_color: config.pwa.themeColor,
@@ -714,7 +714,7 @@ ${colorVariables}
         short_name: config.app.shortName,
         name: config.app.name,
         description: config.app.description,
-        icons: getManifestIcons(config),
+        icons: getManifestIcons(),
         start_url: ".",
         display: "standalone",
         theme_color: config.pwa.themeColor,
@@ -724,21 +724,5 @@ ${colorVariables}
       fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
       console.log("[radfish-theme] Wrote manifest.json to", manifestPath);
     },
-  };
-}
-
-/**
- * Generate VitePWA manifest configuration from radfish.config.js
- * Used by VitePWA plugin for dev mode manifest serving
- */
-export function getManifestFromConfig(config) {
-  return {
-    short_name: config.app.shortName,
-    name: config.app.name,
-    icons: getManifestIcons(config),
-    start_url: ".",
-    display: "standalone",
-    theme_color: config.pwa.themeColor,
-    background_color: config.pwa.backgroundColor,
   };
 }
