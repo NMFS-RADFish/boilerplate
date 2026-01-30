@@ -300,57 +300,47 @@ function getContentType(ext) {
 
 /**
  * Generate manifest icon array from config
+ * Uses generic filenames so developers can simply replace files in themes/<theme>/assets/
  */
 function getManifestIcons(config) {
   return [
     {
-      src: "icons/radfish.ico",
-      sizes: "512x512 256x256 144x144 64x64 32x32 24x24 16x16",
+      src: "icons/favicon.ico",
+      sizes: "64x64 32x32 24x24 16x16",
       type: "image/x-icon",
     },
     {
-      src: "icons/radfish-144.ico",
-      sizes: "144x144 64x64 32x32 24x24 16x16",
-      type: "image/x-icon",
-    },
-    {
-      src: "icons/radfish-144.ico",
-      type: "image/icon",
+      src: "icons/icon-144.png",
+      type: "image/png",
       sizes: "144x144",
       purpose: "any",
     },
     {
-      src: "icons/radfish-192.ico",
-      type: "image/icon",
+      src: "icons/icon-192.png",
+      type: "image/png",
       sizes: "192x192",
       purpose: "any",
     },
     {
-      src: "icons/radfish-512.ico",
-      type: "image/icon",
+      src: "icons/icon-512.png",
+      type: "image/png",
       sizes: "512x512",
       purpose: "any",
     },
     {
-      src: config.icons.pwa.icon144.replace(/^\//, ""),
-      type: "image/png",
-      sizes: "144x144",
-      purpose: "any",
-    },
-    {
-      src: config.icons.pwa.icon144.replace(/^\//, ""),
+      src: "icons/icon-144.png",
       type: "image/png",
       sizes: "144x144",
       purpose: "maskable",
     },
     {
-      src: config.icons.pwa.icon192.replace(/^\//, ""),
+      src: "icons/icon-192.png",
       type: "image/png",
       sizes: "192x192",
       purpose: "maskable",
     },
     {
-      src: config.icons.pwa.icon512.replace(/^\//, ""),
+      src: "icons/icon-512.png",
       type: "image/png",
       sizes: "512x512",
       purpose: "maskable",
@@ -370,13 +360,13 @@ export function getDefaultConfig() {
       description: "RADFish React App",
     },
     icons: {
-      logo: "/icons/radfish.png",
-      favicon: "/icons/radfish.ico",
-      appleTouchIcon: "/icons/radfish.png",
+      logo: "/icons/logo.png",
+      favicon: "/icons/favicon.ico",
+      appleTouchIcon: "/icons/icon-192.png",
       pwa: {
-        icon144: "/icons/144.png",
-        icon192: "/icons/192.png",
-        icon512: "/icons/512.png",
+        icon144: "/icons/icon-144.png",
+        icon192: "/icons/icon-192.png",
+        icon512: "/icons/icon-512.png",
       },
     },
     colors: {
