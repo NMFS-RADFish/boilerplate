@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react";
 import { useToasts, dispatchToast } from "./useToast";
 
 describe("useToast", () => {
@@ -11,7 +11,9 @@ describe("useToast", () => {
       },
     } = renderHook(() => useToasts());
 
-    dispatchToast({ message: "Hello", status: "ok" });
+    act(() => {
+      dispatchToast({ message: "Hello", status: "ok" });
+    });
 
     let dispatchedEvent = dispatchEventSpy.mock.calls[0][0];
     expect(dispatchEventSpy).toHaveBeenCalledWith(expect.any(CustomEvent));
