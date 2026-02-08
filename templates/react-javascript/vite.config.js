@@ -31,8 +31,8 @@ const defaultConfig = getDefaultConfig();
 // NOTE: Colors automatically come from themes/<theme-name>/styles/theme.scss (Section 1)
 const configOverrides = {
   app: {
-    name: "RADFish App",
-    shortName: "RADFish",
+    name: "RADFISH Boilerplate",
+    shortName: "RADFISH Boilerplate",
     description: "Offline-first fisheries data collection built with RADFish",
   },
   pwa: {

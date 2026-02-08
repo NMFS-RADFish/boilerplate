@@ -11,7 +11,7 @@
  * Quick Start:
  *   1. Add new pages in src/pages/
  *   2. Add routes in the <Routes> section below
- *   3. Add navigation links in the PrimaryNav items array
+ *   3. Add navigation links in the ExtendedNav primaryItems array
  *
  * Theme customization:
  *   - Edit themes/noaa-theme/styles/theme.scss for colors and styles
@@ -27,14 +27,65 @@ import { Application } from "@nmfs-radfish/react-radfish";
 import {
   GridContainer,
   NavMenuButton,
-  PrimaryNav,
+  NavDropDownButton,
+  Menu,
+  ExtendedNav,
   Header,
 } from "@trussworks/react-uswds";
 
 import HomePage from "./pages/Home";
 
+function onToggle(index, setIsOpen) {
+  setIsOpen((prev) => prev.map((val, i) => (i === index ? !val : false)));
+}
+
 function App({ application }) {
   const [isExpanded, setExpanded] = useState(false);
+  const [isOpen, setIsOpen] = useState([false]);
+
+  const handleToggleMobileNav = () => setExpanded((prev) => !prev);
+
+  const menuItems = [
+    <Link to="/" key="one">
+      Simple link one
+    </Link>,
+    <Link to="/" key="two">
+      Simple link two
+    </Link>,
+  ];
+
+  const primaryItems = [
+    <>
+      <NavDropDownButton
+        onToggle={() => onToggle(0, setIsOpen)}
+        menuId="nav-dropdown"
+        isOpen={isOpen[0]}
+        label="Nav Label"
+        isCurrent={true}
+      />
+      <Menu
+        key="one"
+        items={menuItems}
+        isOpen={isOpen[0]}
+        id="nav-dropdown"
+      />
+    </>,
+    <Link to="/" key="two" className="usa-nav__link">
+      <span>Parent link</span>
+    </Link>,
+    <Link to="/" key="three" className="usa-nav__link">
+      <span>Parent link</span>
+    </Link>,
+  ];
+
+  const secondaryItems = [
+    <Link to="/" key="one">
+      Simple link one
+    </Link>,
+    <Link to="/" key="two">
+      Simple link two
+    </Link>,
+  ];
 
   return (
     <Application application={application}>
@@ -43,44 +94,27 @@ function App({ application }) {
       </a>
       <main id="main-content">
         <BrowserRouter>
-          {/* Header - Uses USWDS Header component */}
-          <Header
-            basic
-            showMobileOverlay={isExpanded}
-            className="header-container"
-          >
-            <div className="usa-nav-container">
-              <div className="usa-navbar">
-                <Link to="/" className="header-logo-link">
-                  <img
-                    src={import.meta.env.RADFISH_LOGO}
-                    alt={import.meta.env.RADFISH_APP_NAME}
-                    className="header-logo"
-                  />
-                </Link>
-                <NavMenuButton
-                  onClick={() => setExpanded((prev) => !prev)}
-                  label="Menu"
+          {/* Header - Uses USWDS Extended Header component */}
+          <Header extended showMobileOverlay={isExpanded}>
+            <div className="usa-navbar">
+              <Link to="/" className="header-logo-link">
+                <img
+                  src={import.meta.env.RADFISH_LOGO}
+                  alt={import.meta.env.RADFISH_APP_NAME}
+                  className="header-logo"
                 />
-              </div>
-
-              {/* Navigation - Add your nav links here */}
-              <PrimaryNav
-                items={[
-                  <Link
-                    key="home"
-                    to="/"
-                    style={{ color: isExpanded ? "black" : "white" }}
-                  >
-                    Home
-                  </Link>,
-                  // Add more navigation links here:
-                  // <Link key="about" to="/about" style={{ color: isExpanded ? "black" : "white" }}>About</Link>,
-                ]}
-                mobileExpanded={isExpanded}
-                onToggleMobileNav={() => setExpanded((prev) => !prev)}
+              </Link>
+              <NavMenuButton
+                onClick={handleToggleMobileNav}
+                label="Menu"
               />
             </div>
+            <ExtendedNav
+              primaryItems={primaryItems}
+              secondaryItems={secondaryItems}
+              mobileExpanded={isExpanded}
+              onToggleMobileNav={handleToggleMobileNav}
+            />
           </Header>
 
           {/* Main Content Area */}

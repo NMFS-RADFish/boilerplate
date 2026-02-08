@@ -34,11 +34,11 @@ body {
 }
 
 .header-logo {
-  height: 48px;
-  width: auto;
+  margin-top: 10px;
+  max-width: 210px;
+  width: 100%;
 }
 
-/* Keep menu button on the right on mobile/tablet */
 .usa-navbar {
   display: flex;
   justify-content: space-between;

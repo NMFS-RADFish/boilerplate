@@ -201,10 +201,8 @@ $disabled-dark: #9a9a9a;
 // -----------------------------------------------------------------------------
 
 /* Header Background */
-.usa-header.usa-header--basic.header-container,
-.usa-header.header-container,
 header.usa-header {
-  background-color: var(--radfish-color-primary);
+  // background-color: var(--radfish-color-primary);
 }
 
 /* Header Logo Width - Minimum 72px for agency logos */
