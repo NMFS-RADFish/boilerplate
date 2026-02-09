@@ -310,34 +310,10 @@ function getManifestIcons() {
       type: "image/x-icon",
     },
     {
-      src: "icons/icon-144.png",
-      type: "image/png",
-      sizes: "144x144",
-      purpose: "any",
-    },
-    {
-      src: "icons/icon-192.png",
-      type: "image/png",
-      sizes: "192x192",
-      purpose: "any",
-    },
-    {
       src: "icons/icon-512.png",
       type: "image/png",
       sizes: "512x512",
       purpose: "any",
-    },
-    {
-      src: "icons/icon-144.png",
-      type: "image/png",
-      sizes: "144x144",
-      purpose: "maskable",
-    },
-    {
-      src: "icons/icon-192.png",
-      type: "image/png",
-      sizes: "192x192",
-      purpose: "maskable",
     },
     {
       src: "icons/icon-512.png",
@@ -362,10 +338,8 @@ export function getDefaultConfig() {
     icons: {
       logo: "/icons/logo.png",
       favicon: "/icons/favicon.ico",
-      appleTouchIcon: "/icons/icon-192.png",
+      appleTouchIcon: "/icons/icon-512.png",
       pwa: {
-        icon144: "/icons/icon-144.png",
-        icon192: "/icons/icon-192.png",
         icon512: "/icons/icon-512.png",
       },
     },
