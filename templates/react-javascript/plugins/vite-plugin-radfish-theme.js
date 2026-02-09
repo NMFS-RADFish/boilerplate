@@ -449,20 +449,17 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
           precompileThemeScss(themeDirPath, themeName);
 
           console.log("[radfish-theme] Loaded theme from:", themeDirPath);
-        } else {
-          // Fallback: try old _colors.scss for backwards compatibility
-          const colorsScssPath = path.join(themeDirPath, "styles", "_colors.scss");
-          if (fs.existsSync(colorsScssPath)) {
-            const scssColors = parseScssVariables(colorsScssPath);
-            config.colors = deepMerge(config.colors, scssColors);
-            console.log("[radfish-theme] Loaded colors from:", colorsScssPath);
-          }
         }
       } else {
         console.warn(`[radfish-theme] Theme "${themeName}" not found at ${themeDirPath}`);
       }
 
       // Return define values for import.meta.env.RADFISH_*
+      // These are available in app code via import.meta.env.RADFISH_<NAME>.
+      // RADFISH_APP_NAME and RADFISH_LOGO are used by the default header component.
+      // The rest are available for developers to use in their own components, e.g.:
+      //   <img src={import.meta.env.RADFISH_FAVICON} />
+      //   <span style={{ color: import.meta.env.RADFISH_PRIMARY_COLOR }}>...</span>
       return {
         define: {
           "import.meta.env.RADFISH_APP_NAME": JSON.stringify(config.app.name),
@@ -523,7 +520,12 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
       // Serve pre-compiled CSS files at /radfish-theme/*
       server.middlewares.use("/radfish-theme", (req, res, next) => {
         const fileName = req.url?.replace(/^\//, "") || "";
-        const filePath = path.join(cacheDir, fileName);
+        const filePath = path.resolve(cacheDir, fileName);
+
+        // Prevent path traversal attacks
+        if (!filePath.startsWith(cacheDir)) {
+          return next();
+        }
 
         if (fs.existsSync(filePath) && filePath.endsWith(".css")) {
           res.setHeader("Content-Type", "text/css");
@@ -558,7 +560,13 @@ export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {
 
       // Serve /icons/* from themes/<themeName>/assets/ directory
       server.middlewares.use("/icons", (req, res, next) => {
-        const filePath = path.join(themeAssetsDir, req.url || "");
+        const filePath = path.resolve(themeAssetsDir, req.url?.replace(/^\//, "") || "");
+
+        // Prevent path traversal attacks
+        if (!filePath.startsWith(themeAssetsDir)) {
+          return next();
+        }
+
         if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
           res.setHeader(
             "Content-Type",
