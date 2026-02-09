@@ -22,7 +22,7 @@
 
 import "./index.css";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Application } from "@nmfs-radfish/react-radfish";
 import {
   GridContainer,
@@ -55,7 +55,7 @@ function App({ application }) {
   ];
 
   const primaryItems = [
-    <>
+    <React.Fragment key="one">
       <NavDropDownButton
         onToggle={() => onToggle(0, setIsOpen)}
         menuId="nav-dropdown"
@@ -64,12 +64,11 @@ function App({ application }) {
         isCurrent={true}
       />
       <Menu
-        key="one"
         items={menuItems}
         isOpen={isOpen[0]}
         id="nav-dropdown"
       />
-    </>,
+    </React.Fragment>,
     <Link to="/" key="two" className="usa-nav__link">
       <span>Parent link</span>
     </Link>,
