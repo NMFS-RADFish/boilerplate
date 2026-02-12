@@ -7,9 +7,9 @@
     "@nmfs-radfish/react-radfish": "^1.0.0",
     "@tanstack/react-query": "^5.51.11",
     "@tanstack/react-query-devtools": "^5.51.11",
-    "@trussworks/react-uswds": "^9.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@trussworks/react-uswds": "^10.2.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "react-router-dom": "^7.0.2"
   },
   "scripts": {
