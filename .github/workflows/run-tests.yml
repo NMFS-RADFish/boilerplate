@@ -45,7 +45,7 @@ jobs:
       - name: Install template dependencies with local packages
         run: |
           npm install
-          npm link @nmfs-radfish/radfish @nmfs-radfish/react-radfish
+          npm link @nmfs-radfish/radfish @nmfs-radfish/react-radfish @nmfs-radfish/vite-plugin-radfish-theme
         working-directory: templates/react-javascript
 
       - name: Build project
