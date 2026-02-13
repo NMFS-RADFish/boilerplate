@@ -1,0 +1,29 @@
+{
+  "name": "@nmfs-radfish/vite-plugin-radfish-theme",
+  "version": "0.1.0-rc.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "sass": "^1.97.2"
+  },
+  "peerDependencies": {
+    "vite": "^5.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0"
+  }
+}
