@@ -42,10 +42,8 @@ jobs:
         run: npm link --workspaces
         working-directory: .
 
-      - name: Install template dependencies with local packages
-        run: |
-          npm install
-          npm link @nmfs-radfish/radfish @nmfs-radfish/react-radfish
+      - name: Link local packages into template
+        run: npm link @nmfs-radfish/radfish @nmfs-radfish/react-radfish @nmfs-radfish/vite-plugin-radfish-theme
         working-directory: templates/react-javascript
 
       - name: Build project
