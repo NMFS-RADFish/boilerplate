@@ -1,0 +1,94 @@
+import fs from "fs";
+import path from "path";
+
+/**
+ * Parse SCSS content string and extract variable definitions
+ * Supports simple variable definitions like: $variable-name: #hex;
+ * @param {string} content - SCSS content as a string
+ * @returns {Object} Object mapping variable names (without $) to values
+ */
+export function parseScssContent(content) {
+  const variables = {};
+
+  // Match SCSS variable definitions: $variable-name: value;
+  // Captures: variable name (without $) and value (without semicolon)
+  const variableRegex = /^\s*\$([a-zA-Z_][\w-]*)\s*:\s*([^;]+);/gm;
+
+  let match;
+  while ((match = variableRegex.exec(content)) !== null) {
+    const name = match[1].trim();
+    let value = match[2].trim();
+
+    // Remove !default flag if present
+    value = value.replace(/\s*!default\s*$/, "").trim();
+
+    // Convert kebab-case to camelCase for config compatibility
+    const camelName = name.replace(/-([a-z])/g, (_, letter) =>
+      letter.toUpperCase(),
+    );
+    variables[camelName] = value;
+  }
+
+  return variables;
+}
+
+/**
+ * Parse SCSS file and extract variable definitions
+ * Supports simple variable definitions like: $variable-name: #hex;
+ * @param {string} filePath - Path to the SCSS file
+ * @returns {Object} Object mapping variable names (without $) to values
+ */
+export function parseScssVariables(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return {};
+  }
+
+  const content = fs.readFileSync(filePath, "utf-8");
+  return parseScssContent(content);
+}
+
+/**
+ * Normalize color value (strip quotes if present)
+ */
+export function normalizeColorValue(value) {
+  return value.replace(/['"]/g, '');
+}
+
+/**
+ * Check if a value is a USWDS system color token
+ * Matches patterns like: blue-60v, gray-cool-30, red-warm-50v, green-cool-40v
+ * See: https://designsystem.digital.gov/design-tokens/color/system-tokens/
+ */
+export function isUswdsToken(value) {
+  // USWDS token pattern: color-family[-modifier]-grade[v]
+  // Examples: blue-60v, gray-cool-30, red-warm-50v, mint-cool-40v
+  const tokenPattern = /^(black|white|red|orange|gold|yellow|green|mint|cyan|blue|indigo|violet|magenta|gray)(-warm|-cool|-vivid)?(-[0-9]+v?)?$/;
+  return tokenPattern.test(value);
+}
+
+/**
+ * Format value for USWDS @use statement
+ * - USWDS tokens: quoted ('blue-60v')
+ * - Custom values (hex, etc.): unquoted (#0093D0)
+ */
+export function formatUswdsValue(value) {
+  const normalized = normalizeColorValue(value);
+  if (isUswdsToken(normalized)) {
+    return `'${normalized}'`; // USWDS tokens are quoted
+  }
+  return normalized; // Custom values (hex, etc.) are unquoted
+}
+
+/**
+ * Load theme tokens from theme.scss
+ * Returns: { uswdsTokens: {} }
+ */
+export function loadThemeFiles(themeDir) {
+  const themeFile = path.join(themeDir, "styles", "theme.scss");
+
+  const uswdsTokens = fs.existsSync(themeFile)
+    ? parseScssVariables(themeFile)
+    : {};
+
+  return { uswdsTokens };
+}
