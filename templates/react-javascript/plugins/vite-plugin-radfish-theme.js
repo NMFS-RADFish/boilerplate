@@ -9,8 +9,8 @@
  * - Writes manifest.json after build via closeBundle
  *
  * Usage:
- *   radFishThemePlugin("noaa-theme")                    // Use noaa-theme from themes/noaa-theme/
- *   radFishThemePlugin("noaa-theme", { app: {...} })    // With config overrides (non-color)
+ *   radFishThemePlugin()                                              // Use default noaa-theme
+ *   radFishThemePlugin({ theme: "noaa-theme", name: "My App" })      // With options
  *
  * Theme Structure:
  *   themes/<theme-name>/
@@ -325,10 +325,9 @@ function getManifestIcons() {
 }
 
 /**
- * Default configuration values (used if radfish.config.js is missing)
- * Exported so vite.config.js can import and use default colors
+ * Default configuration values
  */
-export function getDefaultConfig() {
+function getDefaultConfig() {
   return {
     app: {
       name: "RADFish Application",
@@ -371,10 +370,18 @@ function deepMerge(source, target) {
 
 /**
  * Main Vite plugin for RADFish theming
- * @param {string} themeName - Name of the theme folder in themes/ directory
- * @param {Object} configOverrides - Optional config overrides (colors, app name, etc.)
+ * @param {Object} options
+ * @param {string} [options.theme="noaa-theme"] - Name of the theme folder in themes/ directory
+ * @param {string} [options.name] - App name (shown in header, manifest, etc.)
+ * @param {string} [options.shortName] - Short app name (used in PWA manifest)
+ * @param {string} [options.description] - App description (used in meta tags and manifest)
  */
-export function radFishThemePlugin(themeName = "noaa-theme", configOverrides = {}) {
+export function radFishThemePlugin({ theme = "noaa-theme", name, shortName, description } = {}) {
+  const configOverrides = {};
+  if (name || shortName || description) {
+    configOverrides.app = { ...(name && { name }), ...(shortName && { shortName }), ...(description && { description }) };
+  }
+  const themeName = theme;
   let config = null;
   let resolvedViteConfig = null;
   let themeDir = null; // Path to themes/<themeName>/ directory
