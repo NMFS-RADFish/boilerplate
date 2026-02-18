@@ -4,7 +4,10 @@ import { getDefaultConfig, deepMerge } from "./config.js";
 describe("getDefaultConfig", () => {
   it("returns an object with expected top-level keys", () => {
     const config = getDefaultConfig();
-    expect(config).toHaveProperty("app");
+    expect(config).toHaveProperty("theme");
+    expect(config).toHaveProperty("name");
+    expect(config).toHaveProperty("shortName");
+    expect(config).toHaveProperty("description");
     expect(config).toHaveProperty("icons");
     expect(config).toHaveProperty("colors");
     expect(config).toHaveProperty("pwa");
@@ -13,9 +16,9 @@ describe("getDefaultConfig", () => {
 
   it("returns default app values", () => {
     const config = getDefaultConfig();
-    expect(config.app.name).toBe("RADFish Application");
-    expect(config.app.shortName).toBe("RADFish");
-    expect(config.app.description).toBe("RADFish React App");
+    expect(config.name).toBe("RADFish Application");
+    expect(config.shortName).toBe("RADFish");
+    expect(config.description).toBe("RADFish React App");
   });
 
   it("returns default color values", () => {

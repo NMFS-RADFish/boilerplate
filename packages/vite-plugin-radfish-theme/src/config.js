@@ -4,11 +4,10 @@
  */
 export function getDefaultConfig() {
   return {
-    app: {
-      name: "RADFish Application",
-      shortName: "RADFish",
-      description: "RADFish React App",
-    },
+    theme: "noaa-theme",
+    name: "RADFish Application",
+    shortName: "RADFish",
+    description: "RADFish React App",
     icons: {
       logo: "/icons/logo.png",
       favicon: "/icons/favicon.ico",
