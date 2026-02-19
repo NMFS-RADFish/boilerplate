@@ -8,22 +8,6 @@ export function getDefaultConfig() {
     name: "RADFish Application",
     shortName: "RADFish",
     description: "RADFish React App",
-    icons: {
-      logo: "/icons/logo.png",
-      favicon: "/icons/favicon.ico",
-      appleTouchIcon: "/icons/icon-512.png",
-    },
-    colors: {
-      primary: "#0054a4",
-      secondary: "#0093d0",
-    },
-    pwa: {
-      themeColor: "#0054a4",
-      backgroundColor: "#ffffff",
-    },
-    typography: {
-      fontFamily: "Arial Narrow, sans-serif",
-    },
   };
 }
 

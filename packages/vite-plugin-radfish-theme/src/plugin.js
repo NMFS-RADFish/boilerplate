@@ -36,6 +36,24 @@ export function radFishThemePlugin(options = {}) {
   const mergedConfig = deepMerge(getDefaultConfig(), options);
   const themeName = mergedConfig.theme;
 
+  // Internal defaults — derived from theme directory at build time
+  mergedConfig.icons = {
+    logo: "/icons/logo.png",
+    favicon: "/icons/favicon.ico",
+    appleTouchIcon: "/icons/icon-512.png",
+  };
+  mergedConfig.colors = {
+    primary: "#0054a4",
+    secondary: "#0093d0",
+  };
+  mergedConfig.pwa = {
+    themeColor: "#0054a4",
+    backgroundColor: "#ffffff",
+  };
+  mergedConfig.typography = {
+    fontFamily: "Arial Narrow, sans-serif",
+  };
+
   // Shared context object passed between modules
   const ctx = {
     config: null,
